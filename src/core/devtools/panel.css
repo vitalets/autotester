@@ -1,0 +1,20 @@
+body {
+    margin: 5px;
+}
+
+#mocha-stats {
+    top: 60px;
+}
+
+#mocha {
+    margin: 10px 0;
+}
+
+#error {
+    margin: 10px 0;
+    padding: 5px;
+    border: solid 1px red;
+    color: red;
+    font-size: 1.3em;
+    display: none;
+}

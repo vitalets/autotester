@@ -10,8 +10,11 @@ window.browser = {
   openTabs(url, count = 1) {
     const tasks = [];
     for (let i = 0; i < count; i++) {
-      tasks.push(openTab(url));
+      tasks.push(browser.openTab(url));
     }
     return Promise.all(tasks);
+  },
+  clearHistory() {
+    return BackgroundProxy.call('chrome.history.deleteAll');
   }
 };

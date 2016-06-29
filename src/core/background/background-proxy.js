@@ -35,7 +35,7 @@ class BackgroundProxy {
   static call(params) {
     if (typeof params === 'string') {
       params = {
-        path: path,
+        path: params,
         args: [].slice.call(arguments, 1)
       };
     }

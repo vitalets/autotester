@@ -10,7 +10,8 @@
     "webRequestBlocking",
     "webNavigation",
     "<all_urls>",
-    "debugger"
+    "debugger",
+    "history"
   ],
 
   "background": {
