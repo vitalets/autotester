@@ -1,31 +1,36 @@
 
-console.log('Autotester panel opened for tab:', chrome.devtools.inspectedWindow.tabId);
+// filled if testing extension page
+let extensionId = '';
 
-document.getElementById('reload').addEventListener('click', () => {
-  console.clear();
-  BackgroundProxy.call({
-    path: 'chrome.runtime.reload',
-    async: false
-  });
-  setTimeout(() => window.location.reload(), 200);
-  setTimeout(() => inspected.eval('window.location.reload()'), 300);
+// entry
+page.getUrl().then(url => {
+  console.log('Autotester opened on tab', chrome.devtools.inspectedWindow.tabId, url);
+  const parsedUrl = new URL(url);
+  extensionId = parsedUrl.protocol === 'chrome-extension:' ? parsedUrl.hostname : '';
+  setDomListeners();
 });
 
-document.getElementById('run').addEventListener('click', () => {
+function setDomListeners() {
+  document.getElementById('reload').addEventListener('click', reload);
+  document.getElementById('run').addEventListener('click', runTests);
+}
+
+function reload() {
+  console.clear();
+  // reload self background
+  BackgroundProxy.call({path: 'chrome.runtime.reload', async: false});
+  // timeouts needed for background to get ready
+  setTimeout(() => window.location.reload(), 500);
+  setTimeout(() => page.reload(), 600);
+}
+
+function runTests() {
   document.getElementById('mocha').innerHTML = '';
-
-  // callProxy('chrome.tabs.update', chrome.devtools.inspectedWindow.tabId, {url: 'chrome://flags'});
-  // inspected.eval('chrome.management.uninstallSelf()');
-
-
   new TestRunner().run([
     '/tests/actions.js',
-    '/tests/prepare.js',
     '/tests/sample.test.js'
   ]);
-
-
-});
+}
 
 // window.requestCollector = new RequestCollector('nkcpopggjcjkiicpenikeogioednjeac');
 
