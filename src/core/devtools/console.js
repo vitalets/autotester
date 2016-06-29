@@ -50,14 +50,13 @@
   }
 
   function listenGlobalErrors() {
-    window.onerror = function(message, source, lineno) {
-      console.error(message, `${source}:${lineno}`);
-      // todo: only sendToBackground to exclude circular error
-    };
+    window.addEventListener('error', e => {
+      console.error(`${e.message} ${e.filename}:${e.lineno}`);
+    });
 
     // see: https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onunhandledrejection
-    window.addEventListener("unhandledrejection", event => {
-      console.error('Unhandled promise rejection:', event);
+    window.addEventListener('unhandledrejection', e => {
+      console.error(`Unhandled promise rejection: ${e.reason}`);
     });
   }
 

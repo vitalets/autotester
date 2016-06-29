@@ -1,12 +1,8 @@
 
-// filled if testing extension page
-let extensionId = '';
-
-// entry
 page.getUrl().then(url => {
-  console.log('Autotester opened on tab', chrome.devtools.inspectedWindow.tabId, url);
-  const parsedUrl = new URL(url);
-  extensionId = parsedUrl.protocol === 'chrome-extension:' ? parsedUrl.hostname : '';
+  console.log('Autotester opened for tab', chrome.devtools.inspectedWindow.tabId, url);
+  // window.requestCollector = new RequestCollector('nkcpopggjcjkiicpenikeogioednjeac');
+  readTests();
   setDomListeners();
 });
 
@@ -25,6 +21,7 @@ function reload() {
 }
 
 function runTests() {
+  setError('');
   document.getElementById('mocha').innerHTML = '';
   new TestRunner().run([
     '/tests/actions.js',
@@ -32,10 +29,10 @@ function runTests() {
   ]);
 }
 
-// window.requestCollector = new RequestCollector('nkcpopggjcjkiicpenikeogioednjeac');
+function readTests() {
+  return utils.loadScript('/tests/index.js')
+    .then(() => {
+      console.log('config', window.autotesterConfig);
+    })
+}
 
-/*
- document.querySelector('#silent-debugger-extension-api a.experiment-enable-link').click()
- document.querySelector('#silent-debugger-extension-api a.experiment-disable-link').style.display === 'none';
- document.querySelector('.experiment-restart-button').click();
- */

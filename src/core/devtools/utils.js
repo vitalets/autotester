@@ -10,7 +10,7 @@ window.utils = {
       script.type = 'text/javascript';
       document.getElementsByTagName('head')[0].appendChild(script);
       script.onload = resolve;
-      script.onerror = reject;
+      script.onerror = () => reject(new Error(`Can not load script ${url}`));
       script.src = url;
     });
   }

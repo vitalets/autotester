@@ -4,11 +4,13 @@
     <link href="/libs/mocha.css" rel="stylesheet"/>
 </head>
 <body style="margin: 5px">
+<pre id="error" style="margin: 5px 0; padding: 5px; border: solid 1px red; color: red; font-size: 1.3em; display: none"></pre>
 <div>
     <button id="reload">Reload</button>
     <button id="run">Run tests</button>
 </div>
 <div id="mocha" style="margin: 0"></div>
+<script src="catch-errors.js"></script>
 <script src="/core/background/background-proxy.js"></script>
 <script src="console.js"></script>
 <script src="utils.js"></script>
