@@ -1,0 +1,27 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="/libs/mocha.css" rel="stylesheet"/>
+</head>
+<body style="margin: 5px">
+<div>
+    <button id="reload">Reload</button>
+    <button id="run">Run tests</button>
+</div>
+<div id="mocha" style="margin: 0"></div>
+<script src="/core/background/background-proxy.js"></script>
+<script src="console.js"></script>
+<script src="utils.js"></script>
+<script src="inspected.js"></script>
+<!-- testing stuff -->
+<script src="test-utils/request-collector.js"></script>
+<script src="test-utils/wait.js"></script>
+<script src="test-utils/page.js"></script>
+<script src="test-utils/browser.js"></script>
+<script src="/core/devtools/request-collector.js"></script>
+<script src="test-utils/runner.js"></script>
+<script src="/core/request-catchers/devtools.js"></script>
+<!-- entry point -->
+<script src="panel.js"></script>
+</body>
+</html>

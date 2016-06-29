@@ -1,0 +1,21 @@
+{
+  "extends": "eslint:recommended",
+
+  "parser": "babel-eslint",
+
+  "ecmaFeatures": {
+    "modules": true,
+    "impliedStrict": true
+  },
+
+  "env": {
+    "es6": true,
+    "node": true
+  },
+
+  "rules": {
+    "comma-dangle": ["error", "only-multiline"],
+    "no-multi-spaces": 2,
+    "space-before-function-paren": [2, {"anonymous": "always", "named": "never"}]
+  }
+}

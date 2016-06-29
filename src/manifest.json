@@ -1,0 +1,37 @@
+{
+  "name": "Autotester",
+  "description": "Makes automated testing easy",
+  "version": "0.1.0",
+  "manifest_version": 2,
+
+  "permissions": [
+    "tabs",
+    "webRequest",
+    "webRequestBlocking",
+    "webNavigation",
+    "<all_urls>",
+    "debugger"
+  ],
+
+  "background": {
+    "scripts": [
+      "core/background/background-proxy.js",
+      "core/request-catchers/debugger.js",
+      "core/background/tab-loader.js",
+      "core/background/tab-catcher.js",
+      "core/background/background.js"
+    ],
+    "persistent": true
+  },
+
+  "content_scripts": [
+    {
+      "all_frames": false,
+      "js": ["core/contentscripts/contentscript.js"],
+      "matches": ["http://*/*", "https://*/*"],
+      "run_at": "document_start"
+    }
+  ],
+
+  "devtools_page": "core/devtools/devtools.html"
+}
