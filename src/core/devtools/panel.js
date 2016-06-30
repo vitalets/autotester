@@ -43,7 +43,8 @@ function readTests() {
 
 function fillTestList(tests) {
   const el = document.getElementById('testlist');
-  el.options[el.options.length] = new Option('All tests', '');
+  el.options.length = 0;
+  el.options[el.options.length] = new Option('All', '');
   tests.forEach((test, index) => {
     const label = '-'.repeat(test.level * 3) + test.label;
     el.options[el.options.length] = new Option(label, index);

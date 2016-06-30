@@ -12,9 +12,9 @@
  */
 
 /**
- * As functional tests are slow, set mocha timeout to 10s
+ * As functional tests are slow, increase timeout
  */
-const TIMEOUT_MS = 10 * 1000;
+const TIMEOUT_MS = 30 * 1000;
 
 class TestRunner {
   configure(config = {}) {
@@ -29,40 +29,46 @@ class TestRunner {
   }
   run(testIndex) {
     this.clearReport();
+    return Promise.resolve()
+      .then(() => this._loadFrameworks())
+      .then(() => this._loadPrepare())
+      .then(() => this._loadTests(testIndex))
+      .then(() => this._runTests());
+  }
+  clearReport() {
+    document.querySelector('.report').innerHTML = '';
+  }
+  _loadFrameworks() {
+    return Promise.all([
+      // can not run mocha twice, so re-load script every time
+      // see https://github.com/mochajs/mocha/issues/995
+      utils.loadScript('/libs/mocha.js'),
+      // reload chai just for consistency here
+      utils.loadScript('/libs/chai.js')
+    ]).then(() => {
+      window.mocha.setup({ui: 'bdd', timeout: TIMEOUT_MS});
+      window.assert = chai.assert;
+    });
+  }
+  _loadPrepare() {
+    return this.config.prepare
+      .map(url => this._addBaseUrl(url))
+      .reduce((res, url) => res.then(() => utils.loadScript(url)), Promise.resolve());
+  }
+  _loadTests(testIndex) {
     testIndex = parseInt(testIndex, 10);
     const urls = Number.isNaN(testIndex) ? this.parsedTests.urls : this.parsedTests.objects[testIndex].urls;
     console.log(`Running ${urls.length} test file(s)`);
-    return Promise.resolve()
-      // can not run mocha twice, so re-load script every time
-      // see https://github.com/mochajs/mocha/issues/995
-      .then(() => utils.loadScript('/libs/mocha.js'))
-      // reload chai just for consistency here
-      .then(() => utils.loadScript('/libs/chai.js'))
-      .then(() => {
-         window.mocha.setup({ui: 'bdd', timeout: TIMEOUT_MS});
-         window.assert = chai.assert;
-      })
-      // load prepare scripts
-      .then(() => {
-        const tasks = this.config.prepare
-          .map(url => this._addBaseUrl(url))
-          .map(url => utils.loadScript(url));
-        return Promise.all(tasks);
-      })
-      // load test scripts
-      .then(() => {
-        const tasks = urls
-          .map(url => this._addBaseUrl(url))
-          .map(url => utils.loadScript(url));
-        return Promise.all(tasks);
-      })
-      .then(() => mocha.run());
+    const tasks = urls
+      .map(url => this._addBaseUrl(url))
+      .map(url => utils.loadScript(url));
+    return Promise.all(tasks);
   }
-  clearReport() {
-    document.getElementById(this.config.runner).innerHTML = '';
+  _runTests() {
+    return mocha.run();
   }
   _addBaseUrl(url) {
-    return /^https?/i.test(url) ? url : `${this.config.baseUrl}/${url.replace('/', '')}`;
+    return /^https?:\/\//i.test(url) ? url : `${this.config.baseUrl}/${url.replace(/^\//, '')}`;
   }
   static parseTests(arr, level = 0) {
     return arr.reduce((res, item) => {

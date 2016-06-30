@@ -12,20 +12,21 @@
     <button id="run">Run</button>
     <button id="reload" style="float: right">Reload</button>
 </div>
-<div id="mocha"></div>
+<div id="mocha" class="report"></div>
+<!-- core scripts -->
 <script src="catch-errors.js"></script>
 <script src="/core/background/background-proxy.js"></script>
 <script src="console.js"></script>
 <script src="utils.js"></script>
 <!-- testing stuff -->
-<script src="test-utils/request-collector.js"></script>
 <script src="test-utils/wait.js"></script>
 <script src="test-utils/page.js"></script>
 <script src="test-utils/browser.js"></script>
 <script src="test-utils/extension.js"></script>
-<script src="/core/devtools/request-collector.js"></script>
+<script src="test-utils/fiddler.js"></script>
 <script src="test-utils/runner.js"></script>
 <script src="/core/request-catchers/devtools.js"></script>
+<script src="/core/request-catchers/debugger.js"></script>
 <!-- entry point -->
 <script src="panel.js"></script>
 </body>
