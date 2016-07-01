@@ -1,4 +1,6 @@
-
+/**
+ * Actions with tested page
+ */
 window.page = {
   /**
    * Eval wrapper with Promises
@@ -60,30 +62,26 @@ window.page = {
    * @returns {Promise}
    */
   click(selector, index = 0) {
-    // todo: move elements existance check to separate function
-    return page._ensureSyn()
-      .then(() => page.eval(`
-        (function () {
-              const elms = document.querySelectorAll('${selector}');
-              if (!elms.length) {
-                throw new Error('Elements not found ${selector}');
-              } else if (${index} >= elms.length) {
-                throw new Error('Elements count ${selector} %i is less than expected index %i',
-                  elms.length, ${index});
-              } else {
-              syn.click(elms[${index}]);
-          }
-        }());
-    `));
+    return page._ensureInjected()
+      .then(() => page.eval(`window.syn.click(window.autotester.el('${selector}', ${index}))`));
   },
 
   /**
-   * Navigates to url in inspected tab
-   * @param {String} url
-   * @returns {Promise}
+   * Ensures that all required scripts are injected into page
    */
-  _ensureSyn() {
-    return page.eval(`Boolean(window.syn)`)
-      .then(res => res ? Promise.resolve() : page.loadScript(chrome.runtime.getURL('libs/syn.js')))
+  _ensureInjected() {
+    return page.eval(`Boolean(window.autotester)`)
+      .then(res => res ? Promise.resolve() : page._inject());
+  },
+
+  _inject() {
+    const scripts = [
+      'core/devtools/test-utils/page-inject.js',
+      'libs/syn.js'
+    ];
+    const tasks = scripts
+      .map(scriptUrl => chrome.runtime.getURL(scriptUrl))
+      .map(scriptUrl => page.loadScript(scriptUrl));
+    return Promise.all(tasks);
   }
 };

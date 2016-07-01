@@ -14,25 +14,28 @@ window.fiddler = {
       catchers.push(this.devtoolsCatcher);
     }
     if (targets.extensionId) {
-      const extensionBgCatcher = new BgRequestCatcher('debuggerBgRequestCatcher');
-      extensionBgCatcher.setTarget({extensionId: targets.extensionId});
-      catchers.push(extensionBgCatcher);
+      this.extensionBgCatcher = this.extensionBgCatcher || new BgRequestCatcher('debuggerBgRequestCatcher');
+      this.extensionBgCatcher.setTarget({extensionId: targets.extensionId});
+      catchers.push(this.extensionBgCatcher);
     }
     if (typeof targets.tabId === 'number') {
-      const tabCatcher = new BgRequestCatcher('webRequestCatcher');
-      tabCatcher.setTarget({tabId: targets.tabId});
-      catchers.push(tabCatcher);
+      // requests from extension tab can be catched only with debugger
+      // although other tabs can be catched with webrequest
+      const name = targets.extensionId ? 'debuggerTabRequestCatcher' : 'webRequestCatcher';
+      this[name] = this[name] || new BgRequestCatcher(name);
+      this[name].setTarget({tabId: targets.tabId});
+      catchers.push(this[name]);
     }
     this._collector = new RequestCollector(catchers);
   },
 
   start() {
-    console.log('fiddler start');
+    // console.log('fiddler start');
     return this._collector.start();
   },
 
   stop() {
-    console.log('fiddler stop');
+    // console.log('fiddler stop');
     return this._collector.stop();
   },
 
