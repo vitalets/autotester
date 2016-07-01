@@ -23,6 +23,7 @@ class RequestCollector {
     return Promise.all(tasks).then(requests => {
       // flatten requests array
       this._requests = requests.reduce((res, reqs) => res.concat(reqs), []);
+      return this._requests;
     });
   }
 

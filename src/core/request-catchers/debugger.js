@@ -76,7 +76,7 @@ class DebuggerRequestCatcher {
       if (!this._isMyEvent(source)) {
         return;
       }
-      if (method === 'Network.requestWillBeSent') {
+      if (method === 'Network.requestWillBeSent' && this._passFilter(params.request)) {
         this._requests.push(params.request);
       }
     });
@@ -92,5 +92,8 @@ class DebuggerRequestCatcher {
   }
   _isMyEvent(source) {
     return this._target && this._target.extensionId === source.extensionId;
+  }
+  _passFilter(request) {
+    return !/^data\:/.test(request.url);
   }
 }

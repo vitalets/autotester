@@ -15,15 +15,24 @@ window.page = {
     }
     return new Promise((resolve, reject) => {
       chrome.devtools.inspectedWindow.eval(code, (result, exceptionInfo = {}) => {
+        let msg = ' Error in eval: ' + code;
         if (exceptionInfo.isError) {
-          reject(exceptionInfo.description);
+          msg = exceptionInfo.description + msg;
+          console.error(msg);
+          reject(msg);
         } else if (exceptionInfo.isException) {
-          reject(exceptionInfo.value);
+          msg = exceptionInfo.value + msg;
+          console.error(msg);
+          reject(msg);
         } else {
           resolve(result);
         }
       });
     });
+  },
+
+  evalInFn(code, nolog) {
+    return page.eval(`(function() {${code}}())`, nolog);
   },
 
   /**
@@ -63,7 +72,10 @@ window.page = {
    */
   click(selector, index = 0) {
     return page._ensureInjected()
-      .then(() => page.eval(`window.syn.click(window.autotester.el('${selector}', ${index}))`));
+      .then(() => page.evalInFn(`
+        const el = window.autotester.el('${selector}', ${index});
+        window.syn.click(el);
+      `));
   },
 
   /**

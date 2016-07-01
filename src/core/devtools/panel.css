@@ -1,13 +1,30 @@
+html {
+    box-sizing: border-box;
+}
+
 body {
-    margin: 5px;
+    margin: 35px 5px 5px 5px;
+}
+
+.top-panel {
+    position: fixed;
+    height: 30px;
+    padding: 5px;
+    background-color: green;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-bottom: solid 1px lightgray;
+    color: white;
 }
 
 #mocha-stats {
-    top: 60px;
+    top: 40px;
 }
 
 #mocha {
-    margin: 10px 0;
+    margin: 0;
+    padding-top: 5px;
 }
 
 #error {
@@ -17,4 +34,9 @@ body {
     color: red;
     font-size: 1.3em;
     display: none;
+}
+
+#reload {
+    position: absolute;
+    right: 5px;
 }

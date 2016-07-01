@@ -11,9 +11,9 @@ window.autotester = {
   el(selector, index = 0) {
     const elms = document.querySelectorAll(selector);
     if (!elms.length) {
-      throw new Error(`Elements not found ${selector}`);
+      throw new Error(`Elements not found for ${selector}`);
     } else if (index >= elms.length) {
-      throw new Error(`Elements count ${selector} %i is less than expected index %i`, elms.length, index);
+      throw new Error(`Elements count for ${selector} ${elms.length} is less than index ${index}`);
     }
     return elms[index];
   }

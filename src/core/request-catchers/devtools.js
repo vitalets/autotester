@@ -23,8 +23,11 @@ class DevtoolsRequestCatcher {
     chrome.devtools.network.onRequestFinished.addListener(this._handler);
   }
   _handler(data) {
-    if (this._started) {
+    if (this._started && this._passFilter(data.request)) {
       this._requests.push(data.request);
     }
+  }
+  _passFilter(request) {
+    return !/^data\:/.test(request.url);
   }
 }
