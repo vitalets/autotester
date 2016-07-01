@@ -1,5 +1,7 @@
 /**
  * Actions with tested page
+ * Uses `syn` library for user actions
+ * See: https://github.com/bitovi/syn
  */
 window.page = {
   /**
@@ -75,6 +77,22 @@ window.page = {
       .then(() => page.evalInFn(`
         const el = window.autotester.el('${selector}', ${index});
         window.syn.click(el);
+      `));
+  },
+
+  type(selector, text, index = 0) {
+    return page._ensureInjected()
+      .then(() => page.evalInFn(`
+        const el = window.autotester.el('${selector}', ${index});
+        window.syn.type(el, '${text}');
+      `));
+  },
+
+  key(selector, key, index = 0) {
+    return page._ensureInjected()
+      .then(() => page.evalInFn(`
+        const el = window.autotester.el('${selector}', ${index});
+        window.syn.key(el, '${key}');
       `));
   },
 
