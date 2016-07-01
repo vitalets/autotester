@@ -30,7 +30,7 @@ window.page = {
    * @returns {Promise}
    */
   loadScript(url) {
-    console.log('Loading to inspected window:', url);
+    console.log('Loading to inspected page:', url);
     return fetch(url)
       .catch(e => Promise.reject(`Can not fetch url: ${url}`))
       .then(r => r.text())
@@ -61,7 +61,7 @@ window.page = {
    */
   click(selector, index = 0) {
     // todo: move elements existance check to separate function
-    return page.ensureSyn()
+    return page._ensureSyn()
       .then(() => page.eval(`
         (function () {
               const elms = document.querySelectorAll('${selector}');

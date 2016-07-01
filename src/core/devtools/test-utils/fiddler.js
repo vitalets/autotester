@@ -1,75 +1,70 @@
 
 window.fiddler = {
   /**
-   *
-   * @param {Array} catchers array of {type, target}
+   * Set targets
+   * @param {Object} targets
+   * @param {Boolean} targets.devtools
+   * @param {String} targets.extensionId
+   * @param {String} targets.tabId
    */
-  configure(catchers = []) {
-    this.catchers = [];
-    catchers.forEach(catcher => {
-      // curently only one instance of each catcher is supported
-      if (catcher.type === 'devtools') {
-        catcher.instance = new DevtoolsRequestCatcher();
-      } else if (catcher.type === 'debugger') {
-        BackgroundProxy.call(`debuggerRequestCatcher.setTarget`, catcher.target);
-      } else if (catcher.type === 'webrequest') {
-        // todo
-      }
-      this.catchers.push(catcher);
-    });
+  setTargets(targets = {}) {
+    const catchers = [];
+    if (targets.devtools) {
+      this.devtoolsCatcher = this.devtoolsCatcher || new DevtoolsRequestCatcher();
+      catchers.push(this.devtoolsCatcher);
+    }
+    if (targets.extensionId) {
+      const extensionBgCatcher = new BgRequestCatcher('debuggerBgRequestCatcher');
+      extensionBgCatcher.setTarget({extensionId: targets.extensionId});
+      catchers.push(extensionBgCatcher);
+    }
+    if (typeof targets.tabId === 'number') {
+      const tabCatcher = new BgRequestCatcher('webRequestCatcher');
+      tabCatcher.setTarget({tabId: targets.tabId});
+      catchers.push(tabCatcher);
+    }
+    this._collector = new RequestCollector(catchers);
   },
 
   start() {
-    this._requestsAsString = '';
-    this._requests = [];
-    this._devtoolsRequestCatcher.start();
-    return this._extensionId
-      ? BackgroundProxy.call(`debuggerRequestCatcher.start`)
-      : Promise.resolve();
+    console.log('fiddler start');
+    return this._collector.start();
   },
 
   stop() {
-    this._requests = this._devtoolsRequestCatcher.stop();
-    return this._extensionId
-      ? BackgroundProxy.call(`debuggerRequestCatcher.stop`)
-      .then(bgRequests => this._requests = this._requests.concat(bgRequests))
-      : Promise.resolve();
+    console.log('fiddler stop');
+    return this._collector.stop();
   },
 
-  filter(matchInfo) {
-    return this._requests.filter(request => {
-      if (matchInfo) {
-        if (typeof matchInfo === 'string') {
-          return matchInfo === request.url;
-        }
-
-        if (matchInfo instanceof RegExp) {
-          return matchInfo.test(request.url);
-        }
-
-        if (typeof matchInfo === 'object') {
-          return Object.keys(matchInfo).every(key => request[key] === matchInfo[key]);
-        }
-      }
-      return true;
-    });
-  },
-
-  assert(matchInfo, count = 1) {
-    const filtered = this.filter(matchInfo);
-    const msg = 'Requests not matched: ' + JSON.stringify(matchInfo, false, 2) + this.requestsAsString;
-    assert.equal(filtered.length, count, msg);
-  },
-
-  get requests() {
-    return this._requests.slice();
-  },
-
-  get requestsAsString() {
-    if (!this._requestsAsString) {
-      this._requestsAsString = `\nCatched requests: ${this._requests.length}\n`;
-      this._requestsAsString += this._requests.map(r => `${r.method} ${r.url}`).join('\n') + '\n';
+  assert(filter, count = 1) {
+    const filtered = this._collector.getRequests(filter);
+    const filterStr = JSON.stringify(filter, false, 2);
+    if (filtered.length === count) {
+      assert.equal(filtered.length, count, `Request matched for ${filterStr}`);
+    } else {
+      const msg = `Requests not matched for ${filterStr} \n ${this._collector.getRequestsAsString()}`;
+      assert.equal(filtered.length, count, msg);
     }
-    return this._requestsAsString;
-  },
+  }
 };
+
+/**
+ * Wrapper for background catchers via BackgroundProxy calls
+ */
+class BgRequestCatcher {
+  constructor(name) {
+    this.name = name;
+  }
+  setTarget(target) {
+    return BackgroundProxy.call(`${this.name}.setTarget`, target);
+  }
+  start() {
+    return BackgroundProxy.call({
+      path: `${this.name}.start`,
+      promise: true
+    });
+  }
+  stop() {
+    return BackgroundProxy.call(`${this.name}.stop`);
+  }
+}

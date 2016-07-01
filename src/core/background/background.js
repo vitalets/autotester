@@ -1,7 +1,9 @@
 
 BackgroundProxy.listen();
 
-window.debuggerRequestCatcher = new DebuggerRequestCatcher();
+window.debuggerBgRequestCatcher = new DebuggerRequestCatcher();
+window.debuggerTabRequestCatcher = new DebuggerRequestCatcher();
+window.webRequestCatcher = new WebRequestCatcher();
 window.tabLoader = new TabLoader();
 window.tabCatcher = new TabCatcher();
 

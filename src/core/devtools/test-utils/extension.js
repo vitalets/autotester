@@ -4,15 +4,13 @@
 
 window.extension = {
   id: '',
-  checkUrl(url) {
+  /**
+   * Checks if passed url is extension url and parse extension id from it
+   * @param {String} url
+   */
+  processPageUrl(url) {
     const parsedUrl = new URL(url);
-    if (parsedUrl.protocol === 'chrome-extension:') {
-      extension.id = parsedUrl.hostname;
-      return true;
-    } else {
-      extension.id = '';
-      return false;
-    }
+    extension.id = parsedUrl.protocol === 'chrome-extension:' ? parsedUrl.hostname : '';
   },
   uninstall() {
     return page.eval('chrome.management.uninstallSelf()');

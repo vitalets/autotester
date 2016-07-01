@@ -15,7 +15,16 @@
 class WebRequestCatcher {
   constructor() {
     this._requests = [];
-    this._handler = data => this._requests.push(data);
+    this._started = false;
+    this._handler = this._handler.bind(this);
+  }
+  /**
+   *
+   * @param {Object} target
+   * @param {Number} target.tabId
+   */
+  setTarget(target) {
+    this._target = target;
   }
   start() {
     this._requests.length = 0;
@@ -25,9 +34,11 @@ class WebRequestCatcher {
   }
   stop() {
     chrome.webRequest.onBeforeRequest.removeListener(this._handler);
-    return this.requests;
+    return this._requests;
   }
-  get requests() {
-    return this._requests.slice();
+  _handler(data) {
+    if (data.tabId === this._target.tabId) {
+      this._requests.push(data);
+    }
   }
 }

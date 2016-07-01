@@ -13,15 +13,18 @@ class DebuggerRequestCatcher {
     this._requests = [];
     this._target = null;
     this._attached = false;
+    this._started = false;
     this._listenRequests();
     this._listenDetach();
   }
   /**
    * See: https://developer.chrome.com/extensions/debugger#type-Debuggee
    * @param {Object} target
+   * @param {Object} target.extensionId
    */
   setTarget(target) {
-    if (this._attached) {
+    if (this._attached && this._target.extensionId !== target.extensionId) {
+      // todo: return Promise?
       chrome.debugger.detach(this._target);
     }
     this._target = target;
@@ -29,14 +32,14 @@ class DebuggerRequestCatcher {
   start() {
     this._requests.length = 0;
     const res = this._attached ? Promise.resolve() : this._attach();
-    return res.then(() => this._sendCommand('Network.enable'));
+    return res
+      .then(() => this._sendCommand('Network.enable'))
+      .then(() => this._started = true);
   }
   stop() {
+    this._started = false;
     this._sendCommand('Network.disable');
-    return this.requests;
-  }
-  get requests() {
-    return this._requests.slice();
+    return this._requests;
   }
   _attach() {
     if (!this._target) {
@@ -67,16 +70,27 @@ class DebuggerRequestCatcher {
   }
   _listenRequests() {
     chrome.debugger.onEvent.addListener((source, method, params) => {
-      if (source.extensionId === this._target.extensionId && method === 'Network.requestWillBeSent') {
+      if (!this._started) {
+        return;
+      }
+      if (!this._isMyEvent(source)) {
+        return;
+      }
+      if (method === 'Network.requestWillBeSent') {
         this._requests.push(params.request);
       }
     });
   }
   _listenDetach() {
     chrome.debugger.onDetach.addListener((source, reason) => {
-      if (source.extensionId === this._target.extensionId) {
+      // console.log('onDetach', source, reason);
+      if (this._isMyEvent(source)) {
         this._attached = false;
+        this._started = false;
       }
     });
+  }
+  _isMyEvent(source) {
+    return this._target && this._target.extensionId === source.extensionId;
   }
 }

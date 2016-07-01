@@ -19,9 +19,10 @@ class BackgroundProxy {
    */
   static listen() {
     chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-      if (msg && msg.name === 'background-call') {
+      if (msg && msg.name === 'background-proxy') {
         const successCallback = data => sendResponse({data: data});
         const errorCallback = error => sendResponse({error: error.message || 'Unknown error'});
+        // console.log('background-proxy', msg);
         return new BackgroundProxyExecuter(msg, successCallback, errorCallback).run();
       }
     });
@@ -39,7 +40,7 @@ class BackgroundProxy {
         args: [].slice.call(arguments, 1)
       };
     }
-    const msg = Object.assign({}, params, {name: 'background-call'});
+    const msg = Object.assign({}, params, {name: 'background-proxy'});
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(msg, result => {
         return result && result.error ? reject(result.error) : resolve(result.data);

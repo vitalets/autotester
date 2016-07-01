@@ -6,25 +6,25 @@
 class DevtoolsRequestCatcher {
   constructor() {
     this._requests = [];
-    this._enabled = false;
+    this._started = false;
+    this._handler = this._handler.bind(this);
+    // start listen here as onRequestFinished does not have removeListener
     this._listen();
   }
   start() {
     this._requests.length = 0;
-    this._enabled = true;
+    this._started = true;
   }
   stop() {
-    this._enabled = false;
-    return this.requests;
-  }
-  get requests() {
-    return this._requests.slice();
+    this._started = false;
+    return this._requests;
   }
   _listen() {
-    chrome.devtools.network.onRequestFinished.addListener(data => {
-      if (this._enabled) {
-        this._requests.push(data.request);
-      }
-    });
+    chrome.devtools.network.onRequestFinished.addListener(this._handler);
+  }
+  _handler(data) {
+    if (this._started) {
+      this._requests.push(data.request);
+    }
   }
 }

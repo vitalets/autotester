@@ -65,7 +65,7 @@ class TestRunner {
     return Promise.all(tasks);
   }
   _runTests() {
-    return mocha.run();
+    return new Promise(resolve => mocha.run(resolve));
   }
   _addBaseUrl(url) {
     return /^https?:\/\//i.test(url) ? url : `${this.config.baseUrl}/${url.replace(/^\//, '')}`;
