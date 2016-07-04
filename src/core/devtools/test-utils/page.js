@@ -2,6 +2,16 @@
  * Actions with tested page
  * Uses `syn` library for user actions
  * See: https://github.com/bitovi/syn
+ *
+ * Limitations:
+ *
+ * 1. In Chrome key emulation is still experimental:
+ * https://bugs.webkit.org/show_bug.cgi?id=16735
+ * https://bugs.chromium.org/p/chromium/issues/detail?id=327853
+ *
+ * Working solution:
+ * http://stackoverflow.com/questions/10455626/keydown-simulation-in-chrome-fires-normally-but-not-the-correct-key/10520017#10520017
+ *
  */
 window.page = {
   /**
@@ -93,6 +103,22 @@ window.page = {
       .then(() => page.evalInFn(`
         const el = window.autotester.el('${selector}', ${index});
         window.syn.key(el, '${key}');
+      `));
+  },
+
+  /**
+   * Submit form of input.
+   * This method is needed because Chrome can not simulate submit by <enter>
+   * as we can't focus element while devtools is open.
+   * @see http://stackoverflow.com/questions/14783585/jquery-focus-command-doesnt-work-from-chrome-command-line
+   *
+   * @param {String} selector
+   */
+  submit(selector) {
+    return page._ensureInjected()
+      .then(() => page.evalInFn(`
+        const el = window.autotester.el('${selector}');
+        el.form.submit();
       `));
   },
 

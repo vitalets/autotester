@@ -18,12 +18,16 @@ class BackgroundProxy {
    * Start listen messages in background
    */
   static listen() {
-    chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-      if (msg && msg.name === 'background-proxy') {
-        const successCallback = data => sendResponse({data: data});
-        const errorCallback = error => sendResponse({error: error.message || 'Unknown error'});
-        // console.log('background-proxy', msg);
-        return new BackgroundProxyExecuter(msg, successCallback, errorCallback).run();
+    chrome.runtime.onMessage.addListener((data, sender, sendResponse) => {
+      if (data && data.name === 'background-proxy') {
+        const successCallback = responseData => sendResponse({data: responseData});
+        const errorCallback = error => {
+          let msg = typeof error === 'string' ? error : error.message;
+          msg = `BackgroundProxy: ${msg} while calling: ${data.path}`;
+          sendResponse({error: msg});
+        };
+        // console.log('background-proxy', data);
+        return new BackgroundProxyExecuter(data, successCallback, errorCallback).run();
       }
     });
   }
@@ -88,9 +92,15 @@ class BackgroundProxyExecuter {
       // this informs chrome messaging that callback will be called asynchroniously
       return true;
     } else if (msg.promise) {
-      fnBinded().then(this.successCallback).catch(this.errorCallback);
-      // this informs chrome messaging that callback will be called asynchroniously
-      return true;
+      const promise = fnBinded();
+      if (promise && promise.then) {
+        promise.then(this.successCallback).catch(this.errorCallback);
+        // this informs chrome messaging that callback will be called asynchroniously
+        return true;
+      } else {
+        this.errorCallback('Expecting Promise');
+        return false;
+      }
     } else {
       // sync function call
       this.successCallback(fnBinded());

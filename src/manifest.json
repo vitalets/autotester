@@ -29,7 +29,7 @@
   "content_scripts": [
     {
       "all_frames": false,
-      "js": ["core/contentscripts/contentscript.js"],
+      "js": ["core/contentscript/contentscript.js"],
       "matches": ["http://*/*", "https://*/*"],
       "run_at": "document_start"
     }

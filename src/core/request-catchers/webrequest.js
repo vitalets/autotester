@@ -31,6 +31,7 @@ class WebRequestCatcher {
     if (!chrome.webRequest.onBeforeRequest.hasListener(this._handler)) {
       chrome.webRequest.onBeforeRequest.addListener(this._handler, {urls: ['<all_urls>']});
     }
+    return Promise.resolve();
   }
   stop() {
     chrome.webRequest.onBeforeRequest.removeListener(this._handler);

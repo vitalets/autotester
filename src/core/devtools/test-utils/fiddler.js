@@ -45,7 +45,7 @@ window.fiddler = {
     if (filtered.length === count) {
       assert.equal(filtered.length, count, `Request matched for ${filterStr}`);
     } else {
-      const msg = `Requests not matched for ${filterStr} \n ${this._collector.getRequestsAsString()}`;
+      const msg = `Requests not matched for ${filterStr}\n${this._collector.getRequestsAsString()}`;
       assert.equal(filtered.length, count, msg);
     }
   }

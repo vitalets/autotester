@@ -8,7 +8,7 @@ class RequestCollector {
    * @param {Array} catchers
    */
   constructor(catchers = []) {
-    this._catchers = catchers.filter(Boolean);
+    this._catchers = catchers;
   }
 
   start() {
@@ -28,22 +28,8 @@ class RequestCollector {
   }
 
   getRequests(filter) {
-    return this._requests.filter(request => {
-      if (filter) {
-        if (typeof filter === 'string') {
-          return filter === request.url;
-        }
-
-        if (filter instanceof RegExp) {
-          return filter.test(request.url);
-        }
-
-        if (typeof filter === 'object') {
-          return Object.keys(matchInfo).every(key => request[key] === filter[key]);
-        }
-      }
-      return true;
-    });
+    const requestFilter = new RequestFilter(filter);
+    return this._requests.filter(request => requestFilter.match(request));
   }
 
   getRequestsAsString() {
