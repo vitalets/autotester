@@ -11,5 +11,9 @@
   "dependencies": {
     "chai": "^3.5.0",
     "mocha": "^2.5.3"
+  },
+  "devDependencies": {
+    "archiver": "^1.0.0",
+    "fs-extra": "^0.30.0"
   }
 }

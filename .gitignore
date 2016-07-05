@@ -6,6 +6,9 @@ node_modules/
 npm-debug.log
 .idea
 
+# dist
+/dist
+
 # custom tests
 /src/tests/*
 !/src/tests/readme.md
