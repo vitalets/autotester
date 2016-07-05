@@ -3,7 +3,7 @@ Chrome extension for automated web testing
 
 ## Overview
 This extension adds **Autotester** panel to chrome devtools and allows you to develop and run functional tests for any website.
-You can run single test for particular feature in-development or batch of tests to perform pre-release testing.  
+You can run single test for particular feature or batch of tests to perform pre-release testing.  
 
 ## Key features
 * easy setup: just chrome with installed extension is needed
