@@ -1,12 +1,11 @@
 {
   "name": "autotester",
   "version": "0.1.0",
-  "description": "Makes automated testing easy",
+  "description": "Chrome extension for automated web testing",
   "scripts": {
     "copy-mocha": "cp node_modules/mocha/mocha.{js,css} src/libs/",
     "copy-chai": "cp node_modules/chai/chai.js src/libs/",
-    "copy-then-chrome": "cp node_modules/then-chrome/dist/then-chrome.js src/libs/",
-    "copy-libs": "npm run copy-mocha && npm run copy-chai && npm run copy-then-chrome",
+    "copy-libs": "npm run copy-mocha && npm run copy-chai",
     "build": "npm run copy-libs"
   },
   "dependencies": {
