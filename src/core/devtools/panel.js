@@ -10,11 +10,22 @@ function init() {
     setDomListeners();
     window.extension.processPageUrl(url);
     window.testRunner = new TestRunner();
-    readTestsConfig().then(() => {
-      window.autotesterConfig.baseUrl = TESTS_BASE_URL;
-      window.testRunner.configure(window.autotesterConfig);
-      fillTestList(testRunner.parsedTests.objects);
-    });
+    readTestsConfig()
+      .then(() => {
+        // add baseUrl for loading tests
+        window.autotesterConfig.baseUrl = TESTS_BASE_URL;
+        window.testRunner.configure(window.autotesterConfig);
+        fillTestList(testRunner.parsedTests.objects);
+        const count = testRunner.parsedTests.objects.length;
+        infoblock.success(`<b>${count}</b> test(s) loaded. Press <b>Run</b> to start awesome testing.`);
+      }, e => {
+        // todo: use instanceof for error checking
+        if (e.message.indexOf('Can not load') >= 0) {
+          infoblock.success('Configuration file <b>/tests/index.js</b> not found. Is it exists?');
+        } else {
+          return Promise.reject(e);
+        }
+      });
   });
 }
 
@@ -33,12 +44,21 @@ function reload() {
 }
 
 function runTests() {
-  setError('');
+  infoblock.clear();
   setupFiddler();
+  setUiEnabled(false);
   const testIndex = document.getElementById('testlist').value;
   testRunner.run(testIndex)
-    .then(() => fiddler.stop())
-    .catch(() => fiddler.stop());
+    .then(afterRun)
+    .catch(e => {
+      afterRun();
+      return Promise.reject(e);
+    });
+}
+
+function afterRun() {
+  fiddler.stop();
+  setUiEnabled(true);
 }
 
 function readTestsConfig() {
@@ -72,3 +92,7 @@ function setupFiddler() {
   }
 }
 
+function setUiEnabled(enabled) {
+  document.getElementById('testlist').disabled = !enabled;
+  document.getElementById('run').disabled = !enabled;
+}

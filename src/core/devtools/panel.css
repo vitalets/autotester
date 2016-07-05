@@ -1,4 +1,4 @@
-html {
+* {
     box-sizing: border-box;
 }
 
@@ -27,13 +27,22 @@ body {
     padding-top: 5px;
 }
 
-#error {
-    margin: 10px 0;
+#infoblock {
     padding: 5px;
-    border: solid 1px red;
-    color: red;
+    border: solid 1px black;
+    color: black;
     font-size: 1.3em;
     display: none;
+}
+
+#infoblock.success {
+    border-color: green;
+    color: green;
+}
+
+#infoblock.error {
+    border-color: red;
+    color: red;
 }
 
 #reload {
