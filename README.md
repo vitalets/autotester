@@ -15,7 +15,7 @@ You can run single test for particular feature or batch of tests to perform pre-
 ## Demo 
 todo: gif and link to crx
 
-## Getting started
+## Usage
 Please follow the [getting started guide](/docs/getting-started.md).
 
 ## API
