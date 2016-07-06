@@ -6,7 +6,8 @@
     "copy-mocha": "cp node_modules/mocha/mocha.{js,css} src/libs/",
     "copy-chai": "cp node_modules/chai/chai.js src/libs/",
     "copy-libs": "npm run copy-mocha && npm run copy-chai",
-    "build": "npm run copy-libs"
+    "build": "npm run copy-libs",
+    "zip-google": "node build-scripts/runner.js zip-google"
   },
   "dependencies": {
     "chai": "^3.5.0",
