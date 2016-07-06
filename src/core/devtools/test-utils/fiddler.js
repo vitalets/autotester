@@ -1,37 +1,12 @@
 
 window.fiddler = {
-  /**
-   * Set targets
-   * @param {Object} targets
-   * @param {Boolean} targets.devtools
-   * @param {String} targets.extensionId
-   * @param {String} targets.tabId
-   */
-  setTargets(targets = {}) {
-    const catchers = [];
-    if (targets.devtools) {
-      this.devtoolsCatcher = this.devtoolsCatcher || new DevtoolsRequestCatcher();
-      catchers.push(this.devtoolsCatcher);
-    }
-    if (targets.extensionId) {
-      this.extensionBgCatcher = this.extensionBgCatcher || new BgRequestCatcher('debuggerBgRequestCatcher');
-      this.extensionBgCatcher.setTarget({extensionId: targets.extensionId});
-      catchers.push(this.extensionBgCatcher);
-    }
-    if (typeof targets.tabId === 'number') {
-      // requests from extension tab can be catched only with debugger
-      // although other tabs can be catched with webrequest
-      const name = targets.extensionId ? 'debuggerTabRequestCatcher' : 'webRequestCatcher';
-      this[name] = this[name] || new BgRequestCatcher(name);
-      this[name].setTarget({tabId: targets.tabId});
-      catchers.push(this[name]);
-    }
-    this._collector = new RequestCollector(catchers);
-  },
-
   start() {
-    // console.log('fiddler start');
-    return this._collector.start();
+    return page.getUrl()
+      .then(url => {
+        const extensionId = extension.getIdFromUrl(url);
+        return extensionId ? this._attachToExtension(extensionId) : this._attachToWebPage();
+      })
+      .then(() => this._collector.start());
   },
 
   stop() {
@@ -48,6 +23,27 @@ window.fiddler = {
       const msg = `Requests not matched for ${filterStr}\n${this._collector.getRequestsAsString()}`;
       assert.equal(filtered.length, count, msg);
     }
+  },
+
+  _attachToExtension(extensionId) {
+    console.log(`attach to extension ${extensionId}`);
+    this.devtoolsCatcher = this.devtoolsCatcher || new DevtoolsRequestCatcher();
+    this.extensionBgCatcher = this.extensionBgCatcher || new BgRequestCatcher('debuggerBgRequestCatcher');
+    const tasks = [
+      this.devtoolsCatcher.attach(),
+      this.extensionBgCatcher.attach({extensionId})
+    ];
+    return Promise.all(tasks)
+      .then(() => this._collector = new RequestCollector([
+        this.devtoolsCatcher,
+        this.extensionBgCatcher
+      ]));
+  },
+  _attachToWebPage() {
+    console.log(`attach to web page`);
+    this.webRequestCatcher = this.webRequestCatcher || new BgRequestCatcher('webRequestCatcher');
+    return this.webRequestCatcher.attach({tabId: chrome.devtools.inspectedWindow.tabId})
+      .then(() => this._collector = new RequestCollector([this.webRequestCatcher]));
   }
 };
 
@@ -58,12 +54,17 @@ class BgRequestCatcher {
   constructor(name) {
     this.name = name;
   }
-  setTarget(target) {
-    return BackgroundProxy.call(`${this.name}.setTarget`, target);
+  attach(target) {
+    return BackgroundProxy.call({
+      path: `${this.name}.attach`,
+      args: [target],
+      promise: true
+    });
   }
-  start() {
+  start(filter) {
     return BackgroundProxy.call({
       path: `${this.name}.start`,
+      args: [filter],
       promise: true
     });
   }

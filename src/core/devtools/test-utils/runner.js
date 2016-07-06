@@ -16,7 +16,7 @@
  */
 const TIMEOUT_MS = 30 * 1000;
 
-class TestRunner {
+window.testRunner = {
   configure(config = {}) {
     this.config = Object.assign({
       runner: 'mocha',
@@ -25,8 +25,8 @@ class TestRunner {
       tests: [],
       baseUrl: ''
     }, config);
-    this.parsedTests = TestRunner.parseTests(this.config.tests, 0);
-  }
+    this.parsedTests = this._parseTests(this.config.tests, 0);
+  },
   run(testIndex) {
     this.clearReport();
     return Promise.resolve()
@@ -34,10 +34,10 @@ class TestRunner {
       .then(() => this._loadPrepare())
       .then(() => this._loadTests(testIndex))
       .then(() => this._runTests());
-  }
+  },
   clearReport() {
     document.querySelector('.report').innerHTML = '';
-  }
+  },
   _loadFrameworks() {
     return Promise.all([
       // can not run mocha twice, so re-load script every time
@@ -49,12 +49,12 @@ class TestRunner {
       window.mocha.setup({ui: 'bdd', timeout: TIMEOUT_MS});
       window.assert = chai.assert;
     });
-  }
+  },
   _loadPrepare() {
     return this.config.prepare
       .map(url => this._addBaseUrl(url))
       .reduce((res, url) => res.then(() => utils.loadScript(url)), Promise.resolve());
-  }
+  },
   _loadTests(testIndex) {
     testIndex = parseInt(testIndex, 10);
     const urls = Number.isNaN(testIndex) ? this.parsedTests.urls : this.parsedTests.objects[testIndex].urls;
@@ -63,14 +63,14 @@ class TestRunner {
       .map(url => this._addBaseUrl(url))
       .map(url => utils.loadScript(url));
     return Promise.all(tasks);
-  }
+  },
   _runTests() {
     return new Promise(resolve => mocha.run(resolve));
-  }
+  },
   _addBaseUrl(url) {
     return /^https?:\/\//i.test(url) ? url : `${this.config.baseUrl}/${url.replace(/^\//, '')}`;
-  }
-  static parseTests(arr, level = 0) {
+  },
+  _parseTests(arr, level = 0) {
     return arr.reduce((res, item) => {
       if (!item) {
         return res;
@@ -89,7 +89,7 @@ class TestRunner {
 
       // group of tests
       if (Array.isArray(item.tests)) {
-        const nested = TestRunner.parseTests(item.tests, level + 1);
+        const nested = this._parseTests(item.tests, level + 1);
         const group = {level, urls: nested.urls, label: item.label || item.tests};
         res.objects.push(group);
         res.objects = res.objects.concat(nested.objects);
@@ -99,4 +99,4 @@ class TestRunner {
       return res;
     }, {objects: [], urls: []});
   }
-}
+};

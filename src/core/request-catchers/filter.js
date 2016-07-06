@@ -10,60 +10,70 @@ class RequestFilter {
    * @param {String} [filter.urlStart]
    * @param {String} [filter.type]
    * @param {Object} [filter.urlParams]
-   * @param {Boolean} [filter.includeDataUrls = false]
+   * @param {Boolean} [filter.inverse = false]
    */
   constructor(filter) {
-    this.filter = {};
+    this._filter = {};
 
     if (!filter) {
       return;
     }
 
     if (typeof filter === 'string' || filter instanceof RegExp ) {
-      this.filter.url = filter;
+      this._filter.url = filter;
     }
 
     if (typeof filter === 'object') {
-      this.filter = filter;
+      this._filter = filter;
     }
   }
 
   match(request) {
-    let urlInstance = null;
-    return Object.keys(this.filter).every(field => {
-      if (field === 'url') {
-        return this._matchUrl(request.url);
-      }
-      if (field === 'urlStart') {
-        return request.url.startsWith(this.filter.urlStart);
-      }
-      if (field === 'urlParams') {
-        urlInstance = urlInstance || new URL(request.url);
-        console.log( this._matchUrlParams(urlInstance), request.url);
-        return this._matchUrlParams(urlInstance);
-      }
-      // exact match
-      return this.filter[field] === request[field];
+    const matches = [
+      this._matchType,
+      this._matchUrl,
+      this._matchUrlStart,
+      this._matchUrlParams
+    ];
+    const isMatched = matches.every(fn => {
+      const res = fn.call(this, request);
+      //console.log(fn.name, res, request.url);
+      return res;
     });
+    return this._filter.inverse ? !isMatched : isMatched;
   }
 
   toString() {
-    return JSON.stringify(this.filter, (key, value) => {
+    return JSON.stringify(this._filter, (key, value) => {
       return value instanceof RegExp ? value.toString() : value;
     }, 2);
   }
 
-  _matchUrl(requestUrl) {
-    return this.filter.url instanceof RegExp
-      ? this.filter.url.test(requestUrl)
-      : this.filter.url === requestUrl;
+  _hasField(field) {
+    return this._filter[field] !== undefined;
   }
 
-  _matchUrlParams(urlInstance) {
-    return Object.keys(this.filter.urlParams).every(name => {
-      // console.log(urlInstance.href);
-      console.log(name, urlInstance.searchParams.get(name), this.filter.urlParams[name]);
-      return urlInstance.searchParams.get(name) === this.filter.urlParams[name];
+  _matchType(request) {
+    return !this._hasField('type') || this._filter.type.toLowerCase() === request.type.toLowerCase();
+  }
+
+  _matchUrl(request) {
+    return !this._hasField('url') || (this._filter.url instanceof RegExp
+        ? this._filter.url.test(request.url)
+        : this._filter.url === request.url);
+  }
+
+  _matchUrlStart(request) {
+    return !this._hasField('urlStart') || request.url.startsWith(this._filter.urlStart);
+  }
+
+  _matchUrlParams(request) {
+    if (!this._hasField('urlParams')) {
+      return true;
+    }
+    const urlInstance = new URL(request.url);
+    return Object.keys(this._filter.urlParams).every(name => {
+      return urlInstance.searchParams.get(name) === this._filter.urlParams[name];
     });
   }
 }

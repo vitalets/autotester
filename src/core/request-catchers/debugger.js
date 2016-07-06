@@ -6,9 +6,63 @@
  * chrome://flags/#extensions-on-chrome-urls
  *
  * About warning: https://bugs.chromium.org/p/chromium/issues/detail?id=475151
+ *
+ * Target can be tab or extension
+ * See: https://developer.chrome.com/extensions/debugger#type-Debuggee
  */
 
-class DebuggerRequestCatcher {
+
+class DebuggerRequestCatcher extends BaseRequestCatcher {
+  _attach() {
+    return DebuggerRequestCatcher.promiseCall(chrome.debugger, 'attach', this._target, '1.1');
+  }
+  _start() {
+    return this._sendCommand('Network.enable');
+  }
+  _stop() {
+    return this._sendCommand('Network.disable');
+  }
+  _detach() {
+    return DebuggerRequestCatcher.promiseCall(chrome.debugger, 'detach', this._target);
+  }
+  _handler(source, method, params) {
+    if (!this._started || !this._isSameTarget(source)) {
+      return;
+    }
+    if (method === 'Network.requestWillBeSent') {
+      this._pushRequest(params.request);
+    }
+  }
+  _isSameTarget(target) {
+    return this._target && target
+      && (this._target.tabId === target.tabId || this._target.extensionId === target.extensionId);
+  }
+  _alwaysListen() {
+    chrome.debugger.onEvent.addListener(this._handler);
+    chrome.debugger.onDetach.addListener(this._onDetach.bind(this));
+  }
+  _sendCommand(command) {
+    return DebuggerRequestCatcher.promiseCall(chrome.debugger, 'sendCommand', this._target, command, {});
+  }
+  _onDetach(source, reason) {
+    console.log('onDetach', source, reason);
+    if (this._isSameTarget(source)) {
+      this._attached = false;
+      this._started = false;
+    }
+  }
+  static promiseCall(obj, method) {
+    const args = [].slice.call(arguments, 2);
+    return new Promise((resolve, reject) => {
+      args.push(res => chrome.runtime.lastError ? reject(chrome.runtime.lastError) : resolve(res));
+      obj[method].apply(obj, args);
+    });
+  }
+}
+
+
+/*
+class DebuggerRequestCatcher1 {
   constructor() {
     this._requests = [];
     this._target = null;
@@ -17,11 +71,6 @@ class DebuggerRequestCatcher {
     this._listenRequests();
     this._listenDetach();
   }
-  /**
-   * See: https://developer.chrome.com/extensions/debugger#type-Debuggee
-   * @param {Object} target
-   * @param {Object} target.extensionId
-   */
   setTarget(target) {
     if (this._attached && this._target.extensionId !== target.extensionId) {
       // todo: return Promise?
@@ -97,3 +146,4 @@ class DebuggerRequestCatcher {
     return !/^data\:/.test(request.url);
   }
 }
+*/

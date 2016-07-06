@@ -20,7 +20,10 @@ class BackgroundProxy {
   static listen() {
     chrome.runtime.onMessage.addListener((data, sender, sendResponse) => {
       if (data && data.name === 'background-proxy') {
-        const successCallback = responseData => sendResponse({data: responseData});
+        const successCallback = responseData => {
+          // console.log('background-proxy response', responseData);
+          sendResponse({data: responseData});
+        };
         const errorCallback = error => {
           let msg = typeof error === 'string' ? error : error.message;
           msg = `BackgroundProxy: ${msg} while calling: ${data.path}`;

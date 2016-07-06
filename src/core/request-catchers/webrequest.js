@@ -7,39 +7,24 @@
  * https://bugs.chromium.org/p/chromium/issues/detail?id=510802#c37
  *
  * Advantage:
- * Can fake server response! (todo)
- *
- * Not used now.
+ * Can mock server response!
  */
 
-class WebRequestCatcher {
-  constructor() {
-    this._requests = [];
-    this._started = false;
-    this._handler = this._handler.bind(this);
-  }
-  /**
-   *
-   * @param {Object} target
-   * @param {Number} target.tabId
-   */
-  setTarget(target) {
-    this._target = target;
-  }
-  start() {
-    this._requests.length = 0;
+class WebRequestCatcher extends BaseRequestCatcher {
+  _start() {
     if (!chrome.webRequest.onBeforeRequest.hasListener(this._handler)) {
       chrome.webRequest.onBeforeRequest.addListener(this._handler, {urls: ['<all_urls>']});
     }
-    return Promise.resolve();
   }
-  stop() {
+  _stop() {
     chrome.webRequest.onBeforeRequest.removeListener(this._handler);
-    return this._requests;
   }
   _handler(data) {
-    if (data.tabId === this._target.tabId) {
-      this._requests.push(data);
+    if (this._isSameTarget({tabId: data.tabId})) {
+      this._pushRequest(data);
     }
+  }
+  _isSameTarget(target) {
+    return this._target && target && this._target.tabId === target.tabId;
   }
 }

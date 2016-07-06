@@ -8,13 +8,11 @@ function init() {
   page.getUrl().then(url => {
     console.log('Autotester opened for tab', chrome.devtools.inspectedWindow.tabId, url);
     setDomListeners();
-    window.extension.processPageUrl(url);
-    window.testRunner = new TestRunner();
     readTestsConfig()
       .then(() => {
         // add baseUrl for loading tests
         window.autotesterConfig.baseUrl = TESTS_BASE_URL;
-        window.testRunner.configure(window.autotesterConfig);
+        testRunner.configure(window.autotesterConfig);
         fillTestList(testRunner.parsedTests.objects);
         const count = testRunner.parsedTests.objects.length;
         infoblock.success(`<b>${count}</b> test(s) loaded. Press <b>Run</b> to start awesome testing.`);
@@ -40,12 +38,11 @@ function reload() {
   BackgroundProxy.call({path: 'chrome.runtime.reload', async: false});
   // timeouts needed for background to get ready
   setTimeout(() => window.location.reload(), 500);
-  setTimeout(() => page.reload(), 600);
+  // setTimeout(() => page.reload(), 600);
 }
 
 function runTests() {
   infoblock.clear();
-  setupFiddler();
   setUiEnabled(false);
   const testIndex = document.getElementById('testlist').value;
   testRunner.run(testIndex)
@@ -73,23 +70,6 @@ function fillTestList(tests) {
     const label = '-'.repeat(test.level * 3) + test.label;
     el.options[el.options.length] = new Option(label, index);
   });
-}
-
-function setupFiddler() {
-  if (extension.id) {
-    // for extension use devtools for catching page requests
-    // and debugger for catching background page requests
-    window.fiddler.setTargets({
-      devtools: true,
-      extensionId: extension.id
-    });
-  } else {
-    // for normal webpages use webRequest for catching
-    // as it allows to mock responses
-    window.fiddler.setTargets({
-      tabId: chrome.devtools.inspectedWindow.tabId
-    });
-  }
 }
 
 function setUiEnabled(enabled) {

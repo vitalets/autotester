@@ -14,7 +14,9 @@ class RequestCollector {
   start() {
     this._requestsAsString = '';
     this._requests = [];
-    const tasks = this._catchers.map(catcher => catcher.start());
+    // exclude 'data:' urls
+    const filter = {urlStart: 'data:', inverse: true};
+    const tasks = this._catchers.map(catcher => catcher.start(filter));
     return Promise.all(tasks);
   }
 
