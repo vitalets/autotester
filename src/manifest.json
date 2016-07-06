@@ -1,6 +1,6 @@
 {
   "name": "Autotester",
-  "description": "Makes automated testing easy",
+  "description": "Chrome extension for automated web testing",
   "version": "0.1.0",
   "manifest_version": 2,
 
