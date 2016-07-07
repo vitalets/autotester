@@ -8,6 +8,7 @@ class RequestFilter {
    * @param {String|RegExp|Object} [filter]
    * @param {String|RegExp} [filter.url]
    * @param {String} [filter.urlStart]
+   * @param {String} [filter.urlContain]
    * @param {String} [filter.type]
    * @param {Object} [filter.urlParams]
    * @param {Boolean} [filter.inverse = false]
@@ -33,13 +34,10 @@ class RequestFilter {
       this._matchType,
       this._matchUrl,
       this._matchUrlStart,
+      this._matchUrlContain,
       this._matchUrlParams
     ];
-    const isMatched = matches.every(fn => {
-      const res = fn.call(this, request);
-      //console.log(fn.name, res, request.url);
-      return res;
-    });
+    const isMatched = matches.every(fn => fn.call(this, request));
     return this._filter.inverse ? !isMatched : isMatched;
   }
 
@@ -65,6 +63,10 @@ class RequestFilter {
 
   _matchUrlStart(request) {
     return !this._hasField('urlStart') || request.url.startsWith(this._filter.urlStart);
+  }
+
+  _matchUrlContain(request) {
+    return !this._hasField('urlContain') || request.url.indexOf(this._filter.urlContain) >= 0;
   }
 
   _matchUrlParams(request) {
