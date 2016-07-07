@@ -4,8 +4,7 @@
   "description": "Chrome extension for automated web testing",
   "scripts": {
     "libs": "node build-scripts/runner.js copy-libs",
-    "build": "npm run copy-libs",
-    "build-google": "node build-scripts/runner.js zip-google"
+    "build": "node build-scripts/runner.js build"
   },
   "dependencies": {
     "chai": "^3.5.0",

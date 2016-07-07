@@ -18,9 +18,9 @@ switch (cmd) {
   case 'copy-libs':
     copyLibs.run();
     break;
-  case 'zip-google':
+  case 'build':
     unpacked.create('google');
-    zip.createCli('dist/unpacked', 'dist/autotester-google.zip');
+    zip.create('dist/unpacked', 'dist/autotester.zip');
     break;
   default:
     console.log(`Unknown command: ${cmd}`)

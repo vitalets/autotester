@@ -18,7 +18,7 @@ exports.create = function (exampleDir) {
 
   if (fs.existsSync(examplePath)) {
     fs.copySync(examplePath, testsPath);
-    console.log(`Created: ${outPath} with ${exampleDir} tests`);
+    console.log(`Created: ${outPath} with '${exampleDir}' tests`);
   } else {
     fs.mkdirsSync(testsPath);
     console.log(`Created: ${outPath} with no tests`);
