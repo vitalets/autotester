@@ -16,5 +16,9 @@ window.autotester = {
       throw new Error(`Elements count for ${selector} ${elms.length} is less than index ${index}`);
     }
     return elms[index];
+  },
+  elemProp(selector, prop = '') {
+    const el = autotester.el(selector);
+    return prop.split('.').reduce((res, propItem) => res[propItem], el);
   }
 };

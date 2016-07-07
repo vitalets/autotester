@@ -33,6 +33,7 @@ body {
     color: black;
     font-size: 1.3em;
     display: none;
+    white-space: pre-wrap;
 }
 
 #infoblock.success {

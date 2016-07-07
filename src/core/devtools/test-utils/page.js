@@ -86,7 +86,8 @@ window.page = {
     return page._ensureInjected()
       .then(() => page.evalInFn(`
         const el = window.autotester.el('${selector}', ${index});
-        window.syn.click(el);
+        // window.syn.click(el);
+        el.click();
       `));
   },
 
@@ -123,6 +124,17 @@ window.page = {
   },
 
   /**
+   * Returns element porperty
+   * @param {String} selector
+   * @param {String} prop
+   * @returns {Promise}
+     */
+  elemProp(selector, prop) {
+    return page._ensureInjected()
+      .then(() => page.eval(`autotester.elemProp('${selector}', '${prop}')`));
+  },
+
+  /**
    * Ensures that all required scripts are injected into page
    */
   _ensureInjected() {
@@ -133,7 +145,7 @@ window.page = {
   _inject() {
     const scripts = [
       'core/devtools/test-utils/page-inject.js',
-      'libs/syn.js'
+      'core/libs/syn.js'
     ];
     const tasks = scripts
       .map(scriptUrl => chrome.runtime.getURL(scriptUrl))

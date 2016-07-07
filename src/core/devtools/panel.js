@@ -30,6 +30,11 @@ function init() {
 function setDomListeners() {
   document.getElementById('reload').addEventListener('click', reload);
   document.getElementById('run').addEventListener('click', runTests);
+  document.body.addEventListener('click', event => {
+    if (event.target.id === 'enable-flags') {
+      enableFlags();
+    }
+  });
 }
 
 function reload() {
@@ -75,4 +80,23 @@ function fillTestList(tests) {
 function setUiEnabled(enabled) {
   document.getElementById('testlist').disabled = !enabled;
   document.getElementById('run').disabled = !enabled;
+}
+
+function enableFlags() {
+  page.navigate('chrome://flags/')
+    .then(() => wait.ms(500))
+    .then(() => enableFlag('silent-debugger-extension-api'))
+    .then(() => enableFlag('extensions-on-chrome-urls'))
+    // restart chrome
+    .then(() => page.elemProp('.needs-restart', 'style.display'))
+    .then(display => display !== 'none' ? page.click('.experiment-restart-button') : '');
+}
+
+function enableFlag(flag) {
+  const selector = `#${flag} .experiment-enable-link`;
+  return Promise.resolve()
+    .then(() => wait.ms(500))
+    .then(() => page.elemProp(selector, 'style.display'))
+    .then(display => display !== 'none' ? page.click(selector) : '')
+    .then(() => wait.ms(500))
 }

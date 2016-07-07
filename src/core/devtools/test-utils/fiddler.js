@@ -36,7 +36,19 @@ window.fiddler = {
       .then(() => this._collector = new RequestCollector([
         this.devtoolsCatcher,
         this.extensionBgCatcher
-      ]));
+      ]), e => {
+        if (typeof e === 'string' && e.indexOf('Cannot access a chrome-extension:// URL of different extension') > 0) {
+          const msg = 'You are trying to catch http requests of another extension. ' +
+          'To allow it you should enable 2 chrome flags:\n' +
+          '  --silent-debugger-extension-api\n' +
+          '  --extensions-on-chrome-urls\n' +
+          '<a href="#" id="enable-flags">Click here to enable these flags automatically and restart chrome</a>';
+          infoblock.error(msg);
+          return Promise.reject(msg);
+        } else {
+          return Promise.reject(e);
+        }
+      });
   },
   _attachToWebPage() {
     console.log(`attach to web page`);
