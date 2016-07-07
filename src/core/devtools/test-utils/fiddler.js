@@ -10,8 +10,7 @@ window.fiddler = {
   },
 
   stop() {
-    // console.log('fiddler stop');
-    return this._collector.stop();
+    return this._collector && this._collector.stop() || Promise.resolve();
   },
 
   assert(filter, count = 1) {

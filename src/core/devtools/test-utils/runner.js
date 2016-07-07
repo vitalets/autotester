@@ -19,8 +19,6 @@ const TIMEOUT_MS = 30 * 1000;
 window.testRunner = {
   configure(config = {}) {
     this.config = Object.assign({
-      runner: 'mocha',
-      assert: 'chai',
       prepare: [],
       tests: [],
       baseUrl: ''
@@ -42,9 +40,9 @@ window.testRunner = {
     return Promise.all([
       // can not run mocha twice, so re-load script every time
       // see https://github.com/mochajs/mocha/issues/995
-      utils.loadScript('/libs/mocha.js'),
+      utils.loadScript('/core/libs/mocha.js'),
       // reload chai just for consistency here
-      utils.loadScript('/libs/chai.js')
+      utils.loadScript('/core/libs/chai.js')
     ]).then(() => {
       window.mocha.setup({ui: 'bdd', timeout: TIMEOUT_MS});
       window.assert = chai.assert;
