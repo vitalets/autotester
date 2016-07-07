@@ -37,14 +37,11 @@ window.fiddler = {
         this.devtoolsCatcher,
         this.extensionBgCatcher
       ]), e => {
-        if (typeof e === 'string' && e.indexOf('Cannot access a chrome-extension:// URL of different extension') > 0) {
-          const msg = 'You are trying to catch http requests of another extension. ' +
-          'To allow it you should enable 2 chrome flags:\n' +
-          '  --silent-debugger-extension-api\n' +
-          '  --extensions-on-chrome-urls\n' +
-          '<a href="#" id="enable-flags">Click here to enable these flags automatically and restart chrome</a>';
-          infoblock.error(msg);
-          return Promise.reject(msg);
+        // check for error due to not enabled flags
+        const flagsError = this._checkFlagsError(e);
+        if (flagsError) {
+          infoblock.error(flagsError);
+          return Promise.reject(flagsError);
         } else {
           return Promise.reject(e);
         }
@@ -55,6 +52,16 @@ window.fiddler = {
     this.webRequestCatcher = this.webRequestCatcher || new BgRequestCatcher('webRequestCatcher');
     return this.webRequestCatcher.attach({tabId: chrome.devtools.inspectedWindow.tabId})
       .then(() => this._collector = new RequestCollector([this.webRequestCatcher]));
+  },
+
+  _checkFlagsError(e) {
+    if (typeof e === 'string' && e.indexOf('Cannot access a chrome-extension:// URL of different extension') > 0) {
+      return 'You are trying to catch http requests of another extension. ' +
+        'To allow it you should enable 2 chrome flags:\n' +
+        '  --silent-debugger-extension-api\n' +
+        '  --extensions-on-chrome-urls\n' +
+        '<a href="#" id="enable-flags">Click here to enable these flags automatically and restart chrome</a>';
+    }
   }
 };
 

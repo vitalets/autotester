@@ -95,7 +95,6 @@ function enableFlags() {
 function enableFlag(flag) {
   const selector = `#${flag} .experiment-enable-link`;
   return Promise.resolve()
-    .then(() => wait.ms(500))
     .then(() => page.elemProp(selector, 'style.display'))
     .then(display => display !== 'none' ? page.click(selector) : '')
     .then(() => wait.ms(500))
