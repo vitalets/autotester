@@ -15,7 +15,7 @@ function init() {
         testRunner.configure(window.autotesterConfig);
         fillTestList(testRunner.parsedTests.objects);
         const count = testRunner.parsedTests.objects.length;
-        infoblock.success(`<b>${count}</b> test(s) loaded. Press <b>Run</b> to start awesome testing.`);
+        infoblock.success(`Tests loaded: <b>${count}</b>. Press <b>Run</b> to start awesome testing.`);
       }, e => {
         // todo: use instanceof for error checking
         if (e.message.indexOf('Can not load') >= 0) {

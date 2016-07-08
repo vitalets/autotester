@@ -141,16 +141,20 @@ window.page = {
   },
 
   /**
-   * Checks that elem is visible
+   * Checks that elem is visible.
+   * Currently we check that elem is visible by css and has size.
+   * It is not reliable to check element in viewport as it can be scrolled, depends on screensize etc.
+   *
+   * See: http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+   * See: http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
+   *
    * @param {String|Array} selector
    * @returns {Promise}
    */
   elemVisible(selector) {
-    // See: http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
     return this._elemEval(selector, `return elem && getComputedStyle(elem).display !== 'none'`, false)
       .then(isVisible => isVisible
-        // See: http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
-        ? this._elemEval(selector, `return autotester.isElementInViewport(elem)`)
+        ? this._elemEval(selector, `return autotester.elemHasSize(elem)`)
         : false
       )
   },

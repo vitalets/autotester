@@ -10,15 +10,15 @@ window.autotester = {
    * @param {Boolean} throwError
    */
   elem(selector, index, throwError = true) {
-    const elms = index ? document.querySelectorAll(selector) : [document.querySelector(selector)].filter(Boolean);
+    const elems = index ? document.querySelectorAll(selector) : [document.querySelector(selector)].filter(Boolean);
     if (throwError) {
-      if (!elms.length) {
+      if (!elems.length) {
         throw new Error(`Elements not found for ${selector}`);
-      } else if (index >= elms.length) {
-        throw new Error(`Elements count for ${selector} ${elms.length} is less than index ${index}`);
+      } else if (index >= elems.length) {
+        throw new Error(`Elements count for ${selector} ${elems.length} is less than index ${index}`);
       }
     }
-    return elms[index];
+    return elems[index];
   },
 
   /**
@@ -27,7 +27,7 @@ window.autotester = {
    * @param {DOMElement} elem
    * @returns {boolean}
    */
-  isElementInViewport(elem) {
+  elemInViewport(elem) {
     const rect = elem.getBoundingClientRect();
     return (
       rect.top >= 0 &&
@@ -35,5 +35,13 @@ window.autotester = {
       rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     );
+  },
+
+  /**
+   * Checks that elem has size (how it is done in jquery)
+   * See: https://github.com/jquery/jquery/blob/master/src/css/hiddenVisibleSelectors.js
+   */
+  elemHasSize(elem) {
+    return Boolean(elem.offsetWidth && elem.offsetHeight && elem.getClientRects().length);
   }
 };
