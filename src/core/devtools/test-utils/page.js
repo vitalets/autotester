@@ -122,6 +122,16 @@ window.page = {
   },
 
   /**
+   * Returns elements count
+   * @param {String} selector
+   * @returns {Promise}
+   */
+  elemCount(selector) {
+    return page._ensureInjected()
+      .then(() => page.eval(`document.querySelectorAll('${selector}').length`));
+  },
+
+  /**
    * Checks that elem exists in DOM
    * @param {String|Array} selector
    * @returns {Promise}
@@ -147,15 +157,23 @@ window.page = {
 
   // ====== assertions (maybe move to separate module) ======
   /**
-   *
+   * Asserts that element is visible
    * @param {String|Array} selector
    * @param {Boolean} expected
    */
   assertVisible(selector, expected = true) {
     return this.elemVisible(selector)
-      .then(actual => assert.equal(
-        actual, expected, `Expected '${selector}' to be ${expected ? 'visible' : 'hidden'}`
-      ));
+      .then(actual => assert.equal(actual, expected, `Invalid '${selector}' visibility`));
+  },
+
+  /**
+   * Asserts elements count
+   * @param {String} selector
+   * @param {Number} expected
+   */
+  assertCount(selector, expected) {
+    return this.elemCount(selector)
+      .then(count => assert.equal(count, expected, `Invalid '${selector}' count`));
   },
 
   /**
