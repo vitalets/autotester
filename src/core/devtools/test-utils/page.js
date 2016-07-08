@@ -96,7 +96,8 @@ window.page = {
    * @returns {Promise}
    */
   type(selector, text) {
-    return this._elemEval(selector, `syn.type(elem, '${text}')`);
+    return this._elemEval(selector, `syn.type(elem, '${text}')`)
+      .then(() => wait.ms(10 * text.length));
   },
 
   /**
