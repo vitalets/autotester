@@ -122,17 +122,55 @@ window.page = {
   },
 
   /**
+   * Checks that elem exists in DOM
+   * @param {String|Array} selector
+   * @returns {Promise}
+   */
+  elemExists(selector) {
+    return this._elemEval(selector, `return Boolean(elem)`, false);
+  },
+
+  /**
+   * Checks that elem is visible
+   * @param {String|Array} selector
+   * @returns {Promise}
+   */
+  elemVisible(selector) {
+    // See: http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
+    return this._elemEval(selector, `return elem && getComputedStyle(elem).display !== 'none'`, false)
+      .then(isVisible => isVisible
+        // See: http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+        ? this._elemEval(selector, `return autotester.isElementInViewport(elem)`)
+        : false
+      )
+  },
+
+  // ====== assertions (maybe move to separate module) ======
+  /**
+   *
+   * @param {String|Array} selector
+   * @param {Boolean} expected
+   */
+  assertVisible(selector, expected = true) {
+    return this.elemVisible(selector)
+      .then(actual => assert.equal(
+        actual, expected, `Expected '${selector}' to be ${expected ? 'visible' : 'hidden'}`
+      ));
+  },
+
+  /**
    * Eval any string with DOM element
    * Selector can be string '.classname' or array ['.classname', <index>]
    * @param {String|Array} selector
    * @param {String} evalStr
+   * @param {Boolean} throwError
    * @returns {Promise}
    */
-  _elemEval(selector, evalStr) {
-    const elemArgs = Array.isArray(selector) ? `'${selector[0]}', ${selector[1]}` : `'${selector}'`;
+  _elemEval(selector, evalStr, throwError = true) {
+    const elemArgs = Array.isArray(selector) ? `'${selector[0]}', ${selector[1]}` : `'${selector}', 0`;
     return page._ensureInjected()
       .then(() => page.evalInFn(`
-        const elem = autotester.elem(${elemArgs});
+        const elem = autotester.elem(${elemArgs}, ${throwError});
         ${evalStr};
       `));
   },

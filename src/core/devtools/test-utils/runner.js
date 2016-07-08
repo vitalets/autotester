@@ -43,6 +43,7 @@ window.testRunner = {
       utils.loadScript('/core/libs/mocha.js'),
       // reload chai just for consistency here
       utils.loadScript('/core/libs/chai.js')
+        .then(() => utils.loadScript('/core/libs/chai-as-promised.js'))
     ]).then(() => {
       window.mocha.setup({ui: 'bdd', timeout: TIMEOUT_MS});
       window.assert = chai.assert;

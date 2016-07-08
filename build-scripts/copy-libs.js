@@ -12,7 +12,8 @@ exports.run = function () {
   const libs = [
     'node_modules/mocha/mocha.js',
     'node_modules/mocha/mocha.css',
-    'node_modules/chai/chai.js'
+    'node_modules/chai/chai.js',
+    'node_modules/chai-as-promised/lib/chai-as-promised.js'
   ];
   const destDir = 'src/core/libs/';
   libs.forEach(srcPath => {
