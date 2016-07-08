@@ -8,8 +8,6 @@
  * 1. In Chrome key emulation is still experimental:
  * https://bugs.webkit.org/show_bug.cgi?id=16735
  * https://bugs.chromium.org/p/chromium/issues/detail?id=327853
- *
- * Working solution:
  * http://stackoverflow.com/questions/10455626/keydown-simulation-in-chrome-fires-normally-but-not-the-correct-key/10520017#10520017
  *
  */
@@ -78,33 +76,27 @@ window.page = {
 
   /**
    * Clicks on element
-   * @param {String} selector
-   * @param {Number} [index]
+   * @param {String|Array} selector
    * @returns {Promise}
    */
-  click(selector, index = 0) {
-    return page._ensureInjected()
-      .then(() => page.evalInFn(`
-        const el = window.autotester.el('${selector}', ${index});
-        // window.syn.click(el);
-        el.click();
-      `));
+  click(selector) {
+    return this._elemEval(selector, `syn.click(elem)`);
   },
 
-  type(selector, text, index = 0) {
-    return page._ensureInjected()
-      .then(() => page.evalInFn(`
-        const el = window.autotester.el('${selector}', ${index});
-        window.syn.type(el, '${text}');
-      `));
-  },
-
-  key(selector, key, index = 0) {
-    return page._ensureInjected()
-      .then(() => page.evalInFn(`
-        const el = window.autotester.el('${selector}', ${index});
-        window.syn.key(el, '${key}');
-      `));
+  /**
+   * Simulate keyboard input
+   *
+   * Syn has two similar methods:
+   * type() - for entering specific string
+   * key() - for simulating specific keys of keyboard
+   * See: https://github.com/bitovi/syn/issues/84
+   *
+   * @param {String|Array} selector
+   * @param {String} text
+   * @returns {Promise}
+   */
+  type(selector, text) {
+    return this._elemEval(selector, `syn.type(elem, '${text}')`);
   },
 
   /**
@@ -116,22 +108,33 @@ window.page = {
    * @param {String} selector
    */
   submit(selector) {
-    return page._ensureInjected()
-      .then(() => page.evalInFn(`
-        const el = window.autotester.el('${selector}');
-        el.form.submit();
-      `));
+    return this._elemEval(selector, `elem.form.submit()`);
   },
 
   /**
-   * Returns element porperty
-   * @param {String} selector
+   * Returns element property
+   * @param {String|Array} selector
    * @param {String} prop
    * @returns {Promise}
-     */
+   */
   elemProp(selector, prop) {
+    return this._elemEval(selector, `return elem.${prop}`);
+  },
+
+  /**
+   * Eval any string with DOM element
+   * Selector can be string '.classname' or array ['.classname', <index>]
+   * @param {String|Array} selector
+   * @param {String} evalStr
+   * @returns {Promise}
+   */
+  _elemEval(selector, evalStr) {
+    const elemArgs = Array.isArray(selector) ? `'${selector[0]}', ${selector[1]}` : `'${selector}'`;
     return page._ensureInjected()
-      .then(() => page.eval(`autotester.elemProp('${selector}', '${prop}')`));
+      .then(() => page.evalInFn(`
+        const elem = autotester.elem(${elemArgs});
+        ${evalStr};
+      `));
   },
 
   /**
@@ -142,6 +145,10 @@ window.page = {
       .then(res => res ? Promise.resolve() : page._inject());
   },
 
+  /**
+   * Injects all needed scripts into page
+   * @returns {Promise}
+   */
   _inject() {
     const scripts = [
       'core/devtools/test-utils/page-inject.js',
