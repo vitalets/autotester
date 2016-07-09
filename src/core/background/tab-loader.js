@@ -32,6 +32,25 @@ class TabLoader {
       chrome.tabs.update(tabId, info, tab => this._createLoadingTab(tab, resolve, reject));
     });
   }
+
+  /**
+   * Waits for existing tab to get loaded
+   * @param {Number} tabId
+   * @param {Boolean} force
+   * @returns {Promise}
+   */
+  wait(tabId, force = false) {
+    return new Promise((resolve, reject) => {
+      chrome.tabs.get(tabId, tab => {
+        if (tab.status === 'loading' || force) {
+          this._createLoadingTab(tab, resolve, reject);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
   _onTabUpdated(tabId, changeInfo, tab) {
     if (this._tabs.has(tabId) && changeInfo.status === 'complete') {
       const info = this._tabs.get(tabId);

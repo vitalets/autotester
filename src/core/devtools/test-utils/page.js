@@ -80,7 +80,9 @@ window.page = {
    * @returns {Promise}
    */
   click(selector) {
-    return this._elemEval(selector, `syn.click(elem)`);
+    return this._elemEval(selector, `syn.click(elem)`)
+      // click may cause page loading, so wait for it
+      .then(() => page.wait());
   },
 
   /**
@@ -109,7 +111,8 @@ window.page = {
    * @param {String} selector
    */
   submit(selector) {
-    return this._elemEval(selector, `elem.form.submit()`);
+    return this._elemEval(selector, `elem.form.submit()`)
+      .then(() => page.wait());
   },
 
   /**
@@ -179,6 +182,20 @@ window.page = {
   assertCount(selector, expected) {
     return this.elemCount(selector)
       .then(count => assert.equal(count, expected, `Invalid '${selector}' count`));
+  },
+
+  /**
+   * Waits for page to get loaded
+   * @returns {Promise}
+   */
+  wait() {
+    // delay 100ms to let page start potential loading after user action
+    return wait.ms(100)
+      .then(() => BackgroundProxy.call({
+        path: 'tabLoader.wait',
+        args: [chrome.devtools.inspectedWindow.tabId],
+        promise: true
+      }));
   },
 
   /**
