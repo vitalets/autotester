@@ -13,6 +13,7 @@ exports.run = function () {
     'node_modules/mocha/mocha.js',
     'node_modules/mocha/mocha.css',
     'node_modules/chai/chai.js',
+    'node_modules/syn/dist/global/syn.js',
     'node_modules/chai-as-promised/lib/chai-as-promised.js'
   ];
   const destDir = 'src/core/libs/';

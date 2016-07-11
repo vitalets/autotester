@@ -70,7 +70,7 @@
 		};
 	});
 })({},window)
-/*syn@0.1.4#synthetic*/
+/*syn@0.2.2#synthetic*/
 define('syn/synthetic', function (require, exports, module) {
     var opts = window.syn ? window.syn : {};
     var extend = function (d, s) {
@@ -535,7 +535,7 @@ define('syn/synthetic', function (require, exports, module) {
     }
     module.exports = syn;
 });
-/*syn@0.1.4#mouse*/
+/*syn@0.2.2#mouse*/
 define('syn/mouse', function (require, exports, module) {
     var syn = require('syn/synthetic');
     var h = syn.helpers, getWin = h.getWindow;
@@ -684,7 +684,7 @@ define('syn/mouse', function (require, exports, module) {
         }
     });
 });
-/*syn@0.1.4#mouse.support*/
+/*syn@0.2.2#mouse.support*/
 define('syn/mouse.support', function (require, exports, module) {
     var syn = require('syn/synthetic');
     require('syn/mouse');
@@ -739,7 +739,7 @@ define('syn/mouse.support', function (require, exports, module) {
         syn.support.ready++;
     }());
 });
-/*syn@0.1.4#browsers*/
+/*syn@0.2.2#browsers*/
 define('syn/browsers', function (require, exports, module) {
     var syn = require('syn/synthetic');
     require('syn/mouse');
@@ -1515,7 +1515,7 @@ define('syn/browsers', function (require, exports, module) {
         return syn.mouse.browsers.gecko;
     }();
 });
-/*syn@0.1.4#typeable*/
+/*syn@0.2.2#typeable*/
 define('syn/typeable', function (require, exports, module) {
     var syn = require('syn/synthetic');
     var typeables = [];
@@ -1552,14 +1552,22 @@ define('syn/typeable', function (require, exports, module) {
         ], el.getAttribute('contenteditable')) !== -1;
     });
 });
-/*syn@0.1.4#key*/
+/*syn@0.2.2#key*/
 define('syn/key', function (require, exports, module) {
     var syn = require('syn/synthetic');
     require('syn/typeable');
     require('syn/browsers');
-    var h = syn.helpers, formElExp = /input|textarea/i, getSelection = function (el) {
+    var h = syn.helpers, formElExp = /input|textarea/i, supportsSelection = function (el) {
+            var result;
+            try {
+                result = el.selectionStart !== undefined;
+            } catch (e) {
+                result = false;
+            }
+            return result;
+        }, getSelection = function (el) {
             var real, r, start;
-            if (el.selectionStart !== undefined) {
+            if (supportsSelection(el)) {
                 if (document.activeElement && document.activeElement !== el && el.selectionStart === el.selectionEnd && el.selectionStart === 0) {
                     return {
                         start: el.value.length,
@@ -1743,7 +1751,7 @@ define('syn/key', function (require, exports, module) {
             'f12': 123
         },
         selectText: function (el, start, end) {
-            if (el.setSelectionRange) {
+            if (supportsSelection(el)) {
                 if (!end) {
                     syn.__tryFocus(el);
                     el.setSelectionRange(start, start);
@@ -2183,7 +2191,7 @@ define('syn/key', function (require, exports, module) {
         }
     });
 });
-/*syn@0.1.4#key.support*/
+/*syn@0.2.2#key.support*/
 define('syn/key.support', function (require, exports, module) {
     var syn = require('syn/synthetic');
     require('syn/key');
@@ -2244,7 +2252,7 @@ define('syn/key.support', function (require, exports, module) {
         syn.helpers.extend(syn.support, syn.config.support);
     }
 });
-/*syn@0.1.4#drag*/
+/*syn@0.2.2#drag*/
 define('syn/drag', function (require, exports, module) {
     var syn = require('syn/synthetic');
     (function dragSupport() {
@@ -2419,7 +2427,7 @@ define('syn/drag', function (require, exports, module) {
         }
     });
 });
-/*syn@0.1.4#syn*/
+/*syn@0.2.2#syn*/
 define('syn', function (require, exports, module) {
     var syn = require('syn/synthetic');
     require('syn/mouse.support');
