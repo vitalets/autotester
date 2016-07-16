@@ -1,3 +1,11 @@
+/*
+ Examples of chorme.debugger commands:
+
+ https://chromium.googlesource.com/experimental/chromium/blink/+/master/LayoutTests/inspector-protocol
+
+
+ */
+
 
 const TESTS_BASE_URL = '/tests';
 
@@ -5,9 +13,12 @@ const TESTS_BASE_URL = '/tests';
 init();
 
 function init() {
+  setDomListeners();
+
+  /*
   page.getUrl().then(url => {
     console.log('Autotester opened for tab', chrome.devtools.inspectedWindow.tabId, url);
-    setDomListeners();
+    // setDomListeners();
     readTestsConfig()
       .then(() => {
         // add baseUrl for loading tests
@@ -25,6 +36,7 @@ function init() {
         }
       });
   });
+  */
 }
 
 function setDomListeners() {
@@ -38,15 +50,58 @@ function setDomListeners() {
 }
 
 function reload() {
-  console.clear();
+ // console.clear();
   // reload self background
-  BackgroundProxy.call({path: 'chrome.runtime.reload', async: false});
+  //BackgroundProxy.call({path: 'chrome.runtime.reload', async: false});
   // timeouts needed for background to get ready
   setTimeout(() => window.location.reload(), 500);
   // setTimeout(() => page.reload(), 600);
 }
 
 function runTests() {
+  chrome.tabs.create({url: 'chrome://newtab'}, tab => {
+    chrome.debugger.attach({tabId: tab.id}, '1.1', () => {
+      console.log('attached');
+      setTimeout(() => {
+        chrome.debugger.sendCommand({tabId: tab.id}, 'DOM.enable', () => {
+          console.log('dom enabled');
+
+          chrome.debugger.sendCommand({tabId: tab.id}, 'DOM.getDocument', res => {
+            console.log('getDocument', res);
+          });
+
+          chrome.debugger.sendCommand({tabId: tab.id}, 'DOM.querySelector', {nodeId: 1, selector: '[name="text"]'}, res => {
+            console.log('querySelector', res);
+
+
+            chrome.debugger.sendCommand({tabId: tab.id}, 'DOM.focus', {nodeId: res.nodeId}, res => {
+              console.log('focus', res);
+
+              chrome.debugger.sendCommand({tabId: tab.id}, 'Input.dispatchKeyEvent', {type: 'char', text: 'x'}, res => {
+                console.log('dispatchKeyEvent', res);
+                setTimeout( () => {
+                  chrome.debugger.sendCommand({tabId: tab.id}, 'Input.dispatchKeyEvent', {
+                    type: 'keyDown',
+                    //keyIdentifier: 'U+000D'
+                     nativeVirtualKeyCode: 13,
+                     windowsVirtualKeyCode: 13
+                  }, res => {
+                    console.log('dispatchKeyEvent enter', res);
+                  });
+                }, 500);
+              });
+            });
+
+          });
+
+
+        })
+      }, 2000);
+
+    });
+  });
+
+  /*
   infoblock.clear();
   setUiEnabled(false);
   const testIndex = document.getElementById('testlist').value;
@@ -56,6 +111,7 @@ function runTests() {
       afterRun();
       return Promise.reject(e);
     });
+  */
 }
 
 function afterRun() {

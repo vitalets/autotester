@@ -14,28 +14,13 @@
     "history"
   ],
 
+  "browser_action": { },
+
   "background": {
     "scripts": [
-      "core/background/background-proxy.js",
-      "core/request-catchers/base.js",
-      "core/request-catchers/debugger.js",
-      "core/request-catchers/webrequest.js",
-      "core/request-catchers/filter.js",
-      "core/background/tab-loader.js",
-      "core/background/tab-catcher.js",
-      "core/background/background.js"
+      "bundle.js"
     ],
     "persistent": true
-  },
-
-  "content_scripts": [
-    {
-      "all_frames": false,
-      "js": ["core/contentscript/contentscript.js"],
-      "matches": ["http://*/*", "https://*/*"],
-      "run_at": "document_start"
-    }
-  ],
-
-  "devtools_page": "core/devtools/devtools.html"
+  }
 }
+

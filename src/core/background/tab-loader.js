@@ -59,6 +59,7 @@ class TabLoader {
       this._tabs.delete(tabId);
     }
   }
+
   _createLoadingTab(tab, resolve, reject) {
     if (this._tabs.has(tab.id)) {
       const info = this._tabs.get(tab.id);
@@ -69,3 +70,5 @@ class TabLoader {
     this._tabs.set(tab.id, {resolve, reject, initialUrl: tab.url});
   }
 }
+
+module.exports = TabLoader;

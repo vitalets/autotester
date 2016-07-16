@@ -12,3 +12,6 @@ npm-debug.log
 # custom tests
 /src/tests/*
 !/src/tests/readme.md
+
+# chromedriver log
+/log.txt
