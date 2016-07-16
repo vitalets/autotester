@@ -7,7 +7,7 @@ const until = require('selenium-webdriver/lib/until');
 const driver = new Driver();
 
 window.addEventListener('error', e => {
-  const message = (e.error || e).message;
+  const message = e.error && e.error.message || e.message;
   console.error(`${message} ${e.filename}:${e.lineno}`);
 });
 

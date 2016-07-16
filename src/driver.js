@@ -84,10 +84,15 @@ class Executor extends command.Executor {
           })
           .then(node => {
             console.log('querySelector', node);
+            if (!node.nodeId) {
+              return Promise.reject(`Element not found by ${selector}`);
+            }
             return webdriver.WebElement.buildId(String(node.nodeId));
           });
         break;
       case command.Name.SEND_KEYS_TO_ELEMENT:
+        // todo: scroll
+        // todo: rawKeyPress
         return thenChrome.debugger.sendCommand(data.target, 'DOM.focus', {
           nodeId: Number(cmd.getParameter('id'))
         })
