@@ -3,7 +3,6 @@ const webdriver = require('selenium-webdriver/lib/webdriver');
 
 const logging = require('selenium-webdriver/lib/logging');
 const capabilities = require('selenium-webdriver/lib/capabilities');
-const thenChrome = require('then-chrome');
 
 const Executor = require('./executor');
 
@@ -33,20 +32,10 @@ class Driver extends webdriver.WebDriver {
     */
 
     const caps = capabilities.Capabilities.chrome();
-
     const executor = new Executor();
     const driver = webdriver.WebDriver.createSession(executor, caps);
-
     super(driver.getSession(), executor, driver.controlFlow());
   }
 }
-
-const data = {
-  tabId: null
-};
-
-
-
-// PUBLIC API
 
 module.exports = Driver;

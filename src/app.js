@@ -33,7 +33,7 @@ driver.quit();
 
 // with frames
 driver.get('http://www.about.com/');
-driver.findElement(By.id('main')).then(() => console.log('elem found'));
+//driver.findElement(By.id('main')).then(() => console.log('elem found'));
 //driver.getAllWindowHandles().then(res => console.log(res));
 //driver.switchTo().frame(1);
 //driver.findElement(By.id('main')).then(() => console.log('elem found'));
