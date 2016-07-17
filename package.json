@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "description": "Chrome extension for automated web testing",
   "scripts": {
-    "libs": "node build-scripts/runner.js copy-libs",
-    "build": "node build-scripts/runner.js build",
-    "watch:webpack": "webpack --watch",
-    "watch:resource": "node ./build-scripts/watch.js",
+    "clean": "rm -rf dist",
+    "webpack": "webpack --config ./builder/webpack.config.js",
+    "manifest": "node ./builder/manifest copy",
+    "build": "npm run clean && npm run webpack && npm run manifest",
+    "watch:webpack": "npm run webpack -- --watch",
+    "watch:manifest": "node ./builder/manifest watch",
     "watch": "run-p watch:**"
   },
   "dependencies": {

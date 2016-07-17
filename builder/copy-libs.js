@@ -3,7 +3,7 @@
  * This is needed to run extension from src without installing node
  */
 
-"use strict";
+'use strict';
 
 const fs = require('fs-extra');
 const path = require('path');
