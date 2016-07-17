@@ -21,6 +21,7 @@ driver.wait(until.titleIs('we - Google Search'), 5000);
 driver.quit();
 */
 
+/*
 driver.get('http://www.yandex.ru');
 const el = driver.findElement(By.name('text'));
 el.sendKeys('we');
@@ -28,3 +29,12 @@ driver.sleep(1000);
 driver.findElement(By.css('.search2__button button')).click();
 driver.wait(until.titleContains('we'), 5000);
 driver.quit();
+*/
+
+// with frames
+driver.get('http://www.about.com/');
+driver.findElement(By.id('main')).then(() => console.log('elem found'));
+//driver.getAllWindowHandles().then(res => console.log(res));
+//driver.switchTo().frame(1);
+//driver.findElement(By.id('main')).then(() => console.log('elem found'));
+driver.quit().then(() => console.log('ok'));

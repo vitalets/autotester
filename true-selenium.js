@@ -51,11 +51,16 @@ webdriver.promise.controlFlow().on('uncaughtException', function(e) {
 });
 
 
-driver.get('http://www.google.com/ncr');
-driver.findElement(By.name('q')).sendKeys('webdriver');
+driver.get('http://www.about.com/');
+//driver.get('http://www.google.com/ncr');
+//driver.findElement(By.name('q')).sendKeys('webdriver');
+driver.findElement(By.id('main')).then(() => console.log('elem found'));
+driver.getAllWindowHandles().then(res => console.log(res));
+driver.switchTo().frame(1);
+driver.findElement(By.id('main')).then(() => console.log('elem found'));
 //driver.findElement(By.linkText('q')); //.catch(e => console.log('e', e));
-driver.findElement(By.name('btnG')).click();
-driver.wait(until.titleIs('webdriver - Google Search'), 2000);
+//driver.findElement(By.name('btnG')).click();
+//driver.wait(until.titleIs('webdriver - Google Search'), 2000);
 
 driver.quit().then(() => console.log('ok'));
 
