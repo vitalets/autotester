@@ -3,15 +3,16 @@
  */
 
 const seleniumCommand = require('selenium-webdriver/lib/command');
-const Command = require('./command');
-const TabLoader = require('../tab-loader');
 
-class Navigation extends Command {
+const TabLoader = require('../tab-loader');
+const TargetManager = require('../target-manager');
+
+class Navigation {
   static navigate(params) {
-    return TabLoader.update(Command.tabId, {url: params.url});
+    return TabLoader.update(TargetManager.tabId, {url: params.url});
   }
   static getTitle() {
-    return thenChrome.tabs.get(Command.tabId).then(tab => tab.title);
+    return thenChrome.tabs.get(TargetManager.tabId).then(tab => tab.title);
   }
   static exports() {
     return {

@@ -4,8 +4,6 @@
 
 const seleniumCommand = require('selenium-webdriver/lib/command');
 
-const TargetManager = require('./target-manager');
-const Command = require('./commands/command');
 const TabLoader = require('./tab-loader');
 const logger = require('./logger').create('Executor');
 
@@ -20,7 +18,6 @@ class Executor extends seleniumCommand.Executor {
     super();
     this._commands = new Map();
     this._registerCommands();
-    Command.targetManager = new TargetManager();
     TabLoader.init();
   }
 
@@ -38,9 +35,9 @@ class Executor extends seleniumCommand.Executor {
 
   _registerCommands() {
     commandModules.forEach(m => {
-      const commands = m.exports();
+      const commands = m.exports && m.exports();
       if (!commands) {
-        throw new Error(`Module ${m.name} should return commands from exports()`);
+        throw new Error(`Module '${m.name}' should return commands via exports() method`);
       }
       Object.keys(commands).forEach(name => {
         this._commands.set(name, commands[name].bind(m));

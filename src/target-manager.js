@@ -1,52 +1,71 @@
 /**
  * Manager for command targets
- * Command target has several porperties:
+ * Command target has several prjperties:
  * - tabId
  * - attached debugger
  * - root nodeId
  * - execution context id
+ *
+ * It's a static singleton class for convenient access from any command.
  */
 
 const thenChrome = require('then-chrome');
 const Debugger = require('./debugger');
 
+let debuggers = [];
+let currentTabId = null;
+let currentDebugger = null;
+let currentRootId = null;
+
 class TargetManager {
 
-  constructor() {
-    this.debuggers = [];
-    this.currentTabId = null;
-    this.currentDebugger = null;
-    this.currentRootId = null;
+  static reset() {
+    debuggers = [];
+    currentTabId = null;
+    currentDebugger = null;
+    currentRootId = null;
   }
 
-  switchToTab(tabId) {
-    this.currentTabId = tabId;
-    this.currentRootId = null;
+  static get tabId() {
+    return currentTabId;
+  }
+
+  static get debuggers() {
+    return debuggers;
+  }
+
+  static get debugger() {
+    return currentDebugger;
+  }
+
+  static switchToTab(tabId) {
+    currentTabId = tabId;
+    currentRootId = null;
     return thenChrome.tabs.update(tabId, {active: true})
-      .then(() => this.attachDebugger({tabId}));
+      .then(() => TargetManager.attachDebugger({tabId}));
   }
 
-  switchToWindow(windowId) {
+  static switchToWindow(windowId) {
     // todo
   }
 
-  switchToFrame(frameId) {
+  static switchToFrame(frameId) {
     // todo
   }
 
-  switchToExtension(extensionId) {
+  static switchToExtension(extensionId) {
     // todo
   }
 
-  attachDebugger(target) {
+  static attachDebugger(target) {
     const existingDebugger = this.debuggers.filter(d => d.isAttachedTo(target))[0];
     if (existingDebugger) {
-      this.currentDebugger = existingDebugger;
+      currentDebugger = existingDebugger;
       return Promise.resolve();
     } else {
-      this.currentDebugger = new Debugger();
-      this.debuggers.push(this.currentDebugger);
-      return this.currentDebugger.attach(target);
+      currentDebugger = new Debugger();
+      debuggers.push(currentDebugger);
+      return currentDebugger.attach(target);
     }
   }
 }
