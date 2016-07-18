@@ -1,10 +1,12 @@
 /**
- * Manager for command targets
- * Command target has several prjperties:
+ * Manager for command targets.
+ * Store actual info for targeting commands and list of debuggers.
+ * Command target has several properties:
  * - tabId
  * - attached debugger
  * - root nodeId
  * - execution context id
+ * - ...
  *
  * It's a static singleton class for convenient access from any command.
  */
@@ -36,6 +38,14 @@ class TargetManager {
 
   static get debugger() {
     return currentDebugger;
+  }
+
+  static get rootId() {
+    return currentRootId;
+  }
+
+  static set rootId(value) {
+    currentRootId = value;
   }
 
   static switchToTab(tabId) {

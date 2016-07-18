@@ -7,8 +7,10 @@ const until = require('selenium-webdriver/lib/until');
 const driver = new Driver();
 
 window.addEventListener('error', e => {
-  const message = e.error && e.error.message || e.message;
-  console.error(`${message} ${e.filename}:${e.lineno}`);
+  if (typeof e.error === 'object') {
+    // for errors in debugger giving 'Uncaught [object Object]'
+    console.error(`${e.error.message} ${e.filename}:${e.lineno}`);
+  }
 });
 
 /*
@@ -33,7 +35,7 @@ driver.quit();
 
 // with frames
 driver.get('http://www.about.com/');
-//driver.findElement(By.id('main')).then(() => console.log('elem found'));
+driver.findElement(By.id('main')).findElements(By.id('main')).then(res => console.log('elem found', res));
 //driver.getAllWindowHandles().then(res => console.log(res));
 //driver.switchTo().frame(1);
 //driver.findElement(By.id('main')).then(() => console.log('elem found'));

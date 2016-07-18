@@ -15,7 +15,7 @@ class Debugger {
   }
 
   sendCommand(name, params = {}) {
-    logger.log(`Send command ${name} ${params}`);
+    logger.log(`Send command ${name}`, params);
     return thenChrome.debugger.sendCommand(this._target, name, params);
   }
 

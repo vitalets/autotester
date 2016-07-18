@@ -9,7 +9,7 @@ const logger = require('./logger').create('Executor');
 
 const commandModules = [
   require('./commands/session'),
-  // require('./commands/element-actions'),
+  require('./commands/element-search'),
   require('./commands/navigation'),
 ];
 
@@ -35,14 +35,15 @@ class Executor extends seleniumCommand.Executor {
 
   _registerCommands() {
     commandModules.forEach(m => {
-      const commands = m.exports && m.exports();
-      if (!commands) {
-        throw new Error(`Module '${m.name}' should return commands via exports() method`);
+      if (!m.commands) {
+        throw new Error(`Module '${m.name}' should export commands`);
       }
-      Object.keys(commands).forEach(name => {
-        this._commands.set(name, commands[name].bind(m));
+      Object.keys(m.commands).forEach(name => {
+        this._commands.set(name, m.commands[name]);
       });
     });
+    const total = Object.keys(seleniumCommand.Name).length;
+    logger.log(`Registered commands: ${this._commands.size} of ${total}`);
   }
 }
 
