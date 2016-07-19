@@ -11,6 +11,7 @@ const commandModules = [
   require('./commands/session'),
   require('./commands/element-search'),
   require('./commands/navigation'),
+  require('./commands/keyboard'),
 ];
 
 class Executor extends seleniumCommand.Executor {
@@ -39,6 +40,9 @@ class Executor extends seleniumCommand.Executor {
         throw new Error(`Module '${m.name}' should export commands`);
       }
       Object.keys(m.commands).forEach(name => {
+        if (this._commands.has(name)) {
+          throw new Error(`Dublicate command ${name}`);
+        }
         this._commands.set(name, m.commands[name]);
       });
     });
