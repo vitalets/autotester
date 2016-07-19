@@ -7,7 +7,6 @@ const TargetManager = require('../target-manager');
 
 exports.commands = {
   [seleniumCommand.Name.SEND_KEYS_TO_ELEMENT]: sendKeys,
-  //[seleniumCommand.Name.QUIT]: stop
 };
 
 function sendKeys(params) {

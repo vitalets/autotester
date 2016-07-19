@@ -11,6 +11,7 @@ const commandModules = [
   require('./commands/session'),
   require('./commands/element-search'),
   require('./commands/navigation'),
+  require('./commands/mouse'),
   require('./commands/keyboard'),
 ];
 
@@ -47,7 +48,7 @@ class Executor extends seleniumCommand.Executor {
       });
     });
     const total = Object.keys(seleniumCommand.Name).length;
-    logger.log(`Registered commands: ${this._commands.size} of ${total}`);
+    logger.log(`Supported commands: ${this._commands.size} of ${total}`);
   }
 }
 

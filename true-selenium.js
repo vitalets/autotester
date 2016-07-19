@@ -51,11 +51,20 @@ webdriver.promise.controlFlow().on('uncaughtException', function(e) {
 });
 
 
-driver.get('http://www.about.com/');
+driver.get('http://www.yandex.ru');
+const el = driver.findElement(By.name('text'));
+
+//driver.get('http://www.about.com/');
 //driver.get('http://www.google.com/ncr');
 //driver.findElement(By.name('q')).sendKeys('webdriver');
 //driver.findElements(By.id('main')).then(res => console.log('elem found', res));
-driver.findElements({css: 'div1'}).then(res => console.log('elem found', res));
+//driver.findElements({css: 'div1'}).then(res => console.log('elem found', res));
+
+driver.actions()
+  // .keyDown(input.Key.SHIFT)
+  .click(el)
+  .perform();
+
 //driver.getAllWindowHandles().then(res => console.log(res));
 //driver.switchTo().frame(1);
 //driver.findElement(By.id('main')).then(() => console.log('elem found'));

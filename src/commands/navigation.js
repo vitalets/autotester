@@ -3,7 +3,7 @@
  */
 
 const seleniumCommand = require('selenium-webdriver/lib/command');
-
+const thenChrome = require('then-chrome');
 const TabLoader = require('../tab-loader');
 const TargetManager = require('../target-manager');
 
