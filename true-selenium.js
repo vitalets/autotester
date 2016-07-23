@@ -20,7 +20,7 @@ let service = new chrome.ServiceBuilder('/Users/vitalets/projects/chromium/src/o
 chrome.setDefaultService(service);
 
 let options = new chrome.Options();
-// options.addExtensions('../visbookmarks-chrome/out/yandex.crx')
+// options.addExtensions('../visbookmarks-chrome/out/yandex.crx');
 
 const logging = webdriver.logging;
 /*
@@ -52,7 +52,14 @@ webdriver.promise.controlFlow().on('uncaughtException', function(e) {
 
 
 driver.get('http://www.yandex.ru');
-const el = driver.findElement(By.name('text'));
+//const el = driver.findElement(By.name('text'));
+const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
+driver.actions()
+  //.keyDown(Key.COMMAND)
+  .keyDown(Key.SHIFT)
+.click(el)
+//.perform();
+
 
 //driver.get('http://www.about.com/');
 //driver.get('http://www.google.com/ncr');
@@ -60,12 +67,13 @@ const el = driver.findElement(By.name('text'));
 //driver.findElements(By.id('main')).then(res => console.log('elem found', res));
 //driver.findElements({css: 'div1'}).then(res => console.log('elem found', res));
 
-driver.actions()
+//driver.actions()
   // .keyDown(input.Key.SHIFT)
-  .click(el)
-  .perform();
+  //.click(el)
+  //.perform();
 
-//driver.getAllWindowHandles().then(res => console.log(res));
+driver.getAllWindowHandles().then(res => console.log(res));
+driver.getWindowHandle().then(res => console.log(res));
 //driver.switchTo().frame(1);
 //driver.findElement(By.id('main')).then(() => console.log('elem found'));
 //driver.findElement(By.linkText('q')); //.catch(e => console.log('e', e));

@@ -26,17 +26,20 @@ driver.quit();
 
 
 driver.get('http://www.yandex.ru');
-const el = driver.findElement(By.name('text'));
-el.sendKeys('we');
-driver.sleep(1000);
+//const el = driver.findElement(By.name('text'));
+//el.sendKeys('we');
+//driver.sleep(1000);
 //driver.findElement(By.css('.search2__button button')).click();
-const btn = driver.findElement(By.css('.search2__button button'));
-driver.actions()
+//const btn = driver.findElement(By.css('.search2__button button'));
+//driver.actions()
   // .keyDown(input.Key.SHIFT)
-  .click(btn)
-  .perform();
+ // .click(btn)
+ // .perform();
 
-driver.wait(until.titleContains('we'), 5000);
+driver.getAllWindowHandles().then(res => console.log(res));
+driver.getWindowHandle().then(res => console.log(res));
+
+// driver.wait(until.titleContains('we'), 5000);
 driver.quit();
 
 
