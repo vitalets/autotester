@@ -5,6 +5,7 @@
 const seleniumCommand = require('selenium-webdriver/lib/command');
 const input = require('selenium-webdriver/lib/input');
 const TargetManager = require('../target-manager');
+const modifiers = require('./keyboard/modifiers');
 
 exports.commands = {
   [seleniumCommand.Name.CLICK_ELEMENT]: clickElement,
@@ -73,7 +74,6 @@ function moveToXY(x, y) {
   return dispatchMouseEvent({
     button: 'none',
     clickCount: 0,
-    modifiers: 0,
     type: 'mouseMoved',
     x: x,
     y: y
@@ -85,7 +85,6 @@ function buttonAction(x, y, type, button, count) {
   return dispatchMouseEvent({
     button: button,
     clickCount: count,
-    modifiers: 0,
     type: type,
     x: x,
     y: y
@@ -93,6 +92,7 @@ function buttonAction(x, y, type, button, count) {
 }
 
 function dispatchMouseEvent(options) {
+  options.modifiers = modifiers.get();
   return TargetManager.debugger.sendCommand('Input.dispatchMouseEvent', options);
 }
 
@@ -102,6 +102,7 @@ function getElementCenter(id) {
     })
     .then(res => {
       const content = res.model.content;
+      // calc click point as center of element
       const x = content[0] + Math.round((content[2] - content[0]) / 2);
       const y = content[3] + Math.round((content[5] - content[3]) / 2);
       return {x, y};

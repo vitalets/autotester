@@ -52,8 +52,8 @@ webdriver.promise.controlFlow().on('uncaughtException', function(e) {
 });
 
 
-// driver.get('http://www.yandex.ru');
-driver.get('http://www.google.com/ncr');
+ driver.get('http://www.yandex.ru');
+//driver.get('http://www.google.com/ncr');
 
 
 //driver.executeScript(function () {
@@ -61,25 +61,26 @@ driver.get('http://www.google.com/ncr');
 //});
 
 //const el = driver.findElement(By.name('text'));
-//const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
-//driver.actions()
-// // .keyDown(Key.COMMAND)
-// .keyDown(Key.SHIFT)
-//.click(el)
-//.perform();
+const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
+driver.actions()
+// .keyDown(Key.COMMAND)
+  .keyDown(Key.SHIFT)
+  .click(el)
+  .keyUp(Key.SHIFT)
+  .perform();
 //
 //driver.sleep(1000);
 // driver.manage().window().maximize();
 //driver.get('http://www.about.com/');
 //driver.get('http://www.google.com/ncr');
 // driver.findElement(By.name('text')).sendKeys('й');
-driver.findElement(By.name('q')).sendKeys(Key.SHIFT + '5');
+//driver.findElement(By.name('q')).sendKeys(Key.SHIFT + '5');
 //driver.findElement(By.name('q')).sendKeys('w');
-driver.actions()
- .keyDown(Key.SHIFT)
+//driver.actions()
+ //.keyDown(Key.SHIFT)
  // .keyDown(Key.CONTROL)
   // .sendKeys(Key.SHIFT)
-   .sendKeys('Q')
+  // .sendKeys('Q')
   // .keyUp(Key.SHIFT)
  // .keyDown(Key.SHIFT)
  // .perform();

@@ -62,27 +62,33 @@ window.addEventListener('error', e => {
 
 
 
-driver.get('http://www.google.com/ncr');
+//driver.get('http://www.google.com/ncr');
+driver.get('http://www.yandex.ru');
+
+
+
 //driver.findElement(By.name('q')).sendKeys(Key.SHIFT + 'q' + Key.SHIFT + 'q');
-/*
-driver.sleep(1000);
-driver.findElement(By.name('btnG')).click();
-driver.wait(until.titleIs('we - Google Search'), 5000);
-driver.quit();
-*/
+
+//driver.sleep(1000);
+//driver.findElement(By.name('btnG')).click();
+//driver.wait(until.titleIs('we - Google Search'), 5000);
+//driver.quit();
+
 
 //
-//driver.get('http://www.yandex.ru');
-driver.findElement(By.name('q')).sendKeys('wW%5');
-//const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
+
+//driver.findElement(By.name('q')).sendKeys('wW%5');
+const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
 driver.actions()
-  //.keyDown(Key.SHIFT)
+  .keyDown(Key.SHIFT)
+  //.keyDown(Key.CONTROL)
  // .sendKeys(Key.SHIFT)
- // .sendKeys('q')
+  //.sendKeys('q')
  // .keyUp(Key.SHIFT)
  // .keyDown(Key.SHIFT)
-//  .click(el)
- // .perform();
+  .click(el)
+ // .keyUp(Key.SHIFT)
+  .perform();
 
 //const el = driver.findElement(By.name('text'));
 //el.sendKeys('we');
@@ -113,3 +119,4 @@ driver.actions()
 //driver.switchTo().frame(1);
 //driver.findElement(By.id('main')).then(() => console.log('elem found'));
 //driver.quit().then(() => console.log('ok'));
+

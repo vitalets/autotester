@@ -53,7 +53,8 @@ class TargetManager {
   static switchToTab(tabId) {
     currentTabId = tabId;
     currentRootId = null;
-    return thenChrome.tabs.update(tabId, {active: true})
+    return Promise.resolve()
+      .then(() => thenChrome.tabs.update(tabId, {active: true}))
       .then(() => TargetManager.attachDebugger({tabId}));
   }
 
