@@ -29,7 +29,9 @@ class Debugger {
   }
 
   isAttachedTo(target) {
-    return (this._target.tabId === target.tabId) || (this._target.extensionId === target.extensionId);
+    const sameTabId = this._target.tabId && this._target.tabId === target.tabId;
+    const sameExtensionId = this._target.extensionId && this._target.extensionId === target.extensionId;
+    return sameTabId || sameExtensionId;
   }
 }
 

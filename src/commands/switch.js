@@ -21,12 +21,10 @@ function switchToWindow(params) {
   return windowCommand.getAllPages()
     .then(pages => {
       const page = pages.filter(page => page.id === params.name)[0];
-      if (page) {
-        return TargetManager.switchToTab(page.tabId);
-      } else {
-        throw new Error('Window does not exist');
-      }
-    })
+      return page
+        ? TargetManager.switchToTab(page.tabId)
+        : Promise.reject(`Window ${params.name} does not exist`);
+    });
 }
 
 /**

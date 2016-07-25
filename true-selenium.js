@@ -63,8 +63,8 @@ webdriver.promise.controlFlow().on('uncaughtException', function(e) {
 //const el = driver.findElement(By.name('text'));
 const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
 driver.actions()
-// .keyDown(Key.COMMAND)
-  .keyDown(Key.SHIFT)
+  .keyDown(Key.COMMAND)
+ // .keyDown(Key.SHIFT)
   .click(el)
   .keyUp(Key.SHIFT)
   .perform();
@@ -95,8 +95,8 @@ driver.actions()
   //.click(el)
   //.perform();
 
-//driver.getAllWindowHandles().then(res => {
-//  console.log('switch to ', res[1]);
+driver.getAllWindowHandles().then(res => {
+  console.log('switch to ', res[1]);
 //  driver.switchTo().window(res[1]);
 //
 //  driver.actions()
@@ -110,7 +110,7 @@ driver.actions()
 //  driver.actions()
 //    .sendKeys('w')
 //    .perform();
-//});
+});
 
 
 //

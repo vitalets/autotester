@@ -15,7 +15,8 @@ exports.commands = {
 exports.getAllPages = getAllPages;
 
 function getCurrentWindowHandle() {
-  return getAllPages()
+  return Promise.resolve()
+    .then(() => getAllPages())
     .then(pages => {
       return pages
         .filter(page => page.tabId === TargetManager.tabId)
@@ -24,7 +25,8 @@ function getCurrentWindowHandle() {
 }
 
 function getAllWindowHandles() {
-  return getAllPages()
+  return Promise.resolve()
+    .then(() => getAllPages())
     .then(pages => pages.map(page => page.id));
 }
 
@@ -33,8 +35,9 @@ function getAllPages() {
     .then(targets => {
       return targets
         // allowing 'background_page' type is extra feature to test chrome extensions
+        // todo: add inactive background event pages
         .filter(target => target.type === 'page' || target.type === 'background_page')
-        // todo: exclude autotester tab
+        // todo: exclude autotester tab and background_page
         .filter(target => !target.url.startsWith('chrome-devtools://'))
     });
 }

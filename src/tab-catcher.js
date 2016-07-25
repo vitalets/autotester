@@ -13,35 +13,39 @@ class TabCatcher {
     this._onTabUpdated = this._onTabUpdated.bind(this);
     this._onBeforeNavigate = this._onBeforeNavigate.bind(this);
   }
-  start() {
+  /**
+   *
+   * @param {Object} options
+   * todo: @param {Boolean} [options.readExistingTabs]
+   */
+  start(options) {
     this._setListeners(true);
     this._tabs.length = 0;
+    // todo: thenChrome.tabs.query({status: 'loading'}).then(...);
   }
   stop() {
     this._setListeners(false);
     return this._tabs.slice();
   }
   _onTabCreated(tab) {
-    const tabInfo = this._getOrCreateTab(tab.id);
-    // if catched tab created --> mark it as created
-    tabInfo.action = 'created';
+    this._getOrCreateTab(tab.id, 'created');
   }
   _onTabUpdated(tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete') {
-      const tabInfo = this._getOrCreateTab(tab.id);
+      const tabInfo = this._getOrCreateTab(tab.id, 'updated');
       tabInfo.url = tab.url;
     }
   }
   _onBeforeNavigate(details) {
     if (details.frameId === 0) {
-      const tabInfo = this._getOrCreateTab(details.tabId);
+      const tabInfo = this._getOrCreateTab(details.tabId, 'updated');
       tabInfo.initialUrl = details.url;
     }
   }
-  _getOrCreateTab(tabId) {
+  _getOrCreateTab(tabId, action) {
     let tab = this._tabs.find(tab => tab.id === tabId);
     if (!tab) {
-      tab = {id: tabId, action: 'updated'};
+      tab = {id: tabId, action: action};
       this._tabs.push(tab);
     }
     return tab;

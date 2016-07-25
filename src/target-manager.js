@@ -15,6 +15,7 @@
 
 const thenChrome = require('then-chrome');
 const Debugger = require('./debugger');
+const logger = require('./logger').create('TargetManager');
 
 let debuggers = [];
 let currentTabId = null;
@@ -51,6 +52,7 @@ class TargetManager {
   }
 
   static switchToTab(tabId) {
+    logger.log('Switching to tab', tabId);
     currentTabId = tabId;
     currentRootId = null;
     return Promise.resolve()

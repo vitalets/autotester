@@ -80,14 +80,14 @@ driver.get('http://www.yandex.ru');
 //driver.findElement(By.name('q')).sendKeys('wW%5');
 const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
 driver.actions()
-  .keyDown(Key.SHIFT)
-  //.keyDown(Key.CONTROL)
+  //.keyDown(Key.SHIFT)
+  .keyDown(Key.COMMAND)
  // .sendKeys(Key.SHIFT)
   //.sendKeys('q')
  // .keyUp(Key.SHIFT)
  // .keyDown(Key.SHIFT)
   .click(el)
- // .keyUp(Key.SHIFT)
+  .keyUp(Key.COMMAND)
   .perform();
 
 //const el = driver.findElement(By.name('text'));
@@ -100,16 +100,19 @@ driver.actions()
  // .click(btn)
  // .perform();
 
-//driver.getAllWindowHandles().then(res => {
-//  console.log(res);
-//  driver.switchTo().window(res[2]);
-//});
+// driver.wait(until.ableToSwitchToWindow())
+driver.sleep(100);
+
+driver.getAllWindowHandles().then(res => {
+  console.log(res.length, res);
+  driver.switchTo().window(res[0]);
+});
 //// driver.getWindowHandle().then(res => console.log(res));
 //
 //// driver.wait(until.titleContains('we'), 5000);
-//driver.wait(until.titleContains('Яндекс.Новости'), 2000);
+driver.wait(until.titleContains('Яндекс.Новости'), 5000).then(() => console.log('title ok'));
 //
-//driver.quit();
+driver.quit();
 
 
 // with frames
