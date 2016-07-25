@@ -1,84 +1,99 @@
 /**
- * Manager for command targets.
- * Store actual info for targeting commands and list of debuggers.
- * Command target has several properties:
+ * Manager for command target: current tab/window
+ * Target has several properties:
  * - tabId
  * - attached debugger
  * - root nodeId
  * - execution context id
  * - ...
  *
- * It's a static singleton class for convenient access from any command.
  */
-
-// todo: rewirte as simple exports.*
 
 const thenChrome = require('then-chrome');
 const Debugger = require('./debugger');
 const logger = require('./logger').create('TargetManager');
 
-let debuggers = [];
-let currentTabId = null;
-let currentDebugger = null;
-let currentRootId = null;
+const currentTarget = {
+  tabId: null,
+  debugger: null,
+  rootId: null,
+  contextId: null,
+};
+const usedTabIds = new Set();
+const debuggers = [];
 
-class TargetManager {
+module.exports = {
+  reset() {
+    Object.assign(currentTarget, {
+      tabId: null,
+      debugger: null,
+      rootId: null,
+      contextId: null,
+    });
+    usedTabIds.clear();
+    debuggers.length = 0;
+  },
 
-  static reset() {
-    debuggers = [];
-    currentTabId = null;
-    currentDebugger = null;
-    currentRootId = null;
-  }
+  get tabId() {
+    return currentTarget.tabId;
+  },
 
-  static get tabId() {
-    return currentTabId;
-  }
+  get debugger() {
+    return currentTarget.debugger;
+  },
 
-  static get debuggers() {
-    return debuggers;
-  }
+  get rootId() {
+    return currentTarget.rootId;
+  },
 
-  static get debugger() {
-    return currentDebugger;
-  }
+  set rootId(value) {
+    currentTarget.rootId = value;
+  },
 
-  static get rootId() {
-    return currentRootId;
-  }
-
-  static set rootId(value) {
-    currentRootId = value;
-  }
-
-  static switchToTab(tabId) {
+  switchToTab(tabId) {
     logger.log('Switching to tab', tabId);
-    currentTabId = tabId;
-    currentRootId = null;
+    currentTarget.tabId = tabId;
+    currentTarget.rootId = null;
+    usedTabIds.add(tabId);
     return Promise.resolve()
       .then(() => thenChrome.tabs.update(tabId, {active: true}))
-      .then(() => TargetManager.attachDebugger({tabId}));
-  }
+      .then(() => attachDebugger({tabId}));
+  },
 
-  static switchToFrame(frameId) {
-    // todo
-  }
+  switchToFrame(frameId) {
+  // todo
+  },
 
-  static switchToExtension(extensionId) {
-    // todo
-  }
+  switchToExtension(extensionId) {
+  // todo
+  },
 
-  static attachDebugger(target) {
-    const existingDebugger = this.debuggers.filter(d => d.isAttachedTo(target))[0];
-    if (existingDebugger) {
-      currentDebugger = existingDebugger;
-      return Promise.resolve();
-    } else {
-      currentDebugger = new Debugger();
-      debuggers.push(currentDebugger);
-      return currentDebugger.attach(target);
-    }
+  quit() {
+    return Promise.resolve()
+      .then(detachDebuggers)
+      .then(closeUsedTabs);
+  }
+};
+
+function attachDebugger(target) {
+  const existingDebugger = debuggers.filter(d => d.isAttachedTo(target))[0];
+  if (existingDebugger) {
+    currentTarget.debugger = existingDebugger;
+    return Promise.resolve();
+  } else {
+    currentTarget.debugger = new Debugger();
+    debuggers.push(currentTarget.debugger);
+    return currentTarget.debugger.attach(target);
   }
 }
 
-module.exports = TargetManager;
+function detachDebuggers() {
+  const tasks = debuggers.map(d => d.detach());
+  return Promise.all(tasks)
+    .then(() => debuggers.length = 0);
+}
+
+function closeUsedTabs() {
+  return thenChrome.tabs.remove([...usedTabIds])
+    .then(() => usedTabIds.clear());
+}

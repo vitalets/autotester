@@ -4,7 +4,6 @@
 
 const seleniumCommand = require('selenium-webdriver/lib/command');
 const seleniumSession = require('selenium-webdriver/lib/session');
-const thenChrome = require('then-chrome');
 
 const TabLoader = require('../tab-loader');
 const TargetManager = require('../target-manager');
@@ -25,14 +24,5 @@ function start() {
 }
 
 function stop() {
-  const tasks = TargetManager.debuggers.map(d => {
-    return d.detach()
-      .then(() => {
-        const tabId = d.getTarget().tabId;
-        if (tabId) {
-          return thenChrome.tabs.remove(tabId);
-        }
-      });
-  });
-  return Promise.all(tasks);
+  return TargetManager.quit();
 }
