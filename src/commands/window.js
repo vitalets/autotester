@@ -12,6 +12,8 @@ exports.commands = {
   [seleniumCommand.Name.GET_WINDOW_HANDLES]: getAllWindowHandles,
 };
 
+exports.getAllPages = getAllPages;
+
 function getCurrentWindowHandle() {
   return getAllPages()
     .then(pages => {
@@ -30,8 +32,9 @@ function getAllPages() {
   return thenChrome.debugger.getTargets()
     .then(targets => {
       return targets
-      // todo: exclude autotester tab
-        .filter(target => target.type === 'page')
+        // allowing 'background_page' type is extra feature to test chrome extensions
+        .filter(target => target.type === 'page' || target.type === 'background_page')
+        // todo: exclude autotester tab
         .filter(target => !target.url.startsWith('chrome-devtools://'))
     });
 }

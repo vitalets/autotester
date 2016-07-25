@@ -11,6 +11,8 @@
  * It's a static singleton class for convenient access from any command.
  */
 
+// todo: rewirte as simple exports.*
+
 const thenChrome = require('then-chrome');
 const Debugger = require('./debugger');
 
@@ -53,10 +55,6 @@ class TargetManager {
     currentRootId = null;
     return thenChrome.tabs.update(tabId, {active: true})
       .then(() => TargetManager.attachDebugger({tabId}));
-  }
-
-  static switchToWindow(windowId) {
-    // todo
   }
 
   static switchToFrame(frameId) {

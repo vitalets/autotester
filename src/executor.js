@@ -14,6 +14,7 @@ const commandModules = [
   require('./commands/mouse'),
   require('./commands/keyboard'),
   require('./commands/window'),
+  require('./commands/switch'),
 ];
 
 class Executor extends seleniumCommand.Executor {

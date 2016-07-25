@@ -3,7 +3,7 @@
 const Driver = require('./driver');
 const By = require('selenium-webdriver/lib/by').By;
 const until = require('selenium-webdriver/lib/until');
-const input = require('selenium-webdriver/lib/input');
+const Key = require('selenium-webdriver/lib/input').Key;
 
 const driver = new Driver();
 
@@ -14,18 +14,76 @@ window.addEventListener('error', e => {
   //}
 });
 
-/*
+//const Debugger = require('./debugger');
+//document.addEventListener('keydown', e => console.log('keydown', e));
+//document.addEventListener('keypress', e => console.log('keypress', e));
+//document.addEventListener('keyup', e => console.log('keyup', e));
+
+//function simulateKeyEvent(character) {
+//  var evt = document.createEvent("KeyboardEvent");
+//  //evt.initKeyboardEvent("keypress", true, true, window, 0, 0, 0, 0, 0, character.charCodeAt(0))
+//  //evt.initKeyboardEvent("keypress", true, true, window, character);
+//  evt.initKeyboardEvent("keypress", true, true, document.defaultView, false, false, false, false, 81, 81);
+//  document.dispatchEvent(evt);
+//}
+//
+//simulateKeyEvent('й')
+
+
+//const d = new Debugger();
+//const code = 81;
+//d.attach({extensionId: chrome.runtime.id})
+  //.then(() => d.sendCommand('Input.dispatchKeyEvent', {
+  //  "modifiers": 0,
+  // // "nativeVirtualKeyCode": code,
+  //  "text": "й",
+  //  // "type": "rawKeyDown",
+  //  "type": "keyDown",
+  //  "unmodifiedText": "й",
+  // // "windowsVirtualKeyCode": code
+  //}))
+
+  //.then(() => d.sendCommand('Input.dispatchKeyEvent', {
+  //  "modifiers": 0,
+  //  "nativeVirtualKeyCode": code,
+  // // "text": "Й",
+  //  "type": "char",
+  //   //"unmodifiedText": "й",
+  //  "windowsVirtualKeyCode": code
+  //}))
+  //.then(() => d.sendCommand('Input.dispatchKeyEvent', {
+  //  "modifiers": 0,
+  //  "nativeVirtualKeyCode": code,
+  //  "text": "",
+  //  "type": "keyUp",
+  //  "unmodifiedText": "",
+  //  "windowsVirtualKeyCode": code
+  //}))
+
+
+
 driver.get('http://www.google.com/ncr');
-const el = driver.findElement(By.name('q'));
-el.sendKeys('we');
+//driver.findElement(By.name('q')).sendKeys(Key.SHIFT + 'q' + Key.SHIFT + 'q');
+/*
 driver.sleep(1000);
 driver.findElement(By.name('btnG')).click();
 driver.wait(until.titleIs('we - Google Search'), 5000);
 driver.quit();
 */
 
+//
+//driver.get('http://www.yandex.ru');
+driver.findElement(By.name('q')).sendKeys('wW%5');
+//const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
+driver.actions()
+  //.keyDown(Key.SHIFT)
+ // .sendKeys(Key.SHIFT)
+ // .sendKeys('q')
+ // .keyUp(Key.SHIFT)
+ // .keyDown(Key.SHIFT)
+//  .click(el)
+ // .perform();
 
-driver.get('http://www.yandex.ru');
 //const el = driver.findElement(By.name('text'));
 //el.sendKeys('we');
 //driver.sleep(1000);
@@ -36,11 +94,16 @@ driver.get('http://www.yandex.ru');
  // .click(btn)
  // .perform();
 
-driver.getAllWindowHandles().then(res => console.log(res));
-driver.getWindowHandle().then(res => console.log(res));
-
-// driver.wait(until.titleContains('we'), 5000);
-driver.quit();
+//driver.getAllWindowHandles().then(res => {
+//  console.log(res);
+//  driver.switchTo().window(res[2]);
+//});
+//// driver.getWindowHandle().then(res => console.log(res));
+//
+//// driver.wait(until.titleContains('we'), 5000);
+//driver.wait(until.titleContains('Яндекс.Новости'), 2000);
+//
+//driver.quit();
 
 
 // with frames
