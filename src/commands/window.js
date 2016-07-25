@@ -37,7 +37,16 @@ function getAllPages() {
         // allowing 'background_page' type is extra feature to test chrome extensions
         // todo: add inactive background event pages
         .filter(target => target.type === 'page' || target.type === 'background_page')
-        // todo: exclude autotester tab and background_page
         .filter(target => !target.url.startsWith('chrome-devtools://'))
+        // exclude self background page and tabs
+        .filter(target => !isSelfBackground(target) && !isSelfUi(target))
     });
+}
+
+function isSelfBackground(target) {
+  return target.type === 'background_page' && target.extensionId === chrome.runtime.id;
+}
+
+function isSelfUi(target) {
+  return target.type === 'page' && target.url === chrome.runtime.getURL('ui/index.html');
 }

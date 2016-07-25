@@ -26,25 +26,3 @@ function switchToWindow(params) {
         : Promise.reject(`Window ${params.name} does not exist`);
     });
 }
-
-/**
- * Native selenium does not support tabs but Autotester does.
- * see: https://github.com/SeleniumHQ/selenium/issues/2247
- * see: https://github.com/SeleniumHQ/selenium/issues/399
- * @param tabId
- * @returns {Promise.<T>}
- */
-function switchToTab() {
-  // _targetManager.switchToTab()
-  // _targetManager.currentTarget()
-}
-
-//
-//switchToTab(tabId) {
-//  this._currentTabId = tabId;
-//  this._currentRootId = null;
-//  return thenChrome.tabs.update(tabId, {active: true})
-//    .then(() => this._attachDebugger({tabId}));
-//}
-
-
