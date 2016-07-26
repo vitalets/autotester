@@ -1,7 +1,6 @@
 /**
  * Mouse commands
- * Element coordinates are relative to scrolled position.
- * Mouse coordinates are relative to scrolled position.
+ * All coordinates are relative to scrolled position (viewport).
  * If coordinates are out of viewport - events will not be dispatched.
  */
 
@@ -31,19 +30,16 @@ let lastMoveTo = {
 };
 
 function clickElement(params) {
-  return getElementCenter(params.id)
-    .then(center => {
-      return Promise.resolve()
-        .then(() => scrollToXY(center.x, center.y))
-        .then(() => new Promise(r => setTimeout(r, 1000)))
-        .then(() => getElementCenter(params.id))
-        .then(center => {
-          return Promise.resolve()
-            .then(() => moveToXY(center.x, center.y))
-            .then(() => clickXY(center.x, center.y));
-        })
-
-    });
+  return Promise.resolve()
+     // .then(() => getScrollXY())
+    // scroll to top for correct coords
+    // todo: check element is visible!
+    .then(() => scrollToXY(0, 0))
+    .then(() => getElementCenter(params.id))
+    .then(center => scrollToXY(center.x, center.y))
+    .then(() => getElementCenter(params.id))
+    //.then(() => new Promise(r => setTimeout(r, 1000)))
+    .then(center => moveAndClickXY(center.x, center.y));
 }
 
 /**
@@ -91,6 +87,12 @@ function moveToXY(x, y) {
   .then(() => lastMoveTo = {x, y});
 }
 
+function moveAndClickXY(x, y) {
+  return Promise.resolve()
+    .then(() => moveToXY(x, y))
+    .then(() => clickXY(x, y));
+}
+
 function buttonAction(x, y, type, button, count) {
   return dispatchMouseEvent({
     button: button,
@@ -111,13 +113,17 @@ function getElementCenter(id) {
       nodeId: Number(id)
     })
     .then(res => {
-      const content = res.model.content;
-      // calc click point as center of element
-      const x = content[0] + Math.round((content[2] - content[0]) / 2);
-      const y = content[3] + Math.round((content[5] - content[3]) / 2);
-      highlightXY(x, y);
-      return {x, y};
+      const center = getQuadCenter(res.model.content);
+      highlightXY(center.x, center.y);
+      return center;
     });
+}
+
+function getQuadCenter(quad) {
+  return {
+    x: quad[0] + Math.round((quad[2] - quad[0]) / 2),
+    y: quad[3] + Math.round((quad[5] - quad[3]) / 2),
+  };
 }
 
 // function to scroll
@@ -135,5 +141,12 @@ function highlightXY(x, y) {
     width: 20,
     height: 20,
     color: {r: 255, g: 0, b: 0, a: 1}
+  });
+}
+
+function getScrollXY() {
+  return TargetManager.debugger.sendCommand('Runtime.evaluate', {
+    // expression: `(function() {return {y: window.scrollY}}())`
+    expression: `window.scrollY`
   });
 }

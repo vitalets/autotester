@@ -66,8 +66,8 @@ window.addEventListener('error', e => {
 
 //driver.get('http://www.google.com/ncr');
 // driver.get('http://www.yandex.ru');
-//driver.get('chrome://newtab');
-driver.get('/test/index.html');
+driver.get('chrome://newtab');
+//driver.get('/test/index.html');
 
 
 
@@ -83,8 +83,8 @@ driver.sleep(1000);
 
 //driver.findElement(By.name('q')).sendKeys('wW%5');
 //const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
-//const el = driver.findElement({css: '.i-action__settings'});
-const el = driver.findElement({css: '.btn1'});
+const el = driver.findElement({css: '.i-action__settings'});
+//const el = driver.findElement({css: '.btn1'});
 //const el = driver.findElement({css: '.b-head-logo__link'});
 el.click();
 //driver.actions()
@@ -109,7 +109,10 @@ el.click();
  // .perform();
 
 // driver.wait(until.ableToSwitchToWindow())
-driver.sleep(5000);
+driver.sleep(2000);
+
+el.click();
+
 
 //driver.getAllWindowHandles().then(res => {
 //  console.log(res.length, res);
