@@ -109,9 +109,9 @@ el.click();
  // .perform();
 
 // driver.wait(until.ableToSwitchToWindow())
-driver.sleep(2000);
+//driver.sleep(2000);
 
-el.click();
+//el.click();
 
 
 //driver.getAllWindowHandles().then(res => {

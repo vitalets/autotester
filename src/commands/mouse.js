@@ -34,12 +34,17 @@ function clickElement(params) {
      // .then(() => getScrollXY())
     // scroll to top for correct coords
     // todo: check element is visible!
+    // see also: getNodeForLocation
     .then(() => scrollToXY(0, 0))
     .then(() => getElementCenter(params.id))
     .then(center => scrollToXY(center.x, center.y))
     .then(() => getElementCenter(params.id))
     //.then(() => new Promise(r => setTimeout(r, 1000)))
-    .then(center => moveAndClickXY(center.x, center.y));
+    .then(center => {
+      return Promise.resolve()
+        .then(() => highlightClick(center.x, center.y))
+        .then(() => moveAndClickXY(center.x, center.y));
+    });
 }
 
 /**
@@ -112,11 +117,7 @@ function getElementCenter(id) {
   return TargetManager.debugger.sendCommand('DOM.getBoxModel', {
       nodeId: Number(id)
     })
-    .then(res => {
-      const center = getQuadCenter(res.model.content);
-      highlightXY(center.x, center.y);
-      return center;
-    });
+    .then(res => getQuadCenter(res.model.content));
 }
 
 function getQuadCenter(quad) {
@@ -134,14 +135,31 @@ function scrollToXY(x, y) {
   });
 }
 
-function highlightXY(x, y) {
+function highlightXY(x, y, frame) {
+  const size = Math.round(5 + 50 * frame);
   return TargetManager.debugger.sendCommand('DOM.highlightRect', {
-    x: x - 10,
-    y: y - 10,
-    width: 20,
-    height: 20,
-    color: {r: 255, g: 0, b: 0, a: 1}
+    x: x - Math.round(size / 2),
+    y: y - Math.round(size / 2),
+    width: size,
+    height: size,
+    color: {r: Math.round(255 * (1 - frame)), g: 0, b: 0, a: 1 - frame}
   });
+}
+
+function highlightClick(x, y) {
+  const duration = 500;
+  const interval = 40; // 25 frames per second
+  const framesCount = Math.ceil(duration / interval);
+  const frames = []; res = Promise.resolve();
+  for (let i = 0; i <= framesCount; i++) {
+    frames.push(i / framesCount);
+  }
+  return frames.reduce((res, frame) => {
+    return res
+      .then(() => highlightXY(x, y, frame))
+      .then(() => new Promise(resolve => setTimeout(resolve, interval)))
+  }, Promise.resolve());
+
 }
 
 function getScrollXY() {
