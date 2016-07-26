@@ -4,6 +4,8 @@ const Driver = require('./driver');
 const By = require('selenium-webdriver/lib/by').By;
 const until = require('selenium-webdriver/lib/until');
 const Key = require('selenium-webdriver/lib/input').Key;
+// const mocha = require('mocha');
+//const test = require('selenium-webdriver/testing');
 
 const driver = new Driver();
 
@@ -63,13 +65,15 @@ window.addEventListener('error', e => {
 
 
 //driver.get('http://www.google.com/ncr');
-driver.get('http://www.yandex.ru');
+// driver.get('http://www.yandex.ru');
+//driver.get('chrome://newtab');
+driver.get('/test/index.html');
 
 
 
 //driver.findElement(By.name('q')).sendKeys(Key.SHIFT + 'q' + Key.SHIFT + 'q');
 
-//driver.sleep(1000);
+driver.sleep(1000);
 //driver.findElement(By.name('btnG')).click();
 //driver.wait(until.titleIs('we - Google Search'), 5000);
 //driver.quit();
@@ -78,17 +82,21 @@ driver.get('http://www.yandex.ru');
 //
 
 //driver.findElement(By.name('q')).sendKeys('wW%5');
-const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
-driver.actions()
+//const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
+//const el = driver.findElement({css: '.i-action__settings'});
+const el = driver.findElement({css: '.btn1'});
+//const el = driver.findElement({css: '.b-head-logo__link'});
+el.click();
+//driver.actions()
   //.keyDown(Key.SHIFT)
-  .keyDown(Key.COMMAND)
+  //.keyDown(Key.COMMAND)
  // .sendKeys(Key.SHIFT)
   //.sendKeys('q')
  // .keyUp(Key.SHIFT)
  // .keyDown(Key.SHIFT)
-  .click(el)
-  .keyUp(Key.COMMAND)
-  .perform();
+ // .click(el)
+ // .keyUp(Key.COMMAND)
+ // .perform();
 
 //const el = driver.findElement(By.name('text'));
 //el.sendKeys('we');
@@ -101,18 +109,19 @@ driver.actions()
  // .perform();
 
 // driver.wait(until.ableToSwitchToWindow())
-driver.sleep(100);
+driver.sleep(5000);
 
-driver.getAllWindowHandles().then(res => {
-  console.log(res.length, res);
-  driver.switchTo().window(res[0]);
-});
+//driver.getAllWindowHandles().then(res => {
+//  console.log(res.length, res);
+//  driver.switchTo().window(res[0]);
+//});
+
 //// driver.getWindowHandle().then(res => console.log(res));
 //
 //// driver.wait(until.titleContains('we'), 5000);
-driver.wait(until.titleContains('Яндекс.Новости'), 5000).then(() => console.log('title ok'));
+//driver.wait(until.titleContains('Яндекс.Новости'), 5000).then(() => console.log('title ok'));
 //
-driver.quit();
+//driver.quit();
 
 
 // with frames

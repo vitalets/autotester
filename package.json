@@ -5,10 +5,12 @@
   "scripts": {
     "clean": "rm -rf dist",
     "webpack": "webpack --config ./builder/webpack.config.js",
-    "manifest": "node ./builder/manifest copy",
+    "manifest": "node ./builder/sync copy src/manifest.json",
+    "html": "node ./builder/sync copy test",
     "build": "npm run clean && npm run webpack && npm run manifest",
     "watch:webpack": "npm run webpack -- --watch",
-    "watch:manifest": "node ./builder/manifest watch",
+    "watch:manifest": "node ./builder/sync watch src/manifest.json",
+    "watch:html": "node ./builder/sync watch test/**",
     "watch": "run-p watch:**"
   },
   "dependencies": {

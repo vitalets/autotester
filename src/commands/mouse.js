@@ -1,5 +1,8 @@
 /**
  * Mouse commands
+ * Element coordinates are relative to scrolled position.
+ * Mouse coordinates are relative to scrolled position.
+ * If coordinates are out of viewport - events will not be dispatched.
  */
 
 const seleniumCommand = require('selenium-webdriver/lib/command');
@@ -31,8 +34,15 @@ function clickElement(params) {
   return getElementCenter(params.id)
     .then(center => {
       return Promise.resolve()
-        .then(() => moveToXY(center.x, center.y))
-        .then(() => clickXY(center.x, center.y));
+        .then(() => scrollToXY(center.x, center.y))
+        .then(() => new Promise(r => setTimeout(r, 1000)))
+        .then(() => getElementCenter(params.id))
+        .then(center => {
+          return Promise.resolve()
+            .then(() => moveToXY(center.x, center.y))
+            .then(() => clickXY(center.x, center.y));
+        })
+
     });
 }
 
@@ -105,6 +115,25 @@ function getElementCenter(id) {
       // calc click point as center of element
       const x = content[0] + Math.round((content[2] - content[0]) / 2);
       const y = content[3] + Math.round((content[5] - content[3]) / 2);
+      highlightXY(x, y);
       return {x, y};
     });
+}
+
+// function to scroll
+// temp as it can be used in several other commands
+function scrollToXY(x, y) {
+  return TargetManager.debugger.sendCommand('Runtime.evaluate', {
+    expression: `window.scrollTo(${x}, ${y})`
+  });
+}
+
+function highlightXY(x, y) {
+  return TargetManager.debugger.sendCommand('DOM.highlightRect', {
+    x: x - 10,
+    y: y - 10,
+    width: 20,
+    height: 20,
+    color: {r: 255, g: 0, b: 0, a: 1}
+  });
 }

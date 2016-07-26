@@ -20,7 +20,7 @@ let service = new chrome.ServiceBuilder('/Users/vitalets/projects/chromium/src/o
 chrome.setDefaultService(service);
 
 let options = new chrome.Options();
-// options.addExtensions('../visbookmarks-chrome/out/yandex.crx');
+options.addExtensions('../visbookmarks-chrome/out/yandex.crx');
 // options.addArguments('--start-maximized');
 
 const logging = webdriver.logging;
@@ -51,23 +51,34 @@ webdriver.promise.controlFlow().on('uncaughtException', function(e) {
   // driver.quit();
 });
 
-
- driver.get('http://www.yandex.ru');
+// driver.sleep(10000);
+// driver.get('http://www.yandex.ru');
 //driver.get('http://www.google.com/ncr');
+driver.get('chrome://newtab');
 
 
 //driver.executeScript(function () {
 //  document.addEventListener('keydown', e => console.log('keydown', e.keyCode, e.keyIdentifier));
 //});
 
-//const el = driver.findElement(By.name('text'));
-const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
-driver.actions()
-  .keyDown(Key.COMMAND)
- // .keyDown(Key.SHIFT)
-  .click(el)
-  .keyUp(Key.SHIFT)
-  .perform();
+driver.sleep(10000);
+
+const el = driver.findElement({css: '.i-action__settings'});
+//const el = driver.findElement({css: '.b-head-logo__link'});
+el.getLocation().then(res => console.log(res));
+el.getSize().then(res => console.log(res));
+// el.click();
+
+driver.sleep(1000);
+
+////const el = driver.findElement(By.name('text'));
+//const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
+//driver.actions()
+//  .keyDown(Key.COMMAND)
+// // .keyDown(Key.SHIFT)
+//  .click(el)
+//  .keyUp(Key.SHIFT)
+//  .perform();
 //
 //driver.sleep(1000);
 // driver.manage().window().maximize();
@@ -95,8 +106,8 @@ driver.actions()
   //.click(el)
   //.perform();
 
-driver.getAllWindowHandles().then(res => {
-  console.log('switch to ', res[1]);
+//driver.getAllWindowHandles().then(res => {
+//  console.log('switch to ', res[1]);
 //  driver.switchTo().window(res[1]);
 //
 //  driver.actions()
@@ -110,7 +121,7 @@ driver.getAllWindowHandles().then(res => {
 //  driver.actions()
 //    .sendKeys('w')
 //    .perform();
-});
+//});
 
 
 //

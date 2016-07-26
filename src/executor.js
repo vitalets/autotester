@@ -27,11 +27,15 @@ class Executor extends seleniumCommand.Executor {
 
   execute(cmd) {
     const name = cmd.getName();
-    logger.log('selenium command:', name, cmd);
+    logger.log(`Selenium command '${name}':`, cmd.getParameters());
     if (this._commands.has(name)) {
       const params = cmd.getParameters();
       const fn = this._commands.get(name);
-      return fn(params);
+      return fn(params)
+        .then(res => {
+          logger.log(`Response to '${name}':`, res);
+          return res;
+        })
     } else {
       throw new Error(`Unknown command: ${name}`);
     }

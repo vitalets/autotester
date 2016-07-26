@@ -16,7 +16,12 @@ class Debugger {
 
   sendCommand(name, params = {}) {
     logger.log(`Send command ${name}`, params);
-    return thenChrome.debugger.sendCommand(this._target, name, params);
+    return thenChrome.debugger.sendCommand(this._target, name, params)
+      .then(res => {
+        logger.log(`Response to '${name}'`, res);
+        return res;
+      })
+      .catch(Debugger.convertError);
   }
 
   detach() {
@@ -32,6 +37,19 @@ class Debugger {
     const sameTabId = this._target.tabId && this._target.tabId === target.tabId;
     const sameExtensionId = this._target.extensionId && this._target.extensionId === target.extensionId;
     return sameTabId || sameExtensionId;
+  }
+
+  static convertError(e) {
+    // convert debugger error into readable one
+    // debugger error is object with single key 'message'
+    const isDebuggerError = typeof e === 'object' && Object.keys(e).length === 1 && e.message;
+    if (isDebuggerError) {
+      const info = JSON.parse(e.message);
+      const readableMessage = `Debugger error '${info.message} ${info.data}'`;
+      return Promise.reject(new Error(readableMessage));
+    } else {
+      return Promise.reject(e);
+    }
   }
 }
 
