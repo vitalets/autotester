@@ -21,9 +21,14 @@
   },
   "devDependencies": {
     "archiver": "^1.0.0",
+    "express": "^4.14.0",
     "fs-extra": "^0.30.0",
     "gaze": "^1.1.0",
+    "multer": "^1.1.0",
     "npm-run-all": "^2.3.0",
+    "promises-aplus-tests": "^2.1.2",
+    "serve-index": "^1.8.0",
+    "sinon": "^1.17.5",
     "then-chrome": "^1.0.5",
     "webpack": "^1.13.1"
   }
