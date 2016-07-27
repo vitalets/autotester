@@ -14,10 +14,11 @@
     "history"
   ],
 
-  "browser_action": { },
+  "browser_action": {},
 
   "background": {
     "scripts": [
+      "mocha.js",
       "bundle.js"
     ],
     "persistent": true

@@ -4,8 +4,7 @@ const Driver = require('./driver');
 const By = require('selenium-webdriver/lib/by').By;
 const until = require('selenium-webdriver/lib/until');
 const Key = require('selenium-webdriver/lib/input').Key;
-// const mocha = require('mocha');
-//const test = require('selenium-webdriver/testing');
+const test = require('./testing');
 
 const driver = new Driver();
 
@@ -66,14 +65,14 @@ window.addEventListener('error', e => {
 
 //driver.get('http://www.google.com/ncr');
 // driver.get('http://www.yandex.ru');
-driver.get('chrome://newtab');
+//driver.get('chrome://newtab');
 //driver.get('/test/index.html');
 
 
 
 //driver.findElement(By.name('q')).sendKeys(Key.SHIFT + 'q' + Key.SHIFT + 'q');
 
-driver.sleep(1000);
+//driver.sleep(1000);
 //driver.findElement(By.name('btnG')).click();
 //driver.wait(until.titleIs('we - Google Search'), 5000);
 //driver.quit();
@@ -83,10 +82,10 @@ driver.sleep(1000);
 
 //driver.findElement(By.name('q')).sendKeys('wW%5');
 //const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});
-const el = driver.findElement({css: '.i-action__settings'});
+//const el = driver.findElement({css: '.i-action__settings'});
 //const el = driver.findElement({css: '.btn1'});
 //const el = driver.findElement({css: '.b-head-logo__link'});
-el.click();
+//el.click();
 //driver.actions()
   //.keyDown(Key.SHIFT)
   //.keyDown(Key.COMMAND)

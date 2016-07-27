@@ -5,13 +5,11 @@
   "scripts": {
     "clean": "rm -rf dist",
     "webpack": "webpack --config ./builder/webpack.config.js",
-    "manifest": "node ./builder/sync copy src/manifest.json",
-    "html": "node ./builder/sync copy test",
-    "build": "npm run clean && npm run webpack && npm run manifest",
+    "copy:assets": "node ./builder/assets copy",
     "watch:webpack": "npm run webpack -- --watch",
-    "watch:manifest": "node ./builder/sync watch src/manifest.json",
-    "watch:html": "node ./builder/sync watch test/**",
-    "watch": "run-p watch:**"
+    "watch:assets": "node ./builder/assets watch",
+    "watch": "run-p watch:**",
+    "build": "npm run clean && npm run webpack && npm run copy:assets"
   },
   "dependencies": {
     "chai": "^3.5.0",
