@@ -32,7 +32,8 @@ let lastMoveTo = {
 function clickElement(params) {
   return Promise.resolve()
      // .then(() => getScrollXY())
-    // scroll to top for correct coords
+    // temp: scroll to top for correct coords
+    // todo: scroll to element in center layout
     // todo: check element is visible!
     // see also: getNodeForLocation
     .then(() => scrollToXY(0, 0))

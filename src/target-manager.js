@@ -31,6 +31,10 @@ module.exports = {
     debuggers.length = 0;
   },
 
+  get handle() {
+    return currentTarget.handle;
+  },
+
   get tabId() {
     return currentTarget.tabId;
   },
