@@ -1,19 +1,11 @@
 
+const runner = require('./runner');
 
-const Driver = require('./driver');
-const By = require('selenium-webdriver/lib/by').By;
-const until = require('selenium-webdriver/lib/until');
-const Key = require('selenium-webdriver/lib/input').Key;
-const test = require('./testing');
-
-const driver = new Driver();
-
-window.addEventListener('error', e => {
-  //if (typeof e.error === 'object') {
-    // for errors in debugger giving 'Uncaught [object Object]'
-    // console.error(e, `${e.error.message} ${e.filename}:${e.lineno}`);
-  //}
-});
+runner.setGlobals();
+runner.run([
+  //'test/google-search.test.js',
+  'test/vb-settings.test.js',
+]);
 
 //const Debugger = require('./debugger');
 //document.addEventListener('keydown', e => console.log('keydown', e));

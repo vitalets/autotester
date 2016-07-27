@@ -1,16 +1,11 @@
 'use strict';
 
-var webdriver = require('selenium-webdriver'),
-  By = webdriver.By,
-  Key = webdriver.Key,
-  // test = require('selenium-webdriver/testing'),
-  until = webdriver.until,
-  proxy = require('selenium-webdriver/proxy');
-
-// var assert = require('assert');
+const webdriver = require('selenium-webdriver');
+// const test = require('selenium-webdriver/testing');
 
 let chrome = require('selenium-webdriver/chrome');
 
+// use chromedriver built with full logging
 let service = new chrome.ServiceBuilder('/Users/vitalets/projects/chromium/src/out/Default/chromedriver')
   .usingPort(9515)
   .loggingTo('./log.txt')
@@ -23,7 +18,7 @@ let options = new chrome.Options();
 options.addExtensions('../visbookmarks-chrome/out/yandex.crx');
 // options.addArguments('--start-maximized');
 
-const logging = webdriver.logging;
+//const logging = webdriver.logging;
 /*
 const prefs = new logging.Preferences();
 prefs.setLevel(logging.Type.BROWSER, logging.Level.ALL);
@@ -44,32 +39,42 @@ let driver = new webdriver.Builder()
   .setChromeOptions(options)
   .build();
 
+global.driver = driver;
+global.By = webdriver.By;
+global.Key = webdriver.Key;
+global.until = webdriver.until;
+// this does not work as mocha set's globals later
+// global.test = test;
+
+// todo: use mocha programmatically!!!
+
+// sample: mocha --require ./true-selenium --harmony -t 600000 --recursive ./test/google-search.test.js
 
 // quit driver in case of error
-webdriver.promise.controlFlow().on('uncaughtException', function(e) {
-  console.error(e);
-  // driver.quit();
-});
+//webdriver.promise.controlFlow().on('uncaughtException', function(e) {
+//  console.error(e);
+//  // driver.quit();
+//});
 
 // driver.sleep(10000);
 // driver.get('http://www.yandex.ru');
 //driver.get('http://www.google.com/ncr');
-driver.get('chrome://newtab');
+//driver.get('chrome://newtab');
 
 
 //driver.executeScript(function () {
 //  document.addEventListener('keydown', e => console.log('keydown', e.keyCode, e.keyIdentifier));
 //});
-
-driver.sleep(10000);
-
-const el = driver.findElement({css: '.i-action__settings'});
-//const el = driver.findElement({css: '.b-head-logo__link'});
-el.getLocation().then(res => console.log(res));
-el.getSize().then(res => console.log(res));
-// el.click();
-
-driver.sleep(1000);
+//
+//driver.sleep(10000);
+//
+//const el = driver.findElement({css: '.i-action__settings'});
+////const el = driver.findElement({css: '.b-head-logo__link'});
+//el.getLocation().then(res => console.log(res));
+//el.getSize().then(res => console.log(res));
+//// el.click();
+//
+//driver.sleep(1000);
 
 ////const el = driver.findElement(By.name('text'));
 //const el = driver.findElement({css: 'a[href="https://news.yandex.ru/?lang=ru"]'});

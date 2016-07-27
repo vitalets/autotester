@@ -69,8 +69,6 @@
 // in autotester we can not require full selenium as it is for node, not for browser
 // var promise = require('..').promise;
 var promise = require('selenium-webdriver/lib/promise');
-var global = window;
-
 var flow = promise.controlFlow();
 
 
@@ -202,71 +200,77 @@ exports.controlFlow = function(){
   return flow;
 };
 
-
 /**
- * Registers a new test suite.
- * @param {string} name The suite name.
- * @param {function()=} fn The suite function, or {@code undefined} to define
- *     a pending test suite.
+ * Autotester:
+ * Re-export globals after mocha reload
+ * @param {Object} global
  */
-exports.describe = global.describe;
+exports.wrapGlobals = function (global) {
+  /**
+   * Registers a new test suite.
+   * @param {string} name The suite name.
+   * @param {function()=} fn The suite function, or {@code undefined} to define
+   *     a pending test suite.
+   */
+  exports.describe = global.describe;
 
-/**
- * Defines a suppressed test suite.
- * @param {string} name The suite name.
- * @param {function()=} fn The suite function, or {@code undefined} to define
- *     a pending test suite.
- */
-exports.xdescribe = global.xdescribe;
-exports.describe.skip = global.describe.skip;
+  /**
+   * Defines a suppressed test suite.
+   * @param {string} name The suite name.
+   * @param {function()=} fn The suite function, or {@code undefined} to define
+   *     a pending test suite.
+   */
+  exports.xdescribe = global.xdescribe;
+  exports.describe.skip = global.describe.skip;
 
-/**
- * Register a function to call after the current suite finishes.
- * @param {function()} fn .
- */
-exports.after = wrapped(global.after);
+  /**
+   * Register a function to call after the current suite finishes.
+   * @param {function()} fn .
+   */
+  exports.after = wrapped(global.after);
 
-/**
- * Register a function to call after each test in a suite.
- * @param {function()} fn .
- */
-exports.afterEach = wrapped(global.afterEach);
+  /**
+   * Register a function to call after each test in a suite.
+   * @param {function()} fn .
+   */
+  exports.afterEach = wrapped(global.afterEach);
 
-/**
- * Register a function to call before the current suite starts.
- * @param {function()} fn .
- */
-exports.before = wrapped(global.before);
+  /**
+   * Register a function to call before the current suite starts.
+   * @param {function()} fn .
+   */
+  exports.before = wrapped(global.before);
 
-/**
- * Register a function to call before each test in a suite.
- * @param {function()} fn .
- */
-exports.beforeEach = wrapped(global.beforeEach);
+  /**
+   * Register a function to call before each test in a suite.
+   * @param {function()} fn .
+   */
+  exports.beforeEach = wrapped(global.beforeEach);
 
-/**
- * Add a test to the current suite.
- * @param {string} name The test name.
- * @param {function()=} fn The test function, or {@code undefined} to define
- *     a pending test case.
- */
-exports.it = wrapped(global.it);
+  /**
+   * Add a test to the current suite.
+   * @param {string} name The test name.
+   * @param {function()=} fn The test function, or {@code undefined} to define
+   *     a pending test case.
+   */
+  exports.it = wrapped(global.it);
 
-/**
- * An alias for {@link #it()} that flags the test as the only one that should
- * be run within the current suite.
- * @param {string} name The test name.
- * @param {function()=} fn The test function, or {@code undefined} to define
- *     a pending test case.
- */
-exports.iit = exports.it.only = wrapped(global.it.only);
+  /**
+   * An alias for {@link #it()} that flags the test as the only one that should
+   * be run within the current suite.
+   * @param {string} name The test name.
+   * @param {function()=} fn The test function, or {@code undefined} to define
+   *     a pending test case.
+   */
+  exports.iit = exports.it.only = wrapped(global.it.only);
 
-/**
- * Adds a test to the current suite while suppressing it so it is not run.
- * @param {string} name The test name.
- * @param {function()=} fn The test function, or {@code undefined} to define
- *     a pending test case.
- */
-exports.xit = exports.it.skip = wrapped(global.xit);
+  /**
+   * Adds a test to the current suite while suppressing it so it is not run.
+   * @param {string} name The test name.
+   * @param {function()=} fn The test function, or {@code undefined} to define
+   *     a pending test case.
+   */
+  exports.xit = exports.it.skip = wrapped(global.xit);
+};
 
 exports.ignore = ignore;

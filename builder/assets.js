@@ -20,6 +20,7 @@ exports.copy = function () {
 exports.watch = function () {
   sync.watch('src/manifest.json', paths.UNPACKED);
   sync.watch('test/**', paths.UNPACKED + '/test');
+  sync.watch('node_modules/mocha/mocha.js', paths.UNPACKED);
 };
 
 // run from cli
