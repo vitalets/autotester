@@ -24,7 +24,7 @@ const BUTTONS = {
 };
 
 // store last moveTo coords as selenium does not send it in 'click' command
-let lastMoveTo = {
+const lastMoveTo = {
   x: 0,
   y: 0,
 };
@@ -90,7 +90,7 @@ function moveToXY(x, y) {
     x: x,
     y: y
   })
-  .then(() => lastMoveTo = {x, y});
+  .then(() => Object.assign(lastMoveTo, {x, y}));
 }
 
 function moveAndClickXY(x, y) {
