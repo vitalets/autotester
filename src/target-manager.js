@@ -1,6 +1,7 @@
 /**
  * Manager for command target: current tab/window
  * Target has several properties:
+ * - handle
  * - tabId
  * - attached debugger
  * - root nodeId
@@ -14,6 +15,7 @@ const Debugger = require('./debugger');
 const logger = require('./logger').create('TargetManager');
 
 const currentTarget = {
+  handle: null,
   tabId: null,
   debugger: null,
   rootId: null,
@@ -24,12 +26,7 @@ const debuggers = [];
 
 module.exports = {
   reset() {
-    Object.assign(currentTarget, {
-      tabId: null,
-      debugger: null,
-      rootId: null,
-      contextId: null,
-    });
+    this._clearCurrentTarget();
     usedTabIds.clear();
     debuggers.length = 0;
   },
@@ -50,28 +47,41 @@ module.exports = {
     currentTarget.rootId = value;
   },
 
-  switchToTab(tabId) {
-    logger.log('Switching to tab', tabId);
-    currentTarget.tabId = tabId;
-    currentTarget.rootId = null;
-    usedTabIds.add(tabId);
-    return Promise.resolve()
-      .then(() => thenChrome.tabs.update(tabId, {active: true}))
-      .then(() => attachDebugger({tabId}));
-  },
-
-  switchToFrame(frameId) {
-  // todo
-  },
-
-  switchToExtension(extensionId) {
-  // todo
+  switchTo(target) {
+    this._clearCurrentTarget();
+    currentTarget.handle = target.handle;
+    return target.extensionId
+      ? this._switchToExtension(target)
+      : this._switchToTab(target);
   },
 
   quit() {
     return Promise.resolve()
       .then(detachDebuggers)
       .then(closeUsedTabs);
+  },
+
+  _switchToTab(target) {
+    logger.log('Switching to tab', target.url);
+    currentTarget.tabId = target.tabId;
+    usedTabIds.add(target.tabId);
+    return Promise.resolve()
+      .then(() => thenChrome.tabs.update(target.tabId, {active: true}))
+      .then(() => attachDebugger({tabId: target.tabId}));
+  },
+
+  _switchToExtension(target) {
+    logger.log('Switching to extension', target.extensionId);
+    return Promise.resolve()
+      .then(() => attachDebugger({extensionId: target.extensionId}));
+  },
+
+  _switchToFrame(frameId) {
+    // todo
+  },
+
+  _clearCurrentTarget() {
+    Object.keys(currentTarget).forEach(key => currentTarget[key] = null);
   }
 };
 

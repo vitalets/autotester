@@ -11,6 +11,8 @@ exports.commands = {
   [seleniumCommand.Name.SWITCH_TO_WINDOW]: switchToWindow,
 };
 
+exports.switchByTabId = switchByTabId;
+
 /**
  * Switch to window, tab or extension background page
  *
@@ -18,11 +20,19 @@ exports.commands = {
  * @param {String} params.name
  */
 function switchToWindow(params) {
-  return windowCommand.getAllPages()
-    .then(pages => {
-      const page = pages.filter(page => page.id === params.name)[0];
-      return page
-        ? TargetManager.switchToTab(page.tabId)
-        : Promise.reject(`Window ${params.name} does not exist`);
+  return switchByProp('handle', params.name);
+}
+
+function switchByTabId(tabId) {
+  return switchByProp('tabId', tabId);
+}
+
+function switchByProp(prop, value) {
+  return windowCommand.getAllTargets()
+    .then(targets => {
+      const target = targets.filter(target => target[prop] === value)[0];
+      return target
+        ? TargetManager.switchTo(target)
+        : Promise.reject(`Window with ${prop} = '${value}' does not exist`);
     });
 }
