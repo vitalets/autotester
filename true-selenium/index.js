@@ -1,54 +1,23 @@
 'use strict';
 
-const webdriver = require('selenium-webdriver');
-// const test = require('selenium-webdriver/testing');
+const Mocha = require('mocha');
+const files = require('./files');
 
-let chrome = require('selenium-webdriver/chrome');
+const mocha = new Mocha({
+  ui: 'bdd',
+  timeout: 60 * 1000
+});
 
-// use chromedriver built with full logging
-let service = new chrome.ServiceBuilder('/Users/vitalets/projects/chromium/src/out/Default/chromedriver')
-  .usingPort(9515)
-  .loggingTo('./log.txt')
-  .enableVerboseLogging()
-  .build();
+mocha.addFile('true-selenium/prepare.js');
 
-chrome.setDefaultService(service);
+files.forEach(file => mocha.addFile(file));
 
-let options = new chrome.Options();
-options.addExtensions('../visbookmarks-chrome/out/yandex.crx');
-// options.addArguments('--start-maximized');
-
-//const logging = webdriver.logging;
-/*
-const prefs = new logging.Preferences();
-prefs.setLevel(logging.Type.BROWSER, logging.Level.ALL);
-prefs.setLevel(logging.Type.CLIENT, logging.Level.ALL);
-prefs.setLevel(logging.Type.DRIVER, logging.Level.ALL);
-prefs.setLevel(logging.Type.PERFORMANCE, logging.Level.ALL);
-prefs.setLevel(logging.Type.SERVER, logging.Level.ALL);
-options.setLoggingPrefs(prefs);
-*/
-
-//logging.installConsoleHandler();
-//logging.getLogger('webdriver').setLevel(logging.Level.FINER);
-
-
-let driver = new webdriver.Builder()
-  .forBrowser('chrome')
-  // dont use capabilities here as they are overwritten by setChromeOptions
-  .setChromeOptions(options)
-  .build();
-
-global.driver = driver;
-global.By = webdriver.By;
-global.Key = webdriver.Key;
-global.until = webdriver.until;
-// this does not work as mocha set's globals later
-// global.test = test;
-
-// todo: use mocha programmatically!!!
-
-// sample: mocha --require ./true-selenium --harmony -t 600000 --recursive ./test/google-search.test.js
+mocha.run(failures => {
+  // console.log('Finish', failures);
+  process.on('exit', () => {
+    process.exit(failures);
+  });
+});
 
 // quit driver in case of error
 //webdriver.promise.controlFlow().on('uncaughtException', function(e) {

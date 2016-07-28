@@ -34,7 +34,8 @@ exports.setGlobals = function () {
   window.Key = Key;
   window.until = until;
   window.assert = chai.assert;
-  window.require = fakeRequire;
+  // not used now
+  // window.require = fakeRequire;
 };
 
 function prepare() {
@@ -70,6 +71,7 @@ function finalize(failures) {
 
 /**
  * Allows selenium node require
+ * not used now
  */
 function fakeRequire(moduleName) {
   switch (moduleName) {

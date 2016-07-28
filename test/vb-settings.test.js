@@ -1,6 +1,4 @@
 
-const test = require('selenium-webdriver/testing');
-
 test.describe('VB settings', function() {
 
   test.before(function() {
@@ -11,7 +9,7 @@ test.describe('VB settings', function() {
   test.it('should open by click', function() {
     driver.findElement({css: '.i-action__settings'}).click();
     //driver.wait(until.titleIs('webdriver - Google Search'), 1000);
-    driver.sleep(5000);
+    driver.sleep(1000);
   });
 
   test.after(function() {
