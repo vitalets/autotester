@@ -3,8 +3,8 @@ const runner = require('./runner');
 
 runner.setGlobals();
 runner.run([
-  //'test/google-search.test.js',
-  'test/vb-settings.test.js',
+  'test/google-search.test.js',
+  //'test/vb-settings.test.js',
 ]);
 
 //const Debugger = require('./debugger');
