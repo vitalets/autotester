@@ -12,7 +12,7 @@ test.describe('Google Search', function() {
   });
 
   test.after(function() {
-    //driver.quit();
+    driver.quit();
   });
 
 });

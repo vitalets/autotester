@@ -10,7 +10,7 @@ const By = require('selenium-webdriver/lib/by').By;
 const until = require('selenium-webdriver/lib/until');
 const Key = require('selenium-webdriver/lib/input').Key;
 
-const test = require('./testing');
+const test = require('./selenium-testing');
 const utils = require('./utils');
 const Driver = require('./driver');
 const logger = require('./logger').create('Runner');
@@ -49,7 +49,7 @@ function prepare() {
   return Promise.resolve()
     // can not run mocha twice, so re-load script every time
     // see https://github.com/mochajs/mocha/issues/995
-    .then(() => utils.loadScript('mocha/mocha.js'))
+    .then(() => utils.loadScript('/mocha/mocha.js'))
     .then(() => setGlobals());
 }
 

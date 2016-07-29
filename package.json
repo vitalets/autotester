@@ -11,6 +11,8 @@
     "copy:test": "cpx -v 'test/**' dist/unpacked/test/",
     "watch:test": "cpx -v -w 'test/**' dist/unpacked/test/",
     "copy:mocha": "cpx -v 'node_modules/mocha/mocha.{js,css}' dist/unpacked/mocha/",
+    "copy:ui": "cpx -v 'src/ui/ui.{html,css}' dist/unpacked/ui/",
+    "watch:ui": "cpx -v -w 'src/ui/ui.{html,css}' dist/unpacked/ui/",
     "copy": "npm run copy:manifest && npm run copy:test && npm run copy:mocha",
     "watch": "run-p watch:**",
     "build": "npm run clean && npm run webpack && npm run copy"

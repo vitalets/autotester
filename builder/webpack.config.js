@@ -1,8 +1,11 @@
 module.exports = {
-  entry: './src/app.js',
+  entry: {
+    background: './src/background/app',
+    'ui/ui': './src/ui/app',
+  },
   output: {
     path: './dist/unpacked',
-    filename: 'bundle.js',
+    filename: '[name].js',
     sourceMapFilename: '[file].map'
   },
   devtool: '#source-map'
