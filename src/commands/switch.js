@@ -3,15 +3,8 @@
  * For selenium window === tab.
  */
 
-const seleniumCommand = require('selenium-webdriver/lib/command');
 const TargetManager = require('../target-manager');
 const windowCommand = require('./window');
-
-exports.commands = {
-  [seleniumCommand.Name.SWITCH_TO_WINDOW]: switchToWindow,
-};
-
-exports.switchByTabId = switchByTabId;
 
 /**
  * Switch to window, tab or extension background page
@@ -19,13 +12,18 @@ exports.switchByTabId = switchByTabId;
  * @param {Object} params
  * @param {String} params.name
  */
-function switchToWindow(params) {
+exports.switchToWindow = function (params) {
   return switchByProp('handle', params.name);
-}
+};
 
-function switchByTabId(tabId) {
+/**
+ * Switch to tab by id
+ *
+ * @param {Number} tabId
+ */
+exports.switchByTabId = function (tabId) {
   return switchByProp('tabId', tabId);
-}
+};
 
 function switchByProp(prop, value) {
   return windowCommand.getAllTargets()

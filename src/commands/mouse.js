@@ -4,17 +4,9 @@
  * If coordinates are out of viewport - events will not be dispatched.
  */
 
-const seleniumCommand = require('selenium-webdriver/lib/command');
 const input = require('selenium-webdriver/lib/input');
 const TargetManager = require('../target-manager');
 const modifiers = require('./keyboard/modifiers');
-
-exports.commands = {
-  [seleniumCommand.Name.CLICK_ELEMENT]: clickElement,
-  [seleniumCommand.Name.CLICK]: click,
-  [seleniumCommand.Name.DOUBLE_CLICK]: doubleClick,
-  [seleniumCommand.Name.MOVE_TO]: moveTo,
-};
 
 // map selenium buttons to debugger buttons
 const BUTTONS = {
@@ -29,7 +21,7 @@ const lastMoveTo = {
   y: 0,
 };
 
-function clickElement(params) {
+exports.clickElement = function (params) {
   return Promise.resolve()
      // .then(() => getScrollXY())
     // temp: scroll to top for correct coords
@@ -46,7 +38,7 @@ function clickElement(params) {
         .then(() => moveAndClickXY(center.x, center.y))
         .then(() => highlightClick(center.x, center.y))
     });
-}
+};
 
 /**
  * Click particular button on current location
@@ -55,26 +47,26 @@ function clickElement(params) {
  * @param {Number} params.button
  * @returns {Promise}
  */
-function click(params) {
+exports.click = function (params) {
   const button = BUTTONS[params.button];
   return clickXY(lastMoveTo.x, lastMoveTo.y, button);
-}
+};
 
-function doubleClick(params) {
+exports.doubleClick = function (params) {
   const button = BUTTONS[params.button];
   return clickXY(lastMoveTo.x, lastMoveTo.y, button, 2);
-}
+};
 
-function moveTo(params) {
+exports.moveTo = function (params) {
   // todo: opt_offset
   const position =  params.element
     ? getElementCenter(params.element)
     : Promise.resolve({x: params.x, y: params.y});
   return position
     .then(p => moveToXY(p.x, p.y));
-}
+};
 
-// === internal ===
+// todo: Point class
 
 function clickXY(x, y, button = 'left', count = 1) {
   return Promise.resolve()

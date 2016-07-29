@@ -3,26 +3,21 @@
  * For selenium window === tab.
  */
 
-const seleniumCommand = require('selenium-webdriver/lib/command');
 const thenChrome = require('then-chrome');
 const TargetManager = require('../target-manager');
 
-exports.commands = {
-  [seleniumCommand.Name.GET_CURRENT_WINDOW_HANDLE]: getCurrentWindowHandle,
-  [seleniumCommand.Name.GET_WINDOW_HANDLES]: getAllWindowHandles,
-};
-
+// todo: move to target manager
 exports.getAllTargets = getAllTargets;
 
-function getCurrentWindowHandle() {
+exports.getCurrentWindowHandle = function () {
   return Promise.resolve(TargetManager.handle);
-}
+};
 
-function getAllWindowHandles() {
+exports.getAllWindowHandles = function () {
   return Promise.resolve()
     .then(() => getAllTargets())
     .then(targets => targets.map(target => target.handle));
-}
+};
 
 function getAllTargets() {
   return thenChrome.debugger.getTargets()

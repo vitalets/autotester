@@ -2,35 +2,29 @@
  * Keyboard commands
  */
 
-const seleniumCommand = require('selenium-webdriver/lib/command');
 const TargetManager = require('../../target-manager');
 const modifiers = require('./modifiers');
 const dispatcher = require('./dispatcher');
-
-exports.commands = {
-  [seleniumCommand.Name.SEND_KEYS_TO_ELEMENT]: sendKeysToElement,
-  [seleniumCommand.Name.SEND_KEYS_TO_ACTIVE_ELEMENT]: sendKeysToActiveElement,
-};
 
 /**
  * @param {Object} params
  * @param {String} params.id
  * @param {Array} params.value
  */
-function sendKeysToElement(params) {
+exports.sendKeysToElement = function (params) {
   // todo: scroll
   return focus(params.id)
-    .then(() => sendKeysToActiveElement(params))
+    .then(() => exports.sendKeysToActiveElement(params))
     .then(() => modifiers.release());
-}
+};
 
 /**
  * @param {Object} params
  * @param {Array} params.value
  */
-function sendKeysToActiveElement(params) {
+exports.sendKeysToActiveElement = function (params) {
   return params.value.reduce((res, char) => res.then(() => sendKey(char)), Promise.resolve());
-}
+};
 
 function sendKey(char) {
   if (modifiers.isModifier(char)) {

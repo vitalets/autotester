@@ -2,37 +2,28 @@
  * Commands to search element on page
  */
 
-const seleniumCommand = require('selenium-webdriver/lib/command');
-const webdriver = require('selenium-webdriver/lib/webdriver');
+const WebElement = require('selenium-webdriver/lib/webdriver').WebElement;
 const TargetManager = require('../target-manager');
 
-exports.commands = {
-  // [seleniumCommand.Name.GET_ACTIVE_ELEMENT]: ElementSearch.start,
-  [seleniumCommand.Name.FIND_ELEMENT]: findElement,
-  [seleniumCommand.Name.FIND_ELEMENTS]: findElements,
-  [seleniumCommand.Name.FIND_CHILD_ELEMENT]: findChildElement,
-  [seleniumCommand.Name.FIND_CHILD_ELEMENTS]: findChildElements,
+exports.findElement = function (params) {
+  return Promise.resolve()
+    .then(() => getRootNodeId())
+    .then(rootNodeId => new Finder(params.using, params.value, rootNodeId).find());
 };
 
-function findElement(params) {
-  return getRootNodeId()
-    .then(rootNodeId => new Finder(params.using, params.value, rootNodeId).find());
-}
-
-function findElements(params) {
-  return getRootNodeId()
+exports.findElements = function (params) {
+  return Promise.resolve()
+    .then(() => getRootNodeId())
     .then(rootNodeId => new Finder(params.using, params.value, rootNodeId, true).find());
-}
+};
 
-function findChildElement(params) {
+exports.findChildElement = function (params) {
   return new Finder(params.using, params.value, params.id).find();
-}
+};
 
-function findChildElements(params) {
+exports.findChildElements = function (params) {
   return new Finder(params.using, params.value, params.id, true).find();
-}
-
-// === internal ===
+};
 
 function getRootNodeId() {
   if (typeof TargetManager.rootId === 'number') {
@@ -84,6 +75,6 @@ class Finder {
   }
 
   static toSeleniumElement(nodeId) {
-    return webdriver.WebElement.buildId(String(nodeId));
+    return WebElement.buildId(String(nodeId));
   }
 }
