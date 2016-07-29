@@ -38,10 +38,10 @@ function setGlobals() {
   });
   test.wrapGlobals(window);
   window.test = test;
+  window.assert = chai.assert;
   window.By = By;
   window.Key = Key;
   window.until = until;
-  window.assert = chai.assert;
   window.driver = new Driver();
 }
 
