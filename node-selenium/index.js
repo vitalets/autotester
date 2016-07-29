@@ -1,16 +1,18 @@
 'use strict';
 
+const path = require('path');
 const Mocha = require('mocha');
-const files = require('./files');
+const tests = require('../test');
 
 const mocha = new Mocha({
   ui: 'bdd',
   timeout: 60 * 1000
 });
 
-mocha.addFile('true-selenium/prepare.js');
+// add setup file to set globals
+mocha.addFile(path.resolve(__dirname, './prepare.js'));
 
-files.forEach(file => mocha.addFile(file));
+tests.forEach(test => mocha.addFile(test));
 
 mocha.run(failures => {
   // console.log('Finish', failures);

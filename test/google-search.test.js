@@ -1,10 +1,8 @@
 
-const test = require('selenium-webdriver/testing');
-
 test.describe('Google Search', function() {
 
   test.before(function() {
-    driver.get('http://www.google.com');
+    driver.get('http://www.google.com/ncr');
   });
 
   test.it('should append query to title', function() {
@@ -14,11 +12,56 @@ test.describe('Google Search', function() {
   });
 
   test.after(function() {
-    driver.quit();
+    //driver.quit();
   });
 
 });
 
+//const Debugger = require('./debugger');
+//document.addEventListener('keydown', e => console.log('keydown', e));
+//document.addEventListener('keypress', e => console.log('keypress', e));
+//document.addEventListener('keyup', e => console.log('keyup', e));
+
+//function simulateKeyEvent(character) {
+//  var evt = document.createEvent("KeyboardEvent");
+//  //evt.initKeyboardEvent("keypress", true, true, window, 0, 0, 0, 0, 0, character.charCodeAt(0))
+//  //evt.initKeyboardEvent("keypress", true, true, window, character);
+//  evt.initKeyboardEvent("keypress", true, true, document.defaultView, false, false, false, false, 81, 81);
+//  document.dispatchEvent(evt);
+//}
+//
+//simulateKeyEvent('й')
+
+
+//const d = new Debugger();
+//const code = 81;
+//d.attach({extensionId: chrome.runtime.id})
+//.then(() => d.sendCommand('Input.dispatchKeyEvent', {
+//  "modifiers": 0,
+// // "nativeVirtualKeyCode": code,
+//  "text": "й",
+//  // "type": "rawKeyDown",
+//  "type": "keyDown",
+//  "unmodifiedText": "й",
+// // "windowsVirtualKeyCode": code
+//}))
+
+//.then(() => d.sendCommand('Input.dispatchKeyEvent', {
+//  "modifiers": 0,
+//  "nativeVirtualKeyCode": code,
+// // "text": "Й",
+//  "type": "char",
+//   //"unmodifiedText": "й",
+//  "windowsVirtualKeyCode": code
+//}))
+//.then(() => d.sendCommand('Input.dispatchKeyEvent', {
+//  "modifiers": 0,
+//  "nativeVirtualKeyCode": code,
+//  "text": "",
+//  "type": "keyUp",
+//  "unmodifiedText": "",
+//  "windowsVirtualKeyCode": code
+//}))
 
 // quit driver in case of error
 //webdriver.promise.controlFlow().on('uncaughtException', function(e) {

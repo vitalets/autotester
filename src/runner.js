@@ -28,26 +28,27 @@ exports.run = function (urls) {
     .then(failures => finalize(failures))
 };
 
-exports.setGlobals = function () {
+function setGlobals() {
+  window.mocha.setup({
+    ui: 'bdd',
+    timeout: TIMEOUT_MS,
+    allowUncaught: true
+  });
+  test.wrapGlobals(window);
   window.test = test;
   window.By = By;
   window.Key = Key;
   window.until = until;
   window.assert = chai.assert;
-  // not used now
-  // window.require = fakeRequire;
-};
+  window.driver = new Driver();
+}
 
 function prepare() {
   return Promise.resolve()
     // can not run mocha twice, so re-load script every time
     // see https://github.com/mochajs/mocha/issues/995
-    .then(() => utils.loadScript('mocha.js'))
-    .then(() => {
-      window.mocha.setup({ui: 'bdd', timeout: TIMEOUT_MS, allowUncaught: true});
-      test.wrapGlobals(window);
-      window.driver = new Driver();
-    });
+    .then(() => utils.loadScript('mocha/mocha.js'))
+    .then(() => setGlobals());
 }
 
 function loadTests(urls) {

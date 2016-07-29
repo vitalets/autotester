@@ -43,8 +43,8 @@ function clickElement(params) {
     //.then(() => new Promise(r => setTimeout(r, 1000)))
     .then(center => {
       return Promise.resolve()
+        .then(() => moveAndClickXY(center.x, center.y))
         .then(() => highlightClick(center.x, center.y))
-        .then(() => moveAndClickXY(center.x, center.y));
     });
 }
 
