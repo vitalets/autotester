@@ -7,9 +7,11 @@ test.describe('VB settings', function() {
   });
 
   test.it('should open by click', function() {
+    const settings = driver.findElement({css: '.settings'});
+    assert.eventually.equal(settings.isDisplayed(), false);
     driver.findElement({css: '.i-action__settings'}).click();
-    //driver.wait(until.titleIs('webdriver - Google Search'), 1000);
-    driver.sleep(1000);
+    //driver.sleep(1000);
+    driver.wait(until.elementIsVisible(settings), 1000);
   });
 
   test.after(function() {

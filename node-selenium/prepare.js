@@ -3,8 +3,14 @@
 const webdriver = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const test = require('selenium-webdriver/testing');
+// const assert = require('selenium-webdriver/testing/assert');
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+
+chai.use(chaiAsPromised);
 
 global.test = test;
+global.assert = chai.assert;
 global.By = webdriver.By;
 global.Key = webdriver.Key;
 global.until = webdriver.until;

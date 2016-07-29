@@ -4,7 +4,7 @@
  */
 
 const chai = require('chai');
-// todo: chai as promised
+const chaiAsPromised = require('chai-as-promised');
 
 const By = require('selenium-webdriver/lib/by').By;
 const until = require('selenium-webdriver/lib/until');
@@ -19,6 +19,8 @@ const logger = require('./logger').create('Runner');
  * As functional tests are slow, increase timeout
  */
 const TIMEOUT_MS = 30 * 1000;
+
+chai.use(chaiAsPromised);
 
 exports.run = function (urls) {
   return Promise.resolve()
