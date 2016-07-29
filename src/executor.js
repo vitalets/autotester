@@ -3,13 +3,8 @@
  */
 
 const seleniumCommand = require('selenium-webdriver/lib/command');
-
-const TabLoader = require('./tab-loader');
 const commands = require('./commands');
 const logger = require('./logger').create('Executor');
-
-// todo: lazy init on demand
-TabLoader.init();
 
 class Executor extends seleniumCommand.Executor {
   /**
