@@ -5,11 +5,15 @@
   "scripts": {
     "clean": "rm -rf dist",
     "webpack": "webpack --config ./builder/webpack.config.js",
-    "copy:assets": "node ./builder/assets copy",
     "watch:webpack": "npm run webpack -- --watch",
-    "watch:assets": "node ./builder/assets watch",
+    "copy:manifest": "cpx -v src/manifest.json dist/unpacked/",
+    "watch:manifest": "cpx -v -w src/manifest.json dist/unpacked/",
+    "copy:test": "cpx -v 'test/**' dist/unpacked/test/",
+    "watch:test": "cpx -v -w 'test/**' dist/unpacked/test/",
+    "copy:mocha": "cpx -v 'node_modules/mocha/mocha.{js,css}' dist/unpacked/mocha/",
+    "copy": "npm run copy:manifest && npm run copy:test && npm run copy:mocha",
     "watch": "run-p watch:**",
-    "build": "npm run clean && npm run webpack && npm run copy:assets"
+    "build": "npm run clean && npm run webpack && npm run copy"
   },
   "dependencies": {
     "chai": "^3.5.0",
@@ -19,6 +23,7 @@
   },
   "devDependencies": {
     "archiver": "^1.0.0",
+    "cpx": "^1.3.2",
     "express": "^4.14.0",
     "fs-extra": "^0.30.0",
     "gaze": "^1.1.0",
