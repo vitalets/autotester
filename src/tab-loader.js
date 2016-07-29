@@ -15,8 +15,9 @@ const tabs = new Map();
  */
 exports.create = function (info) {
   ensureListeners();
-  return thenChrome.tabs.create(info)
-    .then(tab => TabLoader._createLoadingTab(tab));
+  return Promise.resolve()
+    .then(() => thenChrome.tabs.create(info))
+    .then(createLoadingTab);
 };
 
 /**
@@ -27,8 +28,9 @@ exports.create = function (info) {
  */
 exports.update = function (tabId, info) {
   ensureListeners();
-  return thenChrome.tabs.update(tabId, info)
-    .then(tab => TabLoader._createLoadingTab(tab));
+  return Promise.resolve()
+    .then(() => thenChrome.tabs.update(tabId, info))
+    .then(createLoadingTab);
 };
 
 /**
@@ -42,7 +44,7 @@ exports.wait = function (tabId, force = false) {
   return thenChrome.tabs.get(tabId)
     .then(tab => {
       if (tab.status === 'loading' || force) {
-        TabLoader._createLoadingTab(tab);
+        createLoadingTab(tab);
       }
     });
 };

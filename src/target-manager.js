@@ -12,6 +12,7 @@
 
 const thenChrome = require('then-chrome');
 const Debugger = require('./debugger');
+const targetFilter = require('./target-filter');
 const logger = require('./logger').create('TargetManager');
 
 const currentTarget = {
@@ -26,7 +27,7 @@ const debuggers = [];
 
 module.exports = {
   reset() {
-    this._clearCurrentTarget();
+    clearCurrentTarget();
     usedTabIds.clear();
     debuggers.length = 0;
   },
@@ -51,41 +52,36 @@ module.exports = {
     currentTarget.rootId = value;
   },
 
-  switchTo(target) {
-    this._clearCurrentTarget();
-    currentTarget.handle = target.handle;
-    return target.extensionId
-      ? this._switchToExtension(target)
-      : this._switchToTab(target);
+  getAllTargets() {
+    // todo: add inactive background event pages
+    return thenChrome.debugger.getTargets()
+      .then(targets => {
+        return targets
+          .filter(targetFilter.isCorrectTarget)
+          .map(addHandle);
+      });
+  },
+
+  switchByProp(prop, value) {
+    return this.getAllTargets()
+      .then(targets => {
+        const target = targets.filter(target => target[prop] === value)[0];
+        if (target) {
+          clearCurrentTarget();
+          currentTarget.handle = target.handle;
+          return target.extensionId
+            ? switchToExtension(target)
+            : switchToTab(target);
+        } else {
+          return Promise.reject(`Target with ${prop} = '${value}' does not exist`);
+        }
+      });
   },
 
   quit() {
     return Promise.resolve()
       .then(detachDebuggers)
       .then(closeUsedTabs);
-  },
-
-  _switchToTab(target) {
-    logger.log('Switching to tab', target.url);
-    currentTarget.tabId = target.tabId;
-    usedTabIds.add(target.tabId);
-    return Promise.resolve()
-      .then(() => thenChrome.tabs.update(target.tabId, {active: true}))
-      .then(() => attachDebugger({tabId: target.tabId}));
-  },
-
-  _switchToExtension(target) {
-    logger.log('Switching to extension', target.extensionId);
-    return Promise.resolve()
-      .then(() => attachDebugger({extensionId: target.extensionId}));
-  },
-
-  _switchToFrame(frameId) {
-    // todo
-  },
-
-  _clearCurrentTarget() {
-    Object.keys(currentTarget).forEach(key => currentTarget[key] = null);
   }
 };
 
@@ -110,4 +106,37 @@ function detachDebuggers() {
 function closeUsedTabs() {
   return thenChrome.tabs.remove([...usedTabIds])
     .then(() => usedTabIds.clear());
+}
+
+function addHandle(target) {
+  if (target.type === 'page') {
+    target.handle = target.id;
+  }
+  if (target.type === 'background_page') {
+    target.handle = target.extensionId;
+  }
+  return target;
+}
+
+function switchToTab(target) {
+  logger.log('Switching to tab', target.url);
+  currentTarget.tabId = target.tabId;
+  usedTabIds.add(target.tabId);
+  return Promise.resolve()
+    .then(() => thenChrome.tabs.update(target.tabId, {active: true}))
+    .then(() => attachDebugger({tabId: target.tabId}));
+}
+
+function switchToExtension(target) {
+  logger.log('Switching to extension', target.extensionId);
+  return Promise.resolve()
+    .then(() => attachDebugger({extensionId: target.extensionId}));
+}
+
+function switchToFrame(frameId) {
+  // todo
+}
+
+function clearCurrentTarget() {
+  Object.keys(currentTarget).forEach(key => currentTarget[key] = null);
 }
