@@ -10,10 +10,15 @@ const mocha = new Mocha({
 });
 
 // add setup file to set globals
-//mocha.addFile(path.resolve(__dirname, './prepare.js'));
-//tests.forEach(test => mocha.addFile('.' + test));
+mocha.addFile(path.resolve(__dirname, './prepare.js'));
 
-mocha.addFile('./node_modules/selenium-webdriver/test/tag_name_test.js');
+tests.forEach(test => {
+  // paths originally for extension, not for node-selenium
+  test = test.replace('/test/selenium/', '/node_modules/selenium-webdriver/test/');
+  mocha.addFile('.' + test)
+});
+
+
 
 process.env['SELENIUM_BROWSER'] = 'chrome';
 

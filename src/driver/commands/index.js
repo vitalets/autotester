@@ -11,6 +11,7 @@ const navigation = require('./navigation');
 const mouse = require('./mouse');
 const keyboard = require('./keyboard');
 const elementSearch = require('./element-search');
+const element = require('./element');
 
 module.exports = {
   [cmd.NEW_SESSION]: session.start,
@@ -37,4 +38,6 @@ module.exports = {
 
   [cmd.SEND_KEYS_TO_ELEMENT]: keyboard.sendKeysToElement,
   [cmd.SEND_KEYS_TO_ACTIVE_ELEMENT]: keyboard.sendKeysToActiveElement,
+
+  [cmd.GET_ELEMENT_TAG_NAME]: element.getElementTagName,
 };
