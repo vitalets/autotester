@@ -18,7 +18,7 @@ global.until = webdriver.until;
 test.before(function () {
   // use chromedriver with full logging
   const service = new chrome.ServiceBuilder('/Users/vitalets/projects/chromium/src/out/Default/chromedriver')
-    .usingPort(9515)
+    .usingPort(9516)
     .loggingTo('./log.txt')
     .enableVerboseLogging()
     .build();

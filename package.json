@@ -16,7 +16,8 @@
     "watch:ui": "npm run copy:ui -- -w",
     "copy": "run-p copy:**",
     "watch": "npm run clean && run-p watch:**",
-    "build": "npm run clean && npm run webpack && npm run copy"
+    "build": "npm run clean && npm run webpack && npm run copy",
+    "fileserver": "node ./node_modules/selenium-webdriver/lib/test/fileserver.js"
   },
   "dependencies": {
     "chai": "^3.5.0",
