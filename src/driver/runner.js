@@ -53,6 +53,7 @@ function setGlobals() {
   window.Key = Key;
   window.until = until;
   window.require = fakeRequire;
+  window.Driver = Driver;
   window.driver = new Driver();
 }
 

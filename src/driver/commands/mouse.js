@@ -36,7 +36,7 @@ exports.clickElement = function (params) {
     .then(center => {
       return Promise.resolve()
         .then(() => moveAndClickXY(center.x, center.y))
-        .then(() => highlightClick(center.x, center.y))
+        // .then(() => highlightClick(center.x, center.y))
     });
 };
 

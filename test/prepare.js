@@ -57,7 +57,9 @@ function TestEnvironment(browserName, server) {
   this.builder = function() {
     return {
       build: function() {
-        return window.driver;
+        return window.driver.getSession()
+          ? window.driver
+          : window.driver = new window.Driver();
       }
     };
   };

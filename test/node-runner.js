@@ -3,7 +3,7 @@
 const path = require('path');
 const Mocha = require('mocha');
 const chrome = require('selenium-webdriver/chrome');
-const testConfig = require('..');
+const testConfig = require('./index');
 
 const mocha = new Mocha({
   ui: 'bdd',

@@ -2,6 +2,7 @@
 'use strict';
 
 var By = require('selenium-webdriver').By,
+  until = require('selenium-webdriver').until,
   assert = require('selenium-webdriver/testing/assert'),
   test = require('selenium-webdriver/lib/test');
 
@@ -17,10 +18,10 @@ test.suite(function(env) {
   });
 
   test.it('should append query to title', function () {
-    // driver.get('http://www.google.com/ncr');
-    // driver.findElement(By.name('q')).sendKeys('webdriver');
-    // driver.findElement(By.name('btnG')).click();
-    // driver.wait(until.titleIs('webdriver - Google Search'), 1000);
+     driver.get('http://www.google.com/ncr');
+     driver.findElement(By.name('q')).sendKeys('webdriver');
+     driver.findElement(By.name('btnG')).click();
+     driver.wait(until.titleIs('webdriver - Google Search'), 1000);
   });
 
 });
