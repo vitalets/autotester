@@ -66,7 +66,6 @@ function setup() {
     .then(() => utils.loadScript('/mocha/mocha.js'))
     .then(() => setupMocha())
     .then(() => setGlobals());
-    //.then(() => setGlobalsForOwnSeleniumTests());
 }
 
 function loadPrepare(urls) {
