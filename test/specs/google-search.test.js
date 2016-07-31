@@ -1,18 +1,26 @@
 
-test.describe('Google Search', function() {
+'use strict';
+
+var By = require('selenium-webdriver').By,
+  assert = require('selenium-webdriver/testing/assert'),
+  test = require('selenium-webdriver/lib/test');
+
+test.suite(function(env) {
+  var driver;
 
   test.before(function() {
-    driver.get('http://www.google.com/ncr');
-  });
-
-  test.it('should append query to title', function() {
-    driver.findElement(By.name('q')).sendKeys('webdriver');
-    driver.findElement(By.name('btnG')).click();
-    driver.wait(until.titleIs('webdriver - Google Search'), 1000);
+    driver = env.builder().build();
   });
 
   test.after(function() {
     driver.quit();
+  });
+
+  test.it('should append query to title', function () {
+    // driver.get('http://www.google.com/ncr');
+    // driver.findElement(By.name('q')).sendKeys('webdriver');
+    // driver.findElement(By.name('btnG')).click();
+    // driver.wait(until.titleIs('webdriver - Google Search'), 1000);
   });
 
 });
