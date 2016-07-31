@@ -10,7 +10,8 @@
 const By = require('selenium-webdriver/lib/by').By;
 const until = require('selenium-webdriver/lib/until');
 const Key = require('selenium-webdriver/lib/input').Key;
-const assert = require('selenium-webdriver/testing/assert');
+const assert = require('assert');
+const seleniumAssert = require('selenium-webdriver/testing/assert');
 
 const test = require('./selenium-testing');
 const utils = require('./utils');
@@ -48,7 +49,7 @@ function setupMocha() {
 
 function setGlobals() {
   window.test = test;
-  window.assert = assert;
+  window.assert = seleniumAssert;
   window.By = By;
   window.Key = Key;
   window.until = until;
@@ -104,6 +105,10 @@ function fakeRequire(moduleName) {
       return window.assert;
     case 'selenium-webdriver/lib/test':
       return window.test;
+    case 'selenium-webdriver/lib/promise':
+      return require('selenium-webdriver/lib/promise');
+    case 'assert':
+      return assert;
     default:
       throw new Error(`Unsupported module in fakeRequire: ${moduleName}`);
   }
