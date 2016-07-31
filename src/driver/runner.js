@@ -3,13 +3,14 @@
  * Loads tests from urls and run via mocha
  */
 
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
+// const chai = require('chai');
+// const chaiAsPromised = require('chai-as-promised');
+// chai.use(chaiAsPromised);
 
 const By = require('selenium-webdriver/lib/by').By;
 const until = require('selenium-webdriver/lib/until');
 const Key = require('selenium-webdriver/lib/input').Key;
-const seleniumAssert = require('selenium-webdriver/testing/assert');
+const assert = require('selenium-webdriver/testing/assert');
 
 const test = require('./selenium-testing');
 const utils = require('./utils');
@@ -17,16 +18,22 @@ const Driver = require('./driver');
 const logger = require('./logger').create('Runner');
 
 /**
- * As functional tests are slow, increase timeout
+ * As functional tests are slow, increase mocha timeout
  */
 const TIMEOUT_MS = 30 * 1000;
 
-chai.use(chaiAsPromised);
-
-exports.run = function (urls) {
+/**
+ * Run tests
+ *
+ * @param {Array} testUrls
+ * @param {Array} [prepareUrls]
+ * @returns {Promise}
+ */
+exports.run = function (testUrls, prepareUrls) {
   return Promise.resolve()
-    .then(() => prepare())
-    .then(() => loadTests(urls))
+    .then(() => setup())
+    .then(() => loadPrepare(prepareUrls))
+    .then(() => loadTests(testUrls))
     .then(() => run())
     .then(failures => finalize(failures))
 };
@@ -41,30 +48,29 @@ function setupMocha() {
 
 function setGlobals() {
   window.test = test;
-  window.assert = chai.assert;
+  window.assert = assert;
   window.By = By;
   window.Key = Key;
   window.until = until;
+  window.require = fakeRequire;
   window.driver = new Driver();
 }
 
-function setGlobalsForOwnSeleniumTests() {
-  test.suite = suite;
-  const fileserverUrl = 'http://127.0.0.1:2310/common/';
-  test.Pages = {
-    formPage: fileserverUrl + 'formPage.html'
-  };
-  window.require = fakeRequire;
-}
-
-function prepare() {
+function setup() {
   return Promise.resolve()
     // can not run mocha twice, so re-load script every time
     // see https://github.com/mochajs/mocha/issues/995
+    // todo: maybe use Mocha constructor
     .then(() => utils.loadScript('/mocha/mocha.js'))
     .then(() => setupMocha())
-    //.then(() => setGlobals())
-    .then(() => setGlobalsForOwnSeleniumTests());
+    .then(() => setGlobals());
+    //.then(() => setGlobalsForOwnSeleniumTests());
+}
+
+function loadPrepare(urls) {
+  return (urls || []).reduce((res, url) => {
+    return res.then(() => utils.loadScript(url));
+  }, Promise.resolve());
 }
 
 function loadTests(urls) {
@@ -72,7 +78,6 @@ function loadTests(urls) {
   //const urls = Number.isNaN(testIndex) ? this.parsedTests.urls : this.parsedTests.objects[testIndex].urls;
   //console.log(`Running ${urls.length} test file(s)`);
   const tasks = urls
-    // .map(url => this._addBaseUrl(url))
     .map(url => utils.loadScript(url));
   return Promise.all(tasks);
 }
@@ -86,63 +91,19 @@ function finalize(failures) {
   logger.log(`Finalize with ${failures} failure(s)`);
 }
 
-// === below is for running own selenium tests from 'selenium-webdriver/test'
-
 /**
- * Allows selenium node require
- *
+ * Allows to require selenium stuff in autotester tests.
+ * In fact it is proxy to globals.
  */
 function fakeRequire(moduleName) {
   switch (moduleName) {
-    case '..':
+    case 'selenium-webdriver':
       return {By, Key, until};
-    case '../testing/assert':
-      return seleniumAssert;
-    case '../lib/test':
-      return test;
+    case 'selenium-webdriver/testing/assert':
+      return window.assert;
+    case 'selenium-webdriver/lib/test':
+      return window.test;
     default:
-      throw new Error(`Unknown module in fakeRequire: ${moduleName}`);
+      throw new Error(`Unsupported module in fakeRequire: ${moduleName}`);
   }
-}
-
-function suite(fn, opt_options) {
-  const browser = 'chrome';
-  test.describe('[' + browser + ']', function() {
-    fn(new TestEnvironment(browser));
-  });
-}
-
-function TestEnvironment(browserName, server) {
-  this.currentBrowser = function() {
-    return browserName;
-  };
-
-  this.isRemote = function() {
-    return false;
-  };
-
-  this.browsers = function(var_args) {
-    var browsersToIgnore = Array.prototype.slice.apply(arguments, [0]);
-    return browsers(browserName, browsersToIgnore);
-  };
-
-  this.builder = function() {
-    return {
-      build: function() {
-        return new Driver();
-      }
-    };
-  };
-}
-
-/**
- * Creates a predicate function that ignores tests for specific browsers.
- * @param {string} currentBrowser The name of the current browser.
- * @param {!Array.<!Browser>} browsersToIgnore The browsers to ignore.
- * @return {function(): boolean} The predicate function.
- */
-function browsers(currentBrowser, browsersToIgnore) {
-  return function() {
-    return browsersToIgnore.indexOf(currentBrowser) != -1;
-  };
 }

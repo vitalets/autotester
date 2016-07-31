@@ -19,3 +19,24 @@ exports.loadScript = function (url) {
     script.src = url;
   });
 };
+
+/**
+ * Fetch script via window.fetch + eval as commonjs
+ *
+ * @param {String} url
+ * @returns {Promise}
+ */
+exports.fetchCommonjsScript = function (url) {
+  return fetch(url)
+    .catch(e => Promise.reject(`Can not fetch url: ${url}`))
+    .then(r => r.text())
+    .then(text => exports.evalCommonjs(text))
+};
+
+exports.evalCommonjs = function (code) {
+  const wrapped = `(function(module, exports = module.exports) {
+        ${code}
+        return module;
+      })({exports: {}})`;
+  return window.eval(wrapped).exports;
+};
