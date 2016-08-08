@@ -12,6 +12,7 @@ const mouse = require('./mouse');
 const keyboard = require('./keyboard');
 const elementSearch = require('./element-search');
 const element = require('./element');
+const evaluate = require('./evaluate');
 
 module.exports = {
   [cmd.NEW_SESSION]: session.start,
@@ -40,4 +41,7 @@ module.exports = {
   [cmd.SEND_KEYS_TO_ACTIVE_ELEMENT]: keyboard.sendKeysToActiveElement,
 
   [cmd.GET_ELEMENT_TAG_NAME]: element.getElementTagName,
+
+  [cmd.EXECUTE_SCRIPT]: evaluate.executeScript,
+  [cmd.EXECUTE_ASYNC_SCRIPT]: evaluate.executeAsyncScript,
 };

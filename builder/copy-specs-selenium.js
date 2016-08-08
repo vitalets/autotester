@@ -14,6 +14,7 @@ const tests = [
   'tag_name_test.js',
   'element_finding_test.js',
   'actions_test.js',
+  'execute_script_test.js',
 ];
 
 fs.ensureDirSync(destDir);

@@ -17,6 +17,9 @@ function wrapRequire() {
           Pages: window.test.Pages,
           whereIs: window.test.whereIs,
         };
+      // this is strange unused require in execute_script_test.js
+      case 'path':
+        return {};
       default:
         // selenium tests require webdriver as '..'
         moduleName = moduleName.replace('..', 'selenium-webdriver');
