@@ -15,3 +15,5 @@ npm-debug.log
 
 # chromedriver log
 /log.txt
+
+/roadmap.txt
