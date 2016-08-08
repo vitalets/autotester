@@ -14,6 +14,8 @@ exports.getReporter = function (win) {
   // overwrite globals
   var window = win;
   var document = win.document;
+  // clear report
+  document.getElementById('mocha').innerHTML = '';
 
   /**
    * Stats template.
