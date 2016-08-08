@@ -23,6 +23,6 @@
     "persistent": true
   },
 
-  "content_security_policy": "script-src 'self' 'unsafe-eval' blob: filesystem: chrome-extension-resource:"
+  "content_security_policy": "script-src 'self' 'unsafe-eval' blob: filesystem: chrome-extension-resource:; object-src 'self'"
 }
 

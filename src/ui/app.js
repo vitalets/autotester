@@ -1,18 +1,13 @@
 
-const thenChrome = require('then-chrome');
+const messaging = require('../background/messaging');
 
-const runner = require('../driver/runner');
-const tests = require('../../test');
-const TestsLoader = require('./tests-loader');
+document.getElementById('run').addEventListener('click', run);
 
-const testsLoader = new TestsLoader('/test');
+messaging.start();
 
-testsLoader.loadConfig().then(config => {
-  //console.log(config);
-  // todo: run from background!
-  runner.run(config.tests, config.prepare)
-    .then(activateSelfTab);
-});
+function run() {
+  messaging.send(messaging.names.RUN);
+}
 
 function activateSelfTab() {
   return thenChrome.tabs.getCurrent()

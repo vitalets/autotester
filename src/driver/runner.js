@@ -43,6 +43,7 @@ function setupMocha() {
   window.mocha.setup({
     ui: 'bdd',
     timeout: TIMEOUT_MS,
+    // reporter: MyReporter
   });
   test.wrapGlobals(window);
 }
