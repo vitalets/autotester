@@ -7,13 +7,9 @@
 // const chaiAsPromised = require('chai-as-promised');
 // chai.use(chaiAsPromised);
 
-const By = require('selenium-webdriver/lib/by').By;
-const until = require('selenium-webdriver/lib/until');
-const Key = require('selenium-webdriver/lib/input').Key;
-const capabilities = require('selenium-webdriver/lib/capabilities');
 const assert = require('assert');
 const seleniumAssert = require('selenium-webdriver/testing/assert');
-
+const webdriver = require('./selenium-webdriver');
 const test = require('./selenium-testing');
 const utils = require('./utils');
 const Driver = require('./driver');
@@ -63,9 +59,9 @@ function setupMocha(params) {
 function setGlobals() {
   window.test = test;
   window.assert = seleniumAssert;
-  window.By = By;
-  window.Key = Key;
-  window.until = until;
+  window.By = webdriver.By;
+  window.Key = webdriver.Key;
+  window.until = webdriver.until;
   window.require = fakeRequire;
   window.Driver = Driver;
   // always create driver instance on start to allow just write tests
@@ -102,7 +98,7 @@ function finalize(failures) {
 function fakeRequire(moduleName) {
   switch (moduleName) {
     case 'selenium-webdriver':
-      return {By, Key, until, Browser: capabilities.Browser};
+      return webdriver;
     case 'selenium-webdriver/testing/assert':
       return window.assert;
     case 'selenium-webdriver/lib/test':
