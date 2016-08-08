@@ -74,7 +74,7 @@ function setGlobals() {
 
 function loadPrepare(urls) {
   return (urls || []).reduce((res, url) => {
-    return res.then(() => utils.loadScript(url));
+    return res.then(() => utils.fetchScript(url));
   }, Promise.resolve());
 }
 
@@ -82,7 +82,7 @@ function loadTests(urls) {
   //testIndex = parseInt(testIndex, 10);
   //const urls = Number.isNaN(testIndex) ? this.parsedTests.urls : this.parsedTests.objects[testIndex].urls;
   //console.log(`Running ${urls.length} test file(s)`);
-  const tasks = urls.map(url => utils.loadScript(url));
+  const tasks = urls.map(url => utils.fetchScript(url));
   return Promise.all(tasks);
 }
 

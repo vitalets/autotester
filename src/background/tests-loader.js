@@ -13,7 +13,7 @@ class TestsLoader {
   loadConfig () {
     const url = `${this._baseUrl}index.js`;
     console.log(`Loading tests config: ${url}`);
-    return utils.fetchCommonjsScript(url)
+    return utils.fetchCommonJsScript(url)
       .then(config => this._setConfig(config));
   }
 
