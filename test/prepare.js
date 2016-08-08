@@ -1,19 +1,27 @@
 /**
- * Preparation file to setup environment for running own selenium tests in autotester
+ * Preparation for running own selenium tests in autotester (browser env)
  * see: selenium-webdriver/lib/test/**
  */
 
 const FILE_SERVER_BASE_URL = 'http://127.0.0.1:2310/common/';
 
-wrapRequire();
 wrapTest();
+wrapRequire();
 
 function wrapRequire() {
   const originalRequire = window.require;
   window.require = function (moduleName) {
-    // selenium tests require webdriver as '..'
-    moduleName = moduleName.replace('..', 'selenium-webdriver');
-    return originalRequire(moduleName);
+    switch (moduleName) {
+      case '../lib/test/fileserver':
+        return {
+          Pages: window.test.Pages,
+          whereIs: window.test.whereIs,
+        };
+      default:
+        // selenium tests require webdriver as '..'
+        moduleName = moduleName.replace('..', 'selenium-webdriver');
+        return originalRequire(moduleName);
+    }
   };
 }
 
