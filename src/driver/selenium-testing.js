@@ -205,7 +205,7 @@ exports.controlFlow = function(){
  * Re-export globals after mocha reload
  * @param {Object} global
  */
-exports.wrapGlobals = function (global) {
+exports.wrapMochaGlobals = function (global) {
   /**
    * Registers a new test suite.
    * @param {string} name The suite name.
