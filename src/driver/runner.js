@@ -51,6 +51,7 @@ function setupMocha(params) {
         ui: 'bdd',
         timeout: params.timeout || TIMEOUT_MS,
         reporter: params.reporter,
+        allowUncaught: true, // seems it does not work :(
       });
       test.wrapMochaGlobals(window);
     });
