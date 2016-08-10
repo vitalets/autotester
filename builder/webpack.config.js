@@ -1,7 +1,7 @@
 module.exports = {
   entry: {
-    background: './src/background/app',
-    'ui/ui': './src/ui/app',
+    background: './src/background/',
+    'ui/ui': './src/ui/',
   },
   output: {
     path: './dist/unpacked',

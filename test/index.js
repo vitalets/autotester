@@ -9,8 +9,8 @@
  */
 
 module.exports = {
-  prepare: [
-    'prepare.js',
+  before: [
+    'before.js',
   ],
   tests: [
     'specs/attach_to_extension_test.js',

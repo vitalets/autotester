@@ -4,6 +4,7 @@
 
 body {
     margin: 35px 5px 5px 5px;
+    font-family: Verdana, sans-serif;
 }
 
 .top-panel {
@@ -46,7 +47,8 @@ body {
     color: red;
 }
 
-#reload {
+.top-right {
     position: absolute;
+    top: 5px;
     right: 5px;
 }

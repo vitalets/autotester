@@ -24,9 +24,10 @@ const TIMEOUT_MS = 30 * 1000;
  * Run tests
  *
  * @param {Object} params
- * @param {Array} params.testUrls
- * @param {Array} [params.prepareUrls]
+ * @param {Array} params.tests
  * @param {Object} params.reporter
+ * @param {Array} [params.before]
+ * @param {Array} [params.after]
  * @param {Number} [params.timeout]
  * @returns {Promise}
  */
@@ -34,10 +35,11 @@ exports.run = function (params) {
   return Promise.resolve()
     .then(() => setupMocha(params))
     .then(() => setGlobals())
-    .then(() => loadPrepare(params.prepareUrls))
-    .then(() => loadTests(params.testUrls))
+    .then(() => loadSeries(params.before))
+    .then(() => loadParallel(params.tests))
     .then(() => run())
-    .then(failures => finalize(failures))
+    .then(failures => logger.log(`Finalize with ${failures} failure(s)`))
+    .then(() => loadSeries(params.after))
 };
 
 function setupMocha(params) {
@@ -68,16 +70,13 @@ function setGlobals() {
   window.driver = new Driver();
 }
 
-function loadPrepare(urls) {
+function loadSeries(urls) {
   return (urls || []).reduce((res, url) => {
     return res.then(() => utils.fetchScript(url));
   }, Promise.resolve());
 }
 
-function loadTests(urls) {
-  //testIndex = parseInt(testIndex, 10);
-  //const urls = Number.isNaN(testIndex) ? this.parsedTests.urls : this.parsedTests.objects[testIndex].urls;
-  //console.log(`Running ${urls.length} test file(s)`);
+function loadParallel(urls) {
   const tasks = urls.map(url => utils.fetchScript(url));
   return Promise.all(tasks);
 }
@@ -88,10 +87,6 @@ function run() {
     const runner = window.mocha.run(resolve);
     catchErrorsInsideMocha(runner);
   });
-}
-
-function finalize(failures) {
-  logger.log(`Finalize with ${failures} failure(s)`);
 }
 
 /**

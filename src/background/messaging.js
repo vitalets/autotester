@@ -16,8 +16,12 @@ const keyMirror = require('keymirror');
  * List of all messages
  */
 exports.names = keyMirror({
-  RUN: null,
-  RUNNER_EVENT: null,
+  // from tab
+  LOAD_TESTS_CONFIG: null,
+  RUN_TESTS: null,
+  // from bg
+  LOAD_TESTS_CONFIG_DONE: null,
+  RUN_TESTS_DONE: null,
 });
 
 const listeners = new Map();

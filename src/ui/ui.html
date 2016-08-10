@@ -7,10 +7,18 @@
 </head>
 <body>
 <div class="top-panel">
-    <span>Tests:</span>
+    <span>Loaded tests:</span>
     <select id="testlist"></select>
     <button id="run">Run</button>
-    <button id="reload">Reload</button>
+    <div class="top-right">
+        <span>Tests source:</span>
+        <select id="source-type">
+            <option value="snippet">snippet</option>
+            <option value="url">url</option>
+        </select>
+        <input type="text" id="base-url"/>
+        <button id="config-reload">Reload</button>
+    </div>
 </div>
 <pre id="infoblock"></pre>
 <div id="mocha" class="report"></div>
