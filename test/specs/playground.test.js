@@ -41,7 +41,6 @@ test.suite(function(env) {
 });
 */
 
-
 test.suite(function(env) {
   var driver;
 

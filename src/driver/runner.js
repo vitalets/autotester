@@ -51,7 +51,6 @@ function setupMocha(params) {
         ui: 'bdd',
         timeout: params.timeout || TIMEOUT_MS,
         reporter: params.reporter,
-        allowUncaught: true, // seems it does not work :(
       });
       test.wrapMochaGlobals(window);
     });
@@ -85,7 +84,10 @@ function loadTests(urls) {
 
 function run() {
   logger.log('Running');
-  return new Promise(resolve => window.mocha.run(resolve));
+  return new Promise(resolve => {
+    const runner = window.mocha.run(resolve);
+    catchErrorsInsideMocha(runner);
+  });
 }
 
 function finalize(failures) {
@@ -111,4 +113,16 @@ function fakeRequire(moduleName) {
     default:
       throw new Error(`Unsupported module in fakeRequire: ${moduleName}`);
   }
+}
+
+function catchErrorsInsideMocha(runner) {
+  // mocha encapsulate errors inside, so catch err via 'fail' event and re-throw to see pretty console message
+  // excluding AssertionError
+  runner.on('fail', function (test) {
+    if (test.err.name !== 'AssertionError') {
+      setTimeout(() => {
+        throw test.err;
+      }, 0);
+    }
+  });
 }
