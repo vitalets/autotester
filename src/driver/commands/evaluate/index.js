@@ -38,8 +38,13 @@ exports.executeAsyncScript = function (params) {
       const fn = wrapPromiseFunction(params.script);
       return helper.callFunctionOn(fn, args)
     })
-    .then(result => awaitPromise(result.objectId))
-    .then(result => new RemoteObject(result).value())
+    .then(result => {
+      return awaitPromise(result.objectId)
+        .then(
+          result => new RemoteObject(result).value(),
+          err => err.objectId ? new RemoteObject(err).value() : err
+        )
+    })
 };
 
 function wrapFunction(code) {

@@ -58,7 +58,7 @@ test.suite(function(env) {
 
   describe('executeScript;', function () {
 
-    test.it('async', function() {
+    test.it.only('async', function() {
       driver.executeAsyncScript(function () {
           const callback = arguments[arguments.length - 1];
           setTimeout(() => callback(123), 1000);
@@ -66,7 +66,7 @@ test.suite(function(env) {
         .then(res => console.log('res', res));
     });
 
-    test.it.only('can pass null arguments', function() {
+    test.it('can pass null arguments', function() {
       assert(execute('return arguments[0] === null', null)).equalTo(true);
       assert(execute('return arguments[0]', null)).equalTo(null);
     });

@@ -6,7 +6,7 @@
 const helper = require('./helper');
 
 class RemoteObject {
-  constructor (data) {
+  constructor(data) {
     this._data = data;
   }
   value() {
@@ -40,7 +40,8 @@ class RemoteObject {
       case 'date':
         return this._resolveDate();
       case 'error':
-        return new Error(this._data.description);
+        const ErrorConstructor = window[this._data.className] || Error;
+        throw new ErrorConstructor('Async error in evaluated script: ' + this._data.description);
       default:
         return this._resolvePlainObject();
     }
@@ -65,9 +66,12 @@ class RemoteObject {
     throw new Error('_resolveDate not implemented');
   }
   _resolvePlainObject() {
-    return helper.getOwnEnumProperties(this._data.objectId)
+    return helper.getOwnProperties(this._data.objectId)
       .then(props => {
-        const tasks = props.map(prop => new RemoteObject(prop.value).value());
+        const tasks = props
+          // keep only props that are enumerable (Object.keys())
+          .filter(prop => prop.enumerable)
+          .map(prop => new RemoteObject(prop.value).value());
         return Promise.all(tasks)
           .then(results => {
             return props.reduce((out, prop, index) => {

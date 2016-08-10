@@ -40,9 +40,12 @@ exports.getOwnProperties = function (objectId) {
     .then(res => res.result);
 };
 
-exports.getOwnEnumProperties = function (objectId) {
-  return exports.getOwnProperties(objectId)
-    .then(props => props.filter(prop => prop.enumerable));
+exports.getInternalProperties = function (objectId) {
+  return TargetManager.debugger.sendCommand('Runtime.getProperties', {
+      objectId: objectId,
+      ownProperties: true,
+    })
+    .then(res => res.internalProperties)
 };
 
 exports.getWebElement = function (objectId) {
