@@ -2,6 +2,10 @@
   "name": "autotester",
   "version": "0.1.0",
   "description": "Chrome extension for automated web testing",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vitalets/autotester.git"
+  },
   "scripts": {
     "clean": "rm -rf dist",
     "webpack": "webpack --config ./builder/webpack.config.js",
@@ -46,5 +50,6 @@
     "sinon": "^1.17.5",
     "then-chrome": "^1.0.5",
     "webpack": "^1.13.1"
-  }
+  },
+  "license": "MIT"
 }
