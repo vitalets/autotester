@@ -58,7 +58,7 @@ test.suite(function(env) {
 
   describe('executeScript;', function () {
 
-    test.it.only('async', function() {
+    test.it('async', function() {
       driver.executeAsyncScript(function () {
           const callback = arguments[arguments.length - 1];
           setTimeout(() => callback(123), 1000);

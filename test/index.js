@@ -13,9 +13,8 @@ module.exports = {
     'prepare.js',
   ],
   tests: [
-    //'specs/google-search.test.js',
-    //'specs/vb-settings.test.js',
-    'specs/playground.test.js',
+    'specs/attach_to_extension_test.js',
+    'specs/playground_test.js',
     // === own selenium specs from 'node_modules/selenium-webdriver/test' ===
     'specs-selenium/tag_name_test.js',
     'specs-selenium/actions_test.js',

@@ -15,6 +15,9 @@ const Debugger = require('./debugger');
 const targetFilter = require('./target-filter');
 const logger = require('./logger').create('TargetManager');
 
+const TAB_PREFIX = 'tab-';
+const EXTENSION_PREFIX = 'extension-';
+
 const currentTarget = {
   handle: null,
   tabId: null,
@@ -110,10 +113,10 @@ function closeUsedTabs() {
 
 function addHandle(target) {
   if (target.type === 'page') {
-    target.handle = target.id;
+    target.handle = TAB_PREFIX + target.id;
   }
   if (target.type === 'background_page') {
-    target.handle = target.extensionId;
+    target.handle = EXTENSION_PREFIX + target.extensionId;
   }
   return target;
 }
