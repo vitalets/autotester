@@ -5,7 +5,7 @@
 const helper = require('./helper');
 const RemoteObject = require('./remote-object');
 const awaitPromise = require('./await-promise');
-const argsProcessor = require('./args');
+const prepareArgs = require('./prepare-args');
 
 /**
  * Executes sync script
@@ -16,7 +16,7 @@ const argsProcessor = require('./args');
  */
 exports.executeScript = function (params) {
   return Promise.resolve()
-    .then(() => argsProcessor.process(params.args))
+    .then(() => prepareArgs(params.args))
     .then(args => {
       const fn = wrapFunction(params.script);
       return helper.callFunctionOn(fn, args)
@@ -33,7 +33,7 @@ exports.executeScript = function (params) {
  */
 exports.executeAsyncScript = function (params) {
   return Promise.resolve()
-    .then(() => argsProcessor.process(params.args))
+    .then(() => prepareArgs(params.args))
     .then(args => {
       const fn = wrapPromiseFunction(params.script);
       return helper.callFunctionOn(fn, args)

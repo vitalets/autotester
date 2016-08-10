@@ -1,12 +1,12 @@
 /**
- * Processing arguments before evaluation
+ * Prepare arguments before evaluation
  */
 
 const WebElement = require('selenium-webdriver/lib/webdriver').WebElement;
 const cmdElement = require('../element');
 const helper = require('./helper');
 
-exports.process = function (args) {
+module.exports = function (args) {
   const tasks = args.map(arg => {
     if (WebElement.isId(arg)) {
       return processWebElement(arg);
