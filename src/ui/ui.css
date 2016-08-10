@@ -17,6 +17,7 @@ body {
     right: 0;
     border-bottom: solid 1px lightgray;
     color: white;
+    z-index: 10;
 }
 
 #mocha-stats {
