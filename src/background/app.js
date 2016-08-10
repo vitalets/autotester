@@ -28,5 +28,3 @@ messaging.on(messaging.names.RUN, data => {
   });
 
 });
-
-

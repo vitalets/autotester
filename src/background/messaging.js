@@ -10,13 +10,15 @@
  * }
  */
 
+const keyMirror = require('keymirror');
+
 /**
  * List of all messages
  */
-exports.names = {
-  RUN: 0,
-  RUNNER_EVENT: 1,
-};
+exports.names = keyMirror({
+  RUN: null,
+  RUNNER_EVENT: null,
+});
 
 const listeners = new Map();
 
