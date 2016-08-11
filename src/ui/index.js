@@ -2,7 +2,6 @@
 const messaging = require('../background/messaging');
 
 document.getElementById('run').addEventListener('click', runTests);
-document.getElementById('config-reload').addEventListener('click', loadConfig);
 
 messaging.start();
 
