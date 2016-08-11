@@ -5,6 +5,7 @@
 const WebDriver = require('./selenium-webdriver').WebDriver;
 const Capabilities = require('./selenium-webdriver').Capabilities;
 const Executor = require('./executor');
+const Requests = require('./requests');
 
 /**
  * Creates a new WebDriver client for Chrome.
@@ -16,10 +17,20 @@ class Driver extends WebDriver {
     const driver = WebDriver.createSession(executor, caps);
     super(driver.getSession(), executor, driver.controlFlow());
   }
+
+  /**
+   * Extra feature to catch network requests
+   * @returns {Requests}
+   */
+  requests() {
+    if (!this.requests_) {
+      this.requests_ = new Requests(this);
+    }
+    return this.requests_;
+  }
 }
 
 module.exports = Driver;
-
 
 /*
 

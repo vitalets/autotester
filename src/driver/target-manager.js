@@ -122,7 +122,7 @@ function addHandle(target) {
 }
 
 function switchToTab(target) {
-  logger.log('Switching to tab', target.url);
+  logger.log('Switching to tab', target.tabId, target.url);
   currentTarget.tabId = target.tabId;
   usedTabIds.add(target.tabId);
   return Promise.resolve()
