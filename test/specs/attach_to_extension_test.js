@@ -1,3 +1,10 @@
+/**
+ * Attaching to extensions api requires these two flag to be set:
+ *
+ * --silent-debugger-extension-api
+ * --extensions-on-chrome-urls
+ */
+
 'use strict';
 
 var webdriver = require('selenium-webdriver'),

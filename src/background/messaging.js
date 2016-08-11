@@ -21,6 +21,7 @@ exports.names = keyMirror({
   RUN_TESTS: null,
   // from bg
   LOAD_TESTS_CONFIG_DONE: null,
+  RUN_TESTS_STARTED: null,
   RUN_TESTS_DONE: null,
 });
 

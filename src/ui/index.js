@@ -1,7 +1,10 @@
 
 const messaging = require('../background/messaging');
+const title = require('./title');
 
 document.getElementById('run').addEventListener('click', runTests);
+
+title.setListeners();
 
 messaging.start();
 
@@ -17,6 +20,7 @@ function runTests() {
 }
 
 function loadConfig() {
+  title.set('loading...');
   messaging.send(messaging.names.LOAD_TESTS_CONFIG);
 }
 

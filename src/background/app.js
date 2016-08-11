@@ -49,7 +49,9 @@ class App {
       after: addBaseUrlToArr(this._testsConfig.after),
       reporter: getReporter(),
     };
-    runner.run(runnerParams);
+    messaging.send(messaging.names.RUN_TESTS_STARTED);
+    runner.run(runnerParams)
+      .then(() => messaging.send(messaging.names.RUN_TESTS_DONE));
   }
 }
 
