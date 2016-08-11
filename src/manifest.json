@@ -23,6 +23,7 @@
     "persistent": true
   },
 
-  "content_security_policy": "script-src 'self' 'unsafe-eval' blob: filesystem: chrome-extension-resource:; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval' blob: filesystem: chrome-extension-resource:; object-src 'self'",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA39Uw73hvr9T0wrPq20zKJrMyNmmfNwuZLLIdKMAESVcLu4WQFoFDiD03F8bprj61tjRzgMHK3FoFUAOUAlA5lUpJZwMJEx2tJDE5G4ZHOO+whNbMD/HKK1WftbnEspYpRQURBYlTLf+wBllpUKDB1/Sw+BwDRp/H5yHbH6MYs92Fm0aqgTwDRYVi/skrQwkyaoe9Mv0W1yuonKDwzSZuvDkTaCcCGNSDdETr49GKIHLlyPxOIAU9wwmfCHxrOU3ae26iZCMWuqxapSN53mJXEQxQxxkbvYE7eY67arcGOhrXKgKfuvdcZc+oV7qCJu7vhiRtWqwdGAixSh/atNZNVQIDAQAB"
 }
 
