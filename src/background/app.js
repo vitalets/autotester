@@ -3,8 +3,6 @@
  */
 
 const utils = require('../driver/utils');
-
-// const ConfigLoader = require('./config-loader');
 const messaging = require('./messaging');
 const runner = require('../driver/runner');
 const htmlReporter = require('../reporter/html');
