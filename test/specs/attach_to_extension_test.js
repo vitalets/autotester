@@ -7,13 +7,9 @@
 
 'use strict';
 
-var webdriver = require('selenium-webdriver'),
-  By = webdriver.By,
-  until = webdriver.until,
-  Browser = webdriver.Browser,
-  assert = require('selenium-webdriver/testing/assert'),
-  test = require('selenium-webdriver/lib/test');
-
+var webdriver = require('selenium-webdriver');
+var assert = require('selenium-webdriver/testing/assert');
+var test = require('selenium-webdriver/lib/test');
 
 test.suite(function (env) {
   var driver;
@@ -29,7 +25,7 @@ test.suite(function (env) {
     driver.quit();
   });
 
-  describe.only('extension background page', function() {
+  describe('extension background page', function() {
 
     test.it('should execute sync script', function () {
       const manifestVersion = driver.executeScript(function() {

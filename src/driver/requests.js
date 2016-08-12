@@ -45,13 +45,23 @@ class Requests {
    * @param {Object} filter
    */
   get(filter) {
-    const requestFilter = new RequestsFilter(filter);
-    const filtered = this._requests.filter(request => requestFilter.match(request));
-    return Promise.resolve(filtered);
+    return this._driver.controlFlow().execute(() => {
+      const requestFilter = new RequestsFilter(filter);
+      const filtered = this._requests.filter(request => requestFilter.match(request));
+      return Promise.resolve(filtered);
+    });
   }
 
   getCount(filter) {
     return this.get(filter).then(requests => requests.length);
+  }
+
+  dump() {
+    return this._driver.controlFlow().execute(() => {
+      const result = this._requests.map(r => `${r.method} ${r.url}`);
+      result.unshift(`Catched ${this._requests.length} requests:`);
+      return Promise.resolve(result.join('\n'));
+    });
   }
 
   _onEvent(method, params) {

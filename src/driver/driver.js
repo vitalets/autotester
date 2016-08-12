@@ -19,8 +19,17 @@ class Driver extends WebDriver {
   }
 
   /**
-   * Extra feature to catch network requests
-   * @returns {Requests}
+   * Returns instance of network requests catcher.
+   * It allows to catch and assert any network requests made from target page.
+   * Example:
+   *
+   *     driver.requests().catch();
+   *     driver.get('http://google.com');
+   *     driver.requests().stop();
+   *     const count = driver.requests().getCount({url: 'http://google.com'});
+   *     assert(count).equalTo(1);
+   *
+   * @return {Requests}
    */
   requests() {
     if (!this.requests_) {

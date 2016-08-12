@@ -18,8 +18,8 @@ module.exports = {
     'specs/playground_test.js',
     // === own selenium specs from 'node_modules/selenium-webdriver/test' ===
     'specs-selenium/tag_name_test.js',
-    'specs-selenium/actions_test.js',
+    //'specs-selenium/actions_test.js',
     'specs-selenium/execute_script_test.js',
-    'specs-selenium/element_finding_test.js',
+    //'specs-selenium/element_finding_test.js',
   ]
 };
