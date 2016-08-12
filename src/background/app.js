@@ -3,6 +3,7 @@
  */
 
 const utils = require('../utils');
+const evaluate = require('../utils/evaluate');
 const messaging = require('./messaging');
 const runner = require('../runner');
 const htmlReporter = require('../reporter/html');
@@ -26,8 +27,9 @@ class App {
 
   _loadConfig() {
     const url = addBaseUrl('index.js');
-    return utils.fetchCommonJsScript(url)
-      .then(config => {
+    return utils.fetchText(url)
+      .then(text => {
+        const config = evaluate.asCommonJs(text);
         this._testsConfig = config;
         messaging.send(messaging.names.LOAD_TESTS_CONFIG_DONE, config);
       });

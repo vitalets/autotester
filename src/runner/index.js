@@ -7,6 +7,7 @@ const seleniumAssert = require('selenium-webdriver/testing/assert');
 const webdriver = require('../driver/selenium-webdriver');
 const test = require('../driver/selenium-testing');
 const utils = require('../utils');
+const evaluate = require('../utils/evaluate');
 const Driver = require('../driver');
 const fakeRequire = require('./fake-require');
 const logger = require('../utils/logger').create('Runner');
@@ -66,12 +67,17 @@ function setGlobals() {
 
 function loadSeries(urls) {
   return (urls || []).reduce((res, url) => {
-    return res.then(() => utils.fetchScript(url));
+    return res
+      .then(() => utils.fetchText(url))
+      .then(code => evaluate.asAnonymousFn(code));
   }, Promise.resolve());
 }
 
 function loadParallel(urls) {
-  const tasks = urls.map(url => utils.fetchScript(url));
+  const tasks = urls.map(url => {
+    return utils.fetchText(url)
+      .then(code => evaluate.asAnonymousFn(code));
+  });
   return Promise.all(tasks);
 }
 
