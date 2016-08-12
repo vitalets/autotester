@@ -9,14 +9,14 @@
  * - ...
  */
 
-test.describe('Google Search', function() {
+test.describe('Google Search (autotester)', function() {
   var driver;
 
   test.before(function() {
     driver = new Driver();
   });
 
-  test.it('should append query to title', function() {
+  test.it('should append query to title (autotester)', function() {
     driver.get('http://www.google.com/ncr');
     driver.findElement(By.name('q')).sendKeys('autotester');
     driver.findElement(By.name('btnG')).click();

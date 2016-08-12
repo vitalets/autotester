@@ -15,16 +15,6 @@ exports.seleniumTests = function () {
   copyFiles(srcDir, destDir, files);
 };
 
-exports.seleniumExamples = function () {
-  const srcDir = './node_modules/selenium-webdriver/example/';
-  const destDir = './examples/from-selenium/';
-  const files = [
-    'google_search.js',
-    'google_search_test.js',
-  ];
-  copyFiles(srcDir, destDir, files);
-};
-
 function copyFiles(srcDir, destDir, files) {
   fs.ensureDirSync(destDir);
   files.forEach(filepath => {

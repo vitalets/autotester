@@ -66,8 +66,6 @@ function setGlobals() {
   window.until = webdriver.until;
   window.require = fakeRequire;
   window.Driver = Driver;
-  // always create driver instance on start to allow just write tests
-  window.driver = new Driver();
 }
 
 function loadSeries(urls) {
