@@ -2,10 +2,17 @@
  * Filters debugger targets that we can use
  */
 
+/**
+ * We also exclude chromedriver internal extension from available targets
+ * See: https://chromium.googlesource.com/chromium/src.git/+/master/chrome/test/chromedriver/extension/
+ */
+const CHROMEDRIVER_EXTENSION_ID = 'aapnijgdinlhnhlmodcfapnahmbfebeb';
+
 exports.isCorrectTarget = function (target) {
   return isSuitableType(target)
     && !isDevtools(target)
     && !isAutotesterBg(target)
+    && !isChromedriverExtensionBg(target)
     && !isAutotesterUi(target);
 };
 
@@ -22,6 +29,11 @@ function isAutotesterBg(target) {
   return target.type === 'background_page' && target.extensionId === chrome.runtime.id;
 }
 
+function isChromedriverExtensionBg(target) {
+  return target.type === 'background_page' && target.extensionId === CHROMEDRIVER_EXTENSION_ID;
+}
+
 function isAutotesterUi(target) {
   return target.type === 'page' && target.url === chrome.runtime.getURL('ui/ui.html');
 }
+
