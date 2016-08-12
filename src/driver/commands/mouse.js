@@ -5,7 +5,7 @@
  */
 
 const input = require('selenium-webdriver/lib/input');
-const TargetManager = require('../target-manager');
+const Targets = require('../targets');
 const modifiers = require('./keyboard/modifiers');
 
 // map selenium buttons to debugger buttons
@@ -103,11 +103,11 @@ function buttonAction(x, y, type, button, count) {
 
 function dispatchMouseEvent(options) {
   options.modifiers = modifiers.get();
-  return TargetManager.debugger.sendCommand('Input.dispatchMouseEvent', options);
+  return Targets.debugger.sendCommand('Input.dispatchMouseEvent', options);
 }
 
 function getElementCenter(id) {
-  return TargetManager.debugger.sendCommand('DOM.getBoxModel', {
+  return Targets.debugger.sendCommand('DOM.getBoxModel', {
       nodeId: Number(id)
     })
     .then(res => getQuadCenter(res.model.content));
@@ -123,14 +123,14 @@ function getQuadCenter(quad) {
 // function to scroll
 // temp as it can be used in several other commands
 function scrollToXY(x, y) {
-  return TargetManager.debugger.sendCommand('Runtime.evaluate', {
+  return Targets.debugger.sendCommand('Runtime.evaluate', {
     expression: `window.scrollTo(${x}, ${y})`
   });
 }
 
 function highlightXY(x, y, frame) {
   const size = Math.round(5 + 50 * frame);
-  return TargetManager.debugger.sendCommand('DOM.highlightRect', {
+  return Targets.debugger.sendCommand('DOM.highlightRect', {
     x: x - Math.round(size / 2),
     y: y - Math.round(size / 2),
     width: size,
@@ -156,7 +156,7 @@ function highlightClick(x, y) {
 }
 
 function getScrollXY() {
-  return TargetManager.debugger.sendCommand('Runtime.evaluate', {
+  return Targets.debugger.sendCommand('Runtime.evaluate', {
     // expression: `(function() {return {y: window.scrollY}}())`
     expression: `window.scrollY`
   });

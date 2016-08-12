@@ -2,7 +2,7 @@
  * Helper to dispatch keyboard commands
  */
 
-const TargetManager = require('../../target-manager');
+const Targets = require('../../targets');
 
 exports.dispatchChar = function (char, modifiers = 0) {
   return dispatchKeyEvent({
@@ -38,5 +38,5 @@ exports.dispatchKeyUp = function (keyCode, modifiers = 0) {
 };
 
 function dispatchKeyEvent(options) {
-  return TargetManager.debugger.sendCommand('Input.dispatchKeyEvent', options);
+  return Targets.debugger.sendCommand('Input.dispatchKeyEvent', options);
 }

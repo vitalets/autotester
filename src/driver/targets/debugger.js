@@ -4,7 +4,7 @@
 
 const thenChrome = require('then-chrome');
 const Channel = require('chnl');
-const logger = require('./logger').create('Debugger');
+const logger = require('../../utils/logger').create('Debugger');
 
 const PROTOCOL_VERSION = '1.1';
 

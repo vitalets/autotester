@@ -12,8 +12,8 @@
 
 const thenChrome = require('then-chrome');
 const Debugger = require('./debugger');
-const targetFilter = require('./target-filter');
-const logger = require('./logger').create('TargetManager');
+const filter = require('./filter');
+const logger = require('../../utils/logger').create('Targets');
 
 const TAB_PREFIX = 'tab-';
 const EXTENSION_PREFIX = 'extension-';
@@ -60,7 +60,7 @@ module.exports = {
     return thenChrome.debugger.getTargets()
       .then(targets => {
         return targets
-          .filter(targetFilter.isCorrectTarget)
+          .filter(filter.isCorrectTarget)
           .map(addHandle);
       });
   },

@@ -2,7 +2,7 @@
  * Commands for getting element props
  */
 
-const TargetManager = require('../target-manager');
+const Targets = require('../targets');
 
 /**
  * Returns element tag name
@@ -30,7 +30,7 @@ exports.getElementText = function (params) {
  * @param {String} id
  */
 exports.resolveNode = function (id) {
-  return TargetManager.debugger.sendCommand('DOM.resolveNode', {
+  return Targets.debugger.sendCommand('DOM.resolveNode', {
     nodeId: Number(id)
   })
   .then(res => res.object.objectId);
@@ -45,7 +45,7 @@ exports.getProps = function (id) {
   return Promise.resolve()
     .then(() => exports.resolveNode(id))
     .then(objectId => {
-      return TargetManager.debugger.sendCommand('Runtime.getProperties', {
+      return Targets.debugger.sendCommand('Runtime.getProperties', {
         objectId: objectId,
       })
     })

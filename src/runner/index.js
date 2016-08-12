@@ -3,17 +3,13 @@
  * Loads tests from urls and run via mocha
  */
 
-// const chai = require('chai');
-// const chaiAsPromised = require('chai-as-promised');
-// chai.use(chaiAsPromised);
-
-const assert = require('assert');
 const seleniumAssert = require('selenium-webdriver/testing/assert');
-const webdriver = require('./selenium-webdriver');
-const test = require('./selenium-testing');
-const utils = require('./utils');
-const Driver = require('./driver');
-const logger = require('./logger').create('Runner');
+const webdriver = require('../driver/selenium-webdriver');
+const test = require('../driver/selenium-testing');
+const utils = require('../utils');
+const Driver = require('../driver');
+const fakeRequire = require('./fake-require');
+const logger = require('../utils/logger').create('Runner');
 
 /**
  * As functional tests are slow, increase mocha timeout
@@ -85,29 +81,6 @@ function run() {
     const runner = window.mocha.run(resolve);
     catchErrorsInsideMocha(runner);
   });
-}
-
-/**
- * Allows to require selenium stuff in autotester tests.
- * In fact it is proxy to globals.
- */
-function fakeRequire(moduleName) {
-  switch (moduleName) {
-    case 'selenium-webdriver':
-      return webdriver;
-    case 'selenium-webdriver/testing/assert':
-      return window.assert;
-    case 'selenium-webdriver/testing':
-      return window.test;
-    case 'selenium-webdriver/lib/test':
-      return window.test;
-    case 'selenium-webdriver/lib/promise':
-      return webdriver.promise;
-    case 'assert':
-      return assert;
-    default:
-      throw new Error(`Unsupported module in fakeRequire: ${moduleName}`);
-  }
 }
 
 function catchErrorsInsideMocha(runner) {

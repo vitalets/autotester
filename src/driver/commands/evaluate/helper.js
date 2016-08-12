@@ -3,10 +3,10 @@
  */
 
 const WebElement = require('selenium-webdriver/lib/webdriver').WebElement;
-const TargetManager = require('../../target-manager');
+const Targets = require('../../targets');
 
 exports.evaluate = function (expression) {
-  return TargetManager.debugger.sendCommand('Runtime.evaluate', {
+  return Targets.debugger.sendCommand('Runtime.evaluate', {
     expression: expression,
     returnByValue: false,
   })
@@ -19,7 +19,7 @@ exports.evaluate = function (expression) {
 exports.callFunctionOn = function (fn, args) {
   return exports.evaluate('window')
     .then(result => {
-      return TargetManager.debugger.sendCommand('Runtime.callFunctionOn', {
+      return Targets.debugger.sendCommand('Runtime.callFunctionOn', {
         objectId: result.objectId,
         functionDeclaration: fn,
         arguments: args,
@@ -33,7 +33,7 @@ exports.callFunctionOn = function (fn, args) {
 };
 
 exports.getOwnProperties = function (objectId) {
-  return TargetManager.debugger.sendCommand('Runtime.getProperties', {
+  return Targets.debugger.sendCommand('Runtime.getProperties', {
       objectId: objectId,
       ownProperties: true,
     })
@@ -41,7 +41,7 @@ exports.getOwnProperties = function (objectId) {
 };
 
 exports.getInternalProperties = function (objectId) {
-  return TargetManager.debugger.sendCommand('Runtime.getProperties', {
+  return Targets.debugger.sendCommand('Runtime.getProperties', {
       objectId: objectId,
       ownProperties: true,
     })
@@ -50,8 +50,8 @@ exports.getInternalProperties = function (objectId) {
 
 exports.getWebElement = function (objectId) {
   // todo: yet not clear why we need getDocument before each request node
-  return TargetManager.debugger.sendCommand('DOM.getDocument', {})
-    .then(() => TargetManager.debugger.sendCommand('DOM.requestNode', {
+  return Targets.debugger.sendCommand('DOM.getDocument', {})
+    .then(() => Targets.debugger.sendCommand('DOM.requestNode', {
       objectId: objectId,
     }))
     .then(res => WebElement.buildId(String(res.nodeId)));

@@ -3,7 +3,7 @@
  */
 
 const WebElement = require('selenium-webdriver/lib/webdriver').WebElement;
-const TargetManager = require('../target-manager');
+const Targets = require('../targets');
 
 exports.findElement = function (params) {
   return Promise.resolve()
@@ -26,11 +26,11 @@ exports.findChildElements = function (params) {
 };
 
 function getRootNodeId() {
-  if (typeof TargetManager.rootId === 'number') {
-    return Promise.resolve(TargetManager.rootId);
+  if (typeof Targets.rootId === 'number') {
+    return Promise.resolve(Targets.rootId);
   } else {
-    return TargetManager.debugger.sendCommand('DOM.getDocument', {})
-      .then(res => TargetManager.rootId = res.root.nodeId);
+    return Targets.debugger.sendCommand('DOM.getDocument', {})
+      .then(res => Targets.rootId = res.root.nodeId);
   }
 }
 
@@ -58,7 +58,7 @@ class Finder {
 
   _queryByCss() {
     const queryCommand = this._all ? 'DOM.querySelectorAll' : 'DOM.querySelector';
-    return TargetManager.debugger.sendCommand(queryCommand, {
+    return Targets.debugger.sendCommand(queryCommand, {
       nodeId: Number(this._startNodeId),
       selector: this._value
     });

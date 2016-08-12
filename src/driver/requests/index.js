@@ -2,9 +2,9 @@
  * Network request catcher
  */
 
-const TargetManager = require('./target-manager');
-const RequestsFilter = require('./requests-filter');
-const logger = require('./logger').create('Requests');
+const Targets = require('../targets');
+const Filter = require('./filter');
+const logger = require('../../utils/logger').create('Requests');
 
 class Requests {
 
@@ -39,7 +39,7 @@ class Requests {
    */
   get(filter) {
     return this._driver.controlFlow().execute(() => {
-      const requestFilter = new RequestsFilter(filter);
+      const requestFilter = new Filter(filter);
       const filtered = this._requests.filter(request => requestFilter.match(request));
       return Promise.resolve(filtered);
     });
@@ -73,7 +73,7 @@ class Requests {
    * @param {String} state 'enable|disable'
    */
   _setNetworkState(state) {
-    return TargetManager.debugger.sendCommand(`Network.${state}`);
+    return Targets.debugger.sendCommand(`Network.${state}`);
   }
 
   /**
@@ -82,7 +82,7 @@ class Requests {
    */
   _setEventListenerState(state) {
     const method = state === 'enable' ? 'addListener' : 'removeListener';
-    return TargetManager.debugger.onEvent[method](this._onEvent, this);
+    return Targets.debugger.onEvent[method](this._onEvent, this);
   }
 }
 

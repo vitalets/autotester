@@ -4,7 +4,7 @@
 
 const seleniumCommand = require('selenium-webdriver/lib/command');
 const commands = require('./commands');
-const logger = require('./logger').create('Executor');
+const logger = require('../utils/logger').create('Executor');
 
 class Executor extends seleniumCommand.Executor {
   /**

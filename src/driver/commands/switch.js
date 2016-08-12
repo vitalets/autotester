@@ -3,7 +3,7 @@
  * For selenium window === tab.
  */
 
-const TargetManager = require('../target-manager');
+const Targets = require('../targets');
 
 /**
  * Switch to window, tab or extension background page
@@ -12,5 +12,5 @@ const TargetManager = require('../target-manager');
  * @param {String} params.name
  */
 exports.switchToWindow = function (params) {
-  return TargetManager.switchByProp('handle', params.name);
+  return Targets.switchByProp('handle', params.name);
 };

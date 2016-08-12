@@ -3,14 +3,14 @@
  * For selenium window === tab.
  */
 
-const TargetManager = require('../target-manager');
+const Targets = require('../targets');
 
 exports.getCurrentWindowHandle = function () {
-  return Promise.resolve(TargetManager.handle);
+  return Promise.resolve(Targets.handle);
 };
 
 exports.getAllWindowHandles = function () {
   return Promise.resolve()
-    .then(() => TargetManager.getAllTargets())
+    .then(() => Targets.getAllTargets())
     .then(targets => targets.map(target => target.handle));
 };

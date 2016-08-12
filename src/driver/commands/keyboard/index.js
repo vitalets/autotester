@@ -2,7 +2,7 @@
  * Keyboard commands
  */
 
-const TargetManager = require('../../target-manager');
+const Targets = require('../../targets');
 const modifiers = require('./modifiers');
 const dispatcher = require('./dispatcher');
 
@@ -54,7 +54,7 @@ function sendKey(char) {
 }
 
 function focus(id) {
-  return TargetManager.debugger.sendCommand('DOM.focus', {
+  return Targets.debugger.sendCommand('DOM.focus', {
     nodeId: Number(id)
   });
 }

@@ -2,9 +2,9 @@
  * Main App controller
  */
 
-const utils = require('../driver/utils');
+const utils = require('../utils');
 const messaging = require('./messaging');
-const runner = require('../driver/runner');
+const runner = require('../runner');
 const htmlReporter = require('../reporter/html');
 const storage = require('./storage');
 

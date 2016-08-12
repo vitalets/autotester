@@ -3,7 +3,7 @@
  * http://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/lib/webdriver_exports_Timeouts.html
  */
 
-const TargetManager = require('../target-manager');
+const Targets = require('../targets');
 
 const TYPES = [
   'script',
