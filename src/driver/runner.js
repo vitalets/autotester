@@ -97,10 +97,12 @@ function fakeRequire(moduleName) {
       return webdriver;
     case 'selenium-webdriver/testing/assert':
       return window.assert;
+    case 'selenium-webdriver/testing':
+      return window.test;
     case 'selenium-webdriver/lib/test':
       return window.test;
     case 'selenium-webdriver/lib/promise':
-      return require('selenium-webdriver/lib/promise');
+      return webdriver.promise;
     case 'assert':
       return assert;
     default:
