@@ -3,6 +3,8 @@
  *
  * --silent-debugger-extension-api
  * --extensions-on-chrome-urls
+ *
+ * About warning: https://bugs.chromium.org/p/chromium/issues/detail?id=475151
  */
 
 'use strict';

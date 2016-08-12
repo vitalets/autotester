@@ -1,12 +1,5 @@
 /**
  * Network request catcher
- *
- * To catch requests from extensions you should enable 2 flags:
- * chrome://flags/#silent-debugger-extension-api
- * chrome://flags/#extensions-on-chrome-urls
- *
- * About warning: https://bugs.chromium.org/p/chromium/issues/detail?id=475151
- *
  */
 
 const TargetManager = require('./target-manager');
