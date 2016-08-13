@@ -4,8 +4,8 @@
  */
 
 const seleniumAssert = require('selenium-webdriver/testing/assert');
-const webdriver = require('../driver/selenium-webdriver');
-const test = require('../driver/selenium-testing');
+const webdriver = require('./selenium-webdriver');
+const test = require('./selenium-testing');
 const utils = require('../utils');
 const evaluate = require('../utils/evaluate');
 const Driver = require('../driver');

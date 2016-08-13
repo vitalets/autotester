@@ -2,8 +2,8 @@
  * Webdriver implementation that uses chrome.debugger.* api
  */
 
-const WebDriver = require('./selenium-webdriver').WebDriver;
-const Capabilities = require('./selenium-webdriver').Capabilities;
+const WebDriver = require('selenium-webdriver/lib/webdriver').WebDriver;
+const Capabilities = require('selenium-webdriver/lib/capabilities').Capabilities;
 const Executor = require('./executor');
 const Requests = require('./requests');
 

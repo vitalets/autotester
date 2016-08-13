@@ -2,7 +2,7 @@
  * This fake require allows to run selenium tests in autotester without any edits.
  */
 
-const webdriver = require('../driver/selenium-webdriver');
+const webdriver = require('./selenium-webdriver');
 
 module.exports = function(moduleName) {
   switch (moduleName) {

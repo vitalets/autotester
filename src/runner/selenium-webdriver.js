@@ -6,11 +6,11 @@
 
 'use strict';
 
-// const builder = require('./builder');
+const Builder = require('../driver/builder');
 const actions = require('selenium-webdriver/lib/actions');
 const by = require('selenium-webdriver/lib/by');
 const capabilities = require('selenium-webdriver/lib/capabilities');
-// const command = require('selenium-webdriver/lib/command');
+const command = require('selenium-webdriver/lib/command');
 const error = require('selenium-webdriver/lib/error');
 const events = require('selenium-webdriver/lib/events');
 const input = require('selenium-webdriver/lib/input');
@@ -23,7 +23,7 @@ const webdriver = require('selenium-webdriver/lib/webdriver');
 
 exports.ActionSequence = actions.ActionSequence;
 exports.Browser = capabilities.Browser;
-// exports.Builder = builder.Builder;
+exports.Builder = Builder;
 exports.Button = input.Button;
 exports.By = by.By;
 exports.Capabilities = capabilities.Capabilities;
