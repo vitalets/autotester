@@ -12,7 +12,7 @@ exports.set = function (status) {
 
 exports.setListeners = function () {
   messaging.on(messaging.names.LOAD_TESTS_CONFIG_DONE,
-    config => exports.set(`${config.tests.length} tests loaded`));
+    data => exports.set(`${data.config.tests.length} tests loaded`));
   messaging.on(messaging.names.RUN_TESTS_STARTED, () => exports.set('running...'));
   messaging.on(messaging.names.RUN_TESTS_DONE, () => exports.set('done'));
 };

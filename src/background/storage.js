@@ -3,7 +3,7 @@
  */
 
 const DEFAULTS = {
-  sourceType: 'url', // from whare take tests
+  sourceType: 'extension', // from where take tests: snippet|extension|url
   baseUrl: 'test',   // base url for loading tests for sourceType = 'url'
   selectedTest: '',  // currently selected test
 };

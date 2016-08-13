@@ -19,6 +19,7 @@ exports.names = keyMirror({
   // from tab
   LOAD_TESTS_CONFIG: null,
   RUN_TESTS: null,
+  SELECT_TEST: null,
   // from bg
   LOAD_TESTS_CONFIG_DONE: null,
   RUN_TESTS_STARTED: null,

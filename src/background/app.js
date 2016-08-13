@@ -23,6 +23,7 @@ class App {
   _setListeners() {
     messaging.on(messaging.names.LOAD_TESTS_CONFIG, () => this._loadConfig());
     messaging.on(messaging.names.RUN_TESTS, data => this._runTests(data));
+    messaging.on(messaging.names.SELECT_TEST, data => this._selectTest(data));
   }
 
   _loadConfig() {
@@ -31,7 +32,11 @@ class App {
       .then(text => {
         const config = evaluate.asCommonJs(text);
         this._testsConfig = config;
-        messaging.send(messaging.names.LOAD_TESTS_CONFIG_DONE, config);
+        this._updateSelectedTest();
+        messaging.send(messaging.names.LOAD_TESTS_CONFIG_DONE, {
+          config: config,
+          selectedTest: storage.get('selectedTest'),
+        });
       });
   }
 
@@ -54,6 +59,20 @@ class App {
     messaging.send(messaging.names.RUN_TESTS_STARTED);
     runner.run(runnerParams)
       .then(() => messaging.send(messaging.names.RUN_TESTS_DONE));
+  }
+
+  _updateSelectedTest() {
+    const selectedTest = storage.get('selectedTest');
+    if (selectedTest && Array.isArray(this._testsConfig.tests)) {
+      const exists = this._testsConfig.tests.some(test => test === selectedTest);
+      if (!exists) {
+        this._selectTest({name: ''});
+      }
+    }
+  }
+
+  _selectTest(data) {
+    storage.set('selectedTest', data.name);
   }
 }
 

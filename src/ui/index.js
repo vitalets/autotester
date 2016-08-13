@@ -3,14 +3,13 @@ const messaging = require('../background/messaging');
 const title = require('./title');
 
 document.getElementById('run').addEventListener('click', runTests);
+document.getElementById('testlist').addEventListener('change', onTestSelected);
 
 title.setListeners();
 
 messaging.start();
 
-messaging.on(messaging.names.LOAD_TESTS_CONFIG_DONE, config => {
-  fillTestList(config);
-});
+messaging.on(messaging.names.LOAD_TESTS_CONFIG_DONE, fillTestList);
 
 loadConfig();
 
@@ -29,9 +28,20 @@ function activateSelfTab() {
     .then(tab => thenChrome.tabs.update(tab.id, {active: true}));
 }
 
-function fillTestList(config) {
+function fillTestList(data) {
+  const firstItem = {value: '', text: 'All'};
+  const testItems = data.config.tests.map(test => {
+    return {value: test, text: test};
+  });
+  const items = [firstItem].concat(testItems);
   const el = document.getElementById('testlist');
   el.options.length = 0;
-  el.options[el.options.length] = new Option('All', '');
-  config.tests.forEach(test => el.options[el.options.length] = new Option(test, test));
+  items.forEach(item => {
+    const option = new Option(item.text, item.value, false, item.value === data.selectedTest);
+    return el.options[el.options.length] = option;
+  });
+}
+
+function onTestSelected(event) {
+  messaging.send(messaging.names.SELECT_TEST, {name: event.target.value});
 }
