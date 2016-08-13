@@ -6,7 +6,6 @@ const utils = require('../utils');
 const evaluate = require('../utils/evaluate');
 const messaging = require('./messaging');
 const runner = require('../runner');
-const htmlReporter = require('../reporter/html');
 const storage = require('./storage');
 
 class App {
@@ -47,14 +46,14 @@ class App {
    * @param {String} data.test
    */
   _runTests(data) {
-    const tests = data.test
+    const tests = data.test //todo: rename to selectedTest
       ? this._testsConfig.tests.filter(test => test === data.test)
       : this._testsConfig.tests;
     const runnerParams = {
-      tests: addBaseUrlToArr(tests),
-      before: addBaseUrlToArr(this._testsConfig.before),
-      after: addBaseUrlToArr(this._testsConfig.after),
-      reporter: getReporter(),
+      urls: addBaseUrlToArr(tests),
+      //before: addBaseUrlToArr(this._testsConfig.before),
+      // after: addBaseUrlToArr(this._testsConfig.after),
+      window: getReporterWindow(),
     };
     messaging.send(messaging.names.RUN_TESTS_STARTED);
     runner.run(runnerParams)
@@ -83,11 +82,6 @@ function getReporterWindow() {
   } else {
     throw new Error('Autotester tab not found!');
   }
-}
-
-function getReporter() {
-  const reporterWin = getReporterWindow();
-  return htmlReporter.getReporter(reporterWin);
 }
 
 function addBaseUrl(path) {

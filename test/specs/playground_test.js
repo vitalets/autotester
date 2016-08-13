@@ -1,45 +1,18 @@
 
 'use strict';
 
+let driver = new Driver();
+driver.get('http://yandex.ru');
+driver.getTitle().then(title => console.log(title));
+driver.quit();
 
+/*
 var webdriver = require('selenium-webdriver'),
   By = webdriver.By,
   until = webdriver.until,
   Browser = webdriver.Browser,
   assert = require('selenium-webdriver/testing/assert'),
   test = require('selenium-webdriver/lib/test');
-
-/*
-test.suite(function(env) {
-  var driver;
-
-  test.before(function() {
-    driver = env.builder().build();
-  });
-
-  test.after(function() {
-    driver.quit();
-  });
-
-  test.it('should pass playground', function () {
-    driver.get('https://yandex.ru');
-
-    // driver.executeScript('console.log(arguments); return arguments[1];', 1, '2', [1, 2], {x: 'abc'});
-    //driver.executeScript(function () { console.log(arguments); return arguments[1]}, 1, '2', [1, 2], {x: 'abc'});
-
-    driver.manage().timeouts().setScriptTimeout(5000);
-    //driver.manage().timeouts().pageLoadTimeout(500);
-    var start = new Date().getTime();
-    driver.executeAsyncScript(function () {
-      const callback = arguments[arguments.length - 1];
-      setTimeout(() => callback(123), 1000);
-    })
-    .then(res => console.log('res', res));
-
-  });
-
-});
-*/
 
 test.suite(function(env) {
   var driver;
@@ -83,3 +56,4 @@ test.suite(function(env) {
     return driver.executeScript.apply(driver, arguments);
   }
 });
+*/

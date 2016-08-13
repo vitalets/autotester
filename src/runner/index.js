@@ -10,6 +10,7 @@ const utils = require('../utils');
 const evaluate = require('../utils/evaluate');
 const Driver = require('../driver');
 const fakeRequire = require('./fake-require');
+const htmlReporter = require('../reporter/html');
 const logger = require('../utils/logger').create('Runner');
 
 /**
@@ -21,22 +22,21 @@ const TIMEOUT_MS = 30 * 1000;
  * Run tests
  *
  * @param {Object} params
- * @param {Array} params.tests
- * @param {Object} params.reporter
- * @param {Array} [params.before]
- * @param {Array} [params.after]
+ * @param {Array} params.urls
+ * @param {Object} params.window
  * @param {Number} [params.timeout]
  * @returns {Promise}
  */
 exports.run = function (params) {
   return Promise.resolve()
-    .then(() => setupMocha(params))
+    .then(() => setupMocha({
+      reporter: htmlReporter.getReporter(params.window),
+      timeout: params.timeout,
+    }))
     .then(() => setGlobals())
-    .then(() => loadSeries(params.before))
-    .then(() => loadParallel(params.tests))
-    .then(() => run())
-    .then(failures => logger.log(`Finalize with ${failures} failure(s)`))
-    .then(() => loadSeries(params.after))
+    .then(() => fetchCode(params.urls))
+    .then(code => runCode(code, params.window))
+    //.then(() => tryRunMocha())
 };
 
 function setupMocha(params) {
@@ -65,6 +65,20 @@ function setGlobals() {
   window.Driver = Driver;
 }
 
+function fetchCode(urls) {
+  return urls ? utils.fetchTextFromUrls(urls) : [];
+}
+
+function runCode(code, win) {
+  const args = {
+    runContext: {},
+    console: win.console,
+  };
+  return code.reduce((res, item) => {
+    return res.then(() => evaluate.asFunction(item.text, args));
+  }, Promise.resolve());
+}
+
 function loadSeries(urls) {
   return (urls || []).reduce((res, url) => {
     return res
@@ -73,20 +87,15 @@ function loadSeries(urls) {
   }, Promise.resolve());
 }
 
-function loadParallel(urls) {
-  const tasks = urls.map(url => {
-    return utils.fetchText(url)
-      .then(code => evaluate.asAnonymousFn(code));
-  });
-  return Promise.all(tasks);
-}
-
-function run() {
-  logger.log('Running');
-  return new Promise(resolve => {
-    const runner = window.mocha.run(resolve);
-    catchErrorsInsideMocha(runner);
-  });
+function tryRunMocha() {
+  if (window.mocha.tests.length) {
+    logger.log('Running mocha');
+    return new Promise(resolve => {
+      const runner = window.mocha.run(resolve);
+      catchErrorsInsideMocha(runner);
+    })
+    .then(failures => logger.log(`Finalize mocha with ${failures} failure(s)`));
+  }
 }
 
 function catchErrorsInsideMocha(runner) {

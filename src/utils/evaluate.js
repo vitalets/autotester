@@ -3,26 +3,30 @@
  */
 
 /**
- * Evals code as commonJs module
+ * Evaluate code as commonJs module
  *
  * @param {String} code
  */
 exports.asCommonJs = function (code) {
-  const wrapped = `(function(module, exports = module.exports) {
-        ${code}
-        return module;
-      })({exports: {}})`;
-  return window.eval(wrapped).exports;
+  const module = {exports: {}};
+  const args = {
+    module: module,
+    exports: module.exports,
+  };
+  const fnCode = code + '\nreturn module;';
+  return exports.asFunction(fnCode, args).exports;
 };
 
 /**
- * Evals code as anonymous function
+ * Evaluate code as anonymous function with specified arguments
  *
  * @param {String} code
+ * @param {Object} [args]
+ * @param {Object} [context]
  */
-exports.asAnonymousFn = function (code) {
-  const wrapped = `(function() {
-        ${code}
-      })()`;
-  return window.eval(wrapped);
+exports.asFunction = function (code, args = {}, context = null) {
+  const argNames = Object.keys(args);
+  const argValues = argNames.map(name => args[name]);
+  const fn = new Function(argNames.join(','), code);
+  return fn.apply(context, argValues);
 };

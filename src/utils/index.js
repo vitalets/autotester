@@ -31,3 +31,18 @@ exports.fetchText = function (url) {
     .catch(e => Promise.reject(`Can not fetch text url: ${url}`))
     .then(r => r.text())
 };
+
+/**
+ * Parallel fetch text from urls
+ * @param {Array} urls
+ * @returns {Promise}
+ */
+exports.fetchTextFromUrls = function (urls) {
+  const tasks = urls.map(url => {
+    return exports.fetchText(url)
+      .then(text => {
+        return {url, text};
+      });
+  });
+  return Promise.all(tasks);
+};
