@@ -66,11 +66,8 @@ function TestEnvironment(browserName, server) {
   };
 
   this.builder = function() {
-    return {
-      build: function() {
-        return new window.Driver();
-      }
-    };
+    const webdriver = require('selenium-webdriver');
+    return new webdriver.Builder();
   };
 }
 
