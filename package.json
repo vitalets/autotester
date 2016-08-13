@@ -7,7 +7,9 @@
     "url": "git://github.com/vitalets/autotester.git"
   },
   "scripts": {
+    "code": "npm run madge",
     "clean": "rm -rf dist",
+    "madge": "madge --format=cjs --circular src",
     "webpack": "webpack --config ./builder/webpack.config.js",
     "copy:manifest": "cpx -v src/manifest.json dist/unpacked/",
     "copy:test": "cpx -v 'test/**' dist/unpacked/test/",
@@ -41,6 +43,7 @@
     "fs-extra": "^0.30.0",
     "gaze": "^1.1.0",
     "keymirror": "^0.1.1",
+    "madge": "^0.6.0",
     "material-ui": "^0.15.2",
     "multer": "^1.1.0",
     "npm-run-all": "^2.3.0",
