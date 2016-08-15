@@ -54,52 +54,59 @@ function fetchFiles(urls) {
 }
 
 function runFiles(files, win) {
-  return new Promise((resolve, reject) => {
-    const args = globals.get(win);
-    files.forEach(file => runFile(file, args));
-    setFlowListeners(resolve, reject);
-  });
+  const args = globals.get(win);
+  return files.reduce((res, file) => {
+    return res.then(() => runFile(file, args));
+  }, Promise.resolve());
 }
 
-function setFlowListeners(resolve, reject) {
-  const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
-  const flow = promise.controlFlow();
-
-  if (flow.isIdle()) {
-    resolve();
-    return;
-  }
-
-  flow.on(IDLE, () => {
-    flow.removeAllListeners();
-    resolve();
-  });
-  flow.on(UNCAUGHT_EXCEPTION, function (e) {
-    // try catch needed as we are already in catch and can not throw second error
-    // so at least log it to console
-    try {
-      flow.removeAllListeners();
-      // attach custom message for ui
-      // todo: set filename if only single test selected
-      e.uiMessage = evaluate.getErrorMessage(e);
-    } catch(err) {
-      console.error(err);
-    }
-    reject(e);
-  });
-}
-
+/**
+ * Execute file and wait until control flow finish queue
+ * @param {Object} file
+ * @param {Object} args
+ * @returns {Promise}
+ * todo: split on smaller fns or create class
+ */
 function runFile(file, args) {
-  logger.log(`Run ${file.url}`);
-  try {
-    evaluate.asFunction(file.text, args);
-  } catch(e) {
-    // attach custom message for ui
-    e.uiMessage = evaluate.getErrorMessage(e, file.url);
-    // stop control flow
-    promise.controlFlow().reset();
-    throw e;
-  }
+  return new Promise((resolve, reject) => {
+    const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
+    const flow = promise.controlFlow();
+
+    logger.log(`Run ${file.url}`);
+    try {
+      evaluate.asFunction(file.text, args);
+    } catch(e) {
+      attachErrorUiMessage(e, file.url);
+      flow.reset();
+      throw e;
+    }
+
+    if (flow.isIdle()) {
+      resolve();
+      return;
+    }
+
+    flow.on(IDLE, () => {
+      flow.removeAllListeners();
+      resolve();
+    });
+
+    flow.on(UNCAUGHT_EXCEPTION, function (e) {
+      // try catch needed as we are already in catch and can not throw second error
+      // so at least log it to console
+      try {
+        flow.removeAllListeners();
+        attachErrorUiMessage(e, file.url);
+      } catch (err) {
+        console.error(err);
+      }
+      reject(e);
+    });
+  });
+}
+
+function attachErrorUiMessage(e, filename) {
+  e.uiMessage = evaluate.getErrorMessage(e, filename);
 }
 
 function tryRunMocha() {

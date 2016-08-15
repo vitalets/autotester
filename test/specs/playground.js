@@ -1,18 +1,17 @@
 
 'use strict';
 
-/*
+
 let driver = new Driver();
 driver.get('http://yandex.ru');
 driver.getTitle().then(title => {
-  wwww()
   console.log(title)
 });
-qqqq()
+
 driver.quit();
-*/
 
 
+/*
 var webdriver = require('selenium-webdriver'),
   By = webdriver.By,
   until = webdriver.until;
@@ -22,15 +21,15 @@ var driver = new webdriver.Builder()
   .build();
 
 driver.get('http://www.google.com/ncr');
-driver.findElement(By.name('q')).sendKeys('webdriver')//.then(() => wwww())
+driver.findElement(By.name('q')).sendKeys('webdriver').then(() => wwww())
 driver.findElement(By.name('btnG')).click();
- // qqq();
+//qqq();
 driver.wait(until.titleIs('webdriver - Google Search'), 1000);
 driver.getTitle().then(title => {
   console.log(title)
 });
 driver.quit();
-
+*/
 
 /*
 
