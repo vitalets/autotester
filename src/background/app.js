@@ -46,13 +46,12 @@ class App {
    * @param {String} data.test
    */
   _runTests(data) {
-    const tests = data.test //todo: rename to selectedTest
-      ? this._testsConfig.tests.filter(test => test === data.test)
-      : this._testsConfig.tests;
+    //todo: rename to selectedTest
+    const tests = this._testsConfig.tests.filter(test => !data.test || test === data.test);
+    const setup = this._testsConfig.setup || [];
+    const urls = setup.concat(tests);
     const runnerParams = {
-      urls: addBaseUrlToArr(tests),
-      //before: addBaseUrlToArr(this._testsConfig.before),
-      // after: addBaseUrlToArr(this._testsConfig.after),
+      urls: addBaseUrlToArr(urls),
       window: getReporterWindow(),
     };
     messaging.send(messaging.names.RUN_TESTS_STARTED);

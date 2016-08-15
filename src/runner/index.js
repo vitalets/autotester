@@ -58,7 +58,10 @@ function fetchCode(urls) {
 function runCode(code, win) {
   const args = getRunGlobals(win);
   return code.reduce((res, item) => {
-    return res.then(() => evaluate.asFunction(item.text, args));
+    return res.then(() => {
+      logger.log(`Run ${item.url}`);
+      evaluate.asFunction(item.text, args);
+    });
   }, Promise.resolve());
 }
 

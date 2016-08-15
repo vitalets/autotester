@@ -5,45 +5,34 @@
 
 const FILE_SERVER_BASE_URL = 'http://127.0.0.1:2310/common/';
 
-wrapTest();
-wrapRequire();
+setup();
 
-function wrapRequire() {
-  const originalRequire = window.require;
-  window.require = function (moduleName) {
-    switch (moduleName) {
-      case '../lib/test/fileserver':
-        return {
-          Pages: window.test.Pages,
-          whereIs: window.test.whereIs,
-        };
-        case ' ../lib/test':
-          return 'window.test';
-      // this is strange unused require in execute_script_test.js
-      case 'path':
-        return {};
-      default:
-        // selenium tests require webdriver as '..'
-        moduleName = moduleName.replace('..', 'selenium-webdriver');
-        return originalRequire(moduleName);
-    }
-  };
+function setup() {
+  setupTest();
+  setupRequire();
 }
 
-function wrapTest() {
-  const originalTest = window.test;
-  window.test = {
-    suite: suite,
-    after: originalTest.after,
-    afterEach: originalTest.afterEach,
-    before: originalTest.before,
-    beforeEach: originalTest.beforeEach,
-    it: originalTest.it,
-    describe: originalTest.describe,
-    ignore: originalTest.ignore,
-    Pages: getPages(),
-    whereIs: whereIs
-  };
+function setupTest() {
+  test.suite = suite;
+  test.Pages = getPages();
+  test.whereIs = whereIs;
+}
+
+function setupRequire() {
+  // selenium tests require webdriver as '..'
+  require.alias('..', 'selenium-webdriver');
+
+  require.register('selenium-webdriver/lib/test/fileserver', {
+    Pages: test.Pages,
+    whereIs: test.whereIs,
+  });
+
+  // selenium uses special `test` object to run same tests over several browsers
+  require.register('selenium-webdriver/lib/test', test);
+
+  // this is strange unused require in execute_script_test.js
+  // fixed in: https://github.com/SeleniumHQ/selenium/pull/2598
+  require.register('path', {});
 }
 
 function suite(fn, opt_options) {
