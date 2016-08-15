@@ -23,7 +23,7 @@
     "watch:test": "npm run copy:test -- -w",
     "watch:mocha": "npm run copy:mocha -- -w",
     "watch:ui": "npm run copy:ui -- -w",
-    "copy": "npm run clean && run-p copy:**",
+    "copy": "run-p copy:**",
     "watch": "npm run clean && run-p watch:**",
     "build": "npm run clean && npm run webpack && run-p copy:**",
     "fileserver": "node ./node_modules/selenium-webdriver/lib/test/fileserver.js"
