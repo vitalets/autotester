@@ -5,7 +5,7 @@
 
 const seleniumAssert = require('selenium-webdriver/testing/assert');
 const webdriver = require('./selenium-webdriver');
-const test = require('./selenium-testing');
+const seleniumTesting = require('./selenium-testing');
 const utils = require('../utils');
 const evaluate = require('../utils/evaluate');
 const Driver = require('../driver');
@@ -29,14 +29,10 @@ const TIMEOUT_MS = 30 * 1000;
  */
 exports.run = function (params) {
   return Promise.resolve()
-    .then(() => setupMocha({
-      reporter: htmlReporter.getReporter(params.window),
-      timeout: params.timeout,
-    }))
-    .then(() => setGlobals())
+    .then(() => setupMocha(params))
     .then(() => fetchCode(params.urls))
     .then(code => runCode(code, params.window))
-    //.then(() => tryRunMocha())
+    .then(() => tryRunMocha())
 };
 
 function setupMocha(params) {
@@ -49,20 +45,10 @@ function setupMocha(params) {
       window.mocha.setup({
         ui: 'bdd',
         timeout: params.timeout || TIMEOUT_MS,
-        reporter: params.reporter,
+        reporter: htmlReporter.getReporter(params.window),
       });
-      test.wrapMochaGlobals(window);
+      seleniumTesting.wrapMochaGlobals(window);
     });
-}
-
-function setGlobals() {
-  window.test = test;
-  window.assert = seleniumAssert;
-  window.By = webdriver.By;
-  window.Key = webdriver.Key;
-  window.until = webdriver.until;
-  window.require = fakeRequire;
-  window.Driver = Driver;
 }
 
 function fetchCode(urls) {
@@ -70,25 +56,37 @@ function fetchCode(urls) {
 }
 
 function runCode(code, win) {
-  const args = {
-    runContext: {},
-    console: win.console,
-  };
+  const args = getRunGlobals(win);
   return code.reduce((res, item) => {
     return res.then(() => evaluate.asFunction(item.text, args));
   }, Promise.resolve());
 }
 
-function loadSeries(urls) {
-  return (urls || []).reduce((res, url) => {
-    return res
-      .then(() => utils.fetchText(url))
-      .then(code => evaluate.asAnonymousFn(code));
-  }, Promise.resolve());
+/**
+ * All this variables are available in tests
+ * @param {Object} win
+ */
+function getRunGlobals(win) {
+  return {
+    runContext: {},
+    Driver: Driver,
+    By: webdriver.By,
+    Key: webdriver.Key,
+    until: webdriver.until,
+    // for running tests
+    test: seleniumTesting,
+    assert: seleniumAssert,
+    // for running selenium tests as is
+    require: fakeRequire,
+    // for debugging
+    console: win.console,
+  };
 }
 
 function tryRunMocha() {
-  if (window.mocha.tests.length) {
+  const hasSuites = window.mocha.suite.suites.length;
+  const hasTests = window.mocha.suite.tests.length;
+  if (hasSuites || hasTests) {
     logger.log('Running mocha');
     return new Promise(resolve => {
       const runner = window.mocha.run(resolve);

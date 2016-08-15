@@ -1,10 +1,12 @@
 
 'use strict';
-
+/*
 let driver = new Driver();
 driver.get('http://yandex.ru');
 driver.getTitle().then(title => console.log(title));
 driver.quit();
+*/
+
 
 /*
 var webdriver = require('selenium-webdriver'),

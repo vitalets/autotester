@@ -17,6 +17,8 @@ function wrapRequire() {
           Pages: window.test.Pages,
           whereIs: window.test.whereIs,
         };
+        case ' ../lib/test':
+          return 'window.test';
       // this is strange unused require in execute_script_test.js
       case 'path':
         return {};
