@@ -3,14 +3,12 @@
  * Loads tests from urls and run via mocha
  */
 
-const seleniumAssert = require('selenium-webdriver/testing/assert');
-const webdriver = require('./selenium-webdriver');
+const promise = require('selenium-webdriver/lib/promise');
 const seleniumTesting = require('./selenium-testing');
 const utils = require('../utils');
 const evaluate = require('../utils/evaluate');
-const Driver = require('../driver');
-const fakeRequire = require('./fake-require');
 const htmlReporter = require('../reporter/html');
+const globals = require('./globals');
 const logger = require('../utils/logger').create('Runner');
 
 /**
@@ -57,56 +55,49 @@ function fetchFiles(urls) {
 
 function runFiles(files, win) {
   return new Promise((resolve, reject) => {
-    setFlowListeners(resolve, reject, win);
-    const args = getRunGlobals(win);
+    const args = globals.get(win);
     files.forEach(file => runFile(file, args));
+    setFlowListeners(resolve, reject);
   });
 }
 
-function setFlowListeners(resolve, reject, win) {
-  const {IDLE, UNCAUGHT_EXCEPTION} = webdriver.promise.ControlFlow.EventType;
-  const flow = webdriver.promise.controlFlow();
+function setFlowListeners(resolve, reject) {
+  const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
+  const flow = promise.controlFlow();
+
+  if (flow.isIdle()) {
+    resolve();
+    return;
+  }
+
   flow.on(IDLE, () => {
     flow.removeAllListeners();
     resolve();
   });
   flow.on(UNCAUGHT_EXCEPTION, function (e) {
-    flow.removeAllListeners();
-    const msg = `${e.name}: ${e.message}`;
-    win.console.error(msg);
+    // try catch needed as we are already in catch and can not throw second error
+    // so at least log it to console
+    try {
+      flow.removeAllListeners();
+      // attach custom message for ui
+      // todo: set filename if only single test selected
+      e.uiMessage = evaluate.getErrorMessage(e);
+    } catch(err) {
+      console.error(err);
+    }
     reject(e);
   });
 }
 
-/**
- * All this variables are available in tests
- * @param {Object} win
- */
-function getRunGlobals(win) {
-  return {
-    runContext: {},
-    Driver: Driver,
-    By: webdriver.By,
-    Key: webdriver.Key,
-    until: webdriver.until,
-    // for running tests
-    test: seleniumTesting,
-    assert: seleniumAssert,
-    // for running selenium tests as is
-    require: fakeRequire,
-    // for debugging
-    console: win.console,
-  };
-}
-
-function runFile(file, args, win) {
+function runFile(file, args) {
   logger.log(`Run ${file.url}`);
   try {
     evaluate.asFunction(file.text, args);
   } catch(e) {
-    const msg = evaluate.getErrorMessage(e, file.url);
-    win.console.error(msg);
-    // todo: show error in infoblock
+    // attach custom message for ui
+    e.uiMessage = evaluate.getErrorMessage(e, file.url);
+    // stop control flow
+    promise.controlFlow().reset();
     throw e;
   }
 }

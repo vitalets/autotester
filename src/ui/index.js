@@ -12,12 +12,7 @@ messaging.start();
 
 messaging.on(messaging.names.LOAD_TESTS_CONFIG_DONE, fillTestList);
 messaging.on(messaging.names.RUN_TESTS_STARTED, () => console.clear());
-messaging.on(messaging.names.RUN_TESTS_DONE, activateSelfTab);
-// messaging.on(messaging.names.ERROR, data => {
-//   setTimeout(() => {
-//     console.error(data.stack);
-//   }, 0);
-// });
+messaging.on(messaging.names.RUN_TESTS_DONE, onDone);
 
 loadConfig();
 
@@ -48,6 +43,13 @@ function fillTestList(data) {
     const option = new Option(item.text, item.value, false, item.value === data.selectedTest);
     return el.options[el.options.length] = option;
   });
+}
+
+function onDone(data) {
+  if (data.error) {
+    console.error(data.error);
+  }
+  activateSelfTab();
 }
 
 function onTestSelected(event) {

@@ -38,8 +38,8 @@ exports.asFunction = function (code, args = {}, context = null) {
  * @param {Error} error
  * @param {String} filename
  */
-exports.getErrorMessage = function (error, filename) {
-  const stack = e.stack.split('\n');
+exports.getErrorMessage = function (error, filename = '<anonymous>') {
+  const stack = error.stack.split('\n');
   let msg = `${stack[0]}\nat ${filename}`;
   // take row/col from <anonymous> part of stack
   const matches = stack[1].match(/<anonymous>:(\d+):(\d+)/);

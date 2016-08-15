@@ -21,10 +21,10 @@ var driver = new webdriver.Builder()
   .forBrowser('chrome')
   .build();
 
-driver.get('http://www.google.com/ncr')//.then(() => wwww())
-driver.findElement(By.name('q')).sendKeys('webdriver');
+driver.get('http://www.google.com/ncr');
+driver.findElement(By.name('q')).sendKeys('webdriver')//.then(() => wwww())
 driver.findElement(By.name('btnG')).click();
-// qqq();
+ // qqq();
 driver.wait(until.titleIs('webdriver - Google Search'), 1000);
 driver.getTitle().then(title => {
   console.log(title)

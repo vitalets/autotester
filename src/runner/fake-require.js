@@ -1,5 +1,5 @@
 /**
- * This fake require allows to run selenium tests in autotester without any edits.
+ * This fake require allows to process require calls in own selenium tests.
  */
 
 const map = {

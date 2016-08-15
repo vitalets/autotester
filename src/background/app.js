@@ -57,10 +57,10 @@ class App {
     messaging.send(messaging.names.RUN_TESTS_STARTED);
     runner.run(runnerParams)
       .then(() => {
-        messaging.send(messaging.names.RUN_TESTS_DONE)
+        messaging.send(messaging.names.RUN_TESTS_DONE, {})
       })
       .catch(e => {
-        messaging.send(messaging.names.RUN_TESTS_DONE);
+        messaging.send(messaging.names.RUN_TESTS_DONE, {error: e.uiMessage});
         throw e;
       });
   }
