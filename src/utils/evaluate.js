@@ -30,3 +30,23 @@ exports.asFunction = function (code, args = {}, context = null) {
   const fn = new Function(argNames.join(','), code);
   return fn.apply(context, argValues);
 };
+
+/**
+ * Creates error message with specified filename and row:col link
+ * using existing thrown error
+ *
+ * @param {Error} error
+ * @param {String} filename
+ */
+exports.getErrorMessage = function (error, filename) {
+  const stack = e.stack.split('\n');
+  let msg = `${stack[0]}\nat ${filename}`;
+  // take row/col from <anonymous> part of stack
+  const matches = stack[1].match(/<anonymous>:(\d+):(\d+)/);
+  if (matches) {
+    const row = matches[1] - 2; // eval stack has extra 2 rows for `function() { ...`
+    const col = matches[2];
+    msg += `:${row}:${col}`;
+  }
+  return msg;
+};

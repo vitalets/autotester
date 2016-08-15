@@ -1,4 +1,5 @@
 
+const thenChrome = require('then-chrome');
 const messaging = require('../background/messaging');
 const title = require('./title');
 
@@ -10,6 +11,13 @@ title.setListeners();
 messaging.start();
 
 messaging.on(messaging.names.LOAD_TESTS_CONFIG_DONE, fillTestList);
+messaging.on(messaging.names.RUN_TESTS_STARTED, () => console.clear());
+messaging.on(messaging.names.RUN_TESTS_DONE, activateSelfTab);
+// messaging.on(messaging.names.ERROR, data => {
+//   setTimeout(() => {
+//     console.error(data.stack);
+//   }, 0);
+// });
 
 loadConfig();
 

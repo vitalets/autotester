@@ -13,9 +13,9 @@ module.exports = {
     'setup.js',
   ],
   tests: [
+    'specs/playground.js',
     'specs/attach_to_extension_test.js',
     'specs/catch_network_requests_test.js',
-    'specs/playground_test.js',
     // === own selenium specs from 'node_modules/selenium-webdriver/test' ===
     'specs-selenium/tag_name_test.js',
     //'specs-selenium/actions_test.js',

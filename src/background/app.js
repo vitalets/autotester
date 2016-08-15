@@ -56,7 +56,13 @@ class App {
     };
     messaging.send(messaging.names.RUN_TESTS_STARTED);
     runner.run(runnerParams)
-      .then(() => messaging.send(messaging.names.RUN_TESTS_DONE));
+      .then(() => {
+        messaging.send(messaging.names.RUN_TESTS_DONE)
+      })
+      .catch(e => {
+        messaging.send(messaging.names.RUN_TESTS_DONE);
+        throw e;
+      });
   }
 
   _updateSelectedTest() {

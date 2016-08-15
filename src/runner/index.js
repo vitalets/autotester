@@ -30,8 +30,8 @@ const TIMEOUT_MS = 30 * 1000;
 exports.run = function (params) {
   return Promise.resolve()
     .then(() => setupMocha(params))
-    .then(() => fetchCode(params.urls))
-    .then(code => runCode(code, params.window))
+    .then(() => fetchFiles(params.urls))
+    .then(files => runFiles(files, params.window))
     .then(() => tryRunMocha())
 };
 
@@ -51,18 +51,31 @@ function setupMocha(params) {
     });
 }
 
-function fetchCode(urls) {
+function fetchFiles(urls) {
   return urls ? utils.fetchTextFromUrls(urls) : [];
 }
 
-function runCode(code, win) {
-  const args = getRunGlobals(win);
-  return code.reduce((res, item) => {
-    return res.then(() => {
-      logger.log(`Run ${item.url}`);
-      evaluate.asFunction(item.text, args);
-    });
-  }, Promise.resolve());
+function runFiles(files, win) {
+  return new Promise((resolve, reject) => {
+    setFlowListeners(resolve, reject, win);
+    const args = getRunGlobals(win);
+    files.forEach(file => runFile(file, args));
+  });
+}
+
+function setFlowListeners(resolve, reject, win) {
+  const {IDLE, UNCAUGHT_EXCEPTION} = webdriver.promise.ControlFlow.EventType;
+  const flow = webdriver.promise.controlFlow();
+  flow.on(IDLE, () => {
+    flow.removeAllListeners();
+    resolve();
+  });
+  flow.on(UNCAUGHT_EXCEPTION, function (e) {
+    flow.removeAllListeners();
+    const msg = `${e.name}: ${e.message}`;
+    win.console.error(msg);
+    reject(e);
+  });
 }
 
 /**
@@ -86,11 +99,23 @@ function getRunGlobals(win) {
   };
 }
 
+function runFile(file, args, win) {
+  logger.log(`Run ${file.url}`);
+  try {
+    evaluate.asFunction(file.text, args);
+  } catch(e) {
+    const msg = evaluate.getErrorMessage(e, file.url);
+    win.console.error(msg);
+    // todo: show error in infoblock
+    throw e;
+  }
+}
+
 function tryRunMocha() {
-  const hasSuites = window.mocha.suite.suites.length;
-  const hasTests = window.mocha.suite.tests.length;
-  if (hasSuites || hasTests) {
-    logger.log('Running mocha');
+  const suitesCount = window.mocha.suite.suites.length;
+  const testsCount = window.mocha.suite.tests.length;
+  if (suitesCount || testsCount) {
+    logger.log(`Running mocha for ${suitesCount} suite(s) and ${testsCount} test(s)`);
     return new Promise(resolve => {
       const runner = window.mocha.run(resolve);
       catchErrorsInsideMocha(runner);

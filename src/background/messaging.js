@@ -24,6 +24,7 @@ exports.names = keyMirror({
   LOAD_TESTS_CONFIG_DONE: null,
   RUN_TESTS_STARTED: null,
   RUN_TESTS_DONE: null,
+  ERROR: null,
 });
 
 const listeners = new Map();
