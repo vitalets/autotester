@@ -46,3 +46,14 @@ exports.fetchTextFromUrls = function (urls) {
   });
   return Promise.all(tasks);
 };
+
+/**
+ * Throws error in next tick
+ *
+ * @param {Error} error
+ */
+exports.asyncThrow = function (error) {
+  setTimeout(() => {
+    throw error;
+  }, 0);
+};

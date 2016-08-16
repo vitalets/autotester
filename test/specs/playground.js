@@ -5,7 +5,7 @@
 let driver = new Driver();
 driver.get('http://yandex.ru');
 driver.getTitle().then(title => {
-  console.log(title)
+  console.log('Title:', title)
 });
 
 driver.quit();
