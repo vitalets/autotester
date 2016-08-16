@@ -18,6 +18,7 @@
 
   "background": {
     "scripts": [
+      "bootstrap.js",
       "background.js"
     ],
     "persistent": true

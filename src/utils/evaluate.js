@@ -40,7 +40,7 @@ exports.asFunction = function (code, args = {}, context = null) {
  */
 exports.getErrorMessage = function (error, filename = '<anonymous>') {
   const stack = error.stack.split('\n');
-  let msg = `${stack[0]}\nat ${filename}`;
+  let msg = `${stack[0]}\n      at ${filename}`;
   // take row/col from <anonymous> part of stack
   const matches = stack[1].match(/<anonymous>:(\d+):(\d+)/);
   if (matches) {

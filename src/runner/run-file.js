@@ -70,7 +70,7 @@ class RunFile {
       // try catch here is needed as we are already in catch and can not throw second error
       // so at least log it to console
       try {
-        this._attachErrorUiMessage(error);
+        this._attachErrorCustomMessage(error);
         this._flow.reset();
       } catch (e) {
         console.error(e);
@@ -81,8 +81,8 @@ class RunFile {
     }
   }
 
-  _attachErrorUiMessage(error) {
-    error.uiMessage = evaluate.getErrorMessage(error, this._filename);
+  _attachErrorCustomMessage(error) {
+    error.testMessage = evaluate.getErrorMessage(error, this._filename);
   }
 }
 

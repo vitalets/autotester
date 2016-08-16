@@ -60,7 +60,7 @@ class App {
         messaging.send(messaging.names.RUN_TESTS_DONE, {})
       })
       .catch(e => {
-        messaging.send(messaging.names.RUN_TESTS_DONE, {error: e.uiMessage});
+        messaging.send(messaging.names.RUN_TESTS_DONE, {});
         throw e;
       });
   }

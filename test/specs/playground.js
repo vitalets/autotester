@@ -1,7 +1,7 @@
 
 'use strict';
 
-
+/*
 let driver = new Driver();
 driver.get('http://yandex.ru');
 driver.getTitle().then(title => {
@@ -9,9 +9,9 @@ driver.getTitle().then(title => {
 });
 
 driver.quit();
+*/
 
 
-/*
 var webdriver = require('selenium-webdriver'),
   By = webdriver.By,
   until = webdriver.until;
@@ -29,7 +29,7 @@ driver.getTitle().then(title => {
   console.log(title)
 });
 driver.quit();
-*/
+
 
 /*
 

@@ -1,6 +1,7 @@
 module.exports = {
   entry: {
-    background: './src/background/',
+    'background': './src/background/',
+    'bootstrap': './src/background/bootstrap',
     'ui/ui': './src/ui/',
   },
   output: {
