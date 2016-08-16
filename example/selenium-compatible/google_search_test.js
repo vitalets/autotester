@@ -1,5 +1,5 @@
 /**
- * Test similar to own selenium from `selenium-webdriver/exampels/google_search_test.js`
+ * Test is similar to own selenium from `selenium-webdriver/exampels/google_search_test.js`
  * But it can be executed via both Selenium webdriverjs or Autotester
  */
 
@@ -8,7 +8,7 @@ var webdriver = require('selenium-webdriver'),
     until = webdriver.until,
     test = require('selenium-webdriver/testing');
 
-test.describe('Google Search', function() {
+test.describe('Google Search (selenium compatible)', function() {
   var driver;
 
   test.before(function() {
@@ -17,7 +17,7 @@ test.describe('Google Search', function() {
         .build();
   });
 
-  test.it('should append query to title', function() {
+  test.it('should append query to title (selenium compatible)', function() {
     driver.get('http://www.google.com');
     driver.findElement(By.name('q')).sendKeys('webdriver');
     driver.findElement(By.name('btnG')).click();
