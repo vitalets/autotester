@@ -21,6 +21,6 @@ exports.get = function (win) {
     // for running selenium tests as is
     require: fakeRequire,
     // for debugging
-    console: win.consoleProxy,
+    console: win.sharedConsole,
   };
 };

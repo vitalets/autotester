@@ -19,7 +19,7 @@ exports.setup = function () {
 function sendError(error) {
   const msg = getMsg(error);
   getViews().forEach(view => {
-    const console = view.consoleProxy || view.console;
+    const console = view.sharedConsole || view.console;
     console.error(msg);
   });
 }

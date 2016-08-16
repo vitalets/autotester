@@ -2,9 +2,11 @@
 const thenChrome = require('then-chrome');
 const messaging = require('../background/messaging');
 const title = require('./title');
-const ConsoleProxy = require('./console-proxy');
+const HtmlConsole = require('./html-console');
+const shareCalls = require('../utils/share-calls');
 
-window.consoleProxy = new ConsoleProxy('#console', console);
+window.htmlConsole = new HtmlConsole('#console');
+window.sharedConsole = shareCalls(console, htmlConsole);
 
 document.getElementById('run').addEventListener('click', runTests);
 document.getElementById('testlist').addEventListener('change', onTestSelected);
@@ -19,7 +21,7 @@ messaging.on(messaging.names.RUN_TESTS_DONE, onDone);
 loadConfig();
 
 function runTests() {
-  consoleProxy.clear();
+  sharedConsole.clear();
   const test = document.getElementById('testlist').value;
   messaging.send(messaging.names.RUN_TESTS, {test});
 }
