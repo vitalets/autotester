@@ -10,33 +10,35 @@ class HtmlConsole {
 
   log() {
     const args = [].slice.call(arguments);
-    this._addLine(args);
+    this._addLine('log', args);
   }
 
   info() {
     const args = [].slice.call(arguments);
-    this._addLine(args);
+    this._addLine('info', args);
   }
 
   warn() {
     const args = [].slice.call(arguments);
-    this._addLine(args);
+    this._addLine('warn', args);
   }
 
   error() {
     const args = [].slice.call(arguments);
-    this._addLine(args);
+    this._addLine('error', args);
   }
 
   clear() {
     this._setVisible(false);
-    this._el.textContent = '';
+    this._el.innerHTML = '';
   }
 
-  _addLine(args) {
-    const str = stringifyArgs(args);
+  _addLine(type, args) {
     this._setVisible(true);
-    this._el.textContent += str + '\n';
+    const line = document.createElement('div');
+    line.classList.add(type);
+    line.textContent = stringifyArgs(args);
+    this._el.appendChild(line);
   }
 
   _setVisible(value) {

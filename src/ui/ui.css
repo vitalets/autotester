@@ -64,3 +64,19 @@ body {
     color: #333;
     max-height: 200px;
 }
+
+#console .log {
+    color: #333;
+}
+
+#console .info {
+    color: blue;
+}
+
+#console .warn {
+    color: #eea236;
+}
+
+#console .error {
+    color: red;
+}
