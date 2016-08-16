@@ -2,6 +2,9 @@
 const thenChrome = require('then-chrome');
 const messaging = require('../background/messaging');
 const title = require('./title');
+const ConsoleProxy = require('./console-proxy');
+
+window.consoleProxy = new ConsoleProxy('#console', console);
 
 document.getElementById('run').addEventListener('click', runTests);
 document.getElementById('testlist').addEventListener('change', onTestSelected);
@@ -11,12 +14,12 @@ title.setListeners();
 messaging.start();
 
 messaging.on(messaging.names.LOAD_TESTS_CONFIG_DONE, fillTestList);
-messaging.on(messaging.names.RUN_TESTS_STARTED, () => console.clear());
 messaging.on(messaging.names.RUN_TESTS_DONE, onDone);
 
 loadConfig();
 
 function runTests() {
+  consoleProxy.clear();
   const test = document.getElementById('testlist').value;
   messaging.send(messaging.names.RUN_TESTS, {test});
 }
