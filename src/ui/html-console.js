@@ -2,6 +2,8 @@
  * Html element that displays messages like console
  */
 
+const marked = require('marked');
+
 class HtmlConsole {
   constructor(selector) {
     this._el = document.querySelector(selector);
@@ -35,10 +37,12 @@ class HtmlConsole {
 
   _addLine(type, args) {
     this._setVisible(true);
-    const line = document.createElement('div');
-    line.classList.add(type);
-    line.textContent = stringifyArgs(args);
-    this._el.appendChild(line);
+    const str = stringifyArgs(args);
+    const html = marked(str, {sanitize: true}).trim();
+    const lineElem = document.createElement('div');
+    lineElem.classList.add(type);
+    lineElem.innerHTML = html;
+    this._el.appendChild(lineElem);
   }
 
   _setVisible(value) {
@@ -54,9 +58,16 @@ function stringifyArgs(args) {
 }
 
 function stringifyArg(arg) {
-  return typeof arg === 'object'
-    ? JSON.stringify(arg)
-    : String(arg);
+  switch (typeof arg) {
+    case 'object':
+      return JSON.stringify(arg);
+    case 'number':
+      return `**${arg}**`;
+    case 'undefined':
+      return `*${arg}*`;
+    default:
+      return String(arg);
+  }
 }
 
 module.exports = HtmlConsole;

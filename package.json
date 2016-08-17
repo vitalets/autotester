@@ -28,7 +28,7 @@
     "copy-test": "if [[ -n $npm_config_copytest ]]; then npm run copy-$npm_config_copytest; fi",
     "watch": "npm run clean && run-p watch:**",
     "fileserver": "node ./node_modules/selenium-webdriver/lib/test/fileserver.js",
-    "dev": "npm run watch && npm run fileserver",
+    "dev": "run-p watch fileserver",
     "build-unpacked": "npm run clean && npm run webpack && npm run copy",
     "zip": "pushd $npm_config_outdir && rimraf $npm_config_outzip && zip -rT $npm_config_outzip . && popd",
     "build-zip": "npm run build-unpacked && npm run zip",
@@ -54,6 +54,7 @@
     "ghooks": "^1.3.2",
     "keymirror": "^0.1.1",
     "madge": "^0.6.0",
+    "marked": "^0.3.6",
     "material-ui": "^0.15.2",
     "multer": "^1.1.0",
     "npm-run-all": "^2.3.0",
@@ -68,7 +69,6 @@
     "webpack": "^1.13.1"
   },
   "config": {
-    "foo" : "3000",
     "ghooks": {
       "pre-commit": "npm run code"
     }

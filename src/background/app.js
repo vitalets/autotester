@@ -30,6 +30,7 @@ class App {
     return utils.fetchText(url)
       .then(text => {
         const config = evaluate.asCommonJs(text);
+        config.url = url;
         this._testsConfig = config;
         this._updateSelectedTest();
         messaging.send(messaging.names.LOAD_TESTS_CONFIG_DONE, {

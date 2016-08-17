@@ -65,12 +65,17 @@ body {
     max-height: 200px;
 }
 
+#console p {
+    margin: 0 0 7px 0;
+    padding: 0;
+}
+
 #console .log {
     color: #333;
 }
 
 #console .info {
-    color: blue;
+    color: #0066ff;
 }
 
 #console .warn {

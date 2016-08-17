@@ -12,10 +12,12 @@ function start() {
   title.setListeners();
   messaging.start();
 
-  messaging.on(messaging.names.LOAD_TESTS_CONFIG_DONE, fillTestList);
+  messaging.on(messaging.names.LOAD_TESTS_CONFIG_DONE, onConfigLoaded);
   messaging.on(messaging.names.RUN_TESTS_DONE, onDone);
 
   loadConfig();
+
+  welcome();
 }
 
 function runTests() {
@@ -32,6 +34,12 @@ function loadConfig() {
 function activateSelfTab() {
   return thenChrome.tabs.getCurrent()
     .then(tab => thenChrome.tabs.update(tab.id, {active: true}));
+}
+
+function onConfigLoaded(data) {
+  const msg = `Config successfully loaded from: **${data.config.url}**\nTests found: **${data.config.tests.length}**`;
+  htmlConsole.info(msg);
+  fillTestList(data);
 }
 
 function fillTestList(data) {
@@ -57,4 +65,16 @@ function onDone(data) {
 
 function onTestSelected(event) {
   messaging.send(messaging.names.SELECT_TEST, {name: event.target.value});
+}
+
+function welcome() {
+  const version = chrome.runtime.getManifest().version;
+  const msg = [
+    `Welcome to **Autotester v${version}**`,
+    ` - chrome extension to develop and run functional tests.\n`,
+    `Tests are written on Javascript and compatible with **Selenium**.\n`,
+    `Please see [Selenium Javascript API Reference](http://seleniumhq.github.io/selenium/docs/api/javascript/) `,
+    `for details.`,
+  ].join('');
+  htmlConsole.log(msg);
 }
