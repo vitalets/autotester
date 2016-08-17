@@ -9,6 +9,7 @@
   "scripts": {
     "code": "npm run madge",
     "clean": "rimraf $npm_config_outdir",
+    "clean-dist": "rimraf dist",
     "madge": "madge --format=cjs --circular src",
     "check-deps": "check-dependencies",
     "webpack": "webpack --config ./builder/webpack.config.js",
