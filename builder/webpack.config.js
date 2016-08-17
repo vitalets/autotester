@@ -6,7 +6,7 @@ module.exports = {
     'ui/bootstrap': './src/ui/bootstrap',
   },
   output: {
-    path: './dist/unpacked',
+    path: process.env.npm_config_outdir,
     filename: '[name].js',
     sourceMapFilename: '[file].map'
   },
