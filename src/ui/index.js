@@ -2,23 +2,21 @@
 const thenChrome = require('then-chrome');
 const messaging = require('../background/messaging');
 const title = require('./title');
-const HtmlConsole = require('./html-console');
-const shareCalls = require('../utils/share-calls');
 
-window.htmlConsole = new HtmlConsole('#console');
-window.sharedConsole = shareCalls(console, htmlConsole);
+start();
 
-document.getElementById('run').addEventListener('click', runTests);
-document.getElementById('testlist').addEventListener('change', onTestSelected);
+function start() {
+  document.getElementById('run').addEventListener('click', runTests);
+  document.getElementById('testlist').addEventListener('change', onTestSelected);
 
-title.setListeners();
+  title.setListeners();
+  messaging.start();
 
-messaging.start();
+  messaging.on(messaging.names.LOAD_TESTS_CONFIG_DONE, fillTestList);
+  messaging.on(messaging.names.RUN_TESTS_DONE, onDone);
 
-messaging.on(messaging.names.LOAD_TESTS_CONFIG_DONE, fillTestList);
-messaging.on(messaging.names.RUN_TESTS_DONE, onDone);
-
-loadConfig();
+  loadConfig();
+}
 
 function runTests() {
   sharedConsole.clear();

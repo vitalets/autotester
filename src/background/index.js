@@ -4,4 +4,4 @@
 
 const App = require('./app');
 
-new App().run();
+new App().start();

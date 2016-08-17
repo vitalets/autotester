@@ -13,7 +13,7 @@ class App {
     this._testsConfig = null;
   }
 
-  run() {
+  start() {
     messaging.start();
     this._setListeners();
     this._loadConfig();
