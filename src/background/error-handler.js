@@ -1,28 +1,21 @@
 /**
- * Proxy all unhandled errors and rejections to all extension UIs
+ * Handler for uncaught errors that proxies it to ui
  */
 
 const TEST_PREFIX = '[TEST]: ';
 const BG_PREFIX = '[BACKGROUND]: ';
 
-exports.setup = function () {
-  window.addEventListener('error', errEvent => {
-    sendError(errEvent.error);
-  });
-
-  // see: https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onunhandledrejection
-  window.addEventListener('unhandledrejection', promiseErrEvent => {
-    sendError(promiseErrEvent.reason);
-  });
-};
-
-function sendError(error) {
+module.exports = function (error) {
+  if (error.isMocha) {
+    // don't display mocha errors as mocha do it itself
+    return;
+  }
   const msg = getMsg(error);
   getViews().forEach(view => {
     const console = view.sharedConsole || view.console;
     console.error(msg);
   });
-}
+};
 
 function getViews() {
   return chrome.extension.getViews({type: 'tab'});

@@ -11,7 +11,7 @@ driver.getTitle().then(title => {
 driver.quit();
 */
 
-
+/*
 var webdriver = require('selenium-webdriver'),
   By = webdriver.By,
   until = webdriver.until;
@@ -29,10 +29,10 @@ driver.getTitle().then(title => {
   console.log(title)
 });
 driver.quit();
+*/
 
 
 /*
-
 var webdriver = require('selenium-webdriver'),
   By = webdriver.By,
   until = webdriver.until,

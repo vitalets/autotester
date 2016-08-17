@@ -49,6 +49,8 @@ function catchErrorsInsideMocha(runner) {
   // excluding AssertionError
   runner.on('fail', function (test) {
     if (test.err.name !== 'AssertionError') {
+      // mark error to not show in htmlConsole as mocha shows it normally
+      test.err.isMocha = true;
       // throw error asynchronously to go out of promise chain
       utils.asyncThrow(test.err);
     }

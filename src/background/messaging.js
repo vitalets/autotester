@@ -32,7 +32,7 @@ const listeners = new Map();
  * Start listen messages
  */
 exports.start = function () {
-  chrome.runtime.onMessage.addListener(listener);
+  chrome.runtime.onMessage.addListener(onMessage);
 };
 
 /**
@@ -62,13 +62,22 @@ exports.on = function (name, fn) {
   listeners.set(name, msgListeners);
 };
 
-function listener(msg, sender, sendResponse) {
+function onMessage(msg, sender, sendResponse) {
   if (msg.toBg !== isBackgroundPage()) {
     return;
   }
   const msgListeners = listeners.get(msg.name);
   if (msgListeners && msgListeners.length) {
-    const results = msgListeners.map(listener => listener(msg.payload, sender, sendResponse));
+    const results = msgListeners.map(listener => {
+      try {
+        return listener(msg.payload, sender, sendResponse);
+      } catch (e) {
+        // we need to re-throw error in next tick to be out of onMessage handler and allow event to bubble
+        setTimeout(() => {
+          throw e;
+        }, 0);
+      }
+    });
     // if at least some result is true, we should return it here
     // to show that sendResponse will be called asynchroniously
     return results.some(Boolean);

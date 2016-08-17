@@ -2,8 +2,9 @@
  * Bootstrap before main bundle
  */
 
-const proxyErrors = require('./proxy-errors');
+const errorCatcher = require('../utils/error-catcher');
+const errorHandler = require('./error-handler');
 const browserAction = require('./browser-action');
 
-proxyErrors.setup();
+errorCatcher.attach(window, errorHandler);
 browserAction.setup();
