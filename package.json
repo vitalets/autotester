@@ -8,7 +8,7 @@
   },
   "scripts": {
     "code": "npm run madge",
-    "clean": "rm -rf dist",
+    "clean": "rimraf dist",
     "madge": "madge --format=cjs --circular src",
     "check-deps": "check-dependencies",
     "webpack": "webpack --config ./builder/webpack.config.js",
@@ -54,6 +54,7 @@
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
     "react-tap-event-plugin": "^1.0.0",
+    "rimraf": "^2.5.4",
     "serve-index": "^1.8.0",
     "sinon": "^1.17.5",
     "then-chrome": "^1.0.5",
