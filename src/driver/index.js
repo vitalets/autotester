@@ -6,6 +6,7 @@ const WebDriver = require('selenium-webdriver/lib/webdriver').WebDriver;
 const Capabilities = require('selenium-webdriver/lib/capabilities').Capabilities;
 const Executor = require('./executor');
 const Requests = require('./requests');
+const Navigation = require('./navigation');
 
 /**
  * Creates a new WebDriver client for Chrome.
@@ -36,6 +37,13 @@ class Driver extends WebDriver {
       this.requests_ = new Requests(this);
     }
     return this.requests_;
+  }
+
+  /**
+   * @return {!Navigation} The navigation interface for this instance.
+   */
+  navigate() {
+    return new Navigation(this);
   }
 }
 

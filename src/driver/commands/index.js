@@ -3,6 +3,7 @@
  */
 
 const cmd = require('selenium-webdriver/lib/command').Name;
+const extraCmd = require('./extra');
 
 const session = require('./session');
 const switchCommand = require('./switch');
@@ -48,4 +49,7 @@ module.exports = {
   [cmd.EXECUTE_ASYNC_SCRIPT]: evaluate.executeAsyncScript,
 
   [cmd.SET_TIMEOUT]: timeouts.setTimeout,
+
+  // ==== Extra commands - not supported by selenium! ====
+  [extraCmd.NEW_TAB]: navigation.newTab,
 };

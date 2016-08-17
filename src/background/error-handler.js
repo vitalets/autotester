@@ -22,11 +22,25 @@ function getViews() {
 }
 
 function getMsg(error) {
-  return error.testMessage
-    ? TEST_PREFIX + error.testMessage
-    : BG_PREFIX + cutStack(error.stack);
+  const prefix = error.isTestSelf ? TEST_PREFIX : BG_PREFIX;
+  return prefix + cutStack(error.stack);
 }
 
+/**
+ * Cuts stack to first `eval` line as everything after it usually useless
+ * @param {String} stack
+ * @returns {String}
+ */
 function cutStack(stack) {
-  return stack.split('\n').slice(0, 2).join('\n');
+  const evalMarker = 'eval at <anonymous>';
+  const lines = stack.split('\n');
+  const result = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].indexOf(evalMarker) >= 0) {
+      break;
+    } else {
+      result.push(lines[i]);
+    }
+  }
+  return result.join('\n');
 }

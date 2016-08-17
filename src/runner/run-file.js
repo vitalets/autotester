@@ -70,7 +70,10 @@ class RunFile {
       // try catch here is needed as we are already in catch and can not throw second error
       // so at least log it to console
       try {
-        this._attachErrorCustomMessage(error);
+        evaluate.fixStack(error, this._filename);
+        if (this._isTestSelfError(error)) {
+          error.isTestSelf = true;
+        }
         this._flow.reset();
       } catch (e) {
         console.error(e);
@@ -81,8 +84,14 @@ class RunFile {
     }
   }
 
-  _attachErrorCustomMessage(error) {
-    error.testMessage = evaluate.getErrorMessage(error, this._filename);
+  /**
+   * Is error occurred in test code itself
+   *
+   * @param {Error} error
+   */
+  _isTestSelfError(error) {
+    const stack = error.stack.split('\n');
+    return stack[1].indexOf(this._filename) >= 0;
   }
 }
 

@@ -32,21 +32,28 @@ exports.asFunction = function (code, args = {}, context = null) {
 };
 
 /**
- * Creates error message with specified filename and row:col link
- * using existing thrown error
+ * Replaces <anonymous> with filename in stack trace
  *
  * @param {Error} error
  * @param {String} filename
  */
-exports.getErrorMessage = function (error, filename = '<anonymous>') {
+exports.fixStack = function (error, filename) {
   const stack = error.stack.split('\n');
-  let msg = `${stack[0]}\n    at ${filename}`;
-  // take row/col from <anonymous> part of stack
-  const matches = stack[1].match(/<anonymous>:(\d+):(\d+)/);
-  if (matches) {
-    const row = matches[1] - 2; // eval stack has extra 2 rows for `function() { ...`
-    const col = matches[2];
-    msg += `:${row}:${col}`;
-  }
-  return msg;
+  const newStack = [];
+  const regexp = /\, <anonymous>:(\d+):(\d+)/;
+  let found = false;
+  stack.forEach((line, index) => {
+    if (!found) {
+      const matches = line.match(regexp);
+      if (matches) {
+        found = true;
+        const row = matches[1] - 2; // eval stack has extra 2 rows for `function() { ...`
+        const col = matches[2];
+        newStack.push(`    at eval (${filename}:${row}:${col})`);
+        line = line.replace(regexp, '');
+      }
+    }
+    newStack.push(line);
+  });
+  error.stack = newStack.join('\n');
 };

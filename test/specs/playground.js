@@ -1,15 +1,16 @@
 
 'use strict';
 
-/*
+
 let driver = new Driver();
 driver.get('http://yandex.ru');
 driver.getTitle().then(title => {
   console.log('Title:', title)
 });
+driver.navigate().newTab('http://mail.ru');
 
 driver.quit();
-*/
+
 
 /*
 var webdriver = require('selenium-webdriver'),
