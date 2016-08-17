@@ -7,7 +7,7 @@
     "url": "git://github.com/vitalets/autotester.git"
   },
   "scripts": {
-    "code": "npm run madge",
+    "code": "npm run check-deps && npm run madge",
     "clean": "rimraf $npm_config_outdir",
     "clean-dist": "rimraf dist",
     "madge": "madge --format=cjs --circular src",
@@ -35,12 +35,7 @@
     "build-update": "npm run build-zip --outdir=dist/unpacked --outzip=../autotester.zip",
     "build-with-example": "npm run build-zip --outdir=dist/unpacked --copytest=example --outzip=../autotester-with-example.zip"
   },
-  "dependencies": {
-    "chai": "^3.5.0",
-    "chai-as-promised": "^5.3.0",
-    "mocha": "^2.5.3",
-    "selenium-webdriver": "^2.53.3"
-  },
+  "dependencies": {},
   "devDependencies": {
     "archiver": "^1.0.0",
     "assert": "^1.4.1",
@@ -56,6 +51,7 @@
     "madge": "^0.6.0",
     "marked": "^0.3.6",
     "material-ui": "^0.15.2",
+    "mocha": "^3.0.2",
     "multer": "^1.1.0",
     "npm-run-all": "^2.3.0",
     "promises-aplus-tests": "^2.1.2",
@@ -63,6 +59,7 @@
     "react-dom": "^15.3.0",
     "react-tap-event-plugin": "^1.0.0",
     "rimraf": "^2.5.4",
+    "selenium-webdriver": "^3.0.0-beta-2",
     "serve-index": "^1.8.0",
     "sinon": "^1.17.5",
     "then-chrome": "^1.0.5",
