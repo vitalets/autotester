@@ -1,7 +1,7 @@
 {
   "name": "autotester",
   "version": "0.1.0",
-  "description": "Chrome extension for automated web testing",
+  "description": "Chrome extension to develop and run functional tests on javascript",
   "repository": {
     "type": "git",
     "url": "git://github.com/vitalets/autotester.git"
