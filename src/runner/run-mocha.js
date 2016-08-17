@@ -7,6 +7,8 @@ const htmlReporter = require('../reporter/html');
 const seleniumTesting = require('./selenium-testing');
 const logger = require('../utils/logger').create('Run-mocha');
 
+const MOCHA_URL = '/core/mocha/mocha.js';
+
 /**
  * As functional tests are slow, increase mocha timeout
  */
@@ -17,7 +19,7 @@ exports.setup = function (params) {
     // can not run mocha twice, so re-load script every time
     // see https://github.com/mochajs/mocha/issues/995
     // todo: maybe use Mocha constructor
-    .then(() => utils.loadScript('/mocha/mocha.js'))
+    .then(() => utils.loadScript(MOCHA_URL))
     .then(() => {
       window.mocha.setup({
         ui: 'bdd',
@@ -40,7 +42,7 @@ exports.run = function () {
     const runner = window.mocha.run(resolve);
     catchErrorsInsideMocha(runner);
   })
-  .then(failures => logger.log(`Finalize mocha with ${failures} failure(s)`));
+  .then(failures => logger.log(`Mocha finished with ${failures} failure(s)`));
 };
 
 function catchErrorsInsideMocha(runner) {

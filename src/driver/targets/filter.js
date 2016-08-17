@@ -34,6 +34,6 @@ function isChromedriverExtensionBg(target) {
 }
 
 function isAutotesterUi(target) {
-  return target.type === 'page' && target.url === chrome.runtime.getURL('ui/ui.html');
+  return target.type === 'page' && target.url === chrome.runtime.getURL('core/ui/ui.html');
 }
 

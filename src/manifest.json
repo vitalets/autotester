@@ -18,8 +18,8 @@
 
   "background": {
     "scripts": [
-      "bootstrap.js",
-      "background.js"
+      "core/background/bootstrap.js",
+      "core/background/bundle.js"
     ],
     "persistent": true
   },

@@ -9,7 +9,7 @@ exports.setup = function () {
 };
 
 function onClicked() {
-  const url = chrome.runtime.getURL('ui/ui.html');
+  const url = chrome.runtime.getURL('core/ui/ui.html');
   return thenChrome.tabs.query({url})
     .then(tabs => {
       return tabs.length

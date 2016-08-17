@@ -24,6 +24,7 @@ exports.run = function (params) {
     .then(() => fetchFiles(params.urls))
     .then(files => runFiles(files, params.window))
     .then(() => runMocha.hasTests() ? runMocha.run() : null)
+    .then(() => finish())
 };
 
 function fetchFiles(urls) {
@@ -35,4 +36,8 @@ function runFiles(files, win) {
   return files.reduce((res, file) => {
     return res.then(() => new RunFile(file.text, file.url, args).run());
   }, Promise.resolve());
+}
+
+function finish() {
+  logger.log('Finished');
 }

@@ -1,9 +1,9 @@
 module.exports = {
   entry: {
-    'background': './src/background/',
-    'bootstrap': './src/background/bootstrap',
-    'ui/ui': './src/ui/',
-    'ui/bootstrap': './src/ui/bootstrap',
+    'core/background/bundle': './src/background/',
+    'core/background/bootstrap': './src/background/bootstrap',
+    'core/ui/bundle': './src/ui/',
+    'core/ui/bootstrap': './src/ui/bootstrap',
   },
   output: {
     path: process.env.npm_config_outdir,
