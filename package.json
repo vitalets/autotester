@@ -28,6 +28,7 @@
     "copy-test": "if [[ -n $npm_config_copytest ]]; then npm run copy-$npm_config_copytest; fi",
     "watch": "npm run clean && run-p watch:**",
     "fileserver": "node ./node_modules/selenium-webdriver/lib/test/fileserver.js",
+    "dev": "npm run watch && npm run fileserver",
     "build-unpacked": "npm run clean && npm run webpack && npm run copy",
     "zip": "pushd $npm_config_outdir && rimraf $npm_config_outzip && zip -rT $npm_config_outzip . && popd",
     "build-zip": "npm run build-unpacked && npm run zip",
