@@ -7,11 +7,12 @@
     "url": "git://github.com/vitalets/autotester.git"
   },
   "scripts": {
-    "code": "npm run check-deps && npm run madge",
+    "code": "npm run check-deps && npm run madge && npm run only",
     "clean": "rimraf $npm_config_outdir",
     "clean-dist": "rimraf dist",
     "madge": "madge --format=cjs --circular src",
     "check-deps": "check-dependencies",
+    "only": "if [ \"$(git diff --cached -- '*.js'| grep + | grep .only)\" != \"\" ]; then echo 'remove .only' && exit 1; fi",
     "webpack": "webpack --config ./builder/webpack.config.js",
     "copy:manifest": "cpx -v src/manifest.json $npm_config_outdir/",
     "copy:mocha": "cpx -v 'node_modules/mocha/mocha.{js,css}' $npm_config_outdir/core/mocha/",
