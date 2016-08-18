@@ -75,13 +75,14 @@ var driver = new webdriver.Builder()
   .build();
 
 driver.get('http://www.google.com/ncr');
-// driver.findElement(By.name('q')).sendKeys('webdriver')//.then(() => wwww())
+driver.findElements(By.name('q')).then(res => console.log(res))
+//driver.findElement(By.name('q')).sendKeys('webdriver')//.then(() => wwww())
 // driver.findElement(By.name('btnG')).click();
 
 //driver.wait(until.titleIs('webdriver - Google Search'), 1000);
-driver.getCurrentUrl().then(res => {
-  console.log('res', res)
-});
+// driver.getCurrentUrl().then(res => {
+//   console.log('res', res)
+// });
 driver.quit();
 
 

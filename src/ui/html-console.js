@@ -3,6 +3,7 @@
  */
 
 const marked = require('marked');
+const stringifySafe = require('json-stringify-safe');
 
 class HtmlConsole {
   constructor(selector) {
@@ -60,13 +61,42 @@ function stringifyArgs(args) {
 function stringifyArg(arg) {
   switch (typeof arg) {
     case 'object':
-      return JSON.stringify(arg);
+      return arg === null
+        ? '*null*'
+        : stringifyObj(arg);
+    case 'function':
+      return arg.toString();
     case 'number':
       return `**${arg}**`;
     case 'undefined':
       return `*${arg}*`;
     default:
       return String(arg);
+  }
+}
+
+function stringifyObj(obj) {
+  try {
+    let str = stringifySafe(obj, replacer, 2);
+    // for small objects use inline
+    if (str.length < 50) {
+      str = stringifySafe(obj, replacer);
+    }
+    return str;
+  } catch(e) {
+    return obj.toString();
+  }
+}
+
+function replacer(key, value) {
+  if (value instanceof Date) {
+    return value.toString();
+  } else if (value instanceof RegExp) {
+    return `/${value}/`;
+  } else if (value === undefined) {
+    return '*undefined*';
+  } else {
+    return value;
   }
 }
 
