@@ -72,7 +72,7 @@ function welcome() {
   const msg = [
     `Welcome to **Autotester v${version}**`,
     ` - chrome extension to develop and run functional tests.\n`,
-    `Tests are written on Javascript and compatible with **Selenium**.\n`,
+    `Tests are written on Javascript and may be compatible with **Selenium**.\n`,
     `Please see [Selenium Javascript API Reference](http://seleniumhq.github.io/selenium/docs/api/javascript/) `,
     `for details.`,
   ].join('');
