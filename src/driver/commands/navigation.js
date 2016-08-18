@@ -2,17 +2,19 @@
  * Commands to manipulate page navigation
  */
 
-const thenChrome = require('then-chrome');
 const TabLoader = require('../tab-loader');
 const Targets = require('../targets');
+const evaluate = require('./evaluate');
 
 exports.navigate = function (params) {
   return TabLoader.update(Targets.tabId, {url: params.url});
 };
 
 exports.getTitle = function () {
-  // todo: use document.title as extension background pages is not a tab
-  return thenChrome.tabs.get(Targets.tabId).then(tab => tab.title);
+  return evaluate.executeScript({
+    script: 'return document.title',
+    args: [],
+  });
 };
 
 // todo: switch to it automatically ?

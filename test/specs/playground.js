@@ -2,14 +2,14 @@
 'use strict';
 
 
-// let driver = new Driver();
-// driver.get('https://google.ru');
-// driver.findElement(By.name('q')).sendKeys('yandex')//.then(() => wwww())
-// driver.findElement(By.name('btnG')).click();
+let driver = new Driver();
+driver.get('https://google.ru');
+driver.findElement(By.name('q')).sendKeys('yandex')//.then(() => wwww())
+driver.findElement(By.name('btnG')).click();
 
-// driver.getTitle().then(title => {
-//   console.log('Title:', title)
-// });
+driver.getTitle().then(title => {
+  console.log('Title:', title)
+});
 
 //driver.findElement({css: '.__altsearch_ext_root__'}).then(() => console.log('found!'))
 
@@ -19,6 +19,7 @@
 
 // demo
 
+/*
 test.describe('demo', function() {
   let driver;
 
@@ -61,7 +62,7 @@ test.describe('demo', function() {
     assert(driver.requests().getCount({url: 'https://www.yandex.ru/?clid=2063711'})).equalTo(1);
   });
 });
-
+*/
 
 
 /*
