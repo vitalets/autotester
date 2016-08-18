@@ -32,6 +32,9 @@ function getMsg(error) {
  * @returns {String}
  */
 function cutStack(stack) {
+  if (!stack) {
+    return '';
+  }
   const evalMarker = 'eval at <anonymous>';
   const lines = stack.split('\n');
   const result = [];
