@@ -86,9 +86,12 @@ function prettyError(e) {
   // debugger error is object with single key 'message'
   const isDebuggerError = typeof e === 'object' && Object.keys(e).length === 1 && e.message;
   if (isDebuggerError) {
-    const info = JSON.parse(e.message);
-    const readableMessage = `Debugger error '${info.message} ${info.data}'`;
-    return Promise.reject(new Error(readableMessage));
+    let prettyMessage = e.message;
+    try {
+      const parsed = JSON.parse(e.message);
+      prettyMessage = `${parsed.message} ${parsed.data}`;
+    } catch (e) {}
+    return Promise.reject(new Error(`Debugger error '${prettyMessage}'`));
   } else {
     return Promise.reject(e);
   }
