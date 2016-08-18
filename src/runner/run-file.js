@@ -90,8 +90,12 @@ class RunFile {
    * @param {Error} error
    */
   _isTestSelfError(error) {
-    const stack = error.stack.split('\n');
-    return stack[1].indexOf(this._filename) >= 0;
+    const stack = error.stack;
+    if (!stack) {
+      return false;
+    }
+    const stackLines = stack.split('\n');
+    return stackLines[1] && stackLines[1].indexOf(this._filename) >= 0;
   }
 }
 

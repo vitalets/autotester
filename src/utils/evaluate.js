@@ -38,11 +38,16 @@ exports.asFunction = function (code, args = {}, context = null) {
  * @param {String} filename
  */
 exports.fixStack = function (error, filename) {
-  const stack = error.stack.split('\n');
+  const stack = error.stack;
+  // sometimes we get object with only message filed instead of Error instance
+  if (!stack) {
+    return;
+  }
+  const stackLines = stack.split('\n');
   const newStack = [];
   const regexp = /\, <anonymous>:(\d+):(\d+)/;
   let found = false;
-  stack.forEach((line, index) => {
+  stackLines.forEach((line, index) => {
     if (!found) {
       const matches = line.match(regexp);
       if (matches) {

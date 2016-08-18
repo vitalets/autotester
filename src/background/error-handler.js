@@ -23,7 +23,9 @@ function getViews() {
 
 function getMsg(error) {
   const prefix = error.isTestSelf ? TEST_PREFIX : BG_PREFIX;
-  return prefix + cutStack(error.stack);
+  const stack = error.stack;
+  const msg = stack ? cutStack(stack) : (error.message || `Unknown error: ${error}`);
+  return prefix + msg;
 }
 
 /**
@@ -32,9 +34,6 @@ function getMsg(error) {
  * @returns {String}
  */
 function cutStack(stack) {
-  if (!stack) {
-    return '';
-  }
   const evalMarker = 'eval at <anonymous>';
   const lines = stack.split('\n');
   const result = [];
