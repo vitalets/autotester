@@ -2,7 +2,12 @@
 'use strict';
 
 
-// let driver = new Driver();
+let driver = new Driver();
+let flag = 'silent-debugger-extension-api';
+driver.get('chrome://flags');
+const el = driver.findElement({css: `#${flag} .experiment-enable-link`});
+
+
 // driver.get('https://google.ru');
 // // driver.findElement(By.name('q')).sendKeys('yandex')//.then(() => wwww())
 // // driver.findElement(By.name('btnG')).click();
@@ -65,7 +70,7 @@ test.describe('demo', function() {
 */
 
 
-
+/*
 var webdriver = require('selenium-webdriver'),
   By = webdriver.By,
   until = webdriver.until;
@@ -84,7 +89,7 @@ driver.findElements(By.name('q')).then(res => console.log(res))
 //   console.log('res', res)
 // });
 driver.quit();
-
+*/
 
 
 /*

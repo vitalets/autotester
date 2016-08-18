@@ -9,6 +9,8 @@ function start() {
   document.getElementById('run').addEventListener('click', runTests);
   document.getElementById('testlist').addEventListener('change', onTestSelected);
 
+  openAllLinksInNewTab();
+
   title.setListeners();
   messaging.start();
 
@@ -69,12 +71,26 @@ function onTestSelected(event) {
 
 function welcome() {
   const version = chrome.runtime.getManifest().version;
-  const msg = [
+  const msgWelcome = [
     `Welcome to **Autotester v${version}**`,
     ` - chrome extension to develop and run functional tests.\n`,
-    `Tests are written on Javascript and may be compatible with **Selenium**.\n`,
+    `Tests are written on Javascript and compatible with **Selenium**.\n`,
     `Please see [Selenium Javascript API Reference](http://seleniumhq.github.io/selenium/docs/api/javascript/) `,
     `for details.`,
   ].join('');
-  htmlConsole.log(msg);
+  const msgFlags = [`For convenient testing please enable two [chrome flags](chrome://flags):\n`,
+    `*--silent-debugger-extension-api* - to remove annoying bar about using debugger api\n`,
+    `*--extensions-on-chrome-urls* - to allow testing other chrome extensions`,
+  ].join('');
+  htmlConsole.log(msgWelcome);
+  htmlConsole.log(msgFlags);
+}
+
+function openAllLinksInNewTab() {
+  document.body.addEventListener('click', event => {
+    if (event.target.tagName === 'A' && event.target.href) {
+      event.preventDefault();
+      chrome.tabs.create({url: event.target.href});
+    }
+  });
 }
