@@ -12,5 +12,5 @@ const Targets = require('../targets');
  * @param {String} params.name
  */
 exports.switchToWindow = function (params) {
-  return Targets.switchByProp('handle', params.name);
+  return Targets.switchByHandle(params.name);
 };

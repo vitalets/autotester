@@ -24,8 +24,19 @@ exports.getCurrentUrl = function () {
   });
 };
 
-// todo: switch to it automatically ?
-// todo: register it in Targets anyway to close after test end
+/**
+ * Opens new tab
+ *
+ * @param {Object} params
+ * @param {String} params.url
+ * @returns {Promise}
+ */
 exports.newTab = function (params) {
-  return TabLoader.create({url: params.url});
+  return Promise.resolve()
+    .then(() => TabLoader.create({url: params.url}))
+    .then(tab => {
+      Targets.registerTabId(tab.id);
+      return Targets.getByProp('tabId', tab.id);
+    })
+    .then(target => target.handle);
 };

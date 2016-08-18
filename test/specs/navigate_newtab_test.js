@@ -26,13 +26,11 @@ test.suite(function (env) {
 
   describe.only('navigation', function() {
 
-    test.it('should open new tab', function () {
-      let oldCount;
-      driver.getAllWindowHandles().then(handles => oldCount = handles.length);
-      driver.navigate().newTab(test.Pages.echoPage);
-      driver.getAllWindowHandles().then(handles => {
-        assert(handles.length).equalTo(oldCount + 1);
-      });
+    test.it('should open new tab and switch to it', function () {
+      driver.get(test.Pages.echoPage);
+      driver.navigate().newTab(test.Pages.simpleTestPage)
+        .then(handle => driver.switchTo().window(handle));
+      assert(driver.getTitle()).equalTo('Hello WebDriver');
     });
 
   })

@@ -2,25 +2,25 @@
 'use strict';
 
 
-let driver = new Driver();
-let flag = 'silent-debugger-extension-api';
-driver.get('chrome://flags');
-const el = driver.findElement({css: `#${flag} .experiment-enable-link`});
-
-
+// let driver = new Driver();
+//
 // driver.get('https://google.ru');
-// // driver.findElement(By.name('q')).sendKeys('yandex')//.then(() => wwww())
-// // driver.findElement(By.name('btnG')).click();
+// // // driver.findElement(By.name('q')).sendKeys('yandex')//.then(() => wwww())
+// // // driver.findElement(By.name('btnG')).click();
+// //
+// driver.getCurrentUrl().then(result => {
+//   console.log('result1:', result)
+// });
+//
+// //driver.findElement({css: '.__altsearch_ext_root__'}).then(() => console.log('found!'))
+//
+// driver.navigate().newTab('http://mail.ru');
 //
 // driver.getCurrentUrl().then(result => {
-//   console.log('result:', result)
+//   console.log('result2:', result)
 // });
-
-//driver.findElement({css: '.__altsearch_ext_root__'}).then(() => console.log('found!'))
-
-//driver.navigate().newTab('http://mail.ru');
-
-//driver.quit();
+//
+// driver.quit();
 
 // demo
 

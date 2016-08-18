@@ -16,7 +16,7 @@ const INITIAL_URL = 'about:blank';
 exports.start = function () {
   Targets.reset();
   return TabLoader.create({url: INITIAL_URL})
-    .then(tab => Targets.switchByProp('tabId', tab.id))
+    .then(tab => Targets.switchByTabId(tab.id))
     .then(() => new Session(SESSION_ID, {}));
 };
 

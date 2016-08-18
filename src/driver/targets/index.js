@@ -28,7 +28,7 @@ const currentTarget = {
 const usedTabIds = new Set();
 const debuggers = [];
 
-module.exports = {
+const Targets = module.exports = {
   reset() {
     clearCurrentTarget();
     usedTabIds.clear();
@@ -65,20 +65,39 @@ module.exports = {
       });
   },
 
-  switchByProp(prop, value) {
+  getByProp(prop, value) {
     return this.getAllTargets()
       .then(targets => {
-        const target = targets.filter(target => target[prop] === value)[0];
-        if (target) {
-          clearCurrentTarget();
-          currentTarget.handle = target.handle;
-          return target.extensionId
-            ? switchToExtension(target)
-            : switchToTab(target);
-        } else {
-          return Promise.reject(`Target with ${prop} = '${value}' does not exist`);
-        }
+          const target = targets.filter(target => target[prop] === value)[0];
+          return target || Promise.reject(`Target with ${prop} = '${value}' does not exist`);
       });
+  },
+
+  switchByTabId(tabId) {
+    return this.switchByProp('tabId', tabId);
+  },
+
+  switchByHandle(handle) {
+    return this.switchByProp('handle', handle);
+  },
+
+  switchByProp(prop, value) {
+    return this.getByProp(prop, value)
+      .then(target => {
+        clearCurrentTarget();
+        currentTarget.handle = target.handle;
+        return target.extensionId
+          ? switchToExtensionTarget(target)
+          : switchToTabTarget(target);
+      });
+  },
+
+  /**
+   * Registers target
+   * @param {Number} tabId
+   */
+  registerTabId(tabId) {
+    usedTabIds.add(tabId);
   },
 
   quit() {
@@ -121,17 +140,18 @@ function addHandle(target) {
   return target;
 }
 
-function switchToTab(target) {
+function switchToTabTarget(target) {
   logger.log('Switching to tab', target.tabId, target.url);
   currentTarget.tabId = target.tabId;
-  usedTabIds.add(target.tabId);
+  Targets.registerTabId(target.tabId);
   return Promise.resolve()
     .then(() => thenChrome.tabs.update(target.tabId, {active: true}))
     .then(() => attachDebugger({tabId: target.tabId}));
 }
 
-function switchToExtension(target) {
+function switchToExtensionTarget(target) {
   logger.log('Switching to extension', target.extensionId);
+  currentTarget.tabId = null;
   return Promise.resolve()
     .then(() => attachDebugger({extensionId: target.extensionId}));
 }
