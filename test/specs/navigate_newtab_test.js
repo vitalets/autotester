@@ -24,7 +24,7 @@ test.suite(function (env) {
     driver.quit();
   });
 
-  describe.only('navigation', function() {
+  describe('navigation', function() {
 
     test.it('should open new tab and switch to it', function () {
       driver.get(test.Pages.echoPage);
