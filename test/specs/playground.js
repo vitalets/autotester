@@ -2,14 +2,14 @@
 'use strict';
 
 
-let driver = new Driver();
-driver.get('https://google.ru');
-driver.findElement(By.name('q')).sendKeys('yandex')//.then(() => wwww())
-driver.findElement(By.name('btnG')).click();
-
-driver.getTitle().then(title => {
-  console.log('Title:', title)
-});
+// let driver = new Driver();
+// driver.get('https://google.ru');
+// // driver.findElement(By.name('q')).sendKeys('yandex')//.then(() => wwww())
+// // driver.findElement(By.name('btnG')).click();
+//
+// driver.getCurrentUrl().then(result => {
+//   console.log('result:', result)
+// });
 
 //driver.findElement({css: '.__altsearch_ext_root__'}).then(() => console.log('found!'))
 
@@ -65,7 +65,7 @@ test.describe('demo', function() {
 */
 
 
-/*
+
 var webdriver = require('selenium-webdriver'),
   By = webdriver.By,
   until = webdriver.until;
@@ -75,15 +75,15 @@ var driver = new webdriver.Builder()
   .build();
 
 driver.get('http://www.google.com/ncr');
-driver.findElement(By.name('q')).sendKeys('webdriver')//.then(() => wwww())
-driver.findElement(By.name('btnG')).click();
-//qqq();
-driver.wait(until.titleIs('webdriver - Google Search'), 1000);
-driver.getTitle().then(title => {
-  console.log(title)
+// driver.findElement(By.name('q')).sendKeys('webdriver')//.then(() => wwww())
+// driver.findElement(By.name('btnG')).click();
+
+//driver.wait(until.titleIs('webdriver - Google Search'), 1000);
+driver.getCurrentUrl().then(res => {
+  console.log('res', res)
 });
 driver.quit();
-*/
+
 
 
 /*

@@ -27,6 +27,7 @@ module.exports = {
 
   [cmd.GET]: navigation.navigate,
   [cmd.GET_TITLE]: navigation.getTitle,
+  [cmd.GET_CURRENT_URL]: navigation.getCurrentUrl,
 
   [cmd.CLICK_ELEMENT]: mouse.clickElement,
   [cmd.CLICK]: mouse.click,

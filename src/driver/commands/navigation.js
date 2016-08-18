@@ -17,6 +17,13 @@ exports.getTitle = function () {
   });
 };
 
+exports.getCurrentUrl = function () {
+  return evaluate.executeScript({
+    script: 'return document.URL',
+    args: [],
+  });
+};
+
 // todo: switch to it automatically ?
 // todo: register it in Targets anyway to close after test end
 exports.newTab = function (params) {
