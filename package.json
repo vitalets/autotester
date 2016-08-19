@@ -2,6 +2,10 @@
   "name": "autotester",
   "version": "0.1.0",
   "description": "Chrome extension to develop and run functional tests on javascript",
+  "author": {
+    "name": "Vitaliy Potapov",
+    "email": "noginsk@rambler.ru"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/vitalets/autotester.git"
@@ -34,7 +38,9 @@
     "zip": "pushd $npm_config_outdir && rimraf $npm_config_outzip && zip -rT $npm_config_outzip . && popd",
     "build-zip": "npm run build-unpacked && npm run zip",
     "build-update": "npm run build-zip --outdir=dist/unpacked --outzip=../autotester.zip",
-    "build-with-example": "npm run build-zip --outdir=dist/unpacked --copytest=example --outzip=../autotester-with-example.zip"
+    "build-with-example": "npm run build-zip --outdir=dist/unpacked --copytest=example --outzip=../autotester-with-example.zip",
+    "build-for-npm": "npm run build-unpacked && cpx -v package.json $npm_config_outdir/../",
+    "publish-to-npm": "npm run build-for-npm --outdir=dist/npm-publish/extension && npm publish dist/npm-publish"
   },
   "dependencies": {},
   "devDependencies": {
@@ -72,5 +78,15 @@
       "pre-commit": "npm run code"
     }
   },
+  "keywords": [
+    "selenium",
+    "webdriver",
+    "webdriverjs",
+    "automation",
+    "testing",
+    "test",
+    "chormedriver",
+    "chrome"
+  ],
   "license": "MIT"
 }
