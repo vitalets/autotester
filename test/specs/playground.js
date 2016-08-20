@@ -1,6 +1,15 @@
 
 'use strict';
 
+// ====== for node
+
+var webdriver = require('selenium-webdriver'),
+  By = webdriver.By,
+  until = webdriver.until,
+  test = require('selenium-webdriver/testing');
+
+// =======
+
 
 // let driver = new Driver();
 //
@@ -24,27 +33,53 @@
 
 // demo
 
-
+// describe('qqq', function () {
+//   before(function(done) {
+//     console.log('before')
+//     asdf()
+//     done();
+//   })
+//
+//  after(function() {
+//   console.log('after')
+//
+//  });
+//
+//   it('www', function(done) {
+//
+//     console.log('simple test')
+//     setTimeout(done, 1000)
+//   })
+// })
 
 test.describe('demo', function() {
   let driver;
 
   test.before(function() {
-    driver = new Driver();
-    dfgdf()
+    console.log('before')
+
+     driver = new Driver();
+     dfgdf()
+    // setTimeout(() => {
+    //   //dfgdf();
+    //
+    // }, 0)
+    //throw new Error('thrown error (before)');
+    //done()
   });
 
   test.after(function() {
-    driver.quit();
+    console.log('after')
+     driver.quit();
   });
 
   // altsearch
-  test.it('should show panel on google result page', function() {
+  test.it('test', function() {
     console.log(this.runnable().fullTitle())
-
+    //driver.get('http://ya.ru');
+    // dfgdf()
   });
 });
-
 
 
 /*
