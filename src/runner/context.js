@@ -27,7 +27,7 @@ exports.create = function (outer) {
     // for running selenium tests as is
     require: fakeRequire,
     // for debug
-    console: outer.console,
+    console: outer.console || window.console,
     __filename: outer.__filename || '',
     // for custom user data between files
     runContext: {},
