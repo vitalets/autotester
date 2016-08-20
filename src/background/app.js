@@ -50,13 +50,12 @@ class App {
     //todo: rename to selectedTest
     const tests = this._testsConfig.tests.filter(test => !data.test || test === data.test);
     const setup = this._testsConfig.setup || [];
-    const urls = setup.concat(tests);
-    const runnerParams = {
-      urls: addBaseUrlToArr(urls),
+    const urls = setup.concat(tests).map(addBaseUrl);
+    const runnerOptions = {
       window: getReporterWindow(),
     };
     messaging.send(messaging.names.RUN_TESTS_STARTED);
-    runner.run(runnerParams)
+    runner.runUrls(urls, runnerOptions)
       .then(() => {
         messaging.send(messaging.names.RUN_TESTS_DONE, {})
       })
@@ -91,19 +90,9 @@ function getReporterWindow() {
 }
 
 function addBaseUrl(path) {
-  const baseUrl = trimSlashes(storage.get('baseUrl'));
-  path = trimSlashes(path);
+  const baseUrl = utils.trimSlashes(storage.get('baseUrl'));
+  path = utils.trimSlashes(path);
   return `${baseUrl}/${path}`;
-}
-
-// temp!
-function addBaseUrlToArr(arr) {
-  return (arr || []).map(addBaseUrl);
-}
-
-// todo: move to utils
-function trimSlashes(str) {
-  return str.replace(/^\/+|\/+$/g, '');
 }
 
 module.exports = App;

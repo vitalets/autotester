@@ -25,11 +25,13 @@
 // demo
 
 
+
 test.describe('demo', function() {
   let driver;
 
   test.before(function() {
     driver = new Driver();
+    dfgdf()
   });
 
   test.after(function() {

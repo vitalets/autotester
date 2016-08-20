@@ -1,48 +1,45 @@
 /**
- * Test runner
- * Loads tests from urls and run via mocha
+ * Runner api
  */
 
 const utils = require('../utils');
-const globals = require('./globals');
-const RunFile = require('./run-file');
-const runMocha = require('./run-mocha');
-const logger = require('../utils/logger').create('Runner');
+const Runner = require('./runner');
 
 /**
- * Run tests
+ * Run files
  *
- * @param {Object} params
- * @param {Array} params.urls
- * @param {Object} params.window
- * @param {Number} [params.timeout]
+ * @param {Object[]} files
+ * @param {String} files[].code
+ * @param {String} files[].path
+ * @param {Object} options
+ * @param {Object} options.window
+ * @param {Number} [options.timeout]
  * @returns {Promise}
  */
-exports.run = function (params) {
-  return Promise.resolve()
-    .then(() => runMocha.setup(params))
-    .then(() => fetchFiles(params.urls))
-    .then(files => runFiles(files, params.window))
-    .then(() => runMocha.hasTests() ? runMocha.run() : null)
-    .then(() => finish())
+exports.runFiles = function (files, options) {
+  return new Runner().run(files, options);
 };
 
-function fetchFiles(urls) {
-  return urls ? utils.fetchTextFromUrls(urls) : [];
-}
+/**
+ * Run urls
+ *
+ * @param {Array<String>} urls
+ * @param {Object} options
+ * @param {Object} options.window
+ * @param {Number} [options.timeout]
+ * @returns {Promise}
+ */
+exports.runUrls = function (urls, options) {
+  return fetchFiles(urls)
+    .then(files => exports.runFiles(files, options));
+};
 
-function runFiles(files, win) {
-  const runContext = {};
-  return files.reduce((res, file) => {
-    const args = globals.get({
-      runContext: runContext,
-      console: win.sharedConsole,
-      __filename: file.url,
-    });
-    return res.then(() => new RunFile(file.text, file.url, args).run());
-  }, Promise.resolve());
-}
-
-function finish() {
-  logger.log('Finished');
+function fetchFiles(urls = []) {
+  const tasks = urls.map(url => {
+    return utils.fetchText(url)
+      .then(text => {
+        return {code: text, path: url};
+      });
+  });
+  return Promise.all(tasks);
 }

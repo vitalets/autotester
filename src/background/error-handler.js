@@ -23,8 +23,8 @@ function getViews() {
 
 function getMsg(error) {
   const prefix = error.isTestSelf ? TEST_PREFIX : BG_PREFIX;
-  const stack = error.stack;
-  const msg = stack ? cutStack(stack) : (error.message || `Unknown error: ${error}`);
+  const stack = error.isTestSelf ? cutStack(error.stack) : error.stack;
+  const msg = stack || error.message || `Unknown error: ${error}`;
   return prefix + msg;
 }
 

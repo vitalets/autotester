@@ -33,21 +33,6 @@ exports.fetchText = function (url) {
 };
 
 /**
- * Parallel fetch text from urls
- * @param {Array} urls
- * @returns {Promise}
- */
-exports.fetchTextFromUrls = function (urls) {
-  const tasks = urls.map(url => {
-    return exports.fetchText(url)
-      .then(text => {
-        return {url, text};
-      });
-  });
-  return Promise.all(tasks);
-};
-
-/**
  * Throws error in next tick
  *
  * @param {Error} error
@@ -56,4 +41,30 @@ exports.asyncThrow = function (error) {
   setTimeout(() => {
     throw error;
   }, 0);
+};
+
+/**
+ * Copies object without first-level undefined props
+ * Useful for using Object.assign to set defaults
+ *
+ * @param {Object} obj
+ */
+exports.noUndefined = function (obj) {
+  return Object.keys(obj).reduce((res, key) => {
+    if (obj[key] !== undefined) {
+      res[key] = obj[key];
+    }
+    return res;
+  }, {})
+};
+
+
+/**
+ * Trim slashes
+ *
+ * @param {String} str
+ * @returns {String}
+ */
+exports.trimSlashes = function (str) {
+  return str.replace(/^\/+|\/+$/g, '');
 };

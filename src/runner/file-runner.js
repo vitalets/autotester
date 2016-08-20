@@ -5,9 +5,9 @@
 const promise = require('selenium-webdriver/lib/promise');
 const evaluate = require('../utils/evaluate');
 const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
-const logger = require('../utils/logger').create('Run-file');
+const logger = require('../utils/logger').create('File-runner');
 
-class RunFile {
+class FileRunner {
   /**
    * Constructor
    *
@@ -99,4 +99,4 @@ class RunFile {
   }
 }
 
-module.exports = RunFile;
+module.exports = FileRunner;
