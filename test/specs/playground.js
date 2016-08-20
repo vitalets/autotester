@@ -41,6 +41,7 @@ test.describe('demo', function() {
   // altsearch
   test.it('should show panel on google result page', function() {
     console.log(this.runnable().fullTitle())
+
   });
 });
 

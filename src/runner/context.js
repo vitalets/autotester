@@ -38,6 +38,7 @@ exports.create = function (outer) {
     setInterval: window.setInterval,
     clearTimeout: window.clearTimeout,
     clearInterval: window.clearInterval,
-    onerror: window.onerror,
+    get onerror() { return window.onerror; },
+    set onerror(val) { window.onerror = val; },
   };
 };

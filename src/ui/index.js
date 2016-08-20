@@ -39,7 +39,10 @@ function activateSelfTab() {
 }
 
 function onConfigLoaded(data) {
-  const msg = `Config successfully loaded from: **${data.config.url}**\nTests found: **${data.config.tests.length}**`;
+  const msg = [
+    `Config successfully loaded from: **${data.config.url}**`,
+    `Test files found: **${data.config.tests.length}**`,
+    ].join('\n');
   htmlConsole.info(msg);
   fillTestList(data);
 }
@@ -70,11 +73,10 @@ function onTestSelected(event) {
 }
 
 function welcome() {
-  const version = chrome.runtime.getManifest().version;
   const msgWelcome = [
-    `Welcome to **Autotester v${version}**`,
-    ` - chrome extension to develop and run functional tests.\n`,
-    `Tests are written on Javascript and compatible with **Selenium**.\n`,
+    `Welcome to **Autotester**`,
+    ` - chrome extension to develop and run functional tests on javascript.\n`,
+    `Tests are compatible with **Selenium**. `,
     `Please see [Selenium Javascript API Reference](http://seleniumhq.github.io/selenium/docs/api/javascript/) `,
     `for details.`,
   ].join('');
