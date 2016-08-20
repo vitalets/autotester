@@ -52,14 +52,25 @@ var webdriver = require('selenium-webdriver'),
 //   })
 // })
 
+
+
 test.describe('demo', function() {
   let driver;
 
-  test.before(function() {
-    console.log('before')
+  function a() {
+    // driver.xxx();
+  }
 
+  console.log('describe');
+
+  test.describe('demo2', function() {
+    console.log('nested describe');
+  });
+
+
+  test.before(function() {
      driver = new Driver();
-     //dfgdf()
+    // dfgdf()
     // setTimeout(() => {
     //   //dfgdf();
     //
@@ -69,22 +80,21 @@ test.describe('demo', function() {
   });
 
   test.after(function() {
-    console.log('after')
      driver.quit();
   });
 
   test.it('test', function() {
     console.log(this.runnable().fullTitle())
     //driver.get('http://ya.ru');
-     //dfgdf()
+     // a()
     assert(1).equalTo(2);
   });
 
-  test.it('test2', function() {
-    console.log(this.runnable().fullTitle())
-    driver.get('http://ya.ru');
-    // dfgdf()
-  });
+  // test.it('test2', function() {
+  //   console.log(this.runnable().fullTitle())
+  //   driver.get('http://ya.ru');
+  //   // dfgdf()
+  // });
 
 });
 

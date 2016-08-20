@@ -88,6 +88,7 @@ class FileRunner {
 
   /**
    * Is error occurred in test code itself
+   * (check first line of stack trace)
    *
    * @param {Error} error
    */

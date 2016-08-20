@@ -10,7 +10,7 @@ const logger = require('../utils/logger').create('Mocha-runner');
 
 const DEFAULT_OPTIONS = {
   ui: 'bdd',
-  timeout: 30 * 1000,
+  timeout: 2 * 1000,
 };
 
 class MochaRunner {
@@ -35,6 +35,7 @@ class MochaRunner {
   setup(options) {
     options = Object.assign({}, DEFAULT_OPTIONS, utils.noUndefined(options));
     this._context.mocha.setup(options);
+    this._storeFilenames();
     seleniumTesting.wrapMochaGlobals(this._context);
   }
 
@@ -51,6 +52,14 @@ class MochaRunner {
       })
       .then(failures => logger.log(`Mocha finished with ${failures} failure(s)`));
   }
+
+  _storeFilenames() {
+    // store current filename to custom field of suite
+    // for readable error messages later
+    this._context.mocha.suite.on('suite', suite => {
+      suite.filename = this._context.__filename;
+    });
+  }
 }
 
 function catchErrorsInsideMocha(runner) {
@@ -59,9 +68,11 @@ function catchErrorsInsideMocha(runner) {
   // excluding AssertionError
   runner.on('fail', function (test) {
     if (test.err.name !== 'AssertionError') {
-      // mark error to not show in htmlConsole as mocha shows it normally
+      // mark error with flag to not show it in htmlConsole
+      // (as mocha reporter shows errors itself)
       test.err.isMocha = true;
-      // throw error asynchronously to go out of promise chain
+      // throw error out to see pretty stack trace in background console
+      // use asyncThrow to go out of promise chain
       utils.asyncThrow(test.err);
     }
   });

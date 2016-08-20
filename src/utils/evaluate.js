@@ -32,14 +32,21 @@ exports.asFunction = function (code, args = {}, context = null) {
 };
 
 /**
- * Replaces <anonymous> with filename in stack trace
+ * Replaces first <anonymous> eval with filename in stack trace
  *
- * @param {Error} error
+ * before:
+ * at Context.eval (eval at <anonymous> (bundle.js:809:15), <anonymous>:81:6)
+ *
+ * after:
+ * at path/filename.js:79:6)
+ * at Context.eval (eval at <anonymous> (bundle.js:809:15), <anonymous>:81:6)
+ *
+ * @param {Error|Object} error
  * @param {String} filename
  */
 exports.fixStack = function (error, filename) {
   const stack = error.stack;
-  // sometimes we get object with only message filed instead of Error instance
+  // sometimes we get object with only message instead of Error instance
   if (!stack) {
     return;
   }
@@ -60,5 +67,7 @@ exports.fixStack = function (error, filename) {
     }
     newStack.push(line);
   });
-  error.stack = newStack.join('\n');
+  if (found) {
+    error.stack = newStack.join('\n');
+  }
 };

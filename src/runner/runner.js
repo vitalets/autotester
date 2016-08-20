@@ -57,8 +57,10 @@ class Runner {
 
   _runFiles() {
     return this._files.reduce((res, file) => {
-      this._context.__filename = file.path;
-      return res.then(() => new FileRunner(file.code, file.path, this._context, this._flow).run());
+      return res.then(() => {
+        this._context.__filename = file.path;
+        return new FileRunner(file.code, file.path, this._context, this._flow).run();
+      });
     }, Promise.resolve());
   }
 }
