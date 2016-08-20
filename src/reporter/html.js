@@ -4,6 +4,7 @@
 
 var Base = require('./base');
 var utils = require('./utils');
+var evaluate = require('../utils/evaluate');
 var Progress = require('mocha/lib/browser/progress');
 var escapeRe = require('escape-string-regexp');
 var escape = utils.escape;
@@ -139,6 +140,12 @@ exports.getReporter = function (win) {
       // check for the result of the stringifying.
       if (message === '[object Error]') {
         message = test.err.message;
+      }
+
+      // vitalets: get filename for test and fix error stack
+      var filename = utils.getFilename(test);
+      if (filename) {
+        evaluate.fixStack(test.err, filename);
       }
 
       if (test.err.stack) {

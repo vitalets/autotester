@@ -48,3 +48,20 @@ exports.clean = function(str) {
 exports.trim = function(str) {
   return str.replace(/^\s+|\s+$/g, '');
 };
+
+/**
+ * Gets filename for test
+ * We store filename in first suit manually as mocha can store filenames only for node
+ *
+ * @param {Object} test
+ */
+exports.getFilename = function(test) {
+  while (true) {
+    if (test.parent.root) {
+      break;
+    } else {
+      test = test.parent;
+    }
+  }
+  return test.filename;
+};
