@@ -4,8 +4,9 @@
 
 const promise = require('selenium-webdriver/lib/promise');
 const evaluate = require('../utils/evaluate');
-const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
 const logger = require('../utils/logger').create('File-runner');
+
+const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
 
 class FileRunner {
   /**
@@ -14,12 +15,13 @@ class FileRunner {
    * @param {String} code
    * @param {String} filename
    * @param {Object} args
+   * @param {ControlFlow} flow
    */
-  constructor(code, filename, args) {
+  constructor(code, filename, args, flow) {
     this._code = code;
     this._filename = filename;
     this._args = args;
-    this._flow = promise.controlFlow();
+    this._flow = flow;
   }
 
   run() {
