@@ -10,5 +10,10 @@ module.exports = {
     filename: '[name].js',
     sourceMapFilename: '[file].map'
   },
+  module: {
+    loaders: [
+      { test: /\.css$/, loader: "style-loader!css-loader" },
+    ]
+  },
   devtool: '#source-map'
 };

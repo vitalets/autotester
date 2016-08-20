@@ -24,7 +24,7 @@
 
 // demo
 
-/*
+
 test.describe('demo', function() {
   let driver;
 
@@ -38,36 +38,10 @@ test.describe('demo', function() {
 
   // altsearch
   test.it('should show panel on google result page', function() {
-    driver.get('https://google.ru');
-    driver.findElement(By.name('q')).sendKeys('yandex');
-    driver.findElement(By.name('btnG')).click();
-    const panel = driver.wait(until.elementLocated({css: '.__altsearch_ext_root__ /deep/ .altsearch__text'}), 3000);
-    assert(panel.getText()).equalTo('Не нашли нужное? Поищите yandexв');
-  });
-
-  // yobject
-  test.it('should show yobject on lenta.ru page from promo', function() {
-    driver.get('https://lenta.ru/news/2016/01/24/serov/');
-    const article = driver.wait(until.elementLocated({css: '.yobject-marked'}), 3000);
-    const yobjectItem = article.findElement({css: 'yobject'});
-    assert(yobjectItem.getText()).equalTo('Валентина Серова');
-    yobjectItem.click();
-    const badgeTitle = driver.wait(until.elementLocated({css: '#yinfo-badge /deep/ .yinfo-badge__body a'}), 3000);
-    assert(badgeTitle.getText()).equalTo('Серов Валентин');
-  });
-
-  // vb
-  test.it.only('should open yandex from first thumb with correct clid', function() {
-    driver.get('chrome://newtab');
-    const firstThumb = driver.wait(until.elementLocated({css: '.b-tumbs__item_index_0'}), 3000);
-    driver.requests().catch();
-    firstThumb.click();
-    driver.wait(until.titleIs('Яндекс'), 3000);
-    driver.requests().stop();
-    assert(driver.requests().getCount({url: 'https://www.yandex.ru/?clid=2063711'})).equalTo(1);
+    console.log(this.runnable().fullTitle())
   });
 });
-*/
+
 
 
 /*

@@ -8,9 +8,19 @@ const seleniumTesting = require('./selenium-testing');
 const Driver = require('../driver');
 const fakeRequire = require('./fake-require');
 
-exports.get = function (win) {
+/**
+ * Returns globals available in tests
+ *
+ * @param {Object} outer
+ * @param {Object} outer.runContext
+ * @param {Object} outer.console
+ * @param {String} outer.__filename
+ */
+exports.get = function (outer) {
   return {
-    runContext: {},
+    runContext: outer.runContext,
+    console: outer.console,
+    __filename: outer.__filename,
     Driver: Driver,
     By: webdriver.By,
     Key: webdriver.Key,
@@ -20,7 +30,5 @@ exports.get = function (win) {
     assert: seleniumAssert,
     // for running selenium tests as is
     require: fakeRequire,
-    // for debugging
-    console: win.sharedConsole,
   };
 };

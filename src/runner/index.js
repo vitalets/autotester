@@ -32,8 +32,13 @@ function fetchFiles(urls) {
 }
 
 function runFiles(files, win) {
-  const args = globals.get(win);
+  const runContext = {};
   return files.reduce((res, file) => {
+    const args = globals.get({
+      runContext: runContext,
+      console: win.sharedConsole,
+      __filename: file.url,
+    });
     return res.then(() => new RunFile(file.text, file.url, args).run());
   }, Promise.resolve());
 }
