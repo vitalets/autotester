@@ -59,7 +59,7 @@ test.describe('demo', function() {
     console.log('before')
 
      driver = new Driver();
-     dfgdf()
+     //dfgdf()
     // setTimeout(() => {
     //   //dfgdf();
     //
@@ -73,12 +73,19 @@ test.describe('demo', function() {
      driver.quit();
   });
 
-  // altsearch
   test.it('test', function() {
     console.log(this.runnable().fullTitle())
     //driver.get('http://ya.ru');
+     //dfgdf()
+    assert(1).equalTo(2);
+  });
+
+  test.it('test2', function() {
+    console.log(this.runnable().fullTitle())
+    driver.get('http://ya.ru');
     // dfgdf()
   });
+
 });
 
 

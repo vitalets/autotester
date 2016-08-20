@@ -146,12 +146,7 @@ function makeAsyncTestFn(fn) {
           fulfill(testFn());
         }
       }, flow);
-    }, runnable.fullTitle()).then(seal(done), e => {
-      done(e);
-      // vitalets: re-throw error to stop control flow
-      // see: https://github.com/SeleniumHQ/selenium/issues/2636
-      throw e;
-    });
+    }, runnable.fullTitle()).then(seal(done), done);
   });
 
   ret.toString = function() {
