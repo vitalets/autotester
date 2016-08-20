@@ -2,6 +2,7 @@
  * Runner that executes code and runs mocha if needed
  */
 
+const promise = require('selenium-webdriver/lib/promise');
 const utils = require('../utils');
 const context = require('./context');
 const FileRunner = require('./file-runner');
@@ -11,6 +12,13 @@ const logger = require('../utils/logger').create('Runner');
 
 
 class Runner {
+  /**
+   * Constructor
+   */
+  constructor() {
+    // use default controlflow
+    this._flow = promise.controlFlow();
+  }
   /**
    * Runs array of code snippets
    *
@@ -23,6 +31,7 @@ class Runner {
    * @returns {Promise}
    */
   run(files, options) {
+    this._flow.reset();
     this._files = Array.isArray(files) ? files : [];
     logger.log(`Running ${this._files.length} file(s)`);
     this._context = context.create({
@@ -55,25 +64,3 @@ class Runner {
 }
 
 module.exports = Runner;
-
-/**
- * Run tests
- *
- * @param {Object} params
- * @param {Array} params.urls
- * @param {Object} params.window
- * @param {Number} [params.timeout]
- * @returns {Promise}
- */
-exports.run = function (params) {
-  return Promise.resolve()
-    .then(() => runMocha.setup(params))
-    .then(() => fetchFiles(params.urls))
-    .then(files => runFiles(files, params.window))
-    .then(() => runMocha.hasTests() ? runMocha.run() : null)
-    .then(() => finish())
-};
-
-function fetchFiles(urls) {
-  return urls ? utils.fetchTextFromUrls(urls) : [];
-}
