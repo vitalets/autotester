@@ -50,7 +50,7 @@ class Requests {
   dump(console) {
     return this._queue(() => {
       const result = this._requests.map(r => `${r.method} ${r.url}`);
-      result.unshift(`Catched ${this._requests.length} requests:`);
+      result.unshift(`Collected ${this._requests.length} requests:`);
       const resultStr = result.join('\n');
       if (console) {
         console.log(resultStr);

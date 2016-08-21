@@ -114,7 +114,7 @@ test.suite(function(env) {
       driver.get(test.Pages.echoPage);
       driver.requests().stop();
       assert(driver.requests().dump()).equalTo([
-        'Catched 2 requests:',
+        'Collected 2 requests:',
         'GET http://127.0.0.1:2310/common/echo',
         'GET http://127.0.0.1:2310/favicon.ico',
       ].join('\n'));
@@ -127,7 +127,7 @@ test.suite(function(env) {
       const consoleMock = {log: s => consoleMock.s = s};
       driver.requests().dump(consoleMock).then(() => {
         assert(consoleMock.s).equalTo([
-          'Catched 2 requests:',
+          'Collected 2 requests:',
           'GET http://127.0.0.1:2310/common/echo',
           'GET http://127.0.0.1:2310/favicon.ico',
         ].join('\n'));
