@@ -101,8 +101,15 @@ test.suite(function(env) {
       assert(driver.requests().getCount({url: test.whereIs('style.css')})).equalTo(1);
     });
 
-    test.it('should stop in case of error', function () {
-
+    test.it.skip('should stop in case of error', function () {
+      driver.requests().collect();
+      driver.get(test.Pages.echoPage);
+      driver.executeScript(function() {
+        throw new Error('some error');
+      })
+      //   .catch(() => {
+      //   assert(driver.requests().collecting).equalTo(false);
+      // });
     });
 
     test.it.skip('should stop by timeout', function () {
