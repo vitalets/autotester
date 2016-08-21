@@ -73,26 +73,29 @@ function onTestSelected(event) {
 }
 
 function welcome() {
-  const msgWelcome = [
-    `Welcome to **Autotester**`,
-    ` - chrome extension to develop and run functional tests on javascript.\n`,
-    `Tests are compatible with **Selenium**. `,
-    `Please see [Selenium Javascript API Reference](http://seleniumhq.github.io/selenium/docs/api/javascript/) `,
-    `for details.`,
-  ].join('');
-  const msgFlags = [`For convenient testing please enable two [chrome flags](chrome://flags):\n`,
+  const msg = [
+    `Welcome to **Autotester!**\n`,
+    `For convenient testing please enable two [chrome flags](chrome://flags):\n`,
     `*--silent-debugger-extension-api* - to remove annoying bar about using debugger api\n`,
     `*--extensions-on-chrome-urls* - to allow testing other chrome extensions`,
   ].join('');
-  htmlConsole.log(msgWelcome);
-  htmlConsole.log(msgFlags);
+  htmlConsole.log(msg);
 }
 
 function openAllLinksInNewTab() {
   document.body.addEventListener('click', event => {
     if (event.target.tagName === 'A' && event.target.href) {
       event.preventDefault();
-      chrome.tabs.create({url: event.target.href});
+      openOrSwitchToUrl(event.target.href);
     }
   });
+}
+
+function openOrSwitchToUrl(url) {
+  thenChrome.tabs.query({url})
+    .then(tabs => {
+      return tabs.length
+        ? thenChrome.tabs.update(tabs[0].id, {active: true})
+        : thenChrome.tabs.create({url});
+    })
 }

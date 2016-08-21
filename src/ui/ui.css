@@ -20,6 +20,10 @@ body {
     z-index: 10;
 }
 
+.top-panel a, .top-panel a:visited {
+    color: white;
+}
+
 #mocha-stats {
     top: 55px;
 }
