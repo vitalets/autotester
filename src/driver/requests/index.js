@@ -7,7 +7,8 @@ const promise = require('selenium-webdriver/lib/promise');
 const Collector = require('./collector');
 const logger = require('../../utils/logger').create('Requests');
 
-const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
+// todo: see note in constructor
+// const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
 
 class Requests extends Collector {
 
@@ -15,7 +16,10 @@ class Requests extends Collector {
     super();
     this._driver = driver;
     this._flow = this._driver.controlFlow();
-    this._flow.on(UNCAUGHT_EXCEPTION, e => this._onFlowException(e));
+    // todo: stop collecting on flow exception
+    // todo: currently I can't get it working
+    // todo: as flow UNCAUGHT_EXCEPTION event does not come here
+    // this._flow.on(UNCAUGHT_EXCEPTION, e => this._onFlowException(e));
   }
 
   catch() {
@@ -40,18 +44,12 @@ class Requests extends Collector {
   }
 
   getCount(filter) {
-    return this.get(filter).then(requests => requests.length);
+    return this.get(filter)
+      .then(requests => requests.length);
   }
 
   dump(logging) {
     return this._flow.execute(() => super.dump(logging));
-  }
-
-  _onFlowException() {
-    console.info('_onFlowException');
-    if (this._collecting) {
-      this.stop();
-    }
   }
 }
 

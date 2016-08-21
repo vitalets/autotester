@@ -45,12 +45,13 @@ class MochaRunner {
   }
 
   run() {
-    logger.log(`Running mocha`);
+    const suitesCount = this._context.mocha.suite.suites.length;
+    logger.log(`Run mocha for ${suitesCount} suite(s)`);
     return new Promise(resolve => {
         const runner = this._context.mocha.run(resolve);
         catchErrorsInsideMocha(runner);
       })
-      .then(failures => logger.log(`Mocha finished with ${failures} failure(s)`));
+      .then(failures => logger.log(`Finish mocha with ${failures} failure(s)`));
   }
 
   _storeFilenames() {

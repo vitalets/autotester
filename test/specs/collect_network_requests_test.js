@@ -10,12 +10,13 @@ test.suite(function(env) {
     driver = env.builder().build();
   });
 
-  test.after(function () {
-    driver.quit();
-  });
-
   test.beforeEach(function () {
     driver.get(test.Pages.echoPage);
+    driver.requests().reset();
+  });
+
+  test.after(function () {
+    driver.quit();
   });
 
   describe('network requests', function () {
@@ -102,18 +103,20 @@ test.suite(function(env) {
     });
 
     test.it.skip('should stop in case of error', function () {
-      driver.requests().collect();
-      driver.get(test.Pages.echoPage);
-      driver.executeScript(function() {
-        throw new Error('some error');
-      })
-      //   .catch(() => {
-      //   assert(driver.requests().collecting).equalTo(false);
-      // });
+      // todo:
+      // driver.requests().collect();
+      // driver.get(test.Pages.echoPage);
+      // driver.executeScript(function() {
+      //   throw new Error('some error');
+      // })
     });
 
-    test.it.skip('should stop by timeout', function () {
-
+    test.it('should limit requests', function () {
+      driver.requests().limit(1);
+      driver.requests().collect();
+      driver.get(test.Pages.echoPage);
+      driver.requests().stop();
+      assert(driver.requests().getCount()).equalTo(1);
     });
 
     test.it('should dump to string', function () {

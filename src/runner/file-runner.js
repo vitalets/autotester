@@ -27,16 +27,16 @@ class FileRunner {
   }
 
   run() {
-    logger.log(`Running: ${this._filename}`);
+    logger.log(`Evaluate: ${this._filename}`);
     return new Promise((resolve, reject) => {
-      this._resolve = resolve;
-      this._reject = reject;
-      this._fulfilled = false;
-      this._evaluate();
-      this._checkIdle();
-      this._listenIdle();
-      this._listenException();
-    });
+        this._resolve = resolve;
+        this._reject = reject;
+        this._fulfilled = false;
+        this._evaluate();
+        this._checkIdle();
+        this._manageFlowListeners('set');
+      })
+      .then(() => logger.log(`Done: ${this._filename}`));
   }
 
   _evaluate() {

@@ -13,7 +13,7 @@ class Collector {
   constructor() {
     this._requests = [];
     this._collecting = false;
-    this._limit = DEFAULT_REQUESTS_LIMIT;
+    this.reset();
   }
 
   get collecting() {
@@ -69,8 +69,13 @@ class Collector {
     return Promise.resolve(resultStr);
   }
 
-  setLimit(limit) {
-    this._limit = limit;
+  limit(count) {
+    this._limit = count;
+  }
+
+  reset() {
+    this._limit = DEFAULT_REQUESTS_LIMIT;
+    return this._collecting ? this.stop() : Promise.resolve();
   }
 
   _onEvent(method, params) {
