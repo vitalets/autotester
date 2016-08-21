@@ -11,25 +11,23 @@ class Requests {
   constructor(driver) {
     this._driver = driver;
     this._requests = [];
+    this._collecting = false;
   }
 
   catch() {
+    throw new Error('.catch() was renamed to .collect()');
+  }
+
+  collect() {
+    if (this._collecting) {
+      throw new Error('Requests already in collecting state');
+    }
     this._requests.length = 0;
-    return this._driver.controlFlow().execute(() => {
-      return Promise.resolve()
-        .then(() => this._setNetworkState('enable'))
-        .then(() => this._setEventListenerState('enable'))
-        .then(() => logger.log('start catching'))
-    });
+    return this._queue(() => this._collect());
   }
 
   stop() {
-    return this._driver.controlFlow().execute(() => {
-      return Promise.resolve()
-        .then(() => this._setNetworkState('disable'))
-        .then(() => this._setEventListenerState('disable'))
-        .then(() => logger.log('stop catching'))
-    });
+    return this._queue(() => this._stop());
   }
 
   /**
@@ -38,7 +36,7 @@ class Requests {
    * @param {Object} filter
    */
   get(filter) {
-    return this._driver.controlFlow().execute(() => {
+    return this._queue(() => {
       const requestFilter = new Filter(filter);
       const filtered = this._requests.filter(request => requestFilter.match(request));
       return Promise.resolve(filtered);
@@ -49,12 +47,40 @@ class Requests {
     return this.get(filter).then(requests => requests.length);
   }
 
-  dump() {
-    return this._driver.controlFlow().execute(() => {
+  dump(console) {
+    return this._queue(() => {
       const result = this._requests.map(r => `${r.method} ${r.url}`);
       result.unshift(`Catched ${this._requests.length} requests:`);
-      return Promise.resolve(result.join('\n'));
+      const resultStr = result.join('\n');
+      if (console) {
+        console.log(resultStr);
+      }
+      return Promise.resolve(resultStr);
     });
+  }
+
+  _collect() {
+    return Promise.resolve()
+      .then(() => this._setNetworkState('enable'))
+      .then(() => this._setEventListenerState('enable'))
+      .then(() => {
+        this._collecting = true;
+        logger.log('start collecting');
+      })
+  }
+
+  _stop() {
+    return Promise.resolve()
+      .then(() => this._setNetworkState('disable'))
+      .then(() => this._setEventListenerState('disable'))
+      .then(() => {
+        this._collecting = false;
+        logger.log('stop collecting');
+      })
+  }
+
+  _queue(fn) {
+    return this._driver.controlFlow().execute(fn);
   }
 
   _onEvent(method, params) {

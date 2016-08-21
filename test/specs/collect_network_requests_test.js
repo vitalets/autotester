@@ -20,15 +20,15 @@ test.suite(function(env) {
 
   describe('network requests', function () {
 
-    test.it('should catch normal navigation', function () {
-      driver.requests().catch();
+    test.it('should collect normal navigation', function () {
+      driver.requests().collect();
       driver.get(test.Pages.echoPage);
       driver.requests().stop();
       assert(driver.requests().getCount({url: test.Pages.echoPage})).equalTo(1);
     });
 
-    test.it('should catch js navigation', function () {
-      driver.requests().catch();
+    test.it('should collect js navigation', function () {
+      driver.requests().collect();
       driver.executeScript(function() {
         location.href = location.href + '?x=1';
       });
@@ -36,8 +36,8 @@ test.suite(function(env) {
       assert(driver.requests().getCount({url: test.Pages.echoPage + '?x=1'})).equalTo(1);
     });
 
-    test.it('should catch XMLHttpREquest', function () {
-      driver.requests().catch();
+    test.it('should collect XMLHttpREquest', function () {
+      driver.requests().collect();
       driver.executeScript(function() {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', location.href);
@@ -47,8 +47,8 @@ test.suite(function(env) {
       assert(driver.requests().getCount({url: test.Pages.echoPage})).equalTo(1);
     });
 
-    test.it('should catch fetch', function () {
-      driver.requests().catch();
+    test.it('should collect fetch', function () {
+      driver.requests().collect();
       driver.executeScript(function() {
         fetch(location.href);
       });
@@ -56,8 +56,8 @@ test.suite(function(env) {
       assert(driver.requests().getCount({url: test.Pages.echoPage})).equalTo(1);
     });
 
-    test.it('should catch new Image() load', function () {
-      driver.requests().catch();
+    test.it('should collect new Image() load', function () {
+      driver.requests().collect();
       driver.executeScript(function() {
         const img = new Image();
         img.src = 'image.png';
@@ -66,8 +66,8 @@ test.suite(function(env) {
       assert(driver.requests().getCount({url: test.whereIs('image.png')})).equalTo(1);
     });
 
-    test.it('should catch <img> load', function () {
-      driver.requests().catch();
+    test.it('should collect <img> load', function () {
+      driver.requests().collect();
       driver.executeScript(function() {
         const img = document.createElement('img');
         img.src = 'image.png';
@@ -77,8 +77,8 @@ test.suite(function(env) {
       assert(driver.requests().getCount({url: test.whereIs('image.png')})).equalTo(1);
     });
 
-    test.it('should catch <script> load', function () {
-      driver.requests().catch();
+    test.it('should collect <script> load', function () {
+      driver.requests().collect();
       driver.executeScript(function() {
         const script = document.createElement('script');
         script.type = 'text/javascript';
@@ -89,8 +89,8 @@ test.suite(function(env) {
       assert(driver.requests().getCount({url: test.whereIs('script.js')})).equalTo(1);
     });
 
-    test.it('should catch <link> stylesheet load', function () {
-      driver.requests().catch();
+    test.it('should collect <link> stylesheet load', function () {
+      driver.requests().collect();
       driver.executeScript(function() {
         const css = document.createElement('link');
         css.rel = 'stylesheet';
@@ -99,6 +99,39 @@ test.suite(function(env) {
       });
       driver.requests().stop();
       assert(driver.requests().getCount({url: test.whereIs('style.css')})).equalTo(1);
+    });
+
+    test.it('should stop in case of error', function () {
+
+    });
+
+    test.it.skip('should stop by timeout', function () {
+
+    });
+
+    test.it('should dump to string', function () {
+      driver.requests().collect();
+      driver.get(test.Pages.echoPage);
+      driver.requests().stop();
+      assert(driver.requests().dump()).equalTo([
+        'Catched 2 requests:',
+        'GET http://127.0.0.1:2310/common/echo',
+        'GET http://127.0.0.1:2310/favicon.ico',
+      ].join('\n'));
+    });
+
+    test.it('should dump to console', function () {
+      driver.requests().collect();
+      driver.get(test.Pages.echoPage);
+      driver.requests().stop();
+      const consoleMock = {log: s => consoleMock.s = s};
+      driver.requests().dump(consoleMock).then(() => {
+        assert(consoleMock.s).equalTo([
+          'Catched 2 requests:',
+          'GET http://127.0.0.1:2310/common/echo',
+          'GET http://127.0.0.1:2310/favicon.ico',
+        ].join('\n'));
+      });
     });
 
   });
