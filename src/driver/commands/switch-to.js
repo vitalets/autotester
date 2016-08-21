@@ -6,13 +6,16 @@
 const TabLoader = require('../tab-loader');
 const Targets = require('../targets');
 
+// initial url when opening new tab
+const INITIAL_URL = 'about:blank';
+
 /**
  * Switch to window, tab or extension background page
  *
  * @param {Object} params
  * @param {String} params.name
  */
-exports.switchToWindow = function (params) {
+exports.window = function (params) {
   return Targets.switchByHandle(params.name);
 };
 
@@ -23,8 +26,8 @@ exports.switchToWindow = function (params) {
  * @param {String} params.url
  * @returns {Promise}
  */
-exports.switchToNewTab = function (params) {
+exports.newTab = function (params = {}) {
   return Promise.resolve()
-    .then(() => TabLoader.create({url: params.url}))
+    .then(() => TabLoader.create({url: params.url || INITIAL_URL}))
     .then(tab => Targets.switchByTabId(tab.id));
 };

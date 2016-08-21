@@ -6,7 +6,7 @@ const cmd = require('selenium-webdriver/lib/command').Name;
 const extraCmd = require('./extra');
 
 const session = require('./session');
-const switchCommand = require('./switch');
+const switchTo = require('./switch-to');
 const windowCommand = require('./window');
 const navigation = require('./navigation');
 const mouse = require('./mouse');
@@ -20,7 +20,7 @@ module.exports = {
   [cmd.NEW_SESSION]: session.start,
   [cmd.QUIT]: session.stop,
 
-  [cmd.SWITCH_TO_WINDOW]: switchCommand.switchToWindow,
+  [cmd.SWITCH_TO_WINDOW]: switchTo.window,
 
   [cmd.GET_CURRENT_WINDOW_HANDLE]: windowCommand.getCurrentWindowHandle,
   [cmd.GET_WINDOW_HANDLES]: windowCommand.getAllWindowHandles,
@@ -52,5 +52,5 @@ module.exports = {
   [cmd.SET_TIMEOUT]: timeouts.setTimeout,
 
   // ==== Autotester extra commands ====
-  [extraCmd.NEW_TAB]: switchCommand.switchToNewTab,
+  [extraCmd.NEW_TAB]: switchTo.newTab,
 };

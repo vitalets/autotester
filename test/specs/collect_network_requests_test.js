@@ -144,6 +144,19 @@ test.suite(function(env) {
       });
     });
 
+
+    // test.it.skip('should collect from another target', function () {
+    //   let handle;simpleTestPage
+    //   driver.getWindowHandle().then(h => handle = h);
+    //   driver.switchTo().newTab(test.Pages.simpleTestPage);
+    //   driver.requests().collect();
+    //   driver.executeScript(function() {
+    //     fetch(location.href);
+    //   });
+    //   driver.requests().stop();
+    //   assert(driver.requests().getCount({url: test.Pages.echoPage})).equalTo(1);
+    // });
+
   });
 
 });

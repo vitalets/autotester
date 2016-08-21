@@ -27,9 +27,13 @@ test.suite(function (env) {
   describe('switchTo', function() {
 
     test.it('should switch to new tab', function () {
-      driver.get(test.Pages.echoPage);
       driver.switchTo().newTab(test.Pages.simpleTestPage);
-      assert(driver.getTitle()).equalTo('Hello WebDriver');
+      assert(driver.getCurrentUrl()).equalTo(test.Pages.simpleTestPage);
+    });
+
+    test.it('should switch to about:blank if no url provided', function () {
+      driver.switchTo().newTab();
+      assert(driver.getCurrentUrl()).equalTo('about:blank');
     });
 
   })
