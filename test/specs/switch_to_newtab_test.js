@@ -24,12 +24,11 @@ test.suite(function (env) {
     driver.quit();
   });
 
-  describe('navigation', function() {
+  describe('switchto', function() {
 
-    test.it('should open new tab and switch to it', function () {
+    test.it('should switch to new tab', function () {
       driver.get(test.Pages.echoPage);
-      driver.navigate().newTab(test.Pages.simpleTestPage)
-        .then(handle => driver.switchTo().window(handle));
+      driver.switchTo().newTab(test.Pages.simpleTestPage);
       assert(driver.getTitle()).equalTo('Hello WebDriver');
     });
 

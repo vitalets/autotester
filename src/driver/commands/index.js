@@ -51,6 +51,6 @@ module.exports = {
 
   [cmd.SET_TIMEOUT]: timeouts.setTimeout,
 
-  // ==== Extra commands - not supported by selenium! ====
-  [extraCmd.NEW_TAB]: navigation.newTab,
+  // ==== Autotester extra commands ====
+  [extraCmd.NEW_TAB]: switchCommand.switchToNewTab,
 };

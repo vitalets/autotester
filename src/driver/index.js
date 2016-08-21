@@ -6,7 +6,7 @@ const WebDriver = require('selenium-webdriver/lib/webdriver').WebDriver;
 const Capabilities = require('selenium-webdriver/lib/capabilities').Capabilities;
 const Executor = require('./executor');
 const Requests = require('./requests');
-const Navigation = require('./navigation');
+const TargetLocator = require('./target-locator');
 
 /**
  * Creates a new WebDriver client for Chrome.
@@ -40,10 +40,11 @@ class Driver extends WebDriver {
   }
 
   /**
-   * @return {!Navigation} The navigation interface for this instance.
+   * @return {!TargetLocator} The target locator interface for this
+   *     instance.
    */
-  navigate() {
-    return new Navigation(this);
+  switchTo() {
+    return new TargetLocator(this);
   }
 }
 

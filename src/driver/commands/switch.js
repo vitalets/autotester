@@ -3,6 +3,7 @@
  * For selenium window === tab.
  */
 
+const TabLoader = require('../tab-loader');
 const Targets = require('../targets');
 
 /**
@@ -13,4 +14,17 @@ const Targets = require('../targets');
  */
 exports.switchToWindow = function (params) {
   return Targets.switchByHandle(params.name);
+};
+
+/**
+ * Switch new tab
+ *
+ * @param {Object} params
+ * @param {String} params.url
+ * @returns {Promise}
+ */
+exports.switchToNewTab = function (params) {
+  return Promise.resolve()
+    .then(() => TabLoader.create({url: params.url}))
+    .then(tab => Targets.switchByTabId(tab.id));
 };

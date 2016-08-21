@@ -23,20 +23,3 @@ exports.getCurrentUrl = function () {
     args: [],
   });
 };
-
-/**
- * Opens new tab
- *
- * @param {Object} params
- * @param {String} params.url
- * @returns {Promise}
- */
-exports.newTab = function (params) {
-  return Promise.resolve()
-    .then(() => TabLoader.create({url: params.url}))
-    .then(tab => {
-      Targets.registerTabId(tab.id);
-      return Targets.getByProp('tabId', tab.id);
-    })
-    .then(target => target.handle);
-};
