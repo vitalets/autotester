@@ -145,17 +145,18 @@ test.suite(function(env) {
     });
 
 
-    // test.it.skip('should collect from another target', function () {
-    //   let handle;simpleTestPage
-    //   driver.getWindowHandle().then(h => handle = h);
-    //   driver.switchTo().newTab(test.Pages.simpleTestPage);
-    //   driver.requests().collect();
-    //   driver.executeScript(function() {
-    //     fetch(location.href);
-    //   });
-    //   driver.requests().stop();
-    //   assert(driver.requests().getCount({url: test.Pages.echoPage})).equalTo(1);
-    // });
+    test.it('should collect requests from another target', function () {
+      let handle;
+      driver.getWindowHandle().then(h => handle = h);
+      driver.executeScript(function() {
+        setTimeout(() => fetch(location.href), 1000);
+      });
+      driver.switchTo().newTab(test.Pages.simpleTestPage);
+      driver.requests().collect(handle);
+      driver.sleep(1000);
+      driver.requests().stop();
+      assert(driver.requests().getCount({url: test.Pages.echoPage})).equalTo(1);
+    });
 
   });
 
