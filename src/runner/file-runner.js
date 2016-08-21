@@ -22,6 +22,8 @@ class FileRunner {
     this._filename = filename;
     this._args = args;
     this._flow = flow;
+    this._onFlowIdle = this._onFlowIdle.bind(this);
+    this._onFlowException = this._onFlowException.bind(this);
   }
 
   run() {
@@ -51,19 +53,26 @@ class FileRunner {
     }
   }
 
-  _listenIdle() {
-    if (!this._fulfilled) {
-      this._flow.on(IDLE, () => {
-        this._flow.removeAllListeners();
-        this._fulfill();
-      });
+  _manageFlowListeners(action) {
+    if (action === 'set') {
+      if (!this._fulfilled) {
+        this._flow.on(IDLE, this._onFlowIdle);
+        this._flow.on(UNCAUGHT_EXCEPTION, this._onFlowException);
+      }
+    } else {
+      this._flow.removeListener(IDLE, this._onFlowIdle);
+      this._flow.removeListener(UNCAUGHT_EXCEPTION, this._onFlowException);
     }
   }
 
-  _listenException() {
-    if (!this._fulfilled) {
-      this._flow.on(UNCAUGHT_EXCEPTION, e => this._fulfill(e));
-    }
+  _onFlowIdle() {
+    this._manageFlowListeners('remove');
+    this._fulfill();
+  }
+
+  _onFlowException(e) {
+    this._manageFlowListeners('remove');
+    this._fulfill(e);
   }
 
   _fulfill(error) {
