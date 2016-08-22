@@ -68,3 +68,21 @@ exports.noUndefined = function (obj) {
 exports.trimSlashes = function (str) {
   return str.replace(/^\/+|\/+$/g, '');
 };
+
+/**
+ * Sets/unsets listener to channel
+ *
+ * @param {Object} channel
+ * @param {Function} listener
+ * @param {String} action 'set|unset'
+ */
+exports.manageListener = function(channel, listener, action) {
+  if (action === 'set') {
+    const has = channel.hasListener && channel.hasListener(listener);
+    if (!has) {
+      channel.addListener(listener);
+    }
+  } else {
+    channel.removeListener(listener);
+  }
+};

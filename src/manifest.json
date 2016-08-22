@@ -11,6 +11,7 @@
     "webNavigation",
     "<all_urls>",
     "debugger",
+    "webNavigation",
     "history"
   ],
 

@@ -33,6 +33,8 @@ test.suite(function(env) {
       driver.executeScript(function() {
         location.href = location.href + '?x=1';
       });
+      // delay needed for navigation to occur
+      driver.sleep(200);
       driver.requests().stop();
       assert(driver.requests().getCount({url: test.Pages.echoPage + '?x=1'})).equalTo(1);
     });
@@ -102,6 +104,23 @@ test.suite(function(env) {
       assert(driver.requests().getCount({url: test.whereIs('style.css')})).equalTo(1);
     });
 
+    test.it('should collect new tabs', function () {
+      driver.executeScript(function(href) {
+        const a = document.createElement('a');
+        a.href = href;
+        a.target = '_blank';
+        a.textContent = 'newtablink';
+        a.id = 'newtablink';
+        document.body.appendChild(a);
+      }, test.Pages.simpleTestPage);
+      driver.requests().collect();
+      driver.findElement({id: 'newtablink'}).click();
+      // delay needed for newtab to open
+      driver.sleep(200);
+      driver.requests().stop();
+      assert(driver.requests().getCount({type: 'newtab', url: test.Pages.simpleTestPage})).equalTo(1);
+    });
+
     test.it.skip('should stop in case of error', function () {
       // todo:
       // driver.requests().collect();
@@ -121,25 +140,27 @@ test.suite(function(env) {
 
     test.it('should dump to string', function () {
       driver.requests().collect();
-      driver.get(test.Pages.echoPage);
+      driver.executeScript(function() {
+        fetch(location.href);
+      });
       driver.requests().stop();
       assert(driver.requests().dump()).equalTo([
-        'Collected 2 requests:',
-        'Document: GET http://127.0.0.1:2310/common/echo',
-        'Other: GET http://127.0.0.1:2310/favicon.ico',
+        'Collected 1 request(s):',
+        'Other: GET http://127.0.0.1:2310/common/echo',
       ].join('\n'));
     });
 
     test.it('should dump to console', function () {
       driver.requests().collect();
-      driver.get(test.Pages.echoPage);
+      driver.executeScript(function() {
+        fetch(location.href);
+      });
       driver.requests().stop();
       const consoleMock = {log: s => consoleMock.s = s};
       driver.requests().dump(consoleMock).then(() => {
         assert(consoleMock.s).equalTo([
-          'Collected 2 requests:',
-          'Document: GET http://127.0.0.1:2310/common/echo',
-          'Other: GET http://127.0.0.1:2310/favicon.ico',
+          'Collected 1 request(s):',
+          'Other: GET http://127.0.0.1:2310/common/echo',
         ].join('\n'));
       });
     });

@@ -1,9 +1,10 @@
 /**
- * Network request collector via debugger requestWillBeSent event.
+ * Collect network requests from current tab and urls of new opened tabs.
  */
 
-const Targets = require('../targets');
 const Filter = require('./filter');
+const RequestCatcher = require('./request-catcher');
+const NewTabCatcher = require('./newtab-catcher');
 const logger = require('../../utils/logger').create('Requests collecctor');
 
 const DEFAULT_REQUESTS_LIMIT = 1000;
@@ -13,7 +14,9 @@ class Collector {
   constructor() {
     this._requests = [];
     this._collecting = false;
-    this._debugger = null;
+    this._requestCatcher = new RequestCatcher();
+    this._newTabCatcher = new NewTabCatcher();
+    this._setOnCatchedListeners();
     this.reset();
   }
 
@@ -26,10 +29,9 @@ class Collector {
       throw new Error('Requests already in collecting state');
     }
     this._requests.length = 0;
-    this._debugger = Targets.debugger;
     return Promise.resolve()
-      .then(() => this._setNetworkState('enable'))
-      .then(() => this._setEventListenerState('enable'))
+      .then(() => this._requestCatcher.start())
+      .then(() => this._newTabCatcher.start())
       .then(() => {
         this._collecting = true;
         logger.log('start collecting');
@@ -38,8 +40,8 @@ class Collector {
 
   stop() {
     return Promise.resolve()
-      .then(() => this._setNetworkState('disable'))
-      .then(() => this._setEventListenerState('disable'))
+      .then(() => this._newTabCatcher.stop())
+      .then(() => this._requestCatcher.stop())
       .then(() => {
         this._collecting = false;
         logger.log('stop collecting');
@@ -63,7 +65,7 @@ class Collector {
 
   dump(logging) {
     const result = this._requests.map(r => `${r.type}: ${r.method} ${r.url}`);
-    result.unshift(`Collected ${this._requests.length} requests:`);
+    result.unshift(`Collected ${this._requests.length} request(s):`);
     const resultStr = result.join('\n');
     if (logging) {
       logging.log(resultStr);
@@ -80,37 +82,40 @@ class Collector {
     return this._collecting ? this.stop() : Promise.resolve();
   }
 
-  _onEvent(method, params) {
-    if (method === 'Network.requestWillBeSent' && this._collecting) {
-      this._addRequest(params);
+  _setOnCatchedListeners() {
+    this._requestCatcher.onCatched.addListener(this._onRequestCatched, this);
+    this._newTabCatcher.onCatched.addListener(this._onNewTabCatched, this);
+  }
+
+  _onRequestCatched(data) {
+    if (this._collecting) {
+      const request = {
+        type: data.type,
+        method: data.request.method,
+        url: data.request.url,
+      };
+      this._addRequest(request);
     }
   }
 
-  _addRequest(data) {
-    const request = data.request;
-    request.type = data.type;
+  _onNewTabCatched(data) {
+    if (this._collecting) {
+      const request = {
+        type: 'Newtab',
+        method: 'GET',
+        url: data.url,
+      };
+      this._addRequest(request);
+    }
+  }
+
+  _addRequest(request) {
     if (this._limit && this._requests.length >= this._limit) {
       this._requests.shift();
     }
     this._requests.push(request);
   }
 
-  /**
-   *
-   * @param {String} state 'enable|disable'
-   */
-  _setNetworkState(state) {
-    return this._debugger.sendCommand(`Network.${state}`);
-  }
-
-  /**
-   *
-   * @param {String} state 'enable|disable'
-   */
-  _setEventListenerState(state) {
-    const method = state === 'enable' ? 'addListener' : 'removeListener';
-    return this._debugger.onEvent[method](this._onEvent, this);
-  }
 }
 
 module.exports = Collector;
