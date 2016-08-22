@@ -5,17 +5,18 @@
 
 const helper = require('./helper');
 const PING_MS = 50;
+
 /**
- * Waits promise to be fulfilled
+ * Waits remote promise to be fulfilled
  * @param {String} promiseObjectId
  */
-module.exports = function awaitPromise(promiseObjectId) {
+exports.wait = function (promiseObjectId) {
   return helper.getInternalProperties(promiseObjectId)
     .then(props => {
       const result = checkStatus(props);
       return result
         ? result
-        : helper.wait(PING_MS).then(() => awaitPromise(promiseObjectId));
+        : helper.wait(PING_MS).then(() => exports.wait(promiseObjectId));
     })
 };
 

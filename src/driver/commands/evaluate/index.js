@@ -4,8 +4,9 @@
 
 const helper = require('./helper');
 const RemoteObject = require('./remote-object');
-const awaitPromise = require('./await-promise');
+const remotePromise = require('./remote-promise');
 const prepareArgs = require('./prepare-args');
+const prepareScript = require('./prepare-script');
 
 /**
  * Executes sync script
@@ -15,13 +16,8 @@ const prepareArgs = require('./prepare-args');
  * @param {Array} params.args
  */
 exports.executeScript = function (params) {
-  return Promise.resolve()
-    .then(() => prepareArgs(params.args))
-    .then(args => {
-      const fn = wrapFunction(params.script);
-      return helper.callFunctionOn(fn, args)
-    })
-    .then(result => new RemoteObject(result).value())
+  return execute(params.script, params.args)
+    .then(success);
 };
 
 /**
@@ -32,18 +28,10 @@ exports.executeScript = function (params) {
  * @param {Array} params.args
  */
 exports.executeAsyncScript = function (params) {
-  return Promise.resolve()
-    .then(() => prepareArgs(params.args))
-    .then(args => {
-      const fn = wrapPromiseFunction(params.script);
-      return helper.callFunctionOn(fn, args)
-    })
+  return execute(params.script, params.args, true)
     .then(result => {
-      return awaitPromise(result.objectId)
-        .then(
-          result => new RemoteObject(result).value(),
-          err => err.objectId ? new RemoteObject(err).value() : err
-        )
+      return remotePromise.wait(result.objectId)
+        .then(success, error);
     })
 };
 
@@ -52,26 +40,34 @@ exports.executeAsyncScript = function (params) {
  */
 exports.helper = helper;
 
-function wrapFunction(code) {
-  // for some reason callFunctionOn converts {value: null} to undefined
-  // todo: create issue
-  // todo: remember arguments that are really null and transform only them,
-  // todo: as in current case real undefined will be also converted to null
-  return `function() {
-    for (let i=0; i<arguments.length; i++) {
-      if (arguments[i] === undefined) {
-        arguments[i] = null;
+/**
+ * Common execute part for sync and async evaluates
+ * When where are no arguments it's cheaper to call `evaluate` instead of `callFunctionOn`
+ *
+ * @param {String} script
+ * @param {Array} args
+ * @param {Boolean} isAsync
+ * @returns {Promise}
+ */
+function execute(script, args, isAsync) {
+  return Promise.resolve()
+    .then(() => prepareArgs(args))
+    .then(args => {
+      let wrappedScript = isAsync ? prepareScript.asPromise(script) : script;
+      if (args.length) {
+        const fnBody = prepareScript.asFunction(wrappedScript);
+        return helper.callFunctionOn(fnBody, args)
+      } else {
+        const expression = prepareScript.asSelfCallFunction(wrappedScript);
+        return helper.evaluate(expression);
       }
-    }
-    ${code}
-  }`;
+    })
 }
 
-function wrapPromiseFunction(code) {
-  const promisedCode = `
-    return new Promise(resolve => {
-      [].push.call(arguments, resolve);
-      ${code}
-    });`;
-  return wrapFunction(promisedCode);
+function success(result) {
+  return new RemoteObject(result).value();
+}
+
+function error(err) {
+  return err.objectId ? new RemoteObject(err).value() : err;
 }

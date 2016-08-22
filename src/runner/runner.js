@@ -44,7 +44,7 @@ class Runner {
   }
 
   _finish() {
-    logger.log(`Done ${this._files.length} file(s)`);
+    logger.log(`Done.`);
   }
 
   _setupMocha(options) {

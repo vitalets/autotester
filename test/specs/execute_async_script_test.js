@@ -35,36 +35,20 @@ test.suite(function(env) {
     driver.quit();
   });
 
-  describe('form_handling', function () {
+  describe('execute_async_script', function () {
 
-    test.it('should click on submit input elements', function () {
-      driver.get(test.Pages.formPage);
-      driver.findElement(By.id('submitButton')).click();
-      driver.wait(until.titleIs('We Arrive Here'), 1000);
+    test.it('should return primitives', function () {
+      driver.get(test.Pages.ajaxyPage);
+      assert(driver.executeAsyncScript('arguments[arguments.length - 1](123);')).equalTo(123);
+      assert(driver.executeAsyncScript('arguments[arguments.length - 1]("abc");')).equalTo('abc');
+      assert(driver.executeAsyncScript('arguments[arguments.length - 1](false);')).equalTo(false);
+      assert(driver.executeAsyncScript('arguments[arguments.length - 1](true);')).equalTo(true);
     });
 
-    test.it('should be able to click on image buttons', function () {
-      driver.get(test.Pages.formPage);
-      driver.findElement(By.id('imageButton')).click();
-      driver.wait(until.titleIs('We Arrive Here'), 1000);
-    });
-
-    test.it('should be able to submit forms', function () {
-      driver.get(test.Pages.formPage);
-      driver.findElement(By.name('login')).submit();
-      driver.wait(until.titleIs('We Arrive Here'), 1000);
-    });
-
-    test.it('should be able to submit form when inner INPUT is submitted', function () {
-      driver.get(test.Pages.formPage);
-      driver.findElement(By.id('checky')).submit();
-      driver.wait(until.titleIs('We Arrive Here'), 1000);
-    });
-
-    test.it.skip('should be able to submit form when inner ELEMENT is submitted', function () {
-      driver.get(test.Pages.formPage);
-      driver.findElement(By.xpath('//form/p')).submit();
-      driver.wait(until.titleIs('We Arrive Here'), 1000);
+    test.it('should return null and undefined as null', function () {
+      driver.get(test.Pages.ajaxyPage);
+      assert(driver.executeAsyncScript('arguments[arguments.length - 1](null);')).equalTo(null);
+      assert(driver.executeAsyncScript('arguments[arguments.length - 1]();')).equalTo(null);
     });
 
   });
