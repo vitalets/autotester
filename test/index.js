@@ -13,7 +13,7 @@ module.exports = {
     'setup.js',
   ],
   tests: [
-    'specs/playground.js',
+    'playground.js',
     'specs/switch_to_test.js',
     'specs/collect_network_requests_test.js',
     // === own selenium specs from 'node_modules/selenium-webdriver/test' ===
