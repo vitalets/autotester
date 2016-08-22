@@ -2,7 +2,9 @@
  * Commands for getting element props
  */
 
+const WebElement = require('selenium-webdriver/lib/webdriver').WebElement;
 const Targets = require('../targets');
+const evaluate = require('./evaluate');
 
 /**
  * Returns element tag name
@@ -26,24 +28,13 @@ exports.getElementText = function (params) {
 };
 
 /**
- * Resolves nodeId to ObjectId
- * @param {String} id
- */
-exports.resolveNode = function (id) {
-  return Targets.debugger.sendCommand('DOM.resolveNode', {
-    nodeId: Number(id)
-  })
-  .then(res => res.object.objectId);
-};
-
-/**
  * Returns props of node
  * @param {String} id
  * @returns {Promise}
  */
 exports.getProps = function (id) {
   return Promise.resolve()
-    .then(() => exports.resolveNode(id))
+    .then(() => evaluate.helper.resolveNode(id))
     .then(objectId => {
       return Targets.debugger.sendCommand('Runtime.getProperties', {
         objectId: objectId,
@@ -61,4 +52,23 @@ exports.getProps = function (id) {
 exports.getProp = function (id, propName) {
   return exports.getProps(id)
     .then(props => props.filter(prop => prop.name === propName)[0].value.value)
+};
+
+/**
+ * Submit form or element
+ * @param {Object} params
+ * @param {String} params.id
+ * @returns {Promise}
+ */
+exports.submit = function (params) {
+  const args = [WebElement.buildId(params.id)];
+  const script = `
+    const el = arguments[0];
+    if (el.tagName === 'FORM') {
+      el.submit();
+    } else {
+      el.form.submit();
+    }
+  `;
+  return evaluate.executeScript({script, args});
 };

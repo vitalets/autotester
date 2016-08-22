@@ -27,6 +27,7 @@ exports.findChildElements = function (params) {
 
 function getRootNodeId() {
   // todo: save rootId in targets and update after navigations and switchto commands
+  // todo: chromedriver seems to do it after DEVTOOLS EVENT DOM.documentUpdated
   /*
   if (typeof Targets.rootId === 'number') {
     return Promise.resolve(Targets.rootId);

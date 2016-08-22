@@ -4,7 +4,6 @@
 
 const WebElement = require('selenium-webdriver/lib/webdriver').WebElement;
 const Targets = require('../../targets');
-const thenChrome = require('then-chrome');
 
 /**
  * Evaluate expression in current target
@@ -85,6 +84,17 @@ exports.assertThrownError = function (res) {
     throw new Error('Error in evaluated script: ' + res.result.description);
     //throw new Error('Error in evaluated script: ' + res.exceptionDetails.text);
   }
+};
+
+/**
+ * Resolves nodeId of WebElement to ObjectId
+ * @param {String} id
+ */
+exports.resolveNode = function (id) {
+  return Targets.debugger.sendCommand('DOM.resolveNode', {
+      nodeId: Number(id)
+    })
+    .then(res => res.object.objectId);
 };
 
 // todo: move to common utils

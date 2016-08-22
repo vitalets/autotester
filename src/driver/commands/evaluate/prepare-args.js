@@ -1,9 +1,10 @@
 /**
- * Prepare arguments before evaluation
+ * Prepare arguments to be passed into `Runtime.callFunctionOn`:
+ * - convert objects and WebElements to {objectId: <objectId>};
+ * - convert primitives to {value: <value>}
  */
 
 const WebElement = require('selenium-webdriver/lib/webdriver').WebElement;
-const cmdElement = require('../element');
 const helper = require('./helper');
 
 module.exports = function (args) {
@@ -21,7 +22,7 @@ module.exports = function (args) {
 
 function processWebElement(arg) {
   const nodeId = WebElement.extractId(arg);
-  return cmdElement.resolveNode(nodeId)
+  return helper.resolveNode(nodeId)
     .then(objectId => {
       return {objectId};
     });

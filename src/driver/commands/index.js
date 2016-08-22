@@ -34,7 +34,6 @@ module.exports = {
   [cmd.DOUBLE_CLICK]: mouse.doubleClick,
   [cmd.MOVE_TO]: mouse.moveTo,
 
-  // [cmd.GET_ACTIVE_ELEMENT]: elementSearch.start,
   [cmd.FIND_ELEMENT]: elementSearch.findElement,
   [cmd.FIND_ELEMENTS]: elementSearch.findElements,
   [cmd.FIND_CHILD_ELEMENT]: elementSearch.findChildElement,
@@ -42,6 +41,8 @@ module.exports = {
 
   [cmd.SEND_KEYS_TO_ELEMENT]: keyboard.sendKeysToElement,
   [cmd.SEND_KEYS_TO_ACTIVE_ELEMENT]: keyboard.sendKeysToActiveElement,
+
+  [cmd.SUBMIT_ELEMENT]: element.submit,
 
   [cmd.GET_ELEMENT_TEXT]: element.getElementText,
   [cmd.GET_ELEMENT_TAG_NAME]: element.getElementTagName,

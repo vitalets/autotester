@@ -47,10 +47,16 @@ exports.executeAsyncScript = function (params) {
     })
 };
 
+/**
+ * Helper object
+ */
+exports.helper = helper;
+
 function wrapFunction(code) {
-  // for some reason callFunctionOn does converts {value: null} to undefined
+  // for some reason callFunctionOn converts {value: null} to undefined
   // todo: create issue
-  // todo: remember arguments that are really null and transform only them
+  // todo: remember arguments that are really null and transform only them,
+  // todo: as in current case real undefined will be also converted to null
   return `function() {
     for (let i=0; i<arguments.length; i++) {
       if (arguments[i] === undefined) {

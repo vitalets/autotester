@@ -53,28 +53,16 @@ test.suite(function(env) {
     driver.wait(until.titleIs('We Arrive Here'), 1000);
   });
 
+  test.it('should be able to submit form when inner INPUT is submitted', function() {
+    driver.get(test.Pages.formPage);
+    driver.findElement(By.id('checky')).submit();
+    driver.wait(until.titleIs('We Arrive Here'), 1000);
+  });
+
+  test.it.skip('should be able to submit form when inner ELEMENT is submitted', function() {
+    driver.get(test.Pages.formPage);
+    driver.findElement(By.xpath('//form/p')).submit();
+    driver.wait(until.titleIs('We Arrive Here'), 1000);
+  });
+
 });
-
-/*
-
- @Test
- public void testShouldBeAbleToSubmitForms() {
- driver.get(pages.formPage);
- driver.findElement(By.name("login")).submit();
- wait.until(titleIs("We Arrive Here"));
- }
-
- @Test
- public void testShouldSubmitAFormWhenAnyInputElementWithinThatFormIsSubmitted() {
- driver.get(pages.formPage);
- driver.findElement(By.id("checky")).submit();
- wait.until(titleIs("We Arrive Here"));
- }
-
- @Test
- public void testShouldSubmitAFormWhenAnyElementWithinThatFormIsSubmitted() {
- driver.get(pages.formPage);
- driver.findElement(By.xpath("//form/p")).submit();
- wait.until(titleIs("We Arrive Here"));
- }
- */
