@@ -48,13 +48,20 @@ function onConfigLoaded(data) {
 }
 
 function fillTestList(data) {
+  const el = document.getElementById('testlist');
+  el.options.length = 0;
+  if (!data.config.tests.length) {
+    el.disabled = true;
+    return;
+  } else {
+    el.disabled = false;
+  }
   const firstItem = {value: '', text: 'All'};
   const testItems = data.config.tests.map(test => {
     return {value: test, text: test};
   });
   const items = [firstItem].concat(testItems);
-  const el = document.getElementById('testlist');
-  el.options.length = 0;
+
   items.forEach(item => {
     const option = new Option(item.text, item.value, false, item.value === data.selectedTest);
     return el.options[el.options.length] = option;

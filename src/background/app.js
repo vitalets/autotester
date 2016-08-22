@@ -30,6 +30,7 @@ class App {
     return utils.fetchText(url)
       .then(text => {
         const config = evaluate.asCommonJs(text);
+        this._verifyConfig(config);
         config.url = url;
         this._testsConfig = config;
         this._updateSelectedTest();
@@ -49,7 +50,7 @@ class App {
   _runTests(data) {
     //todo: rename to selectedTest
     const tests = this._testsConfig.tests.filter(test => !data.test || test === data.test);
-    const setup = this._testsConfig.setup || [];
+    const setup = this._testsConfig.setup;
     const urls = setup.concat(tests).map(addBaseUrl);
     const runnerOptions = {
       window: getReporterWindow(),
@@ -67,11 +68,23 @@ class App {
 
   _updateSelectedTest() {
     const selectedTest = storage.get('selectedTest');
-    if (selectedTest && Array.isArray(this._testsConfig.tests)) {
+    if (selectedTest) {
       const exists = this._testsConfig.tests.some(test => test === selectedTest);
       if (!exists) {
         this._selectTest({name: ''});
       }
+    }
+  }
+
+  _verifyConfig(config) {
+    if (!config) {
+      throw new Error('Config is empty');
+    }
+    if (!Array.isArray(config.setup)) {
+      config.setup = [];
+    }
+    if (!Array.isArray(config.tests)) {
+      config.tests = [];
     }
   }
 
