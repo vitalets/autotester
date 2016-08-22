@@ -13,6 +13,7 @@ class Collector {
   constructor() {
     this._requests = [];
     this._collecting = false;
+    this._debugger = null;
     this.reset();
   }
 
@@ -25,6 +26,7 @@ class Collector {
       throw new Error('Requests already in collecting state');
     }
     this._requests.length = 0;
+    this._debugger = Targets.debugger;
     return Promise.resolve()
       .then(() => this._setNetworkState('enable'))
       .then(() => this._setEventListenerState('enable'))
@@ -98,7 +100,7 @@ class Collector {
    * @param {String} state 'enable|disable'
    */
   _setNetworkState(state) {
-    return Targets.debugger.sendCommand(`Network.${state}`);
+    return this._debugger.sendCommand(`Network.${state}`);
   }
 
   /**
@@ -107,7 +109,7 @@ class Collector {
    */
   _setEventListenerState(state) {
     const method = state === 'enable' ? 'addListener' : 'removeListener';
-    return Targets.debugger.onEvent[method](this._onEvent, this);
+    return this._debugger.onEvent[method](this._onEvent, this);
   }
 }
 

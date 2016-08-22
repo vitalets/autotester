@@ -146,13 +146,11 @@ test.suite(function(env) {
 
 
     test.it('should collect requests from another target', function () {
-      let handle;
-      driver.getWindowHandle().then(h => handle = h);
+      driver.requests().collect();
       driver.executeScript(function() {
         setTimeout(() => fetch(location.href), 1000);
       });
       driver.switchTo().newTab(test.Pages.simpleTestPage);
-      driver.requests().collect(handle);
       driver.sleep(1000);
       driver.requests().stop();
       assert(driver.requests().getCount({url: test.Pages.echoPage})).equalTo(1);
