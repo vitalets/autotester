@@ -14,8 +14,7 @@ module.exports = {
   ],
   tests: [
     'specs/playground.js',
-    'specs/switch_to_newtab_test.js',
-    'specs/attach_to_extension_test.js',
+    'specs/switch_to_test.js',
     'specs/collect_network_requests_test.js',
     // === own selenium specs from 'node_modules/selenium-webdriver/test' ===
     'specs-selenium/tag_name_test.js',
