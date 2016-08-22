@@ -62,7 +62,7 @@ class Collector {
   }
 
   dump(logging) {
-    const result = this._requests.map(r => `${r.method} ${r.url}`);
+    const result = this._requests.map(r => `${r.type}: ${r.method} ${r.url}`);
     result.unshift(`Collected ${this._requests.length} requests:`);
     const resultStr = result.join('\n');
     if (logging) {
@@ -82,13 +82,13 @@ class Collector {
 
   _onEvent(method, params) {
     if (method === 'Network.requestWillBeSent' && this._collecting) {
-      this._addRequest(params.request);
+      this._addRequest(params);
     }
   }
 
-  _addRequest(request) {
-    // todo: remove log
-    logger.log('collected:', request.method, request.url);
+  _addRequest(data) {
+    const request = data.request;
+    request.type = data.type;
     if (this._limit && this._requests.length >= this._limit) {
       this._requests.shift();
     }

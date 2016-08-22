@@ -48,6 +48,13 @@ class Requests extends Collector {
       .then(requests => requests.length);
   }
 
+  /**
+   * Convenient way to view collected requests:
+   * driver.requests().dump(console);
+   *
+   * @param {Object} logging object with .log() method
+   * @returns {!ManagedPromise.<*>}
+   */
   dump(logging) {
     return this._flow.execute(() => super.dump(logging));
   }

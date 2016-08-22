@@ -25,7 +25,7 @@ test.suite(function(env) {
       driver.requests().collect();
       driver.get(test.Pages.echoPage);
       driver.requests().stop();
-      assert(driver.requests().getCount({url: test.Pages.echoPage})).equalTo(1);
+      assert(driver.requests().getCount({type: 'document', url: test.Pages.echoPage})).equalTo(1);
     });
 
     test.it('should collect js navigation', function () {
@@ -45,7 +45,7 @@ test.suite(function(env) {
         xhr.send();
       });
       driver.requests().stop();
-      assert(driver.requests().getCount({url: test.Pages.echoPage})).equalTo(1);
+      assert(driver.requests().getCount({type: 'xhr', url: test.Pages.echoPage})).equalTo(1);
     });
 
     test.it('should collect fetch', function () {
@@ -125,8 +125,8 @@ test.suite(function(env) {
       driver.requests().stop();
       assert(driver.requests().dump()).equalTo([
         'Collected 2 requests:',
-        'GET http://127.0.0.1:2310/common/echo',
-        'GET http://127.0.0.1:2310/favicon.ico',
+        'Document: GET http://127.0.0.1:2310/common/echo',
+        'Other: GET http://127.0.0.1:2310/favicon.ico',
       ].join('\n'));
     });
 
@@ -138,8 +138,8 @@ test.suite(function(env) {
       driver.requests().dump(consoleMock).then(() => {
         assert(consoleMock.s).equalTo([
           'Collected 2 requests:',
-          'GET http://127.0.0.1:2310/common/echo',
-          'GET http://127.0.0.1:2310/favicon.ico',
+          'Document: GET http://127.0.0.1:2310/common/echo',
+          'Other: GET http://127.0.0.1:2310/favicon.ico',
         ].join('\n'));
       });
     });
@@ -148,10 +148,11 @@ test.suite(function(env) {
     test.it('should collect requests from another target', function () {
       driver.requests().collect();
       driver.executeScript(function() {
+        // Timeout here should be greater than switch-to time
         setTimeout(() => fetch(location.href), 1000);
       });
       driver.switchTo().newTab(test.Pages.simpleTestPage);
-      driver.sleep(1000);
+      driver.sleep(1500);
       driver.requests().stop();
       assert(driver.requests().getCount({url: test.Pages.echoPage})).equalTo(1);
     });

@@ -52,7 +52,13 @@ class RequestsFilter {
   }
 
   _matchType(request) {
-    return !this._hasField('type') || this._filter.type.toLowerCase() === request.type.toLowerCase();
+    if (this._hasField('type')) {
+      const filterType = this._filter.type.toLowerCase();
+      const requestType = request.type.toLowerCase();
+      return filterType === requestType;
+    } else {
+      return true;
+    }
   }
 
   _matchUrl(request) {
