@@ -53,20 +53,9 @@ var webdriver = require('selenium-webdriver'),
 // })
 
 
-
+/*
 test.describe('demo', function() {
   let driver;
-
-  function a() {
-    // driver.xxx();
-  }
-
-  console.log('describe');
-
-  test.describe('demo2', function() {
-    console.log('nested describe');
-  });
-
 
   test.before(function() {
      driver = new Driver();
@@ -84,19 +73,14 @@ test.describe('demo', function() {
   });
 
   test.it('test', function() {
-    console.log(this.runnable().fullTitle())
+    console.log(this.runnable().fullTitle());
     //driver.get('http://ya.ru');
      // a()
-    assert(1).equalTo(2);
+    // assert(1).equalTo(2);
   });
 
-  // test.it('test2', function() {
-  //   console.log(this.runnable().fullTitle())
-  //   driver.get('http://ya.ru');
-  //   // dfgdf()
-  // });
-
 });
+*/
 
 
 /*

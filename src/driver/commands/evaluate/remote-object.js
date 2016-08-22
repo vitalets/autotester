@@ -1,6 +1,6 @@
 /**
  * Wrapper around debugger RemoteObject result
- * Resolves useful value.
+ * Resolves useful value.instead of entries like {"injectedScriptId":2,"id":1}
  */
 
 const helper = require('./helper');

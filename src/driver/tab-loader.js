@@ -35,6 +35,7 @@ exports.update = function (tabId, info) {
 
 /**
  * Waits for existing tab to get loaded (receive 'complete' status)
+ *
  * @param {Number} tabId
  * @param {Boolean} force - wait for complete event even if tab in complete status now
  * @returns {Promise}
@@ -44,7 +45,7 @@ exports.wait = function (tabId, force = false) {
   return thenChrome.tabs.get(tabId)
     .then(tab => {
       if (tab.status === 'loading' || force) {
-        createLoadingTab(tab);
+        return createLoadingTab(tab);
       }
     });
 };

@@ -16,6 +16,7 @@ module.exports = {
     'playground.js',
     'specs/switch_to_test.js',
     'specs/collect_network_requests_test.js',
+    'specs/form_handling_test.js',
     // === own selenium specs from 'node_modules/selenium-webdriver/test' ===
     'specs-selenium/tag_name_test.js',
     //'specs-selenium/actions_test.js',

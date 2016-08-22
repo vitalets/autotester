@@ -4,24 +4,47 @@
 
 const WebElement = require('selenium-webdriver/lib/webdriver').WebElement;
 const Targets = require('../../targets');
+const thenChrome = require('then-chrome');
 
+/**
+ * Evaluate expression in current target
+ *
+ * @param {String} expression
+ * @returns {Promise}
+ */
 exports.evaluate = function (expression) {
-  return Targets.debugger.sendCommand('Runtime.evaluate', {
-    expression: expression,
-    returnByValue: false,
-  })
-  .then(res => {
-    exports.assertThrownError(res);
-    return res.result;
-  });
+  return Promise.resolve()
+    .then(() => Targets.ensureComplete())
+    .then(() => {
+      return Targets.debugger.sendCommand('Runtime.evaluate', {
+        expression: expression,
+        returnByValue: false,
+      });
+    })
+    .then(res => {
+      exports.assertThrownError(res);
+      return res.result;
+    });
 };
 
-exports.callFunctionOn = function (fn, args) {
-  return exports.evaluate('window')
+/**
+ * This method is preferred over 'evaluate' as it allows to pass arguments as RemoteObjectId
+ * that will be converted to js objects when function called.
+ * But this method requires objectId even if we want to call function on 'window',
+ * so we need to get 'window' as RemoteObjectId every time.
+ *
+ * @param {String} fnBody
+ * @param {Array} args
+ * @returns {*}
+ */
+exports.callFunctionOn = function (fnBody, args) {
+  return Promise.resolve()
+    .then(() => Targets.ensureComplete())
+    .then(() => exports.evaluate('window'))
     .then(result => {
       return Targets.debugger.sendCommand('Runtime.callFunctionOn', {
         objectId: result.objectId,
-        functionDeclaration: fn,
+        functionDeclaration: fnBody,
         arguments: args,
         returnByValue: false,
       })
@@ -34,17 +57,17 @@ exports.callFunctionOn = function (fn, args) {
 
 exports.getOwnProperties = function (objectId) {
   return Targets.debugger.sendCommand('Runtime.getProperties', {
-      objectId: objectId,
-      ownProperties: true,
-    })
+    objectId: objectId,
+    ownProperties: true,
+  })
     .then(res => res.result);
 };
 
 exports.getInternalProperties = function (objectId) {
   return Targets.debugger.sendCommand('Runtime.getProperties', {
-      objectId: objectId,
-      ownProperties: true,
-    })
+    objectId: objectId,
+    ownProperties: true,
+  })
     .then(res => res.internalProperties)
 };
 

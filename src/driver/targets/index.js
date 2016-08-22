@@ -13,6 +13,7 @@
 const thenChrome = require('then-chrome');
 const Debugger = require('./debugger');
 const filter = require('./filter');
+const tabLoader = require('../tab-loader');
 const logger = require('../../utils/logger').create('Targets');
 
 const TAB_PREFIX = 'tab-';
@@ -90,6 +91,15 @@ const Targets = module.exports = {
           ? switchToExtensionTarget(target)
           : switchToTabTarget(target);
       });
+  },
+
+  /**
+   * If current target tab is loading, wait for complete
+   */
+  ensureComplete() {
+    return currentTarget.tabId
+      ? tabLoader.wait(currentTarget.tabId)
+      : Promise.resolve();
   },
 
   /**
