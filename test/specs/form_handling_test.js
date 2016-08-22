@@ -41,4 +41,40 @@ test.suite(function(env) {
     driver.wait(until.titleIs('We Arrive Here'), 1000);
   });
 
+  test.it('should be able to click on image buttons', function() {
+    driver.get(test.Pages.formPage);
+    driver.findElement(By.id('imageButton')).click();
+    driver.wait(until.titleIs('We Arrive Here'), 1000);
+  });
+
+  test.it('should be able to submit forms', function() {
+    driver.get(test.Pages.formPage);
+    driver.findElement(By.name('login')).submit();
+    driver.wait(until.titleIs('We Arrive Here'), 1000);
+  });
+
 });
+
+/*
+
+ @Test
+ public void testShouldBeAbleToSubmitForms() {
+ driver.get(pages.formPage);
+ driver.findElement(By.name("login")).submit();
+ wait.until(titleIs("We Arrive Here"));
+ }
+
+ @Test
+ public void testShouldSubmitAFormWhenAnyInputElementWithinThatFormIsSubmitted() {
+ driver.get(pages.formPage);
+ driver.findElement(By.id("checky")).submit();
+ wait.until(titleIs("We Arrive Here"));
+ }
+
+ @Test
+ public void testShouldSubmitAFormWhenAnyElementWithinThatFormIsSubmitted() {
+ driver.get(pages.formPage);
+ driver.findElement(By.xpath("//form/p")).submit();
+ wait.until(titleIs("We Arrive Here"));
+ }
+ */

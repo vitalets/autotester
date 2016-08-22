@@ -26,12 +26,17 @@ exports.findChildElements = function (params) {
 };
 
 function getRootNodeId() {
+  // todo: save rootId in targets and update after navigations and switchto commands
+  /*
   if (typeof Targets.rootId === 'number') {
     return Promise.resolve(Targets.rootId);
   } else {
     return Targets.debugger.sendCommand('DOM.getDocument', {})
       .then(res => Targets.rootId = res.root.nodeId);
   }
+  */
+  return Targets.debugger.sendCommand('DOM.getDocument', {})
+    .then(res => Targets.rootId = res.root.nodeId);
 }
 
 class Finder {
