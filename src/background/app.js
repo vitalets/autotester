@@ -16,7 +16,6 @@ class App {
   start() {
     messaging.start();
     this._setListeners();
-    this._loadConfig();
   }
 
   _setListeners() {
