@@ -1,9 +1,8 @@
 
 'use strict';
 
-var webdriver = require('selenium-webdriver');
-var assert = require('selenium-webdriver/testing/assert');
-var test = require('selenium-webdriver/lib/test');
+var assert = require('../testing/assert');
+var test = require('../lib/test');
 
 test.suite(function (env) {
   var driver;

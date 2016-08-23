@@ -17,12 +17,10 @@
 
 'use strict';
 
-// when pull to selenium replace require('selenium-webdriver') --> require('..')
-
-var By = require('selenium-webdriver').By,
-  until = require('selenium-webdriver').until,
-  assert = require('selenium-webdriver/testing/assert'),
-  test = require('selenium-webdriver/lib/test');
+var By = require('..').By,
+  until = require('..').until,
+  assert = require('../testing/assert'),
+  test = require('../lib/test');
 
 test.suite(function(env) {
   var driver;
