@@ -89,9 +89,9 @@ function onTestSelected(event) {
 function welcome() {
   const msg = [
     `Welcome to **Autotester!**\n`,
-    `For convenient testing please enable two [chrome flags](chrome://flags):\n`,
-    `*--silent-debugger-extension-api* - to remove annoying bar about using debugger api\n`,
-    `*--extensions-on-chrome-urls* - to allow testing other chrome extensions`,
+    `For convenient testing please enable two **chrome flags**:\n`,
+    `[silent-debugger-extension-api](chrome://flags#silent-debugger-extension-api) - to remove annoying bar about using debugger api\n`,
+    `[extensions-on-chrome-urls](chrome://flags#extensions-on-chrome-urls) - to allow testing other chrome extensions`,
   ].join('');
   htmlConsole.log(msg);
 }
