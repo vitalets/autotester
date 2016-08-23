@@ -8,6 +8,16 @@ const messaging = require('./messaging');
 const runner = require('../runner');
 const storage = require('./storage');
 
+const {
+  BG_LOAD_DONE,
+  LOAD_TESTS_CONFIG,
+  RUN_TESTS,
+  RUN_TESTS_DONE,
+  SELECT_TEST,
+  LOAD_TESTS_CONFIG_DONE,
+  RUN_TESTS_STARTED,
+} = messaging.names;
+
 class App {
   constructor() {
     this._testsConfig = null;
@@ -16,12 +26,13 @@ class App {
   start() {
     messaging.start();
     this._setListeners();
+    messaging.send(BG_LOAD_DONE);
   }
 
   _setListeners() {
-    messaging.on(messaging.names.LOAD_TESTS_CONFIG, () => this._loadConfig());
-    messaging.on(messaging.names.RUN_TESTS, data => this._runTests(data));
-    messaging.on(messaging.names.SELECT_TEST, data => this._selectTest(data));
+    messaging.on(LOAD_TESTS_CONFIG, () => this._loadConfig());
+    messaging.on(RUN_TESTS, data => this._runTests(data));
+    messaging.on(SELECT_TEST, data => this._selectTest(data));
   }
 
   _loadConfig() {
@@ -33,7 +44,7 @@ class App {
         config.url = url;
         this._testsConfig = config;
         this._updateSelectedTest();
-        messaging.send(messaging.names.LOAD_TESTS_CONFIG_DONE, {
+        messaging.send(LOAD_TESTS_CONFIG_DONE, {
           config: config,
           selectedTest: storage.get('selectedTest'),
         });
@@ -52,15 +63,15 @@ class App {
     const setup = this._testsConfig.setup;
     const urls = setup.concat(tests).map(addBaseUrl);
     const runnerOptions = {
-      window: getReporterWindow(),
+      window: getUiWindow(),
     };
-    messaging.send(messaging.names.RUN_TESTS_STARTED);
+    messaging.send(RUN_TESTS_STARTED);
     runner.runUrls(urls, runnerOptions)
       .then(() => {
-        messaging.send(messaging.names.RUN_TESTS_DONE, {})
+        messaging.send(RUN_TESTS_DONE)
       })
       .catch(e => {
-        messaging.send(messaging.names.RUN_TESTS_DONE, {});
+        messaging.send(RUN_TESTS_DONE);
         throw e;
       });
   }
@@ -92,7 +103,7 @@ class App {
   }
 }
 
-function getReporterWindow() {
+function getUiWindow() {
   const views = chrome.extension.getViews({type: 'tab'});
   if (views.length) {
     return views[0];

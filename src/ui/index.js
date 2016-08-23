@@ -3,6 +3,15 @@ const thenChrome = require('then-chrome');
 const messaging = require('../background/messaging');
 const title = require('./title');
 
+const {
+  BG_LOAD_DONE,
+  LOAD_TESTS_CONFIG,
+  RUN_TESTS,
+  RUN_TESTS_DONE,
+  SELECT_TEST,
+  LOAD_TESTS_CONFIG_DONE,
+} = messaging.names;
+
 start();
 
 function start() {
@@ -14,8 +23,9 @@ function start() {
   title.setListeners();
   messaging.start();
 
-  messaging.on(messaging.names.LOAD_TESTS_CONFIG_DONE, onConfigLoaded);
-  messaging.on(messaging.names.RUN_TESTS_DONE, onDone);
+  messaging.on(LOAD_TESTS_CONFIG_DONE, onConfigLoaded);
+  messaging.on(RUN_TESTS_DONE, onTestsDone);
+  messaging.on(BG_LOAD_DONE, () => location.reload());
 
   loadConfig();
 
@@ -25,12 +35,12 @@ function start() {
 function runTests() {
   sharedConsole.clear();
   const test = document.getElementById('testlist').value;
-  messaging.send(messaging.names.RUN_TESTS, {test});
+  messaging.send(RUN_TESTS, {test});
 }
 
 function loadConfig() {
   title.set('loading...');
-  messaging.send(messaging.names.LOAD_TESTS_CONFIG);
+  messaging.send(LOAD_TESTS_CONFIG);
 }
 
 function activateSelfTab() {
@@ -68,15 +78,12 @@ function fillTestList(data) {
   });
 }
 
-function onDone(data) {
-  if (data.error) {
-    console.error(data.error);
-  }
+function onTestsDone() {
   activateSelfTab();
 }
 
 function onTestSelected(event) {
-  messaging.send(messaging.names.SELECT_TEST, {name: event.target.value});
+  messaging.send(SELECT_TEST, {name: event.target.value});
 }
 
 function welcome() {

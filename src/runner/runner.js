@@ -44,7 +44,7 @@ class Runner {
   }
 
   _finish() {
-    logger.log(`Done.`);
+    logger.log(`Done`);
   }
 
   _setupMocha(options) {
