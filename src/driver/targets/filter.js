@@ -8,12 +8,13 @@
  */
 const CHROMEDRIVER_EXTENSION_ID = 'aapnijgdinlhnhlmodcfapnahmbfebeb';
 
-exports.isCorrectTarget = function (target) {
+exports.isCorrectTarget = function (target, enabledExtensions) {
   return isSuitableType(target)
     && !isDevtools(target)
     && !isAutotesterBg(target)
     && !isChromedriverExtensionBg(target)
-    && !isAutotesterUi(target);
+    && !isAutotesterUi(target)
+    && isEnabledExtension(target, enabledExtensions)
 };
 
 function isSuitableType(target) {
@@ -37,3 +38,8 @@ function isAutotesterUi(target) {
   return target.type === 'page' && target.url === chrome.runtime.getURL('core/ui/ui.html');
 }
 
+function isEnabledExtension(target, enabledExtensions) {
+  return target.type === 'background_page'
+    ? Boolean(enabledExtensions.filter(e => e.id === target.extensionId).length)
+    : true
+}

@@ -58,10 +58,13 @@ const Targets = module.exports = {
 
   getAllTargets() {
     // todo: add inactive background event pages
-    return thenChrome.debugger.getTargets()
-      .then(targets => {
+    const getTargets = thenChrome.debugger.getTargets();
+    const getEnabledExtensions = thenChrome.management.getAll()
+      .then(items => items.filter(item => item.enabled && item.type === 'extension'));
+    return Promise.all([getTargets, getEnabledExtensions])
+      .then(([targets, enabledExtensions]) => {
         return targets
-          .filter(filter.isCorrectTarget)
+          .filter(target => filter.isCorrectTarget(target, enabledExtensions))
           .map(addHandle);
       });
   },
