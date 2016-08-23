@@ -18,10 +18,10 @@ test.suite(function (env) {
 
   describe('switchTo', function() {
 
-    describe('extension background page', function () {
+    const EXTENSION_ID = 'okmmklebfnaockijmhpkoilemnfcbeic';
+    const EXTENSION_BG_HANDLE = `extension-${EXTENSION_ID}`;
 
-      const EXTENSION_ID = 'okmmklebfnaockijmhpkoilemnfcbeic';
-      const EXTENSION_BG_HANDLE = `extension-${EXTENSION_ID}`;
+    describe('extension background', function () {
 
       test.beforeEach(function () {
         driver.getAllWindowHandles()
@@ -53,8 +53,7 @@ test.suite(function (env) {
       test.it('should execute async script', function () {
         driver.switchTo().window(EXTENSION_BG_HANDLE);
         const popup = driver.executeAsyncScript(function () {
-          const callback = arguments[arguments.length - 1];
-          chrome.browserAction.getPopup({}, callback);
+          chrome.browserAction.getPopup({}, arguments[arguments.length - 1]);
         });
         assert(popup).equalTo(`chrome-extension://${EXTENSION_ID}/popup.html`);
       });
@@ -63,14 +62,25 @@ test.suite(function (env) {
 
     describe('new tab', function() {
 
-      test.it('should switch to new tab', function () {
+      test.it('should switch to new tab with http url', function () {
         driver.switchTo().newTab(test.Pages.simpleTestPage);
         assert(driver.getCurrentUrl()).equalTo(test.Pages.simpleTestPage);
       });
 
-      test.it('should switch to about:blank if no url provided', function () {
+      test.it('should switch to new tab with empty url (as "about:blank")', function () {
         driver.switchTo().newTab();
         assert(driver.getCurrentUrl()).equalTo('about:blank');
+      });
+
+      test.it('should switch to new tab with extension url', function () {
+        driver.switchTo().window(EXTENSION_BG_HANDLE);
+        const popup = driver.executeAsyncScript(function () {
+          chrome.browserAction.getPopup({}, arguments[arguments.length - 1]);
+        });
+        popup.then(popupUrl => {
+          driver.switchTo().newTab(popupUrl);
+          assert(driver.getCurrentUrl()).equalTo(popupUrl);
+        });
       });
 
     });
