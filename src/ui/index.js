@@ -15,7 +15,7 @@ const {
 start();
 
 function start() {
-  document.getElementById('run').addEventListener('click', runTests);
+  document.getElementById('run').addEventListener('click', () => runTests());
   document.getElementById('testlist').addEventListener('change', onTestSelected);
 
   openAllLinksInNewTab();
@@ -30,12 +30,20 @@ function start() {
   loadConfig();
 
   welcome();
+
+  // export runTests for custom calls
+  window.runTests = runTests;
 }
 
-function runTests() {
+function runTests(files) {
+  if (files && !Array.isArray(files)) {
+    throw new Error('files should be array');
+  }
   sharedConsole.clear();
-  const test = document.getElementById('testlist').value;
-  messaging.send(RUN_TESTS, {test});
+  const eventData = files
+     ? {files}
+     : {selectedTest: document.getElementById('testlist').value};
+  messaging.send(RUN_TESTS, eventData);
 }
 
 function loadConfig() {

@@ -55,18 +55,24 @@ class App {
    * Run tests
    *
    * @param {Object} data
-   * @param {String} data.test
+   * @param {String} data.selectedTest
+   * @param {Array<{code, path}>} [data.files] special case to run custom files from ui window.runTests
    */
   _runTests(data) {
-    //todo: rename to selectedTest
-    const tests = this._testsConfig.tests.filter(test => !data.test || test === data.test);
-    const setup = this._testsConfig.setup;
-    const urls = setup.concat(tests).map(addBaseUrl);
     const runnerOptions = {
       window: getUiWindow(),
     };
+    let runnerPromise;
+    if (data.files) {
+      runnerPromise = runner.runFiles(data.files, runnerOptions);
+    } else {
+      const tests = this._testsConfig.tests.filter(test => !data.selectedTest || test === data.selectedTest);
+      const setup = this._testsConfig.setup;
+      const urls = setup.concat(tests).map(addBaseUrl);
+      runnerPromise = runner.runUrls(urls, runnerOptions);
+    }
     messaging.send(RUN_TESTS_STARTED);
-    runner.runUrls(urls, runnerOptions)
+    runnerPromise
       .then(() => {
         messaging.send(RUN_TESTS_DONE)
       })
