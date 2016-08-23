@@ -83,9 +83,9 @@ body {
 }
 
 #console .warn {
-    color: #eea236;
+    color: #E67E22;
 }
 
 #console .error {
-    color: red;
+    color: #cc0000;
 }

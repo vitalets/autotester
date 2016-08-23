@@ -28,7 +28,6 @@ exports.loadScript = function (url) {
  */
 exports.fetchText = function (url) {
   return window.fetch(url)
-    .catch(e => Promise.reject(`Can not fetch text url: ${url}`))
     .then(r => r.text())
 };
 

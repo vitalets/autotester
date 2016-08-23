@@ -38,17 +38,22 @@ class App {
   _loadConfig() {
     const url = addBaseUrl('index.js');
     return utils.fetchText(url)
-      .then(text => {
-        const config = evaluate.asCommonJs(text);
-        this._verifyConfig(config);
-        config.url = url;
-        this._testsConfig = config;
-        this._updateSelectedTest();
-        messaging.send(LOAD_TESTS_CONFIG_DONE, {
-          config: config,
-          selectedTest: storage.get('selectedTest'),
-        });
-      });
+      .then(
+        text => this._parseConfig(text, url),
+        err => messaging.send(LOAD_TESTS_CONFIG_DONE, {error: `Config not found: **${url}**`})
+      );
+  }
+
+  _parseConfig(text, url) {
+    const config = evaluate.asCommonJs(text);
+    this._verifyConfig(config);
+    config.url = url;
+    this._testsConfig = config;
+    this._updateSelectedTest();
+    messaging.send(LOAD_TESTS_CONFIG_DONE, {
+      config: config,
+      selectedTest: storage.get('selectedTest'),
+    });
   }
 
   /**

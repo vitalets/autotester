@@ -56,13 +56,17 @@ function activateSelfTab() {
     .then(tab => thenChrome.tabs.update(tab.id, {active: true}));
 }
 
-function onConfigLoaded(data) {
-  const msg = [
-    `Config successfully loaded from: **${data.config.url}**`,
-    `Test files found: **${data.config.tests.length}**`,
+function onConfigLoaded(data = {}) {
+  if (data.error) {
+    htmlConsole.warn(data.error);
+  } else {
+    const msg = [
+      `Config successfully loaded from: **${data.config.url}**`,
+      `Test files found: **${data.config.tests.length}**`,
     ].join('\n');
-  htmlConsole.info(msg);
-  fillTestList(data);
+    htmlConsole.info(msg);
+    fillTestList(data);
+  }
 }
 
 function fillTestList(data) {
