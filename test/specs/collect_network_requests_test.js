@@ -165,17 +165,15 @@ test.suite(function(env) {
       });
     });
 
-
     test.it('should collect requests from another target', function () {
+      driver.switchTo().window(runContext.simpleExtension.handle);
       driver.requests().collect();
-      driver.executeScript(function() {
-        // Timeout here should be greater than switch-to time
-        setTimeout(() => fetch(location.href), 1000);
+      driver.switchTo().newTab(runContext.simpleExtension.popup);
+      driver.executeAsyncScript(function() {
+        chrome.runtime.sendMessage({action: 'fetch', url: location.href}, callback);
       });
-      driver.switchTo().newTab(test.Pages.simpleTestPage);
-      driver.sleep(1500);
       driver.requests().stop();
-      assert(driver.requests().getCount({url: test.Pages.echoPage})).equalTo(1);
+      assert(driver.requests().getCount({url: runContext.simpleExtension.popup})).equalTo(1);
     });
 
   });

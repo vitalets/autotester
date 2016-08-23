@@ -20,8 +20,8 @@ exports.asFunction = function (code) {
 exports.asPromise = function (code) {
   // add `resolve` as last argument
   return `
-    return new Promise(resolve => {
-      [].push.call(arguments, resolve);
+    return new Promise(callback => {
+      [].push.call(arguments, callback);
       ${code}
     });`;
 };

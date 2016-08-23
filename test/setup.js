@@ -10,6 +10,7 @@ setup();
 function setup() {
   setupTest();
   setupRequire();
+  setupSimpleExtensionParams();
 }
 
 function setupTest() {
@@ -33,6 +34,15 @@ function setupRequire() {
   // this is strange unused require in execute_script_test.js
   // fixed in: https://github.com/SeleniumHQ/selenium/pull/2598
   require.register('path', {});
+}
+
+function setupSimpleExtensionParams() {
+  const id = 'okmmklebfnaockijmhpkoilemnfcbeic';
+  runContext.simpleExtension = {
+    id: id,
+    handle: `extension-${id}`,
+    popup: `chrome-extension://${id}/popup.html`,
+  };
 }
 
 function suite(fn, opt_options) {
