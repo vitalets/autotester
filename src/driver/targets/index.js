@@ -57,6 +57,11 @@ const Targets = module.exports = {
   },
 
   getAllTargets() {
+    // chrome has several build-in hidden event-page extensions that may appear as targets, e.g.:
+    // - CryptoTokenExtension (kmendfapggjehodndflmmgagdbamhnfd)
+    // - Google Network Speech (neajdppkdcdipfabeoofebfddakdcjhd)
+    // - Google Hangouts (nkeimhogjdpnpccoofpliimaahmaaome)
+    // so filter targets by `management.getAll` result.
     // todo: add inactive background event pages
     const getTargets = thenChrome.debugger.getTargets();
     const getEnabledExtensions = thenChrome.management.getAll()
