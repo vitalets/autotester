@@ -1,0 +1,24 @@
+{
+  "name": "Simple extension",
+  "description": "Simple extension for Autotester self testing",
+  "version": "0.1.0",
+  "manifest_version": 2,
+
+  "permissions": [
+    "tabs",
+    "<all_urls>"
+  ],
+
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": true
+  },
+
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwCT3VcILUJy3RghgNT2QhpukYyJUKnQb2v9RoG/UZK/aThORGH6KDs2HeMZE5Fqqy+8Fg2W5xPdw4Fx9LJCA6VcvJtPFg79DI/kazUiwUkTnvi01z93kBsx0zB3DQjVPD4zOOQjY4px4flt3Vk1ZSpkQGBmRQLTi5fGq91roSxXUakgHjEP5AgXxJPQHQ5sMJRqEna65gSMQs170wp744RbHWuQaZ9gHgxYAeBKdOQhp9dbzUn4MfwarfqpR1Tw6mSVdbsQ4PsorBhnhe1FcmO5ROV2nRm3TebqqMPCXAfq8IQLrUysRBq0yR0BHTxcF6ibt8814hd9SCTRKOI/ihQIDAQAB"
+}

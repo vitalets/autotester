@@ -20,13 +20,30 @@ test.suite(function (env) {
 
     describe('extension background page', function () {
 
+      const EXTENSION_ID = 'okmmklebfnaockijmhpkoilemnfcbeic';
+      const EXTENSION_BG_HANDLE = `extension-${EXTENSION_ID}`;
+
       test.beforeEach(function () {
         driver.getAllWindowHandles()
           .then(handles => handles.filter(h => h.startsWith('extension-'))[0])
           .then(handle => driver.switchTo().window(handle));
       });
 
+      test.it('should return extension background handler', function () {
+        driver.getAllWindowHandles().then(handles => {
+          assert(handles.indexOf(EXTENSION_BG_HANDLE) >= 0).equalTo(true);
+        });
+      });
+
+      test.it('should return exclude autotester background handler', function () {
+        driver.getAllWindowHandles().then(handles => {
+          const handle = `extension-${chrome.runtime.id}`;
+          assert(handles.indexOf(handle) >= 0).equalTo(false);
+        });
+      });
+
       test.it('should execute sync script', function () {
+        driver.switchTo().window(EXTENSION_BG_HANDLE);
         const manifestVersion = driver.executeScript(function () {
           return chrome.runtime.getManifest().manifest_version;
         });
@@ -34,11 +51,12 @@ test.suite(function (env) {
       });
 
       test.it('should execute async script', function () {
-        const title = driver.executeAsyncScript(function () {
+        driver.switchTo().window(EXTENSION_BG_HANDLE);
+        const popup = driver.executeAsyncScript(function () {
           const callback = arguments[arguments.length - 1];
-          chrome.browserAction.getTitle({}, callback);
+          chrome.browserAction.getPopup({}, callback);
         });
-        assert(title).equalTo('Визуальные закладки');
+        assert(popup).equalTo(`chrome-extension://${EXTENSION_ID}/popup.html`);
       });
 
     });
