@@ -11,8 +11,8 @@
     "webNavigation",
     "<all_urls>",
     "debugger",
-    "webNavigation",
     "management",
+    "cookies",
     "history"
   ],
 
