@@ -33,8 +33,14 @@ class Debugger {
   }
 
   detach() {
-    return thenChrome.debugger.detach(this._target)
-      .then(() => this._afterDetach('self'));
+    // debugger can be automatically detached when target closes.
+    // In that case second call of detach() should not fail
+    if (this._target) {
+      return thenChrome.debugger.detach(this._target)
+        .then(() => this._afterDetach('self'));
+    } else {
+      return Promise.resolve();
+    }
   }
 
   getTarget() {
