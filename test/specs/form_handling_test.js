@@ -66,7 +66,7 @@ test.suite(function(env) {
       driver.wait(until.titleIs('We Arrive Here'), 1000);
     });
 
-    test.it('should submit form using newline char', function () {
+    test.it.skip('should submit form using newline char', function () {
       driver.get(test.Pages.formPage);
       var nestedForm = driver.findElement(By.id('nested_form'));
       var input = nestedForm.findElement(By.name('x'));
@@ -75,7 +75,7 @@ test.suite(function(env) {
       assert(driver.getCurrentUrl()).endsWith('?x=name');
     });
 
-    test.it('should submit form using ENTER key', function () {
+    test.it.skip('should submit form using ENTER key', function () {
       driver.get(test.Pages.formPage);
       var nestedForm = driver.findElement(By.id('nested_form'));
       var input = nestedForm.findElement(By.name('x'));

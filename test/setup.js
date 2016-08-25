@@ -41,6 +41,7 @@ function setupSimpleExtensionParams() {
   runContext.simpleExtension = {
     id: id,
     handle: `extension-${id}`,
+    bg: `chrome-extension://${id}/_generated_background_page.html`,
     popup: `chrome-extension://${id}/popup.html`,
   };
 }

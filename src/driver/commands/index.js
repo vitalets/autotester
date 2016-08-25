@@ -53,5 +53,6 @@ module.exports = {
   [cmd.SET_TIMEOUT]: timeouts.setTimeout,
 
   // ==== Autotester extra commands ====
-  [extraCmd.NEW_TAB]: switchTo.newTab,
+  [extraCmd.SWITCH_TO_NEW_TAB]: switchTo.newTab,
+  [extraCmd.SWITCH_TO_EXTENSION]: switchTo.extension,
 };

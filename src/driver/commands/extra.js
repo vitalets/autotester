@@ -3,5 +3,6 @@
  */
 
 module.exports = {
-  NEW_TAB: 'newTab',
+  SWITCH_TO_NEW_TAB: 'switchToNewTab',
+  SWITCH_TO_EXTENSION: 'switchToExtension',
 };

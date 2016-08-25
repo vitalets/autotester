@@ -90,15 +90,18 @@ const Targets = module.exports = {
     return this.switchByProp('handle', handle);
   },
 
+  switchByExtensionId(extensionId) {
+    if (extensionId) {
+      return this.switchByProp('extensionId', extensionId);
+    } else {
+      return this._getFirstExtensionTarget()
+        .then(target => switchToTarget(target))
+    }
+  },
+
   switchByProp(prop, value) {
     return this.getByProp(prop, value)
-      .then(target => {
-        clearCurrentTarget();
-        currentTarget.handle = target.handle;
-        return target.extensionId
-          ? switchToExtensionTarget(target)
-          : switchToTabTarget(target);
-      });
+      .then(target => switchToTarget(target))
   },
 
   /**
@@ -122,6 +125,14 @@ const Targets = module.exports = {
     return Promise.resolve()
       .then(detachDebuggers)
       .then(closeUsedTabs);
+  },
+
+  _getFirstExtensionTarget() {
+    return this.getAllTargets()
+      .then(targets => {
+        const target = targets.filter(target => target.extensionId)[0];
+        return target || Promise.reject(`No available extensions found`);
+      });
   }
 };
 
@@ -156,6 +167,14 @@ function addHandle(target) {
     target.handle = EXTENSION_PREFIX + target.extensionId;
   }
   return target;
+}
+
+function switchToTarget(target) {
+  clearCurrentTarget();
+  currentTarget.handle = target.handle;
+  return target.extensionId
+    ? switchToExtensionTarget(target)
+    : switchToTabTarget(target);
 }
 
 function switchToTabTarget(target) {

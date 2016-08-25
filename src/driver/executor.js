@@ -15,6 +15,9 @@ class Executor extends seleniumCommand.Executor {
   execute(cmd) {
     const name = cmd.getName();
     const params = cmd.getParameters();
+    if (!name) {
+      throw new Error('Empty selenium command');
+    }
     logger.log(`Selenium command '${name}':`, params);
     if (commands.hasOwnProperty(name)) {
       return commands[name](params)

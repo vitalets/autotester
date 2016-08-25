@@ -31,3 +31,14 @@ exports.newTab = function (params = {}) {
     .then(() => TabLoader.create({url: params.url || INITIAL_URL}))
     .then(tab => Targets.switchByTabId(tab.id));
 };
+
+/**
+ * Switch extension with specified id or first found extension if id is empty
+ *
+ * @param {Object} params
+ * @param {String} [params.id]
+ * @returns {Promise}
+ */
+exports.extension = function (params = {}) {
+  return Targets.switchByExtensionId(params.id);
+};
