@@ -10,7 +10,7 @@ const logger = require('../utils/logger').create('Mocha-runner');
 
 const DEFAULT_OPTIONS = {
   ui: 'bdd',
-  timeout: 10 * 1000,
+  timeout: 30 * 1000,
 };
 
 class MochaRunner {
