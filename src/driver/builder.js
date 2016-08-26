@@ -1,5 +1,6 @@
 /**
- * Implementation of selenium webdriver.Builder that always returns Autotester driver instance.
+ * Implementation of selenium webdriver.Builder that always returns Autotester driver instance
+ * for unknown methods.
  */
 
 const Driver = require('./');

@@ -30,12 +30,6 @@ const usedTabIds = new Set();
 const debuggers = [];
 
 const Targets = module.exports = {
-  reset() {
-    clearCurrentTarget();
-    usedTabIds.clear();
-    debuggers.length = 0;
-  },
-
   get handle() {
     return currentTarget.handle;
   },
@@ -54,6 +48,14 @@ const Targets = module.exports = {
 
   set rootId(value) {
     currentTarget.rootId = value;
+  },
+
+  reset() {
+    clearCurrentTargetProps();
+    // detach debuggers and close tabs that can hang from prev session
+    return Promise.resolve()
+      .then(detachDebuggers)
+      .then(closeUsedTabs);
   },
 
   getAllTargets() {
@@ -122,9 +124,7 @@ const Targets = module.exports = {
   },
 
   quit() {
-    return Promise.resolve()
-      .then(detachDebuggers)
-      .then(closeUsedTabs);
+    return this.reset();
   },
 
   _getFirstExtensionTarget() {
@@ -170,7 +170,7 @@ function addHandle(target) {
 }
 
 function switchToTarget(target) {
-  clearCurrentTarget();
+  clearCurrentTargetProps();
   currentTarget.handle = target.handle;
   return target.extensionId
     ? switchToExtensionTarget(target)
@@ -197,6 +197,6 @@ function switchToFrame(frameId) {
   // todo
 }
 
-function clearCurrentTarget() {
+function clearCurrentTargetProps() {
   Object.keys(currentTarget).forEach(key => currentTarget[key] = null);
 }

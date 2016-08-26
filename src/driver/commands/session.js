@@ -10,8 +10,9 @@ const switchTo = require('./switch-to');
 const SESSION_ID = 'autotester-session';
 
 exports.start = function () {
-  Targets.reset();
-  return switchTo.newTab()
+  return Promise.resolve()
+    .then(() => Targets.reset())
+    .then(() => switchTo.newTab())
     .then(() => new Session(SESSION_ID, {}));
 };
 
