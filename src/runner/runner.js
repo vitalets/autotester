@@ -37,6 +37,7 @@ class Runner {
     this._context = context.create({
       console: options.window.sharedConsole,
     });
+
     this._setupMocha(options);
     return this._runFiles()
       .then(() => this._mochaRunner.hasTests() ? this._mochaRunner.run() : null)

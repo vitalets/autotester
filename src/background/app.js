@@ -48,7 +48,7 @@ class App {
   }
 
   _parseConfig(text, url) {
-    const config = evaluate.asCommonJs(text);
+    const config = evaluate.asCommonJs(url, text);
     this._verifyConfig(config);
     config.url = url;
     this._testsConfig = config;

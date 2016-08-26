@@ -21,7 +21,7 @@ class MochaRunner {
    */
   constructor(context) {
     this._context = context;
-    evaluate.asFunction(mochaCode, {global: this._context});
+    evaluate.asFunction('mocha.js', mochaCode, {global: this._context});
   }
 
   /**

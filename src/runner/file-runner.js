@@ -41,7 +41,8 @@ class FileRunner {
 
   _evaluate() {
     try {
-      evaluate.asFunction(this._code, this._args);
+      // wrap filename into '**' for markdown in error stack
+      evaluate.asFunction(`**${this._filename}**`, this._code, this._args);
     } catch(e) {
       this._fulfill(e);
     }
@@ -81,7 +82,8 @@ class FileRunner {
       // try catch here is needed as we are already in catch and can not throw second error
       // so at least log it to console
       try {
-        evaluate.fixStack(error, this._filename);
+        // dont fixStack as we name function as filename
+        // evaluate.fixStack(error, this._filename);
         if (this._isTestSelfError(error)) {
           error.isTestSelf = true;
         }

@@ -143,10 +143,11 @@ exports.getReporter = function (win) {
       }
 
       // vitalets: get filename for test and fix error stack
-      var filename = utils.getFilename(test);
-      if (filename) {
-        evaluate.fixStack(test.err, filename);
-      }
+      // todo: dont fix stack as we name function as filename
+      // var filename = utils.getFilename(test);
+      // if (filename) {
+      //   evaluate.fixStack(test.err, filename);
+      // }
 
       if (test.err.stack) {
         var indexOfMessage = test.err.stack.indexOf(test.err.message);
