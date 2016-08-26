@@ -155,7 +155,13 @@ function detachDebuggers() {
 }
 
 function closeUsedTabs() {
-  return thenChrome.tabs.remove([...usedTabIds])
+  // dont use thenChrome.tabs.remove(<array of tab ids>)
+  // as it fails on first non-existent tab
+  const tasks = [...usedTabIds].map(tabId => {
+    // dont throw errors as tab maybe closed by user
+    return thenChrome.tabs.remove(tabId).catch(() => {});
+  });
+  return Promise.all(tasks)
     .then(() => usedTabIds.clear());
 }
 
