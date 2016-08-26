@@ -3,6 +3,7 @@
  */
 
 const promise = require('selenium-webdriver/lib/promise');
+const seleniumTesting = require('./selenium-testing');
 const utils = require('../utils');
 const context = require('./context');
 const FileRunner = require('./file-runner');
@@ -39,6 +40,7 @@ class Runner {
     });
 
     this._setupMocha(options);
+    seleniumTesting.wrapMochaGlobals(this._context);
     return this._runFiles()
       .then(() => this._mochaRunner.hasTests() ? this._mochaRunner.run() : null)
       .then(() => this._finish());

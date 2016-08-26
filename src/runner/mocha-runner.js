@@ -3,7 +3,6 @@
  */
 
 const utils = require('../utils');
-const seleniumTesting = require('./selenium-testing');
 const mochaCode = require('raw!mocha/mocha.js');
 const evaluate = require('../utils/evaluate');
 const logger = require('../utils/logger').create('Mocha-runner');
@@ -36,7 +35,6 @@ class MochaRunner {
     options = Object.assign({}, DEFAULT_OPTIONS, utils.noUndefined(options));
     this._context.mocha.setup(options);
     this._storeFilenames();
-    seleniumTesting.wrapMochaGlobals(this._context);
   }
 
   hasTests() {
