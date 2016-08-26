@@ -6,6 +6,10 @@ const Targets = require('../../targets');
 const modifiers = require('./modifiers');
 const dispatcher = require('./dispatcher');
 
+// temp solution to support enter
+const keycodes = require('./keycodes');
+const Key = require('selenium-webdriver/lib/input').Key;
+
 /**
  * @param {Object} params
  * @param {String} params.id
@@ -43,7 +47,14 @@ function sendKey(char) {
   const isShiftedChar = /[A-Z\!\$\^\*\(\)\+\{\}\:\?\|~@#%&_"<>]/.test(char);
   const dispatchShift = isShiftedChar && !modifiers.hasShift();
   // todo: find true way to get keyCode
-  const keyCode = 0;
+  const indexOfChar = keycodes.indexOf(char.toLocaleUpperCase());
+  const keyCode = indexOfChar >= 0 ? indexOfChar : 0;
+
+  if (char === Key.ENTER) {
+    char = '\r';
+  }
+
+
   // todo: get text/unmodified text
   return Promise.resolve()
     .then(() => dispatchShift ? modifiers.dispatchShift('keydown') : null)

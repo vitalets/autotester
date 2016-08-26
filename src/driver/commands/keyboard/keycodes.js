@@ -38,7 +38,7 @@ module.exports = [
   '', // [10]
   '', // [11]
   'CLEAR', // [12]
-  'ENTER', // [13]
+  Key.ENTER, // [13]
   'ENTER_SPECIAL', // [14]
   '', // [15]
   Key.SHIFT, // [16]
