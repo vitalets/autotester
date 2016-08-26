@@ -72,6 +72,11 @@ test.suite(function (env) {
           assert(driver.getCurrentUrl()).startsWith('chrome-extension://');
         });
 
+        test.it('should not fail on several .extension() calls', function () {
+          driver.switchTo().extension(runContext.simpleExtension.id);
+          driver.switchTo().extension(runContext.simpleExtension.id);
+        });
+
       });
 
       describe('popup', function () {
