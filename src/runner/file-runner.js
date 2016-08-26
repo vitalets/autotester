@@ -41,8 +41,8 @@ class FileRunner {
 
   _evaluate() {
     try {
-      // wrap filename into '**' for markdown in error stack
-      evaluate.asFunction(`**${this._filename}**`, this._code, this._args);
+      // prepend filename with '&#x1F534;' to mark test files with red ball
+      evaluate.asFunction(`&#x1F534;${this._filename}`, this._code, this._args);
     } catch(e) {
       this._fulfill(e);
     }
@@ -79,37 +79,11 @@ class FileRunner {
   _fulfill(error) {
     this._fulfilled = true;
     if (error) {
-      // try catch here is needed as we are already in catch and can not throw second error
-      // so at least log it to console
-      try {
-        // dont fixStack as we name function as filename
-        // evaluate.fixStack(error, this._filename);
-        if (this._isTestSelfError(error)) {
-          error.isTestSelf = true;
-        }
-        this._flow.reset();
-      } catch (e) {
-        console.error(e);
-      }
+      this._flow.reset();
       this._reject(error);
     } else {
       this._resolve();
     }
-  }
-
-  /**
-   * Is error occurred in test code itself
-   * (check first line of stack trace)
-   *
-   * @param {Error} error
-   */
-  _isTestSelfError(error) {
-    const stack = error.stack;
-    if (!stack) {
-      return false;
-    }
-    const stackLines = stack.split('\n');
-    return stackLines[1] && stackLines[1].indexOf(this._filename) >= 0;
   }
 }
 

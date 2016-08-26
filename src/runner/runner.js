@@ -40,7 +40,6 @@ class Runner {
     });
 
     this._setupMocha(options);
-    seleniumTesting.wrapMochaGlobals(this._context);
     return this._runFiles()
       .then(() => this._mochaRunner.hasTests() ? this._mochaRunner.run() : null)
       .then(() => this._finish());
@@ -60,11 +59,15 @@ class Runner {
 
   _runFiles() {
     return this._files.reduce((res, file) => {
-      return res.then(() => {
-        this._context.__filename = file.path;
-        return new FileRunner(file.code, file.path, this._context, this._flow).run();
-      });
+      return res.then(() => this._runFile(file));
     }, Promise.resolve());
+  }
+
+  _runFile(file) {
+    this._context.__filename = file.path;
+    // wrap before each file to add names to every `it` function for pretty error stack
+    this._context.test.wrapMochaGlobals(this._context);
+    return new FileRunner(file.code, file.path, this._context, this._flow).run();
   }
 }
 

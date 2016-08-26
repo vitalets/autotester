@@ -142,13 +142,6 @@ exports.getReporter = function (win) {
         message = test.err.message;
       }
 
-      // vitalets: get filename for test and fix error stack
-      // todo: dont fix stack as we name function as filename
-      // var filename = utils.getFilename(test);
-      // if (filename) {
-      //   evaluate.fixStack(test.err, filename);
-      // }
-
       if (test.err.stack) {
         var indexOfMessage = test.err.stack.indexOf(test.err.message);
         if (indexOfMessage === -1) {
@@ -169,7 +162,8 @@ exports.getReporter = function (win) {
       } else if (test.err.htmlMessage) {
         el.appendChild(fragment('<div class="html-error">%s</div>', test.err.htmlMessage));
       } else {
-        el.appendChild(fragment('<pre class="error">%e%e</pre>', message, stackString));
+        // vitalets: changed %e%e to %e%s to enable html in stack
+        el.appendChild(fragment('<pre class="error">%e%s</pre>', message, stackString));
       }
 
       self.addCodeToggle(el, test.body);
