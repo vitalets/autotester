@@ -33,7 +33,7 @@ test.suite(function(env) {
     driver.quit();
   });
 
-  describe('execute_async_script', function () {
+  describe('execute async script', function () {
 
     test.it('should return primitives', function () {
       driver.get(test.Pages.ajaxyPage);

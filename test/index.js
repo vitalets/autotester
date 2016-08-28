@@ -5,7 +5,7 @@
  * npm run fileserver
  * ```
  *
- * This file is also used by node-runner to get actual tests.
+ * This file is also used by ./run-node-test to get actual tests.
  */
 
 module.exports = {
@@ -14,13 +14,15 @@ module.exports = {
   ],
   tests: [
     'playground.js',
-    'specs/switch_to_test.js',
-    'specs/collect_network_requests_test.js',
-    'specs/form_handling_test.js',
-    'specs/execute_async_script_test.js',
-    'specs/window_switching_test.js',
-
-    // === own selenium specs from 'node_modules/selenium-webdriver/test' ===
+    // === specs for autotester extra features (not supported by selenium)
+    'specs-extra/newtab_switching_test.js',
+    'specs-extra/extension_switching_test.js',
+    'specs-extra/collect_network_requests_test.js',
+    // === specs to be contributed to selenium
+    'specs-selenium-contrib/form_handling_test.js',
+    'specs-selenium-contrib/execute_async_script_test.js',
+    'specs-selenium-contrib/window_switching_test.js',
+    // === specs copied from existing selenium tests in 'node_modules/selenium-webdriver/test'
     'specs-selenium/tag_name_test.js',
     //'specs-selenium/actions_test.js',
     'specs-selenium/execute_script_test.js',
