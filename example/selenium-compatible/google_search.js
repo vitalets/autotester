@@ -14,7 +14,7 @@ var driver = new webdriver.Builder()
 driver.get('http://www.google.com/ncr');
 driver.findElement(By.name('q')).sendKeys('webdriver');
 driver.findElement(By.name('btnG')).click();
-driver.wait(until.titleIs('webdriver - Google Search'), 1000);
+driver.wait(until.titleContains('webdriver'), 2000);
 driver.getTitle().then(title => {
   console.log('Title is:', title);
 });
