@@ -14,3 +14,13 @@ exports.getAllWindowHandles = function () {
     .then(() => Targets.getAllTargets())
     .then(targets => targets.map(target => target.handle));
 };
+
+/**
+ * Close current window
+ *
+ */
+exports.close = function () {
+  return Promise.resolve()
+    .then(() => Targets.getAllTargets())
+    .then(targets => targets.map(target => target.handle));
+};

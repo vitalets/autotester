@@ -18,6 +18,8 @@ module.exports = {
     'specs/collect_network_requests_test.js',
     'specs/form_handling_test.js',
     'specs/execute_async_script_test.js',
+    'specs/window_switching_test.js',
+
     // === own selenium specs from 'node_modules/selenium-webdriver/test' ===
     'specs-selenium/tag_name_test.js',
     //'specs-selenium/actions_test.js',

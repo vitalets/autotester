@@ -34,7 +34,7 @@ test.suite(function(env) {
     driver.quit();
   });
 
-  describe('form_handling', function () {
+  describe('form handling', function () {
 
     test.it('should click on submit input elements', function () {
       driver.get(test.Pages.formPage);

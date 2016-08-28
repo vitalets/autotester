@@ -19,6 +19,7 @@ const timeouts = require('./timeouts');
 module.exports = {
   [cmd.NEW_SESSION]: session.start,
   [cmd.QUIT]: session.stop,
+  [cmd.CLOSE]: windowCommand.close,
 
   [cmd.SWITCH_TO_WINDOW]: switchTo.window,
 

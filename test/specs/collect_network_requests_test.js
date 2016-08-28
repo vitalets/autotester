@@ -1,5 +1,6 @@
 'use strict';
 
+var webdriver = require('..');
 var assert = require('../testing/assert');
 var test = require('../lib/test');
 
@@ -12,7 +13,7 @@ test.suite(function(env) {
 
   test.beforeEach(function () {
     driver.get(test.Pages.echoPage);
-    driver.requests().reset();
+    //driver.requests().reset();
   });
 
   test.after(function () {
@@ -105,6 +106,7 @@ test.suite(function(env) {
     });
 
     test.it('should collect new tabs', function () {
+      const initialHandle = driver.getWindowHandle();
       driver.executeScript(function(href) {
         const a = document.createElement('a');
         a.href = href;
@@ -114,10 +116,20 @@ test.suite(function(env) {
         document.body.appendChild(a);
       }, test.Pages.simpleTestPage);
       driver.requests().collect();
+      const oldHandles = driver.getAllWindowHandles();
       driver.findElement({id: 'newtablink'}).click();
       // delay needed for newtab to open
       driver.sleep(200);
       driver.requests().stop();
+      // close opened tab
+      // todo: find more convenient way, maybe switchTo by url ?
+      const newHandles = driver.getAllWindowHandles();
+      webdriver.promise.all([oldHandles, newHandles, initialHandle]).then(([oldHandles, newHandles, initialHandle]) => {
+        const newHandle = newHandles.filter(h => oldHandles.indexOf(h) === -1)[0];
+        driver.switchTo().window(newHandle);
+        driver.close();
+        driver.switchTo().window(initialHandle);
+      });
       assert(driver.requests().getCount({type: 'newtab', url: test.Pages.simpleTestPage})).equalTo(1);
     });
 

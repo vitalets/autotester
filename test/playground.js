@@ -11,12 +11,40 @@ var webdriver = require('selenium-webdriver'),
 // =======
 
 
+// test.describe('Yandex Search', function() {
+//   var driver;
+//   test.before(function() {
+//     driver = new Driver();
+//   });
+//   test.it('should append query to title', function() {
+//     driver.get('https://ya.ru');
+//     driver.sleep(1000);
+//     driver.findElement(By.name('text')).sendKeys('webdriver'+Key.ENTER);
+//     driver.sleep(1000);
+//     //driver.findElement(By.name('text')).submit();
+//    // driver.findElement(By.name('text')).sendKeys(Key.ENTER);
+//
+//   });
+//   test.after(function() {
+//     //driver.quit();
+//   });
+// });
+
+
 // let driver = new Driver();
 //
-// driver.get('https://google.ru');
+// driver.get('chrome://newtab');
+//driver.wait(until.elementLocated(By.className('b-tumbs__item_index_0')), 3000);
+
+// переключаемся в бэкграуд ВЗ (пока просто по id, потом сделаем универсально)
+//driver.switchTo().extension('nkcpopggjcjkiicpenikeogioednjeac');
+
+
+//
+ //driver.get('https://google.ru');
 // // // driver.findElement(By.name('q')).sendKeys('yandex')//.then(() => wwww())
 // // // driver.findElement(By.name('btnG')).click();
-// //
+
 // driver.getCurrentUrl().then(result => {
 //   console.log('result1:', result)
 // });

@@ -123,6 +123,25 @@ const Targets = module.exports = {
     usedTabIds.add(tabId);
   },
 
+  /**
+   * Close current target (only for tabs)
+   * After this command current target is not set
+   */
+  close() {
+    if (!currentTarget.tabId) {
+      throw new Error('Can not close non-tab target');
+    }
+    return Promise.resolve()
+      .then(() => currentTarget.debugger.detach())
+      .then(() => closeTabSafe(currentTarget.tabId))
+      .then(() => {
+        const index = debuggers.findIndex(d => d === currentTarget.debugger);
+        debuggers.splice(index, 1);
+        usedTabIds.delete(currentTarget.tabId);
+        clearCurrentTargetProps();
+      })
+  },
+
   quit() {
     return this.reset();
   },
@@ -157,12 +176,14 @@ function detachDebuggers() {
 function closeUsedTabs() {
   // dont use thenChrome.tabs.remove(<array of tab ids>)
   // as it fails on first non-existent tab
-  const tasks = [...usedTabIds].map(tabId => {
-    // dont throw errors as tab maybe closed by user
-    return thenChrome.tabs.remove(tabId).catch(() => {});
-  });
+  const tasks = [...usedTabIds].map(closeTabSafe);
   return Promise.all(tasks)
     .then(() => usedTabIds.clear());
+}
+
+function closeTabSafe(tabId) {
+  // dont throw errors as tab maybe closed by user
+  return thenChrome.tabs.remove(tabId).catch(() => {});
 }
 
 function addHandle(target) {
