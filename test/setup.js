@@ -37,7 +37,7 @@ function setupRequire() {
 }
 
 function setupSimpleExtensionParams() {
-  const id = 'okmmklebfnaockijmhpkoilemnfcbeic';
+  const id = 'inilfehdbldcjcffbakeabignfomfbdh';
   runContext.simpleExtension = {
     id: id,
     handle: `extension-${id}`,
