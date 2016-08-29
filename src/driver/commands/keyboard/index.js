@@ -17,7 +17,12 @@ const Key = require('selenium-webdriver/lib/input').Key;
  */
 exports.sendKeysToElement = function (params) {
   // todo: scroll
-  return focus(params.id)
+  return Promise.resolve()
+    .then(() => {
+      // try to set focus if possible
+      return focus(params.id)
+        .catch(e => e.message.indexOf('Element is not focusable') ? null : Promise.reject(e))
+    })
     .then(() => exports.sendKeysToActiveElement(params))
     .then(() => modifiers.release());
 };
