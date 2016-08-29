@@ -28,6 +28,8 @@ exports.create = function (outer) {
     require: fakeRequire,
     // for debug
     console: outer.console || window.console,
+    // for custom reporting
+    report: outer.report,
     __filename: outer.__filename || '',
     // for custom user data between files
     runContext: {},

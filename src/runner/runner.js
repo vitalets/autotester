@@ -37,6 +37,7 @@ class Runner {
     logger.log(`Running ${this._files.length} file(s)`);
     this._context = context.create({
       console: options.window.sharedConsole,
+      report: options.window.document.getElementById('report'),
     });
 
     this._setupMocha(options);
