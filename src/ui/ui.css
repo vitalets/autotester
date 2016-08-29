@@ -58,7 +58,11 @@ body {
     right: 5px;
 }
 
-#console {
+.report {
+    font-size: 13px;
+}
+
+.console {
     overflow: auto;
     border: solid 1px #e1e1e8;
     padding: 9px 14px;
@@ -69,23 +73,23 @@ body {
     max-height: 200px;
 }
 
-#console p, #console ul {
+.console p, .console ul {
     margin: 0 0 7px 0;
     padding: 0;
 }
 
-#console .log {
+.console .log {
     color: #333;
 }
 
-#console .info {
+.console .info {
     color: #0066ff;
 }
 
-#console .warn {
+.console .warn {
     color: #E67E22;
 }
 
-#console .error {
+.console .error {
     color: #cc0000;
 }

@@ -40,6 +40,7 @@ function runTests(files) {
     throw new Error('files should be array');
   }
   sharedConsole.clear();
+  document.getElementById('report').innerHTML = '';
   const eventData = files
      ? {files}
      : {selectedTest: document.getElementById('testlist').value};
