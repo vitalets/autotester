@@ -3,14 +3,16 @@
  * see: selenium-webdriver/lib/test/**
  */
 
-const FILE_SERVER_BASE_URL = 'http://127.0.0.1:2310/common/';
+// const FILE_SERVER_BASE_URL = 'http://127.0.0.1:2310/common/';
+const FILE_SERVER_BASE_URL = 'http://selenium-fileserver.herokuapp.com/common/';
+const SIMPLE_EXTENSION_ID = 'inilfehdbldcjcffbakeabignfomfbdh';
 
 setup();
 
 function setup() {
   setupTest();
   setupRequire();
-  setupSimpleExtensionParams();
+  setupRunContext();
 }
 
 function setupTest() {
@@ -36,14 +38,16 @@ function setupRequire() {
   require.register('path', {});
 }
 
-function setupSimpleExtensionParams() {
-  const id = 'inilfehdbldcjcffbakeabignfomfbdh';
-  runContext.simpleExtension = {
-    id: id,
-    handle: `extension-${id}`,
-    bg: `chrome-extension://${id}/_generated_background_page.html`,
-    popup: `chrome-extension://${id}/popup.html`,
-  };
+function setupRunContext() {
+  Object.assign(runContext, {
+    baseUrl: FILE_SERVER_BASE_URL,
+    simpleExtension: {
+      id: SIMPLE_EXTENSION_ID,
+      handle: `extension-${SIMPLE_EXTENSION_ID}`,
+      bg: `chrome-extension://${SIMPLE_EXTENSION_ID}/_generated_background_page.html`,
+      popup: `chrome-extension://${SIMPLE_EXTENSION_ID}/popup.html`,
+    }
+  });
 }
 
 function suite(fn, opt_options) {

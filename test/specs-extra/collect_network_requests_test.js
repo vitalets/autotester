@@ -158,7 +158,7 @@ test.suite(function(env) {
       driver.requests().stop();
       assert(driver.requests().dump()).equalTo([
         'Collected 1 request(s):',
-        'Other: GET http://127.0.0.1:2310/common/echo',
+        `Other: GET ${runContext.baseUrl}echo`,
       ].join('\n'));
     });
 
@@ -172,7 +172,7 @@ test.suite(function(env) {
       driver.requests().dump(consoleMock).then(() => {
         assert(consoleMock.s).equalTo([
           'Collected 1 request(s):',
-          'Other: GET http://127.0.0.1:2310/common/echo',
+          `Other: GET ${runContext.baseUrl}echo`,
         ].join('\n'));
       });
     });
