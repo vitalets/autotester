@@ -11,9 +11,16 @@
     "url": "git://github.com/vitalets/autotester.git"
   },
   "scripts": {
-    "code": "npm run check-deps && npm run madge && npm run no-only-in-test",
+    "dev": "run-p watch fileserver",
+    "test-local": "mocha -t 20000 ./node-runner",
+    "test-cloud": "source .env && mocha -t 20000 ./node-runner",
+    "build": "npm run unpacked+zip --outdir=dist/unpacked --outzip=../autotester.zip",
+    "build-with-example": "npm run unpacked+zip --outdir=dist/unpacked --copytest=example --outzip=../autotester-with-example.zip",
+    "publish-to-npm": "npm run build-for-npm --outdir=dist/npm-publish/extension && npm publish dist/npm-publish",
+    "//": "============================= below are helper tasks =============================",
     "clean": "rimraf $npm_config_outdir",
     "clean-dist": "rimraf dist",
+    "code": "npm run check-deps && npm run madge && npm run no-only-in-test",
     "madge": "madge --format=cjs --circular src",
     "check-deps": "check-dependencies",
     "no-only-in-test": "if [ \"$(git diff --cached -- '*.js'| grep '\\+' | grep '\\.only')\" != \"\" ]; then exit 1; fi",
@@ -31,17 +38,13 @@
     "copy-test": "if [[ -n $npm_config_copytest ]]; then npm run copy-$npm_config_copytest; fi",
     "watch": "npm run clean && run-p watch:**",
     "fileserver": "node ./node_modules/selenium-webdriver/lib/test/fileserver.js",
-    "dev": "run-p watch fileserver",
     "unpacked": "npm run clean && npm run webpack && npm run copy",
     "zip": "pushd $npm_config_outdir && rimraf $npm_config_outzip && zip -rT $npm_config_outzip . && popd",
     "crx": "crx pack $npm_config_outdir -o $npm_config_outcrx -p keys/autotester.pem",
     "crx-dev": "npm run crx --outcrx=dist/autotester-dev.crx",
     "crx-simple-ext": "crx pack test/data/simple-extension -o dist/simple-extension.crx -p keys/simple-extension.pem",
     "unpacked+zip": "npm run unpacked && npm run zip",
-    "build": "npm run unpacked+zip --outdir=dist/unpacked --outzip=../autotester.zip",
-    "build-with-example": "npm run unpacked+zip --outdir=dist/unpacked --copytest=example --outzip=../autotester-with-example.zip",
-    "build-for-npm": "npm run unpacked && cpx -v package.json $npm_config_outdir/../",
-    "publish-to-npm": "npm run build-for-npm --outdir=dist/npm-publish/extension && npm publish dist/npm-publish"
+    "build-for-npm": "npm run unpacked && cpx -v package.json $npm_config_outdir/../"
   },
   "dependencies": {},
   "devDependencies": {
