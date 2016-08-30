@@ -1,11 +1,14 @@
 /**
- * Run self tests in local/cloud chrome
+ * Run self-tests in local chrome or cloud farm.
+ * Selenium here is used to open Chrome, navigate to Autotester UI and click on 'Run' button.
+ * Autotester is packed with self-tests.
  */
 
 const webdriver = require('selenium-webdriver');
 const Symbols = require('selenium-webdriver/lib/symbols');
 const chrome = require('selenium-webdriver/chrome');
 const htmlToText = require('html-to-text');
+const request = require('request');
 
 Promise.resolve()
   .then(() => process.env.BROWSERSTACK_USER ? getRemoteDriver() : getLocalDriver())
@@ -20,8 +23,14 @@ Promise.resolve()
         const exitCode = header.indexOf('failures: 0') >= 0 ? 0 : 1;
         console.log(text);
         console.log(header);
+        setSessionStatus(driver, exitCode);
         driver.quit().then(() => process.exit(exitCode));
       });
+  })
+  .catch(e => {
+    setTimeout(() => {
+      throw e;
+    }, 0);
   });
 
 function getLocalDriver() {
@@ -53,8 +62,8 @@ function getRemoteDriver() {
 
 function getExtensionsForRemote() {
   let options = new chrome.Options();
-  options.addExtensions(`${__dirname}/dist/autotester-dev.crx`);
-  options.addExtensions(`${__dirname}/dist/simple-extension.crx`);
+  options.addExtensions(`${__dirname}/../dist/autotester-dev.crx`);
+  options.addExtensions(`${__dirname}/../dist/simple-extension.crx`);
   return Promise.all(options[Symbols.serialize]().extensions);
 }
 
@@ -75,4 +84,36 @@ function getCapsForRemote(extensions) {
     'os_version' : '7',
     'resolution' : '1024x768',
   };
+}
+
+function setSessionStatus(driver, hasErrors) {
+  const status = hasErrors ? 'error' : 'completed';
+  driver.call(() => {
+    return driver.session_
+      .then(session => sendSessionStatus(session.id_, status))
+  });
+}
+
+// see: https://www.browserstack.com/automate/node
+function sendSessionStatus(sessionId, status) {
+  const credentials = `${process.env.BROWSERSTACK_USER}:${process.env.BROWSERSTACK_KEY}`;
+  const uri = `https://${credentials}@www.browserstack.com/automate/sessions/${sessionId}.json`;
+  return new Promise((resolve, reject) => {
+    request({
+      uri: uri,
+      method: 'PUT',
+      form: {
+        status: status,
+        reason: ''
+      }
+    }, err => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        console.log(`marked session ${sessionId} as ${status}`);
+        resolve();
+      }
+    })
+  });
 }
