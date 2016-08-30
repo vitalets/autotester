@@ -52,6 +52,7 @@
     "assert": "^1.4.1",
     "check-dependencies": "^0.12.0",
     "chnl": "^0.1.14",
+    "chromedriver": "^2.23.1",
     "cpx": "^1.3.2",
     "crx": "^3.0.3",
     "css-loader": "^0.23.1",
@@ -86,7 +87,8 @@
   },
   "config": {
     "ghooks": {
-      "pre-commit": "npm run code"
+      "pre-commit": "npm run code",
+      "pre-push": "npm run test-local"
     }
   },
   "keywords": [
