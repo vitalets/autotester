@@ -323,7 +323,7 @@ test.suite(function(env) {
         return executeTimeOutScript(ACCEPTABLE_WAIT);
       });
 
-      test.it('fails if script took too long', function() {
+      test.it.skip('fails if script took too long', function() {
         return executeTimeOutScript(TOO_LONG_WAIT)
           .then(function() {
             fail('it should have timed out');
