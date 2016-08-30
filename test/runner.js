@@ -10,8 +10,10 @@ const chrome = require('selenium-webdriver/chrome');
 const htmlToText = require('html-to-text');
 const request = require('request');
 
+const isLocal = !process.env.BROWSERSTACK_USER;
+
 Promise.resolve()
-  .then(() => process.env.BROWSERSTACK_USER ? getRemoteDriver() : getLocalDriver())
+  .then(() => isLocal ? getLocalDriver() : getRemoteDriver())
   .then(driver => {
     driver.get('chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/core/ui/ui.html');
     driver.findElement({id: 'run'}).click();
@@ -23,7 +25,9 @@ Promise.resolve()
         const exitCode = header.indexOf('failures: 0') >= 0 ? 0 : 1;
         console.log(text);
         console.log(header);
-        setSessionStatus(driver, exitCode);
+        if (!isLocal) {
+          setSessionStatus(driver, exitCode);
+        }
         driver.quit().then(() => process.exit(exitCode));
       });
   })
