@@ -4,38 +4,30 @@
 
 const webdriver = require('selenium-webdriver');
 const Symbols = require('selenium-webdriver/lib/symbols');
-const test = require('selenium-webdriver/testing');
 const chrome = require('selenium-webdriver/chrome');
 const htmlToText = require('html-to-text');
 
-test.describe('Autotester', function() {
-
-  test.before(function() {
-    return Promise.resolve()
-      .then(() => process.env.BROWSERSTACK_USER ? getRemoteDriver() : getLocalDriver())
-      .then(result => this.driver = result);
-  });
-
-  test.it('should work like a sharm', function() {
-    this.driver.get('chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/core/ui/ui.html');
-    this.driver.findElement({id: 'run'}).click();
-    this.driver.wait(webdriver.until.titleContains('done'));
-    this.driver.findElement({id: 'mocha'}).getAttribute('innerHTML')
+Promise.resolve()
+  .then(() => process.env.BROWSERSTACK_USER ? getRemoteDriver() : getLocalDriver())
+  .then(driver => {
+    driver.get('chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/core/ui/ui.html');
+    driver.findElement({id: 'run'}).click();
+    driver.wait(webdriver.until.titleContains('done'));
+    driver.findElement({id: 'mocha'}).getAttribute('innerHTML')
       .then(html => {
         text = htmlToText.fromString(html, {ignoreHref: true});
+        const header = text.substr(0, text.indexOf('* [CHROME]'));
+        const exitCode = header.indexOf('failures: 0') >= 0 ? 0 : 1;
         console.log(text);
-      })
+        console.log(header);
+        driver.quit().then(() => process.exit(exitCode));
+      });
   });
-
-  test.after(function() {
-    this.driver.quit();
-  });
-});
 
 function getLocalDriver() {
   const options = new chrome.Options();
   options.addArguments([
-    `--load-extension=${__dirname}/dist/unpacked-dev,${__dirname}/dist/unpacked-dev/test/data/simple-extension`,
+    `--load-extension=${__dirname}/../dist/unpacked-dev,${__dirname}/data/simple-extension`,
     `--extensions-on-chrome-urls`,
     `--silent-debugger-extension-api`,
   ]);
