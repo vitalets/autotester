@@ -12,8 +12,9 @@
   },
   "scripts": {
     "dev": "run-p watch",
-    "test-local": "node ./test/runner",
-    "test-cloud": "source .env && npm run crx-dev && node ./test/runner",
+    "test:local": "node ./test/run local",
+    "test:bs": "source .env && npm run crx-dev && node ./test/run browserstack",
+    "test:yandex": "npm run crx-dev && node ./test/run yandex",
     "build": "npm run unpacked+zip --outdir=dist/unpacked --outzip=../autotester.zip",
     "build-with-example": "npm run unpacked+zip --outdir=dist/unpacked --copytest=example --outzip=../autotester-with-example.zip",
     "publish-to-npm": "npm run build-for-npm --outdir=dist/npm-publish/extension && npm publish dist/npm-publish",
@@ -88,7 +89,7 @@
   "config": {
     "ghooks": {
       "pre-commit": "npm run code",
-      "pre-push": "npm run test-local"
+      "pre-push": "npm run test:local"
     }
   },
   "keywords": [
