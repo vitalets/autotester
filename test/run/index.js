@@ -9,24 +9,42 @@ const htmlToText = require('html-to-text');
 const providers = require('./providers');
 
 const AUTOTESTER_UI_URL = 'chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/core/ui/ui.html';
-const providerName = process.argv[2];
-const provider = providers[providerName];
 
-if (!provider) {
-  throw new Error(`Provider ${providerName} not found`);
-} else {
-  console.log(`Running self-tests on '${providerName}'...`);
+// run tests in all capabilities combination
+run();
+
+function run() {
+  const provider = getProvider();
+  provider.capabilities()
+    .then(caps => {
+      const capsArray = Array.isArray(caps) ? caps : [caps];
+      const tasks = capsArray.map(caps => runForCapabilities(provider, caps));
+      Promise.all(tasks)
+        .then(res => {
+          const errors = res.filter(r => r instanceof Error);
+          errors.forEach(e => console.log(`ERROR: ${e.message}`));
+          console.log(`FINISHED SESSIONS: ${res.length}, ERRORS: ${errors.length}`);
+          process.exit(errors.length ? 1 : 0);
+        });
+    })
+    .catch(throwAsync);
 }
 
-Promise.resolve()
-  .then(() => provider.capabilities())
-  .then(caps => {
+function runForCapabilities(provider, caps) {
+  const signatureArr = [provider.name.toUpperCase(), caps.os, caps.os_version].filter(Boolean);
+  const signature = `[` + signatureArr.join(' ') + ']: ';
+  console.log(`${signature}running...`);
+  return new Promise((resolve, reject) => {
+    const flow = new webdriver.promise.ControlFlow()
+      .on('uncaughtException', reject);
+
     const builder = new webdriver.Builder();
     if (provider.serverUrl) {
       builder.usingServer(provider.serverUrl);
     }
     const driver = builder
       .withCapabilities(caps)
+      .setControlFlow(flow)
       .build();
 
     driver.get(AUTOTESTER_UI_URL);
@@ -42,14 +60,26 @@ Promise.resolve()
           });
         }
         driver.quit()
-          .then(() => process.exit(hasErrors ? 1 : 0));
+          .then(() => !hasErrors ? resolve() : reject(new Error(`Tests failed`)));
       });
   })
+  // catch error and resolve with it to not stop Promise.all chain
   .catch(e => {
-    setTimeout(() => {
-      throw e;
-    }, 0);
+    e.message = signature + e.message;
+    return e;
   });
+}
+
+function getProvider() {
+  const providerName = process.argv[2];
+  const provider = providers[providerName];
+  if (!provider) {
+    throw new Error(`Provider ${providerName} not found`);
+  } else {
+    provider.name = providerName;
+    return provider;
+  }
+}
 
 function processReport(html) {
   const text = htmlToText.fromString(html, {ignoreHref: true});
@@ -58,4 +88,10 @@ function processReport(html) {
   console.log(text);
   console.log(header);
   return hasErrors;
+}
+
+function throwAsync(e) {
+  setTimeout(() => {
+    throw e;
+  }, 0);
 }
