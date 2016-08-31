@@ -7,6 +7,7 @@
 const webdriver = require('selenium-webdriver');
 const htmlToText = require('html-to-text');
 const providers = require('./providers');
+const capabilities = require('./capabilities');
 
 const AUTOTESTER_UI_URL = 'chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/core/ui/ui.html';
 
@@ -23,7 +24,8 @@ function run() {
         .then(res => {
           const errors = res.filter(r => r instanceof Error);
           errors.forEach(e => console.log(`ERROR: ${e.message}`));
-          console.log(`FINISHED SESSIONS: ${res.length}, ERRORS: ${errors.length}`);
+          console.log(`FINISHED SESSIONS: ${res.length} (${provider.name})`);
+          console.log(`ERRORS: ${errors.length}`);
           process.exit(errors.length ? 1 : 0);
         });
     })
@@ -31,8 +33,7 @@ function run() {
 }
 
 function runForCapabilities(provider, caps) {
-  const signatureArr = [provider.name.toUpperCase(), caps.os, caps.os_version].filter(Boolean);
-  const signature = `[` + signatureArr.join(' ') + ']: ';
+  const signature = `[${provider.name.toUpperCase()} ${capabilities.signature(caps)}]: `;
   console.log(`${signature}running...`);
   return new Promise((resolve, reject) => {
     const flow = new webdriver.promise.ControlFlow()
@@ -82,8 +83,10 @@ function getProvider() {
 }
 
 function processReport(html) {
-  const text = htmlToText.fromString(html, {ignoreHref: true});
-  const header = text.substr(0, text.indexOf('* [CHROME]'));
+  const text = htmlToText.fromString(html, {ignoreHref: true}).substr(1);
+  const matches = text.match(/\* duration:.+s/);
+  const headerEnd = matches.index + matches[0].length + 1;
+  const header = text.substr(0, headerEnd);
   const hasErrors = header.indexOf('failures: 0') === -1;
   console.log(text);
   console.log(header);

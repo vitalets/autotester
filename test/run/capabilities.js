@@ -28,15 +28,26 @@ exports.remote = function () {
     });
 };
 
+exports.signature = function (caps) {
+  return [
+    caps.browserName,
+    caps.version,
+    caps.os,
+    caps.os_version
+  ].filter(Boolean).join(' ');
+};
+
 function defaults() {
   return {
     'chromeOptions': {
       'args': [
+        '--lang=en',
         '--extensions-on-chrome-urls',
         '--silent-debugger-extension-api',
       ],
     },
     'browserName' : 'chrome',
+    'version' : '52.0',
     'resolution' : '1024x768',
   };
 }

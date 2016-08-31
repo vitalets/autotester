@@ -4,7 +4,7 @@
 
 'use strict';
 
-const rp = require('request-promise-native');
+const got = require('got');
 const capabilities = require('./capabilities');
 
 const browserstackTargets = [
@@ -37,7 +37,6 @@ module.exports = {
             return Object.assign({}, caps, target, {
               'browserstack.user': process.env.BROWSERSTACK_USER,
               'browserstack.key': process.env.BROWSERSTACK_KEY,
-              'browserstack.debug': true,
             });
           });
         });
@@ -61,15 +60,14 @@ module.exports = {
 // see: https://www.browserstack.com/automate/node
 function sendBrowserstackSessionStatus(sessionId, hasErrors) {
   const status = hasErrors ? 'error' : 'completed';
-  const credentials = `${process.env.BROWSERSTACK_USER}:${process.env.BROWSERSTACK_KEY}`;
-  const uri = `https://${credentials}@www.browserstack.com/automate/sessions/${sessionId}.json`;
+  const url = `https://www.browserstack.com/automate/sessions/${sessionId}.json`;
   const params = {
-    uri: uri,
     method: 'PUT',
-    form: {
+    auth: `${process.env.BROWSERSTACK_USER}:${process.env.BROWSERSTACK_KEY}`,
+    body: {
       status: status,
       reason: ''
     }
   };
-  return rp(params);
+  return got(url, params);
 }
