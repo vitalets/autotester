@@ -29,8 +29,6 @@ Promise.resolve()
       .withCapabilities(caps)
       .build();
 
-    console.log('driver created');
-
     driver.get(AUTOTESTER_UI_URL);
     driver.findElement({id: 'run'}).click();
     driver.wait(webdriver.until.titleContains('done'));
