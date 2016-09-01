@@ -31,9 +31,11 @@ function run() {
     .catch(throwAsync);
 }
 
+// todo: add timeout (check if title not changed for some time)?
 function runForCapabilities(caps) {
   const signature = `[${hub.name.toUpperCase()} ${capabilities.signature(caps)}]: `;
   console.log(`${signature}running...`);
+  let driver;
   return new Promise((resolve, reject) => {
     const flow = new webdriver.promise.ControlFlow()
       .on('uncaughtException', reject);
@@ -42,7 +44,7 @@ function runForCapabilities(caps) {
     if (hub.serverUrl) {
       builder.usingServer(hub.serverUrl);
     }
-    const driver = builder
+    driver = builder
       .withCapabilities(caps)
       .setControlFlow(flow)
       .build();
@@ -54,18 +56,16 @@ function runForCapabilities(caps) {
       .then(html => {
         console.log(signature + 'finished');
         const hasErrors = processReport(html);
-        if (hub.sendSessionStatus) {
-          driver.call(() => {
-            return driver.session_
-              .then(session => hub.sendSessionStatus(session.id_, hasErrors));
-          });
-        }
+        trySendSessionStatus(driver, signature, hasErrors);
         driver.quit()
           .then(() => !hasErrors ? resolve() : reject(new Error(`Tests failed`)));
       });
   })
   // catch error and resolve with it to not stop Promise.all chain
   .catch(e => {
+    if (driver.getSession()) {
+      driver.quit();
+    }
     const msg = e.message || e.stack;
     e.message = signature + msg;
     return e;
@@ -83,6 +83,17 @@ function processReport(html) {
   }
   console.log(header);
   return hasErrors;
+}
+
+function trySendSessionStatus(driver, signature, hasErrors) {
+  if (hub.sendSessionStatus) {
+    driver.call(() => {
+      return driver.session_
+        .then(session => hub.sendSessionStatus(session.id_, hasErrors))
+        .then(() => console.log(`${signature}session status sent as: ${hasErrors ? 'failed' : 'success'}`))
+        .catch(e => console.log(`${signature}session status sending error`, e));
+    });
+  }
 }
 
 function throwAsync(e) {

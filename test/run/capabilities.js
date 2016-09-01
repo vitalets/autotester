@@ -31,8 +31,8 @@ exports.remote = function () {
 exports.signature = function (caps) {
   return [
     caps.browserName,
-    caps.version,
-    caps.os,
+    caps.version || 'stable',
+    caps.os || caps.platform,
     caps.os_version
   ].filter(Boolean).join(' ');
 };
@@ -47,7 +47,6 @@ function defaults() {
       ],
     },
     'browserName' : 'chrome',
-    'version' : '52.0',
     'resolution' : '1024x768',
   };
 }

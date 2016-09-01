@@ -15,6 +15,7 @@
     "test": "npm run test:l",
     "test:l": "node ./test/run local",
     "test:b": "source .env && npm run crx-dev && node ./test/run browserstack",
+    "test:s": "source .env && npm run crx-dev && node ./test/run sauce",
     "test:y": "npm run crx-dev && node ./test/run yandex",
     "build": "npm run unpacked+zip --outdir=dist/unpacked --outzip=../autotester.zip",
     "build-with-example": "npm run unpacked+zip --outdir=dist/unpacked --copytest=example --outzip=../autotester-with-example.zip",
