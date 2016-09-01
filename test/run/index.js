@@ -1,13 +1,13 @@
 /**
- * Entry point for running self-test on different providers
+ * Entry point for running self-test on different selenium hubs
  */
 
 'use strict';
 
 const webdriver = require('selenium-webdriver');
 const htmlToText = require('html-to-text');
-const providers = require('./providers');
 const capabilities = require('./capabilities');
+const hub = require('./hubs/' + process.argv[2]);
 
 const AUTOTESTER_UI_URL = 'chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/core/ui/ui.html';
 
@@ -15,16 +15,15 @@ const AUTOTESTER_UI_URL = 'chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/c
 run();
 
 function run() {
-  const provider = getProvider();
-  provider.capabilities()
+  hub.capabilities()
     .then(caps => {
       const capsArray = Array.isArray(caps) ? caps : [caps];
-      const tasks = capsArray.map(caps => runForCapabilities(provider, caps));
+      const tasks = capsArray.map(caps => runForCapabilities(caps));
       Promise.all(tasks)
         .then(res => {
           const errors = res.filter(r => r instanceof Error);
           errors.forEach(e => console.log(`ERROR: ${e.message}`));
-          console.log(`FINISHED SESSIONS: ${res.length} (${provider.name})`);
+          console.log(`FINISHED SESSIONS: ${res.length} (${hub.name})`);
           console.log(`ERRORS: ${errors.length}`);
           process.exit(errors.length ? 1 : 0);
         });
@@ -32,16 +31,16 @@ function run() {
     .catch(throwAsync);
 }
 
-function runForCapabilities(provider, caps) {
-  const signature = `[${provider.name.toUpperCase()} ${capabilities.signature(caps)}]: `;
+function runForCapabilities(caps) {
+  const signature = `[${hub.name.toUpperCase()} ${capabilities.signature(caps)}]: `;
   console.log(`${signature}running...`);
   return new Promise((resolve, reject) => {
     const flow = new webdriver.promise.ControlFlow()
       .on('uncaughtException', reject);
 
     const builder = new webdriver.Builder();
-    if (provider.serverUrl) {
-      builder.usingServer(provider.serverUrl);
+    if (hub.serverUrl) {
+      builder.usingServer(hub.serverUrl);
     }
     const driver = builder
       .withCapabilities(caps)
@@ -53,11 +52,12 @@ function runForCapabilities(provider, caps) {
     driver.wait(webdriver.until.titleContains('done'));
     driver.findElement({id: 'mocha'}).getAttribute('innerHTML')
       .then(html => {
+        console.log(signature + 'finished');
         const hasErrors = processReport(html);
-        if (provider.sendSessionStatus) {
+        if (hub.sendSessionStatus) {
           driver.call(() => {
             return driver.session_
-              .then(session => provider.sendSessionStatus(session.id_, hasErrors));
+              .then(session => hub.sendSessionStatus(session.id_, hasErrors));
           });
         }
         driver.quit()
@@ -66,20 +66,10 @@ function runForCapabilities(provider, caps) {
   })
   // catch error and resolve with it to not stop Promise.all chain
   .catch(e => {
-    e.message = signature + e.message;
+    const msg = e.message || e.stack;
+    e.message = signature + msg;
     return e;
   });
-}
-
-function getProvider() {
-  const providerName = process.argv[2];
-  const provider = providers[providerName];
-  if (!provider) {
-    throw new Error(`Provider ${providerName} not found`);
-  } else {
-    provider.name = providerName;
-    return provider;
-  }
 }
 
 function processReport(html) {
@@ -88,7 +78,9 @@ function processReport(html) {
   const headerEnd = matches.index + matches[0].length + 1;
   const header = text.substr(0, headerEnd);
   const hasErrors = header.indexOf('failures: 0') === -1;
-  console.log(text);
+  if (hasErrors) {
+    console.log(text);
+  }
   console.log(header);
   return hasErrors;
 }
