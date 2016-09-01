@@ -84,7 +84,7 @@
   "config": {
     "ghooks": {
       "pre-commit": "npm run code",
-      "pre-push": "npm run test:local"
+      "pre-push": "npm test"
     }
   },
   "keywords": [
