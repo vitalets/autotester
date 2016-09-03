@@ -6,14 +6,14 @@
  * Loads script via <script> tag
  *
  * @param {String} url
+ * @param {Object} targetDocument
  * @returns {Promise}
  */
-exports.loadScript = function (url) {
+exports.loadScript = function (url, targetDocument = document) {
   return new Promise(function (resolve, reject) {
-    console.log('Loading script', url);
-    const script = document.createElement('script');
+    const script = targetDocument.createElement('script');
     script.type = 'text/javascript';
-    document.getElementsByTagName('head')[0].appendChild(script);
+    targetDocument.getElementsByTagName('head')[0].appendChild(script);
     script.onload = resolve;
     script.onerror = () => reject(new Error(`Can not load script ${url}`));
     script.src = url;

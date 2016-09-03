@@ -2,6 +2,7 @@
  * Catches all unhandled errors and unhandled promise rejections, then routes it to handler
  * Can avoid circular errors and store errors until handler attached.
  *
+ * todo: event for promise can contain any value, not only Error !!
  * todo: store errors until handler set
  *
  * see: https://developer.mozilla.org/en/docs/Web/API/GlobalEventHandlers/onerror
@@ -74,7 +75,8 @@ function isEqualEvents(errorEvent1, errorEvent2) {
   }
   const error1 = getErrorFromEvent(errorEvent1);
   const error2 = getErrorFromEvent(errorEvent2);
-  return error1.message === error2.message && error1.stack === error2.stack;
+  return error1 === error2 ||
+    (error1.message === error2.message && error1.stack === error2.stack);
 }
 
 function getEventsDelta(event1, event2) {
@@ -82,8 +84,14 @@ function getEventsDelta(event1, event2) {
 }
 
 function getErrorFromEvent(errorEvent) {
-  // `.reason` for promise, `.error` for regular errors
-  return errorEvent.reason || errorEvent.error;
+  // here can be instance of PromiseRejectionEvent or ErrorEvent
+  if (errorEvent.promise) {
+    return typeof errorEvent.reason === 'object'
+      ? errorEvent.reason
+      : `Uncaught (in promise) ${errorEvent.reason}`;
+  } else {
+    return errorEvent.error;
+  }
 }
 
 function resetTimeout() {
@@ -100,4 +108,3 @@ function increaseTimeout() {
     }
   }
 }
-

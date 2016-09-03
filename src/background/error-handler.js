@@ -27,7 +27,9 @@ function getViews() {
 
 function getMsg(error) {
   const prefix = error.isTestSelf ? TEST_PREFIX : BG_PREFIX;
-  const msg = cleanStack(error.stack) || error.message || `Unknown error: ${error}`;
+  const msg = typeof error === 'object'
+    ? (cleanStack(error.stack) || error.message)
+    : String(error);
   return prefix + msg;
 }
 

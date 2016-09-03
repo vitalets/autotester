@@ -1,5 +1,10 @@
 /**
  * Runner that executes code and runs mocha if needed
+ * Creates dynamic iframe element and loads via <script> tag
+ * Advantages of such approach are:
+ * - easy debug of tests (you can put breakpoint)
+ * - normal error stack trace
+ * - isolation of top window
  */
 
 const promise = require('selenium-webdriver/lib/promise');
@@ -20,6 +25,7 @@ class Runner {
     // use default controlflow
     this._flow = promise.controlFlow();
   }
+
   /**
    * Runs array of code snippets
    *
@@ -46,11 +52,24 @@ class Runner {
       .then(() => this._finish());
   }
 
+  _createFrame() {
+    return new Promise(resolve => {
+      this._iframe = document.createElement('iframe');
+      this._iframe.addEventListener('load', resolve);
+      document.body.appendChild(this._iframe);
+    });
+  }
+
+  _removeFrame() {
+    this._iframe.parentNode.removeChild(this._iframe);
+    this._iframe = null;
+  }
+
   _finish() {
     logger.log(`Done`);
   }
 
-  _setupMocha(options) {
+  _setupTestRunner(options) {
     this._mochaRunner = new MochaRunner(this._context);
     this._mochaRunner.setup({
       reporter: htmlReporter.getReporter(options.window),

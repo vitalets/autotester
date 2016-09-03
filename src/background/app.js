@@ -8,9 +8,6 @@ const messaging = require('./messaging');
 const runner = require('../runner');
 const storage = require('./storage');
 
-// export thenChrome for debug
-window.thenChrome = require('then-chrome');
-
 const {
   BG_LOAD_DONE,
   LOAD_TESTS_CONFIG,
@@ -68,7 +65,7 @@ class App {
    */
   _runTests(data) {
     const runnerOptions = {
-      window: getUiWindow(),
+      uiWindow: getUiWindow(),
     };
     let runnerPromise;
     if (data.files) {
