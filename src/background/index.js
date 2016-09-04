@@ -2,9 +2,6 @@
  * Background entry point
  */
 
-// export thenChrome for debug
-window.thenChrome = require('then-chrome');
-
 const App = require('./app');
 
 new App().start();
