@@ -11,19 +11,19 @@ var webdriver = require('selenium-webdriver'),
 
 // =======
 
-let driver = new Driver();
+const driver = new Driver();
 driver.get('https://ya.ru');
-driver.sleep(1000);
+driver.sleep(3000);
 // driver.findElement(By.name('text')).sendKeys('qwertty');
 // driver.sleep(1000);
-a();
+//setTimeout(() => sadfsdf, 10)
+//
+// driver.call(() => {
+//   xxx();
+// });
 driver.quit();
 
-function a() {
-  new Promise((r, re) => {
-    resg(123)
-  })
-}
+
 
 /*
 test.describe('Yandex Search', function() {

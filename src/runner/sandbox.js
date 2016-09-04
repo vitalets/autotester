@@ -1,20 +1,19 @@
 /**
- * Creates context for execution
- * basically it is dynamic iframe element that loads scripts via <script> tag
+ * Creates sandbox for execution of tests
+ * Basically it is dynamic iframe element that loads scripts via <script> tag
  * Advantages of such approach over eval:
  * - easy debug of tests (you can put breakpoint)
  * - normal filenames in error stack trace
  * - isolation of top window
  */
 
-const webdriver = require('./selenium-webdriver');
-const seleniumAssert = require('selenium-webdriver/testing/assert');
-const seleniumTesting = require('./selenium-testing');
-const Driver = require('../driver');
-const utils = require('../utils');
-const fakeRequire = require('./fake-require');
+const Channel = require('chnl');
+const logger = require('../utils/logger').create('Sandbox');
 
-class Context {
+class Sandbox {
+  constructor() {
+    this.onError = new Channel();
+  }
   /**
    * Creates frame and set globals
    *
@@ -25,6 +24,7 @@ class Context {
       .then(() => {
         this._setGlobals(globals);
         this._proxyErrors();
+        logger.log('New sandbox created');
       })
   }
 
@@ -32,7 +32,8 @@ class Context {
    * Removes frame
    */
   clear() {
-    return this._removeFrame();
+    this._removeFrame();
+    logger.log('Sandbox cleared');
   }
 
   get window() {
@@ -56,24 +57,13 @@ class Context {
   }
 
   _proxyErrors() {
-    this.window.addEventListener('error', event => {
-      // event.preventDefault();
-      setTimeout(() => {
-        window.dispatchEvent(event);
-      }, 0);
+    this.window.addEventListener('error', event => this._proxyError(event));
+    this.window.addEventListener('unhandledrejection', event => this._proxyError(event));
+  }
 
-      //utils.asyncThrow(event.error);
-    });
-    this.window.addEventListener('unhandledrejection', event => {
-      //event.preventDefault();
-      //window.dispatchEvent(event);
-      //console.log(111, Object.prototype.toString.call(event) instanceof this.window.PromiseRejectionEvent)
-      setTimeout(() => {
-        window.dispatchEvent(event);
-      }, 0);
-     // const error =
-      //utils.asyncThrow(event.reason);
-    });
+  _proxyError(event) {
+    event.preventDefault();
+    this.onError.dispatch(event);
   }
 
   _removeFrame() {
@@ -82,7 +72,7 @@ class Context {
   }
 }
 
-module.exports = Context;
+module.exports = Sandbox;
 
 /**
  * Returns globals available in tests

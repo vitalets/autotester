@@ -2,11 +2,12 @@
  * Runner api
  */
 
+const promise = require('selenium-webdriver/lib/promise');
 const utils = require('../utils');
 // const Runner = require('./runner');
 const MochaRunner = require('./mocha-runner');
 const ScriptRunner = require('./script-runner');
-const Context = require('./context');
+const Sandbox = require('./sandbox');
 const globals = require('./globals');
 const htmlReporter = require('../reporter/html');
 const logger = require('../utils/logger').create('Runner');
@@ -36,16 +37,22 @@ exports.runFiles = function (files, options) {
  */
 exports.runUrls = function (urls, options) {
   logger.log(`Executing ${urls.length} file(s)`);
+  // todo: sometimes flow gets in 'started state but does not emit any events
+  // todo: so reset it to be sure everything ok
+  promise.controlFlow().reset();
   const globalVars = globals.get(options.uiWindow);
-  const context = new Context();
+  const sandbox = new Sandbox();
   //const mochaRunner = new MochaRunner();
   return Promise.resolve()
-    .then(() => context.prepare(globalVars))
+    .then(() => sandbox.prepare(globalVars))
     //.then(() => mochaRunner.prepare(context.document))
-    .then(() => processUrls(urls, context.document))
+    .then(() => processUrls(urls, sandbox))
     //.then(() => mochaRunner.hasTests() ? mochaRunner.run() : null)
-    .then(() => context.clear())
     .then(() => finish())
+    .catch(e => {
+      sandbox.clear();
+      return Promise.reject(e);
+    });
 };
 
 /*
