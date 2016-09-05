@@ -47,8 +47,9 @@ function cleanStack(stack) {
 function getSelfUrlRegexp() {
   if (!selfUrlREgexp) {
     const selfUrl = chrome.runtime.getURL('');
-    const escaped = escapeStringRegexp(selfUrl);
-    selfUrlREgexp = new RegExp(escaped, 'g');
+    const selfFsUrl = `filesystem:${selfUrl}persistent/`;
+    const regStr = '(' + escapeStringRegexp(selfFsUrl) + ')|(' + escapeStringRegexp(selfUrl) + ')';
+    selfUrlREgexp = new RegExp(regStr, 'g');
   }
   return selfUrlREgexp;
 }
