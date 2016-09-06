@@ -39,7 +39,7 @@ function setupRequire() {
 }
 
 function setupRunContext() {
-  Object.assign(runContext, {
+  window.runContext = {
     baseUrl: FILE_SERVER_BASE_URL,
     simpleExtension: {
       id: SIMPLE_EXTENSION_ID,
@@ -47,7 +47,7 @@ function setupRunContext() {
       bg: `chrome-extension://${SIMPLE_EXTENSION_ID}/_generated_background_page.html`,
       popup: `chrome-extension://${SIMPLE_EXTENSION_ID}/popup.html`,
     }
-  });
+  };
 }
 
 function suite(fn, opt_options) {

@@ -11,22 +11,23 @@ var webdriver = require('selenium-webdriver'),
 
 // =======
 
-const driver = new Driver();
-driver.get('https://ya.ru');
-driver.sleep(3000);
+// const driver = new Driver();
+// driver.get('https://ya.ru');
+// driver.sleep(1000);
 // driver.findElement(By.name('text')).sendKeys('qwertty');
 // driver.sleep(1000);
 //setTimeout(() => sadfsdf, 10)
-//
+//sdfgs
 // driver.call(() => {
 //   xxx();
 // });
-driver.quit();
+// driver.quit();
 
 
 
 /*
 test.describe('Yandex Search', function() {
+
   var driver;
   test.before(function() {
     driver = new webdriver.Builder()
@@ -35,13 +36,18 @@ test.describe('Yandex Search', function() {
   });
 
   test.it('should append query to title', function() {
-    // driver = new webdriver.Builder()
-    //   .forBrowser('chrome')
-    //   .build();
     driver.get('https://ya.ru');
     driver.sleep(1000);
-    driver.findElement(By.name('text')).sendKeys('w'+Key.LEFT);
+    driver.findElement(By.name('text')).sendKeys('hello');
     driver.sleep(1000);
+    //assert(driver.getTitle()).equalTo('adsfgadfg')
+    //assert(1).equalTo(2)
+
+    //assert.equal(1, 2)
+    // throw new Error('abc')
+    // driver.call(() => {
+    //   xxx();
+    // });
     //driver.findElement(By.name('text')).submit();
    // driver.findElement(By.name('text')).sendKeys(Key.ENTER);
 
@@ -78,7 +84,7 @@ test.describe('Yandex Search', function() {
   });
 
   test.after(function() {
-    // driver.quit();
+    driver.quit();
   });
 });
 */

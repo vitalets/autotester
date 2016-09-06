@@ -4,10 +4,8 @@
 
 const map = {
   'selenium-webdriver': require('./selenium-webdriver'),
-  'selenium-webdriver/testing/assert': require('selenium-webdriver/testing/assert'),
   'selenium-webdriver/testing': require('./selenium-testing'),
   'selenium-webdriver/lib/promise': require('selenium-webdriver/lib/promise'),
-  'assert': require('assert'),
 };
 
 const aliases = new Map();
@@ -17,7 +15,7 @@ function fakeRequire(moduleName) {
   if (map.hasOwnProperty(moduleName)) {
     return map[moduleName];
   } else {
-    console.log(map)
+    console.warn(moduleName, map);
     throw new Error(`Unsupported module in fakeRequire: ${moduleName}`);
   }
 }

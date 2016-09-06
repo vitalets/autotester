@@ -8,6 +8,7 @@
  */
 
 const Channel = require('chnl');
+const utils = require('../utils');
 const logger = require('../utils/logger').create('Sandbox');
 
 class Sandbox {
@@ -15,17 +16,33 @@ class Sandbox {
     this.onError = new Channel();
   }
   /**
-   * Creates frame and set globals
-   *
-   * @param {Object} [globals]
+   * Creates new iframe
    */
-  prepare(globals) {
+  create() {
     return this._createFrame()
       .then(() => {
-        this._setGlobals(globals);
         this._proxyErrors();
         logger.log('New sandbox created');
-      })
+      });
+  }
+
+  /**
+   * Adds globals
+   *
+   * @param {Object} globals
+   */
+  addGlobals(globals) {
+    Object.assign(this.window, globals);
+  }
+
+  /**
+   * Loads script
+   *
+   * @param {String} url
+   * @returns {Promise}
+   */
+  loadScript(url) {
+    return utils.loadScript(url, this.document);
   }
 
   /**
@@ -50,10 +67,6 @@ class Sandbox {
       this._iframe.addEventListener('load', resolve);
       document.body.appendChild(this._iframe);
     });
-  }
-
-  _setGlobals(globals) {
-    Object.assign(this.window, globals);
   }
 
   _proxyErrors() {

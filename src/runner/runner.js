@@ -5,6 +5,8 @@
  * - easy debug of tests (you can put breakpoint)
  * - normal error stack trace
  * - isolation of top window
+ *
+ * [NOT USED!!!]
  */
 
 const promise = require('selenium-webdriver/lib/promise');

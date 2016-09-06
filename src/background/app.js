@@ -66,6 +66,7 @@ class App {
   _runTests(data) {
     const runnerOptions = {
       uiWindow: getUiWindow(),
+      baseUrl: storage.get('baseUrl')
     };
     let runnerPromise;
     if (data.files) {
@@ -73,8 +74,8 @@ class App {
     } else {
       const tests = this._testsConfig.tests.filter(test => !data.selectedTest || test === data.selectedTest);
       const setup = this._testsConfig.setup;
-      const urls = setup.concat(tests).map(addBaseUrl);
-      runnerPromise = runner.runUrls(urls, runnerOptions);
+      const files = setup.concat(tests);
+      runnerPromise = runner.runFiles(files, runnerOptions);
     }
     messaging.send(RUN_TESTS_STARTED);
     runnerPromise
