@@ -1,8 +1,6 @@
 
 'use strict';
 
-// ====== for node
-
 var webdriver = require('selenium-webdriver'),
   By = webdriver.By,
   until = webdriver.until,

@@ -9,6 +9,7 @@ const fakeRequire = require('./fake-require');
 
 exports.get = function (uiWindow) {
   return {
+    chrome: chrome,
     Driver: Driver,
     By: webdriver.By,
     Key: webdriver.Key,
@@ -19,6 +20,7 @@ exports.get = function (uiWindow) {
      * Assertions can not be registered here as they use instanceof comparisons that does not work between frames
      */
     //assert: seleniumAssert,
+    runContext: {},
     // for running selenium tests as is
     require: fakeRequire,
     // for debug

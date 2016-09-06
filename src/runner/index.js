@@ -1,5 +1,26 @@
 /**
- * Runner api
+ * Runner
+ *
+ * There are 3 approaches how to run test files dynamically:
+ *
+ * 1. RUN VIA EVAL: wrap each file into anonymous function and eval
+ * - impossible to debug
+ * - ugly error stack
+ *
+ * 2. RUN IN IFRAME: create iframe and load files from local filesystem
+ * + independent window instance
+ * + easy cleanup: just remove iframe
+ * + easy set any globals, no access to top window globals (only as window.parent.*)
+ * - bugs with instanceof, iframe has own context: we need to load asserts separately from own entry point
+ * - need to pass chrome object
+ *
+ * 3. RUN IN TOP WINDOW: load files from local filesystem in main window
+ * - possible dirty top window
+ * - manually remove all script tags with test-files
+ * + no other problems as in #1 and #2
+ *
+ *
+ * Currently we use #2 but maybe move to #3 in future.
  */
 
 const path = require('path');
