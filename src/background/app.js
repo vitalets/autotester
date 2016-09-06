@@ -70,12 +70,12 @@ class App {
     };
     let runnerPromise;
     if (data.files) {
-      runnerPromise = runner.runFiles(data.files, runnerOptions);
+      runnerPromise = runner.runSnippets(data.files, runnerOptions);
     } else {
       const tests = this._testsConfig.tests.filter(test => !data.selectedTest || test === data.selectedTest);
       const setup = this._testsConfig.setup;
       const files = setup.concat(tests);
-      runnerPromise = runner.runFiles(files, runnerOptions);
+      runnerPromise = runner.runRemoteFiles(files, runnerOptions);
     }
     messaging.send(RUN_TESTS_STARTED);
     runnerPromise

@@ -35,6 +35,12 @@ function start() {
   window.runTests = runTests;
 }
 
+/**
+ * Run tests from files
+ *
+ * @param {Array<{code, path}>} [files] for running custom code snippets
+ * todo: split to runSnippets / runFiles
+ */
 function runTests(files) {
   if (files && !Array.isArray(files)) {
     throw new Error('files should be array');

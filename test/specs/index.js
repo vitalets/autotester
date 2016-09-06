@@ -18,6 +18,8 @@ module.exports = {
     'extra/newtab_switching_test.js',
     'extra/extension_switching_test.js',
     'extra/collect_network_requests_test.js',
+    // === ui ===
+    'ui/display_errors_test.js',
     // === specs to be contributed to selenium
     'selenium-contrib/form_handling_test.js',
     'selenium-contrib/execute_async_script_test.js',

@@ -12,44 +12,39 @@ const logger = require('../utils/logger').create('LocalFs');
 let fsInited = false;
 
 /**
- * Downloads url to local fs
- *
- * @param {String} url
- * @param {String} filepath
- * @returns {Promise<String>}
- */
-exports.download = function (url, filepath) {
-  return Promise.resolve()
-    .then(() => utils.fetchText(url))
-    .then(code => exports.save(filepath, code));
-};
-
-/**
- * Save code to local fs with specified filename
+ * Save local file with specified content
  *
  * @param {String} filepath
- * @param {String} code
+ * @param {String} content
  */
-exports.save = function (filepath, code) {
-  const wrappedCode = wrapAsAnonymousFn(code);
+exports.save = function (filepath, content) {
   return Promise.resolve()
     .then(() => ensureFs())
     .then(() => ensurePath(filepath))
-    .then(() => saveFile(filepath, wrappedCode))
+    .then(() => saveFile(filepath, content))
     .then(localUrl => {
       logger.log(`Saved: ${localUrl}`);
       return localUrl;
     })
 };
 
-// todo: move out of this module
-function wrapAsAnonymousFn(text) {
-  return [
-    '(function (console) { try { /* <=== Autotester wrapper */ ',
-    text,
-    '} catch(e) {__onTestFileError.dispatch(e)}})(uiConsole); /* <=== Autotester wrapper */'
-  ].join('');
-}
+/**
+ * Recursively remove dir and all subdirs
+ *
+ * @param {String} dir
+ */
+exports.removeDir = function (dir) {
+  return Promise.resolve()
+    .then(() => ensureFs())
+    .then(() => fs.getFsInstanceAsync())
+    .then(fsInstance => {
+      const options = {create: false};
+      return new Promise((resolve, reject) => fsInstance.root.getDirectory(dir, options, resolve, reject))
+    })
+    .then(dirEntry => {
+      return new Promise((resolve, reject) => dirEntry.removeRecursively(resolve, reject))
+    })
+};
 
 function ensureFs() {
   return fsInited ? Promise.resolve() : fs.initAsync(0).then(() => fsInited = true);
@@ -76,16 +71,3 @@ function ensurePath(filepath) {
       })
   }, Promise.resolve());
 }
-
-/*
-// remove recursively
-function removeDir() {
-  fs.getFsInstance((err, fss) => {
-    fss.root.getDirectory('tests', {create: false}, dir => {
-      dir.removeRecursively(() => {
-        console.log('removeRecursively')
-      });
-    })
-  })
-}
-*/

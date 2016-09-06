@@ -26,37 +26,18 @@
 
 const path = require('path');
 const utils = require('../utils');
-// const Runner = require('./runner');
 const MochaRunner = require('./mocha-runner');
 const htmlReporter = require('../reporter/html');
 const ScriptRunner = require('./script-runner');
 const globals = require('./globals');
 const localFs = require('./local-fs');
-
 const logger = require('../utils/logger').create('Runner');
 
 const LOCAL_TEST_DIR = 'test';
-const LOCAL_SNIPPET_DIR = 'snippets';
-
-
+const LOCAL_SNIPPETS_DIR = 'snippets';
 
 /**
- * Run files
- *
- * @param {Object[]} files
- * @param {String} files[].code
- * @param {String} files[].path
- * @param {Object} options
- * @param {Object} options.window
- * @param {Number} [options.timeout]
- * @returns {Promise}
- */
-// exports.runFiles = function (files, options) {
-//   return new Runner().run(files, options);
-// };
-
-/**
- * Run urls
+ * Run scenarios from array of remote files (paths) and baseUrl
  *
  * @param {Array<String>} files relative filepaths
  * @param {Object} options
@@ -64,47 +45,92 @@ const LOCAL_SNIPPET_DIR = 'snippets';
  * @param {Object} options.uiWindow
  * @returns {Promise}
  */
-exports.runFiles = function (files, options) {
-  logger.log(`Executing ${files.length} file(s)`);
+exports.runRemoteFiles = function (files, options) {
+  logger.log(`Running ${files.length} file(s)`);
+  return Promise.resolve()
+    // temp
+    .then(() => localFs.removeDir(LOCAL_TEST_DIR))
+    .then(() => fetchFiles(files, options.baseUrl))
+    .then(items => saveLocal(items, LOCAL_TEST_DIR))
+    .then(localUrls => runLocalUrls(localUrls, options))
+};
+
+/**
+ * Run snippets
+ *
+ * @param {Array<{path, code}>} snippets
+ * @param {Object} options
+ * @param {Object} options.uiWindow
+ * @returns {Promise}
+ */
+exports.runSnippets = function (snippets, options) {
+  logger.log(`Running ${snippets.length} snippet(s)`);
+  return Promise.resolve()
+    // temp
+    .then(() => localFs.removeDir(LOCAL_SNIPPETS_DIR))
+    .then(() => saveLocal(snippets, LOCAL_SNIPPETS_DIR))
+    .then(localUrls => runLocalUrls(localUrls, options))
+};
+
+function fetchFiles(files, baseUrl) {
+  const tasks = files.map(file => {
+    const url = path.join(baseUrl, file);
+    return utils.fetchText(url)
+      .then(text => {
+        return {path: file, code: text};
+      });
+  });
+  return Promise.all(tasks);
+}
+
+/**
+ * Save snippets to local filesystem
+ * Use serial approach as in parallel there are errors.
+ *
+ * @param {Array<{path, code}>} snippets
+ * @param {String} baseDir
+ * @returns {*}
+ */
+function saveLocal(snippets, baseDir) {
+  return snippets.reduce((res, snippet) => {
+    const content = wrapCode(snippet.code);
+    const localPath = path.join(baseDir, snippet.path);
+    return res
+      .then(urls => {
+        return localFs.save(localPath, content)
+          .then(localUrl => urls.concat([localUrl]))
+      })
+  }, Promise.resolve([]));
+}
+
+function runLocalUrls(urls, options) {
   const context = window;
   const reporter = htmlReporter.getReporter(options.uiWindow);
   const testRunner = new MochaRunner({reporter});
   return Promise.resolve()
     .then(() => testRunner.setup(context))
     .then(() => globals.export(context, options.uiWindow))
-    .then(() => processFiles(files, options.baseUrl, context))
+    .then(() => processLocalUrls(urls, context))
     .then(() => testRunner.hasTests() ? testRunner.run() : null)
     .then(() => logger.log('Done'))
-};
-
-/*
-function fetchUrls(urls = []) {
-  const tasks = urls.map(url => {
-    return utils.fetchText(url)
-      .then(text => {
-        return {text, url};
-      });
-  });
-  return Promise.all(tasks);
 }
-*/
 
-
-function processFiles(files, baseUrl, context) {
-  removePreviousFiles(context);
-  return files.reduce((res, filepath) => {
-    return res.then(() => processFile(baseUrl, filepath, context))
+function processLocalUrls(urls, context) {
+  cleanUp(context);
+  return urls.reduce((res, url) => {
+    return res
+      .then(() => new ScriptRunner(url, context).run())
   }, Promise.resolve());
 }
 
-function processFile(baseUrl, filepath, context) {
-  const url = path.join(baseUrl, filepath);
-  const localPath = path.join(LOCAL_TEST_DIR, filepath);
-  return Promise.resolve()
-    .then(() => localFs.download(url, localPath))
-    .then(localUrl => new ScriptRunner(localUrl, context).run());
+function cleanUp(context) {
+  utils.removeBySelector('script[src^="filesystem:"]', context.document);
 }
 
-function removePreviousFiles(context) {
-  utils.removeBySelector('script[src^="filesystem:"]', context.document);
+function wrapCode(code) {
+  return [
+    '(function (console) { try { /* <=== Autotester wrapper */ ',
+    code,
+    '} catch(e) {__onTestFileError.dispatch(e)}})(uiConsole); /* <=== Autotester wrapper */'
+  ].join('');
 }
