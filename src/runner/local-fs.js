@@ -37,13 +37,9 @@ exports.removeDir = function (dir) {
   return Promise.resolve()
     .then(() => ensureFs())
     .then(() => fs.getFsInstanceAsync())
-    .then(fsInstance => {
-      const options = {create: false};
-      return new Promise((resolve, reject) => fsInstance.root.getDirectory(dir, options, resolve, reject))
-    })
-    .then(dirEntry => {
-      return new Promise((resolve, reject) => dirEntry.removeRecursively(resolve, reject))
-    })
+    .then(fsInstance => getDirectory(fsInstance, dir))
+    .then(dirEntry => removeRecursively(dirEntry))
+    .catch(e => e.name === 'NotFoundError' ? null : Promise.reject(e))
 };
 
 function ensureFs() {
@@ -70,4 +66,13 @@ function ensurePath(filepath) {
         }
       })
   }, Promise.resolve());
+}
+
+function getDirectory(fsInstance, dir) {
+  const options = {create: false};
+  return new Promise((resolve, reject) => fsInstance.root.getDirectory(dir, options, resolve, reject));
+}
+
+function removeRecursively(dirEntry) {
+  return new Promise((resolve, reject) => dirEntry.removeRecursively(resolve, reject));
 }

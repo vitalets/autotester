@@ -52,6 +52,7 @@ function runForCapabilities(caps) {
     driver.get(AUTOTESTER_UI_URL);
     driver.findElement({id: 'run'}).click();
     driver.wait(webdriver.until.titleContains('done'));
+    // todo: read htmlConsole as there can be errors
     driver.findElement({id: 'mocha'}).getAttribute('innerHTML')
       .then(html => {
         console.log(signature + 'finished');
@@ -59,13 +60,14 @@ function runForCapabilities(caps) {
         trySendSessionStatus(driver, signature, hasErrors);
         driver.quit()
           .then(() => !hasErrors ? resolve() : reject(new Error(`Tests failed`)));
-      });
+      })
   })
   // catch error and resolve with it to not stop Promise.all chain
   .catch(e => {
     if (driver.getSession()) {
       driver.quit();
     }
+    // todo: driver.quit().catch() ?
     const msg = e.message || e.stack;
     e.message = signature + msg;
     return e;
@@ -75,6 +77,10 @@ function runForCapabilities(caps) {
 function processReport(html) {
   const text = htmlToText.fromString(html, {ignoreHref: true}).substr(1);
   const matches = text.match(/\* duration:.+s/);
+  if (!matches) {
+    console.log('Empty report!');
+    return true;
+  }
   const headerEnd = matches.index + matches[0].length + 1;
   const header = text.substr(0, headerEnd);
   const hasErrors = header.indexOf('failures: 0') === -1;
