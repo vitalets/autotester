@@ -3,6 +3,7 @@
  */
 
 const utils = require('../utils');
+const seleniumTesting = require('./selenium-testing');
 const logger = require('../utils/logger').create('Mocha-runner');
 
 const MOCHA_PATH = 'core/background/mocha.js';
@@ -27,12 +28,16 @@ class MochaRunner {
    *
    * @param {Object} context
    */
-  load(context = window) {
+  setup(context) {
     this._context = context;
+    this._remove();
     return Promise.resolve()
-      .then(() => this._context.loadScript(MOCHA_PATH))
-      .then(() => this._getMocha().setup(this._mochaOptions))
-      .then(() => logger.log('Mocha loaded'));
+      .then(() => this._load())
+      .then(() => {
+        this._getMocha().setup(this._mochaOptions);
+        seleniumTesting.wrapMochaGlobals(this._context);
+        logger.log('Mocha loaded and ready');
+      })
   }
 
   hasTests() {
@@ -50,20 +55,26 @@ class MochaRunner {
       .then(failures => logger.log(`Finish mocha with ${failures} failure(s)`));
   }
 
+  _load() {
+    return utils.loadScript(MOCHA_PATH, this._context.document)
+  }
+
   _getMocha() {
-    return this._context.window.mocha;
+    return this._context.mocha;
+  }
+
+  _remove() {
+    utils.removeBySelector(`script[src="${MOCHA_PATH}"]`, this._context.document);
   }
 }
 
 function proxyNonAssertionErrors(runner) {
-  // mocha encapsulate errors inside, so catch err via 'fail' event
-  // and re-throw to see pretty console message in background page (excluding AssertionError)
+  // to see pretty error messages in background console, proxy non-assertion errors from mocha
   runner.on('fail', function (test) {
     if (test.err.name !== 'AssertionError') {
       // mark error with flag to not show it in htmlConsole
       // (as mocha reporter shows errors itself)
       test.err.isMocha = true;
-      // throw error out to see pretty stack trace in background console
       // use asyncThrow to go out of promise chain
       utils.asyncThrow(test.err);
     }

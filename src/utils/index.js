@@ -11,14 +11,26 @@ const escapeStringRegexp = require('escape-string-regexp');
  * @param {Object} targetDocument
  * @returns {Promise}
  */
-exports.loadScript = function (url, targetDocument = document) {
+exports.loadScript = function (url, doc = document) {
   return new Promise(function (resolve, reject) {
-    const script = targetDocument.createElement('script');
+    const script = doc.createElement('script');
     script.type = 'text/javascript';
-    targetDocument.getElementsByTagName('head')[0].appendChild(script);
-    script.onload = resolve;
+    doc.getElementsByTagName('head')[0].appendChild(script);
+    script.onload = () => resolve(script);
     script.onerror = () => reject(new Error(`Can not load script ${url}`));
     script.src = url;
+  });
+};
+
+/**
+ * Remove elements by selector
+ *
+ * @param {String} selector
+ * @param {Document} [doc]
+ */
+exports.removeBySelector = function (selector, doc = document) {
+  [].forEach.call(doc.querySelectorAll(selector), el => {
+    el.parentNode.removeChild(el);
   });
 };
 
@@ -81,9 +93,11 @@ exports.cleanStack = function(stack) {
   if (typeof stack !== 'string') {
     return stack;
   }
-  const selfUrl = chrome.runtime.getURL('');
-  const selfFsUrl = `filesystem:${selfUrl}persistent/`;
-  const regStr = '(' + escapeStringRegexp(selfFsUrl) + ')|(' + escapeStringRegexp(selfUrl) + ')';
-  const re = new RegExp(regStr, 'g');
-  return stack.replace(re, '');
+  const url = chrome.runtime.getURL('');
+  const urlFs = `filesystem:${url}persistent/`;
+  const urlRe = new RegExp(escapeStringRegexp(url), 'g');
+  const urlFsRe = new RegExp(escapeStringRegexp(urlFs), 'g');
+  return stack
+    .replace(urlFsRe, '')
+    .replace(urlRe, '')
 };

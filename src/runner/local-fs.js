@@ -19,7 +19,6 @@ let fsInited = false;
  * @returns {Promise<String>}
  */
 exports.download = function (url, filepath) {
-  logger.log(`Downloading: ${url} to ${filepath}`);
   return Promise.resolve()
     .then(() => utils.fetchText(url))
     .then(code => exports.save(filepath, code));
@@ -43,8 +42,13 @@ exports.save = function (filepath, code) {
     })
 };
 
+// todo: move out of this module
 function wrapAsAnonymousFn(text) {
-  return `(function () { /* <=== Autotester wrapper */ ${text}})(); /* <=== Autotester wrapper */`;
+  return [
+    '(function (console) { try { /* <=== Autotester wrapper */ ',
+    text,
+    '} catch(e) {__onTestFileError.dispatch(e)}})(uiConsole); /* <=== Autotester wrapper */'
+  ].join('');
 }
 
 function ensureFs() {

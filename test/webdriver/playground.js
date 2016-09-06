@@ -7,6 +7,7 @@ var webdriver = require('selenium-webdriver'),
   Key = webdriver.Key,
   test = require('selenium-webdriver/testing');
 
+
 // =======
 
 // const driver = new Driver();
@@ -14,11 +15,13 @@ var webdriver = require('selenium-webdriver'),
 // driver.sleep(1000);
 // driver.findElement(By.name('text')).sendKeys('qwertty');
 // driver.sleep(1000);
-//setTimeout(() => sadfsdf, 10)
-//sdfgs
+// //setTimeout(() => sadfsdf, 10)
+// sdfgs
+//
 // driver.call(() => {
 //   xxx();
 // });
+//
 // driver.quit();
 
 
@@ -36,6 +39,7 @@ test.describe('Yandex Search', function() {
   test.it('should append query to title', function() {
     driver.get('https://ya.ru');
     driver.sleep(1000);
+
     driver.findElement(By.name('text')).sendKeys('hello');
     driver.sleep(1000);
 

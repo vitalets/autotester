@@ -2,7 +2,6 @@ module.exports = {
   entry: {
     'core/background/bundle': './src/background/',
     'core/background/bootstrap': './src/background/bootstrap',
-    'core/background/iframe': './src/runner/iframe',
     'core/ui/bundle': './src/ui/',
     'core/ui/bootstrap': './src/ui/bootstrap',
   },

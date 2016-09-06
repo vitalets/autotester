@@ -8,7 +8,6 @@ var evaluate = require('../utils/evaluate');
 var Progress = require('mocha/lib/browser/progress');
 var escapeRe = require('escape-string-regexp');
 var escape = utils.escape;
-var mainUtils = require('../utils');
 
 exports.getReporter = function (win) {
 
@@ -154,9 +153,9 @@ exports.getReporter = function (win) {
         stackString = '\n(' + test.err.sourceURL + ':' + test.err.line + ')';
       }
 
-      // vitalets: clean error stack from useless paths
-      stackString = mainUtils.cleanStack(stackString || '');
-      // stackString = stackString || '';
+      // vitalets: clean stack
+      // (although mocha cleans stack itself we need to remove 'filesystem:persistent'
+      stackString = (stackString || '').replace(/filesystem:persistent\//g, '');
 
       if (test.err.htmlMessage && stackString) {
         el.appendChild(fragment('<div class="html-error">%s\n<pre class="error">%e</pre></div>',

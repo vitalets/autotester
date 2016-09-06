@@ -10,6 +10,7 @@
  * 2. RUN IN IFRAME: create iframe and load files from local filesystem
  * + independent window instance
  * + easy cleanup: just remove iframe
+ * + better error handling: own onerror event in frame
  * + easy set any globals, no access to top window globals (only as window.parent.*)
  * - bugs with instanceof, iframe has own context: we need to load asserts separately, split fake-require function
  * - need to pass chrome object
@@ -24,11 +25,11 @@
  */
 
 const path = require('path');
+const utils = require('../utils');
 // const Runner = require('./runner');
 const MochaRunner = require('./mocha-runner');
 const htmlReporter = require('../reporter/html');
 const ScriptRunner = require('./script-runner');
-const Sandbox = require('./sandbox');
 const globals = require('./globals');
 const localFs = require('./local-fs');
 
@@ -65,50 +66,16 @@ const LOCAL_SNIPPET_DIR = 'snippets';
  */
 exports.runFiles = function (files, options) {
   logger.log(`Executing ${files.length} file(s)`);
-  const globalVars = globals.get(options.uiWindow);
-  const sandbox = new Sandbox();
+  const context = window;
   const reporter = htmlReporter.getReporter(options.uiWindow);
   const testRunner = new MochaRunner({reporter});
   return Promise.resolve()
-    .then(() => sandbox.create())
-    .then(() => testRunner.load(sandbox))
-    .then(() => sandbox.addGlobals(globalVars))
-    .then(() => sandbox.loadScript('core/background/iframe.js'))
-    .then(() => {
-      sandbox.addGlobals({assert: sandbox.window.seleniumAssert})
-    })
-    .then(() => processFiles(files, options.baseUrl, sandbox))
+    .then(() => testRunner.setup(context))
+    .then(() => globals.export(context, options.uiWindow))
+    .then(() => processFiles(files, options.baseUrl, context))
     .then(() => testRunner.hasTests() ? testRunner.run() : null)
-    .then(() => {
-      sandbox.clear();
-      logger.log('Done');
-    })
-    .catch(e => {
-      sandbox.clear();
-      return Promise.reject(e);
-    });
+    .then(() => logger.log('Done'))
 };
-/*
-function runInternalUrls() {
-  logger.log(`Executing ${urls.length} file(s)`);
-// todo: sometimes flow gets in 'started state but does not emit any events
-// todo: so reset it to be sure everything ok
-  promise.controlFlow().reset();
-  const globalVars = globals.get(options.uiWindow);
-  const sandbox = new Sandbox();
-//const mochaRunner = new MochaRunner();
-  return Promise.resolve()
-    .then(() => sandbox.prepare(globalVars))
-    //.then(() => mochaRunner.prepare(context.document))
-    .then(() => processUrls(urls, sandbox))
-    //.then(() => mochaRunner.hasTests() ? mochaRunner.run() : null)
-    .then(() => finish())
-    .catch(e => {
-      sandbox.clear();
-      return Promise.reject(e);
-    });
-}
-*/
 
 /*
 function fetchUrls(urls = []) {
@@ -124,6 +91,7 @@ function fetchUrls(urls = []) {
 
 
 function processFiles(files, baseUrl, context) {
+  removePreviousFiles(context);
   return files.reduce((res, filepath) => {
     return res.then(() => processFile(baseUrl, filepath, context))
   }, Promise.resolve());
@@ -132,15 +100,11 @@ function processFiles(files, baseUrl, context) {
 function processFile(baseUrl, filepath, context) {
   const url = path.join(baseUrl, filepath);
   const localPath = path.join(LOCAL_TEST_DIR, filepath);
-  context.window.__filename = filepath;
-  // wrap before each file to add names to every `it` function for pretty error stack
-  context.window.test.wrapMochaGlobals(context.window);
   return Promise.resolve()
     .then(() => localFs.download(url, localPath))
     .then(localUrl => new ScriptRunner(localUrl, context).run());
 }
 
-
-function finish() {
-  logger.log('Done');
+function removePreviousFiles(context) {
+  utils.removeBySelector('script[src^="filesystem:"]', context.document);
 }

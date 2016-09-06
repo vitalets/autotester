@@ -1,5 +1,5 @@
 /**
- * Catches all unhandled errors and unhandled promise rejections, then routes it to handler
+ * Catches all unhandled errors and unhandled promise rejections, and pass them to specified handler
  * Can avoid circular errors and store errors until handler attached.
  *
  * todo: event for promise can contain any value, not only Error !!

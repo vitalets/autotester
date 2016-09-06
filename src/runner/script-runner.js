@@ -18,8 +18,8 @@ class ScriptRunner {
    * @param {Object} context
    */
   constructor(url, context) {
-    this._context = context;
     this._url = url;
+    this._context = context;
     // todo: use custom control flow?
     this._flow = promise.controlFlow();
     this._setListeners();
@@ -30,21 +30,13 @@ class ScriptRunner {
     return new Promise((resolve, reject) => {
       this._resolve = resolve;
       this._reject = reject;
-      this._contextListeners.on();
+      this._globalErrorListeners.on();
       return Promise.resolve()
         .then(() => this._loadScript())
         .then(() => this._waitFlow())
     })
     .then(() => logger.log(`Done: ${this._url}`))
-    .catch(e => this._catch(e));
-  }
-
-  _initPromise() {
-    return new Promise((resolve, reject) => {
-      this._resolve = resolve;
-      this._reject = reject;
-      this._contextListeners.on();
-    });
+    //.catch(e => this._catch(e));
   }
 
   _loadScript() {
@@ -53,31 +45,43 @@ class ScriptRunner {
 
   _waitFlow() {
     if (this._flow.isIdle()) {
-      this._resolve();
+      this._fulfill();
     } else {
       this._flowListeners.on();
     }
   }
 
   _onFlowIdle() {
-    this._flowListeners.off();
-    this._resolve();
+    this._fulfill();
   }
 
   _onFlowException(e) {
-    this._flowListeners.off();
-    this._flow.reset();
-    this._reject(e);
+    this._fulfill(e);
   }
 
-  _onContextError(errorEvent) {
-    this._reject(errorEvent.error || errorEvent.reason);
+  _onTestFileError(error) {
+    // mark error with special flag to inform user that error is inside test itself
+    error.isTestFile = true;
+    this._fulfill(error);
+  }
+
+  _fulfill(error) {
+    this._globalErrorListeners.off();
+    this._flowListeners.off();
+    if (error) {
+      this._flow.reset();
+      this._reject(error);
+    } else {
+      this._resolve();
+    }
   }
 
   _catch(error) {
-    this._contextListeners.off();
-    this._flowListeners.off();
-    this._flow.reset();
+    console.warn('catched')
+    this._globalErrorListeners.off();
+    // todo: do we really need this?
+    // this._flowListeners.off();
+    // this._flow.reset();
     throw error;
   }
 
@@ -86,8 +90,8 @@ class ScriptRunner {
       [this._flow, IDLE, this._onFlowIdle],
       [this._flow, UNCAUGHT_EXCEPTION, this._onFlowException],
     ], this);
-    this._contextListeners = new ListenerSwitch([
-      [this._context.onError, this._onContextError]
+    this._globalErrorListeners = new ListenerSwitch([
+      [this._context.__onTestFileError, this._onTestFileError],
     ], this);
   }
 }
