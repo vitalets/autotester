@@ -54,7 +54,7 @@
     "zip": "pushd $npm_config_outdir && rimraf $npm_config_outzip && zip -rT $npm_config_outzip . && popd",
     "crx": "crx pack $npm_config_outdir -o $npm_config_outcrx -p $npm_config_crxkey",
     "crx-dev": "npm run crx --outcrx=dist/autotester-dev.crx --crxkey=keys/autotester.pem",
-    "crx-dev-selftest": "crx pack dist/autotester-dev-selftest -o dist/autotester-dev-selftest.crx -p keys/autotester-selftest.pem"
+    "crx-dev-selftest": "crx pack dist/unpacked-dev-selftest -o dist/autotester-dev-selftest.crx -p keys/autotester-selftest.pem"
   },
   "dependencies": {},
   "devDependencies": {

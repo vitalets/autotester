@@ -9,7 +9,7 @@ const cpx = require('cpx');
 const fs = require('fs-extra');
 
 const source = 'dist/unpacked-dev/**/!(*.map)';
-const dest = 'dist/upacked-dev-selftest/';
+const dest = 'dist/unpacked-dev-selftest/';
 const manifestPath = path.join(dest, 'manifest.json');
 const method = process.argv[2];
 const options = {clean: true};
