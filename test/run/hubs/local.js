@@ -8,5 +8,5 @@ const capabilities = require('../capabilities');
 
 exports.name = 'local';
 exports.capabilities = function () {
-  return capabilities.local();
+  return capabilities.get();
 };

@@ -13,19 +13,19 @@ const targets = [
   {
     'platform': 'Windows 7',
   },
-  {
-    'platform': 'Windows 7',
-    'version': 'beta',
-  },
-  {
-    'platform': 'Windows 10',
-  },
+  // {
+  //   'platform': 'Windows 7',
+  //   'version': 'beta',
+  // },
+  // {
+  //   'platform': 'Windows 10',
+  // },
 ];
 
 exports.name = 'sauce';
 exports.serverUrl = `http://ondemand.saucelabs.com:80/wd/hub`;
 exports.capabilities = function () {
-  return capabilities.remote()
+  return capabilities.get()
     .then(caps => {
       return targets.map(target => {
         return Object.assign({}, caps, target, {

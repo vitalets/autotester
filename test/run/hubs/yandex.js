@@ -18,7 +18,7 @@ const targets = [
 exports.name = 'yandex';
 exports.serverUrl = `http://selenium:selenium@sg.yandex-team.ru:4444/wd/hub`;
 exports.capabilities = function () {
-  return capabilities.remote()
+  return capabilities.get()
     .then(caps => {
       return targets.map(target => {
         return Object.assign({}, caps, target);
