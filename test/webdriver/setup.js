@@ -5,7 +5,7 @@
 
 // const FILE_SERVER_BASE_URL = 'http://127.0.0.1:2310/common/';
 const FILE_SERVER_BASE_URL = 'http://selenium-fileserver.herokuapp.com/common/';
-const SIMPLE_EXTENSION_ID = 'inilfehdbldcjcffbakeabignfomfbdh';
+const SELFTEST_EXTENSION_ID = 'inilfehdbldcjcffbakeabignfomfbdh';
 
 setup();
 
@@ -41,11 +41,12 @@ function setupRequire() {
 function setupRunContext() {
   Object.assign(runContext, {
     baseUrl: FILE_SERVER_BASE_URL,
-    simpleExtension: {
-      id: SIMPLE_EXTENSION_ID,
-      handle: `extension-${SIMPLE_EXTENSION_ID}`,
-      bg: `chrome-extension://${SIMPLE_EXTENSION_ID}/_generated_background_page.html`,
-      popup: `chrome-extension://${SIMPLE_EXTENSION_ID}/popup.html`,
+    selftest: {
+      id: SELFTEST_EXTENSION_ID,
+      handle: `extension-${SELFTEST_EXTENSION_ID}`,
+      bg: `chrome-extension://${SELFTEST_EXTENSION_ID}/_generated_background_page.html`,
+      ui: `chrome-extension://${SELFTEST_EXTENSION_ID}/core/ui/ui.html`,
+      configUrl: `chrome-extension://${SELFTEST_EXTENSION_ID}/test/index.js`,
     }
   });
 }

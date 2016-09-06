@@ -27,7 +27,7 @@ test.suite(function (env) {
 
       test.it('should contain extension background handler', function () {
         driver.getAllWindowHandles().then(handles => {
-          assert(handles.indexOf(runContext.simpleExtension.handle) >= 0).equalTo(true);
+          assert(handles.indexOf(runContext.selftest.handle) >= 0).equalTo(true);
         });
       });
 
@@ -39,12 +39,12 @@ test.suite(function (env) {
       });
 
       test.it('should switch and call command', function () {
-        driver.switchTo().window(runContext.simpleExtension.handle);
-        assert(driver.getCurrentUrl()).equalTo(runContext.simpleExtension.bg);
+        driver.switchTo().window(runContext.selftest.handle);
+        assert(driver.getCurrentUrl()).equalTo(runContext.selftest.bg);
       });
 
       test.it('should access chrome api', function () {
-        driver.switchTo().window(runContext.simpleExtension.handle);
+        driver.switchTo().window(runContext.selftest.handle);
         const manifestVersion = driver.executeScript(function () {
           return chrome.runtime.getManifest().manifest_version;
         });
@@ -52,16 +52,16 @@ test.suite(function (env) {
       });
 
       test.it('should execute async script', function () {
-        driver.switchTo().window(runContext.simpleExtension.handle);
+        driver.switchTo().window(runContext.selftest.handle);
         const popup = driver.executeAsyncScript(function () {
-          chrome.browserAction.getPopup({}, arguments[arguments.length - 1]);
+          chrome.browserAction.getTitle({}, arguments[arguments.length - 1]);
         });
-        assert(popup).equalTo(runContext.simpleExtension.popup);
+        assert(popup).equalTo('SELF TEST Autotester');
       });
 
       test.it('should switch via .extension(id)', function () {
-        driver.switchTo().extension(runContext.simpleExtension.id);
-        assert(driver.getCurrentUrl()).equalTo(runContext.simpleExtension.bg);
+        driver.switchTo().extension(runContext.selftest.id);
+        assert(driver.getCurrentUrl()).equalTo(runContext.selftest.bg);
       });
 
       test.it('should switch via .extension() without id to first available extension', function () {
@@ -70,26 +70,26 @@ test.suite(function (env) {
       });
 
       test.it('should not fail on several .extension() calls', function () {
-        driver.switchTo().extension(runContext.simpleExtension.id);
-        driver.switchTo().extension(runContext.simpleExtension.id);
+        driver.switchTo().extension(runContext.selftest.id);
+        driver.switchTo().extension(runContext.selftest.id);
       });
 
     });
 
-    describe('popup', function () {
+    describe('tab with extension url', function () {
 
-      test.it('should navigate to popup url', function () {
-        driver.get(runContext.simpleExtension.popup);
-        assert(driver.getCurrentUrl()).equalTo(runContext.simpleExtension.popup);
+      test.it('should navigate', function () {
+        driver.get(runContext.selftest.ui);
+        assert(driver.getCurrentUrl()).equalTo(runContext.selftest.ui);
       });
 
-      test.it('should open newtab with popup url', function () {
-        driver.switchTo().newTab(runContext.simpleExtension.popup);
-        assert(driver.getCurrentUrl()).equalTo(runContext.simpleExtension.popup);
+      test.it('should open as newtab', function () {
+        driver.switchTo().newTab(runContext.selftest.ui);
+        assert(driver.getCurrentUrl()).equalTo(runContext.selftest.ui);
       });
 
-      test.it('should access chrome api in popup', function () {
-        driver.get(runContext.simpleExtension.popup);
+      test.it('should access chrome api', function () {
+        driver.get(runContext.selftest.ui);
         const manifestVersion = driver.executeScript(function () {
           return chrome.runtime.getManifest().manifest_version;
         });

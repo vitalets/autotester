@@ -177,15 +177,13 @@ test.suite(function(env) {
       });
     });
 
-    test.it('should collect requests from another target', function () {
-      driver.switchTo().window(runContext.simpleExtension.handle);
+    test.it('should collect requests from another target (extension bg)', function () {
+      driver.switchTo().window(runContext.selftest.handle);
       driver.requests().collect();
-      driver.switchTo().newTab(runContext.simpleExtension.popup);
-      driver.executeAsyncScript(function() {
-        chrome.runtime.sendMessage({action: 'fetch', url: location.href}, callback);
-      });
+      driver.switchTo().newTab(runContext.selftest.ui);
+      driver.wait(until.titleContains('loaded'));
       driver.requests().stop();
-      assert(driver.requests().getCount({url: runContext.simpleExtension.popup})).equalTo(1);
+      assert(driver.requests().getCount({url: runContext.selftest.configUrl})).equalTo(1);
     });
 
   });
