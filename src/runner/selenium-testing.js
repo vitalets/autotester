@@ -89,19 +89,14 @@ function seal(fn) {
  * webdriver.promise.ControlFlow and waits for the flow to complete before
  * continuing.
  * @param {!Function} globalFn The function to wrap.
- * @param {String} fnName original function name for debugging
  * @return {!Function} The new function.
  */
-function wrapped(globalFn, fnName) {
+function wrapped(globalFn) {
   return function() {
     if (arguments.length === 1) {
-      // set function name for debugging
-      Object.defineProperty(arguments[0], 'name', {value: fnName || ''});
       return globalFn(makeAsyncTestFn(arguments[0]));
     }
     else if (arguments.length === 2) {
-      // set function name for debugging
-      Object.defineProperty(arguments[1], 'name', {value: fnName || ''});
       return globalFn(arguments[0], makeAsyncTestFn(arguments[1]));
     }
     else {
@@ -211,8 +206,6 @@ exports.controlFlow = function(){
  * @param {Object} global
  */
 exports.wrapMochaGlobals = function (global) {
-  // set fnName as filename for pretty error stack
-  const fnName = `&#x1F534;${global.__filename}`;
   /**
    * Registers a new test suite.
    * @param {string} name The suite name.
@@ -234,25 +227,25 @@ exports.wrapMochaGlobals = function (global) {
    * Register a function to call after the current suite finishes.
    * @param {function()} fn .
    */
-  exports.after = wrapped(global.after, fnName);
+  exports.after = wrapped(global.after);
 
   /**
    * Register a function to call after each test in a suite.
    * @param {function()} fn .
    */
-  exports.afterEach = wrapped(global.afterEach, fnName);
+  exports.afterEach = wrapped(global.afterEach);
 
   /**
    * Register a function to call before the current suite starts.
    * @param {function()} fn .
    */
-  exports.before = wrapped(global.before, fnName);
+  exports.before = wrapped(global.before);
 
   /**
    * Register a function to call before each test in a suite.
    * @param {function()} fn .
    */
-  exports.beforeEach = wrapped(global.beforeEach, fnName);
+  exports.beforeEach = wrapped(global.beforeEach);
 
   /**
    * Add a test to the current suite.
@@ -260,7 +253,7 @@ exports.wrapMochaGlobals = function (global) {
    * @param {function()=} fn The test function, or {@code undefined} to define
    *     a pending test case.
    */
-  exports.it = wrapped(global.it, fnName);
+  exports.it = wrapped(global.it);
 
   /**
    * An alias for {@link #it()} that flags the test as the only one that should
@@ -269,7 +262,7 @@ exports.wrapMochaGlobals = function (global) {
    * @param {function()=} fn The test function, or {@code undefined} to define
    *     a pending test case.
    */
-  exports.iit = exports.it.only = wrapped(global.it.only, fnName);
+  exports.iit = exports.it.only = wrapped(global.it.only);
 
   /**
    * Adds a test to the current suite while suppressing it so it is not run.
@@ -277,7 +270,7 @@ exports.wrapMochaGlobals = function (global) {
    * @param {function()=} fn The test function, or {@code undefined} to define
    *     a pending test case.
    */
-  exports.xit = exports.it.skip = wrapped(global.xit, fnName);
+  exports.xit = exports.it.skip = wrapped(global.xit);
 };
 
 exports.ignore = ignore;
