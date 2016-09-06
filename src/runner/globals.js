@@ -16,15 +16,13 @@ exports.get = function (uiWindow) {
     until: webdriver.until,
     // for running tests
     test: seleniumTesting,
-    /**
-     * Assertions can not be registered here as they use instanceof comparisons that does not work between frames
-     */
-    //assert: seleniumAssert,
+    // assert: sandboxWindow.seleniumAssert,
+    // for custom user data
     runContext: {},
     // for running selenium tests as is
     require: fakeRequire,
     // for debug
-    console: uiWindow.htmlConsole || window.console,
+    console: uiWindow.sharedConsole || window.console,
     // for custom reporting
     report: uiWindow.report,
     __filename: uiWindow.__filename || '',

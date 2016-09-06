@@ -2,6 +2,8 @@
  * Utils
  */
 
+const escapeStringRegexp = require('escape-string-regexp');
+
 /**
  * Loads script via <script> tag
  *
@@ -69,19 +71,19 @@ exports.trimSlashes = function (str) {
 };
 
 /**
- * Sets/unsets listener to channel
+ * Remove useless paths from error stack:
+ * - filesystem:chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/persistent/
+ * - chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/
  *
- * @param {Object} channel
- * @param {Function} listener
- * @param {String} action 'set|unset'
+ * @param {String} stack
  */
-exports.manageListener = function(channel, listener, action) {
-  if (action === 'set') {
-    const has = channel.hasListener && channel.hasListener(listener);
-    if (!has) {
-      channel.addListener(listener);
-    }
-  } else {
-    channel.removeListener(listener);
+exports.cleanStack = function(stack) {
+  if (typeof stack !== 'string') {
+    return stack;
   }
+  const selfUrl = chrome.runtime.getURL('');
+  const selfFsUrl = `filesystem:${selfUrl}persistent/`;
+  const regStr = '(' + escapeStringRegexp(selfFsUrl) + ')|(' + escapeStringRegexp(selfUrl) + ')';
+  const re = new RegExp(regStr, 'g');
+  return stack.replace(re, '');
 };

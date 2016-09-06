@@ -11,7 +11,7 @@
  * + independent window instance
  * + easy cleanup: just remove iframe
  * + easy set any globals, no access to top window globals (only as window.parent.*)
- * - bugs with instanceof, iframe has own context: we need to load asserts separately from own entry point
+ * - bugs with instanceof, iframe has own context: we need to load asserts separately, split fake-require function
  * - need to pass chrome object
  *
  * 3. RUN IN TOP WINDOW: load files from local filesystem in main window
@@ -74,6 +74,9 @@ exports.runFiles = function (files, options) {
     .then(() => testRunner.load(sandbox))
     .then(() => sandbox.addGlobals(globalVars))
     .then(() => sandbox.loadScript('core/background/iframe.js'))
+    .then(() => {
+      sandbox.addGlobals({assert: sandbox.window.seleniumAssert})
+    })
     .then(() => processFiles(files, options.baseUrl, sandbox))
     .then(() => testRunner.hasTests() ? testRunner.run() : null)
     .then(() => {

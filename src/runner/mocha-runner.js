@@ -33,7 +33,6 @@ class MochaRunner {
       .then(() => this._context.loadScript(MOCHA_PATH))
       .then(() => this._getMocha().setup(this._mochaOptions))
       .then(() => logger.log('Mocha loaded'));
-    // this._storeFilenames();
   }
 
   hasTests() {
@@ -46,7 +45,7 @@ class MochaRunner {
     logger.log(`Run mocha for ${suitesCount} suite(s)`);
     return new Promise(resolve => {
         const runner = this._getMocha().run(resolve);
-        // catchErrorsInsideMocha(runner);
+        proxyNonAssertionErrors(runner);
       })
       .then(failures => logger.log(`Finish mocha with ${failures} failure(s)`));
   }
@@ -54,20 +53,11 @@ class MochaRunner {
   _getMocha() {
     return this._context.window.mocha;
   }
-
-  _storeFilenames() {
-    // store current filename to custom field of suite
-    // for readable error messages later
-    this._getMocha().suite.on('suite', suite => {
-      suite.filename = this._context.__filename;
-    });
-  }
 }
 
-function catchErrorsInsideMocha(runner) {
+function proxyNonAssertionErrors(runner) {
   // mocha encapsulate errors inside, so catch err via 'fail' event
-  // and re-throw to see pretty console message
-  // excluding AssertionError
+  // and re-throw to see pretty console message in background page (excluding AssertionError)
   runner.on('fail', function (test) {
     if (test.err.name !== 'AssertionError') {
       // mark error with flag to not show it in htmlConsole

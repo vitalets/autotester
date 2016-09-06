@@ -38,47 +38,20 @@ test.describe('Yandex Search', function() {
     driver.sleep(1000);
     driver.findElement(By.name('text')).sendKeys('hello');
     driver.sleep(1000);
-    //assert(driver.getTitle()).equalTo('adsfgadfg')
+
+    // driver.call(() => {
+    //   xxx();
+    // });
+
+    assert(driver.getTitle()).equalTo('adsfgadfg')
     //assert(1).equalTo(2)
 
     //assert.equal(1, 2)
     // throw new Error('abc')
-    // driver.call(() => {
-    //   xxx();
-    // });
+
     //driver.findElement(By.name('text')).submit();
    // driver.findElement(By.name('text')).sendKeys(Key.ENTER);
 
-  });
-
-  test.it('should create new bookmark', function() {
-    driver.get('chrome://newtab');
-    driver.wait(until.elementLocated({css: '.bottom-menu__item_name_add-thumb'}), 6000);
-    var addThumbButton = driver.findElement({css: '.bottom-menu__item_name_add-thumb'});
-    addThumbButton.click();
-    // driver.sleep(200);
-    var urlInput = driver.findElement({css: '.b-setting [aria-label="url"]'});
-    urlInput.click();
-    urlInput.sendKeys('mail.ru');
-    //urlInput.click();
-    // driver.findElement({css:'.b-setting [aria-label="url"]'}).focus();
-    driver.sleep(1000);
-    // driver.executeScript(function () {
-    //   document.addEventListener('keydown', e => console.info(e));
-    // });
-    urlInput.sendKeys(Key.ENTER);
-    driver.sleep(2000);
-  });
-
-  test.it('slider', function() {
-    driver.get('chrome://newtab');
-    driver.wait(until.elementLocated({css: '.bottom-menu__item_name_add-thumb'}), 6000);
-    driver.findElement({css: '.settings__open-button'}).click();
-    driver.sleep(1000);
-    let slider = driver.findElement({css: '.slider__handle'});
-    slider.click();
-    slider.sendKeys(Key.LEFT);
-    driver.sleep(2000);
   });
 
   test.after(function() {
