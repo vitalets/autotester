@@ -4,9 +4,6 @@
 
 const utils = require('../utils');
 
-const TEST_PREFIX = '[TEST]: ';
-const BG_PREFIX = '[BACKGROUND]: ';
-
 module.exports = function (error) {
   if (error.isMocha) {
     // don't display mocha errors as mocha do it itself
@@ -25,9 +22,7 @@ function getViews() {
 }
 
 function getMsg(error) {
-  const prefix = error.isTestFile ? TEST_PREFIX : BG_PREFIX;
-  const msg = typeof error === 'object'
+  return typeof error === 'object'
     ? (utils.cleanStack(error.stack) || error.message || error.name)
     : String(error);
-  return prefix + msg;
 }
