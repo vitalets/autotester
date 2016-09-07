@@ -18,7 +18,7 @@
     "test:l": "run-p crx-dev crx-dev-selftest && node ./test/run local",
     "test:b": "run-p crx-dev crx-dev-selftest && source .env && node ./test/run browserstack",
     "test:s": "run-p crx-dev crx-dev-selftest && source .env && node ./test/run sauce",
-    "test:y": "run-p crx-dev crx-dev-selftest && node ./test/run yandex",
+    "test:y": "run-p crx-dev crx-dev-selftest && source .env && node ./test/run yandex",
     "__BUILD__": "================================================================",
     "build": "run-s unpacked zip crx --outdir=dist/unpacked",
     "build-with-example": "npm run unpacked+zip --outdir=dist/unpacked --copytest=example --outzip=../autotester-with-example.zip",
