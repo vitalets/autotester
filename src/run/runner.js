@@ -38,7 +38,7 @@ const MochaRunner = require('./mocha-runner');
 const ScriptRunner = require('./script-runner');
 const htmlReporter = require('../reporter/html');
 const globals = require('./globals');
-const localFs = require('./local-fs');
+const localFs = require('../utils/local-fs');
 const logger = require('../utils/logger').create('Runner');
 
 class Runner {

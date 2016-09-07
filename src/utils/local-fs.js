@@ -1,13 +1,12 @@
 /**
- * Downloads external url to local filesystem sandbox.
- * Wraps code into anonymous self-called function to isolate scope.
+ * Local html5 filesystem api
  */
 
 const path = require('path');
 var promisifyAll = require('es6-promisify-all');
 var fs = promisifyAll(require('html5-fs'));
-const utils = require('../utils');
-const logger = require('../utils/logger').create('LocalFs');
+const utils = require('.');
+const logger = require('./logger').create('LocalFs');
 
 let fsInited = false;
 
