@@ -39,6 +39,9 @@ class Collector {
   }
 
   stop() {
+    if (!this._collecting) {
+      return Promise.resolve();
+    }
     return Promise.resolve()
       .then(() => this._newTabCatcher.stop())
       .then(() => this._requestCatcher.stop())

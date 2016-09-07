@@ -24,6 +24,9 @@ class RequestCatcher {
   }
 
   stop() {
+    if (!this._debugger) {
+      throw new Error('RequestCatcher already stopped');
+    }
     this._listenerSwitch.off();
     return this._setNetworkState('disable')
       .then(() => this._debugger = null)

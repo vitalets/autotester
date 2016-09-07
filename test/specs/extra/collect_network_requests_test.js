@@ -186,6 +186,20 @@ test.suite(function(env) {
       assert(driver.requests().getCount({url: runContext.selftest.configUrl})).equalTo(1);
     });
 
+    test.it('should throw error on several .collect() calls', function () {
+      driver.requests().collect();
+      driver.requests().collect().catch(e => {
+        assert(e.message).equalTo('Requests already in collecting state');
+      });
+      driver.requests().stop();
+    });
+
+    test.it('should not throw error on several .stop() calls', function () {
+      driver.requests().collect();
+      driver.requests().stop();
+      driver.requests().stop();
+    });
+
   });
 
 });
