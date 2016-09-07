@@ -10,8 +10,13 @@ var webdriver = require('selenium-webdriver'),
 
 // =======
 
-// const driver = new Driver();
-// driver.get('https://ya.ru');
+//  const driver = new Driver();
+//  driver.get('https://ya.ru');
+// driver.requests().collect();
+// driver.call(() => {
+//   throw new Error('some error');
+// });
+
 // driver.sleep(1000);
 // driver.findElement(By.name('text')).sendKeys('qwertty');
 // driver.sleep(1000);

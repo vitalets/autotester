@@ -13,7 +13,6 @@ test.suite(function(env) {
 
   test.beforeEach(function () {
     driver.get(test.Pages.echoPage);
-    //driver.requests().reset();
   });
 
   test.after(function () {
@@ -133,13 +132,12 @@ test.suite(function(env) {
       assert(driver.requests().getCount({type: 'newtab', url: test.Pages.simpleTestPage})).equalTo(1);
     });
 
-    test.it.skip('should stop in case of error', function () {
-      // todo:
-      // driver.requests().collect();
-      // driver.get(test.Pages.echoPage);
-      // driver.executeScript(function() {
-      //   throw new Error('some error');
-      // })
+    // we can not test it as error should be uncaught to stop request catcher
+    test.it.skip('should call .stop() in case of error', function () {
+      driver.requests().collect();
+      driver.call(() => {
+        throw new Error('some error');
+      });
     });
 
     test.it('should limit requests', function () {

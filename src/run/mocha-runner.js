@@ -10,6 +10,7 @@ const MOCHA_PATH = 'core/background/mocha.js';
 const DEFAULT_OPTIONS = {
   ui: 'bdd',
   timeout: 30 * 1000,
+  // allowUncaught: true, // i did not managed to get it working
 };
 
 class MochaRunner {
