@@ -1,84 +1,91 @@
-
-test.describe('ui: display errors', function() {
+test.describe('ui: display errors', function () {
   var driver;
 
-  test.before(function() {
+  test.before(function () {
     driver = new Driver();
     driver.get(runContext.selftest.ui);
   });
 
-  test.after(function() {
-    // driver.quit();
+  test.after(function () {
+    driver.quit();
   });
 
-  test.it('should show error in syntax before driver started', function() {
-    runCode(`
-      abc()
-    `);
-    getConsoleLines().then(lines => {
-      assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-      assert(lines[1]).equalTo('at snippets/test.js:2:7');
-    })
-  });
+  test.describe('without test-runner', function () {
 
-  test.it('should show error inside driver flow', function() {
-    runCode(`
-      const driver = new Driver();
-      driver.call(() => {
+    test.it('should show error in syntax before driver started', function () {
+      runCode(`
         abc()
-      });
-    `);
-    getConsoleLines().then(lines => {
-      assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-      assert(lines[1]).equalTo('at driver.call (snippets/test.js:4:9)');
-    })
-  });
-
-  test.it('should show syntax error in mocha describe', function() {
-    runCode(`
-      test.describe('suite', function () {
-        abc();
+      `);
+      getConsoleLines().then(lines => {
+        assert(lines[0]).equalTo('ReferenceError: abc is not defined');
+        assert(lines[1]).equalTo('at snippets/test.js:2:9');
       })
-    `);
-    getConsoleLines().then(lines => {
-      assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-      assert(lines[1]).equalTo('at Suite.<anonymous> (snippets/test.js:3:9)');
-    })
+    });
+
+    test.it('should show error inside driver flow', function () {
+      runCode(`
+        const driver = new Driver();
+        driver.call(() => {
+          abc()
+        });
+      `);
+      getConsoleLines().then(lines => {
+        assert(lines[0]).equalTo('ReferenceError: abc is not defined');
+        assert(lines[1]).equalTo('at driver.call (snippets/test.js:4:11)');
+      })
+    });
+
   });
 
-  test.it('should show syntax error in mocha it', function() {
-    runCode(`
-      test.describe('suite', function () {
-        test.it('test', function () {
+  test.describe('inside test-runner', function () {
+
+    test.it('should show syntax error in describe()', function () {
+      runCode(`
+        test.describe('suite', function () {
           abc();
         })
+      `);
+      getConsoleLines().then(lines => {
+        assert(lines[0]).equalTo('ReferenceError: abc is not defined');
+        assert(lines[1]).equalTo('at Suite.<anonymous> (snippets/test.js:3:11)');
       })
-    `);
-    getMochaReportLines().then(lines => {
-      assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-      assert(lines[1]).equalTo('at Context.<anonymous> (snippets/test.js:4:11)');
-    })
-  });
+    });
 
-  test.it('should show error in driver flow in mocha it', function() {
-    runCode(`
-      test.describe('suite', function () {
-        let driver;
-        test.it('test', function () {
-          driver = new Driver();
-          driver.call(() => {
-            abc()
+    test.it('should show syntax error in it()', function () {
+      runCode(`
+        test.describe('suite', function () {
+          test.it('test', function () {
+            abc();
           })
         })
-        test.after(function () {
-          driver.quit();
-        })
+      `);
+      getMochaReportLines().then(lines => {
+        assert(lines[0]).equalTo('ReferenceError: abc is not defined');
+        assert(lines[1]).equalTo('at Context.<anonymous> (snippets/test.js:4:13)');
       })
-    `);
-    getMochaReportLines().then(lines => {
-      assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-      assert(lines[1]).equalTo('at driver.call (snippets/test.js:7:13)');
-    })
+    });
+
+    test.it('should show error in driver flow', function () {
+      runCode(`
+        test.describe('suite', function () {
+          let driver;
+          test.it('test', function () {
+            driver = new Driver();
+            driver.call(() => {
+              abc()
+            })
+          })
+          test.after(function () {
+            driver.quit();
+          })
+        })
+      `);
+      getMochaReportLines().then(lines => {
+        assert(lines[0]).equalTo('ReferenceError: abc is not defined');
+        assert(lines[1]).equalTo('at driver.call (snippets/test.js:7:15)');
+      })
+    });
+
   });
 
   function runCode(code) {
