@@ -5,7 +5,7 @@
 
 const promise = require('selenium-webdriver/lib/promise');
 const utils = require('../utils');
-const ListenerSwitch = require('../utils/listener-switch');
+const Subscription = require('../utils/subscription');
 const logger = require('../utils/logger').create('Script-runner');
 
 const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
@@ -93,13 +93,24 @@ class ScriptRunner {
   }
 
   _setListeners() {
-    this._flowListeners = new ListenerSwitch([
-      [this._flow, IDLE, this._onFlowIdle],
-      [this._flow, UNCAUGHT_EXCEPTION, this._onFlowException],
-    ], this);
-    this._globalErrorListeners = new ListenerSwitch([
-      [this._context.__onTestFileError, this._onTestFileError],
-    ], this);
+    this._flowListeners = new Subscription([
+      {
+        channel: this._flow,
+        event: IDLE,
+        listener: this._onFlowIdle.bind(this),
+      },
+      {
+        channel: this._flow,
+        event: UNCAUGHT_EXCEPTION,
+        listener: this._onFlowException.bind(this),
+      }
+    ]);
+    this._globalErrorListeners = new Subscription([
+      {
+        channel: this._context.__onTestFileError,
+        listener: this._onTestFileError.bind(this),
+      }
+    ]);
   }
 
   _offListeners() {
