@@ -52,18 +52,20 @@ function runForCapabilities(caps) {
     driver.get(AUTOTESTER_UI_URL);
     driver.executeScript(function() {
       return navigator.userAgent + ' ' + navigator.language;
-    }).then(res => console.log(`${signature}actual: ${res}`));
+    }).then(res => console.log(`${signature}${res}`));
     driver.findElement({id: 'run'}).click();
     driver.wait(webdriver.until.titleContains('done'));
     // todo: read htmlConsole as there can be errors
-    driver.findElement({id: 'mocha'}).getAttribute('innerHTML')
-      .then(html => {
-        console.log(signature + 'finished');
-        const hasErrors = processReport(html);
-        trySendSessionStatus(driver, signature, hasErrors);
-        driver.quit()
-          .then(() => !hasErrors ? resolve() : reject(new Error(`Tests failed`)));
-      })
+    const mochaReport = driver.findElement({id: 'mocha'}).getAttribute('innerHTML');
+    const consoleReport = driver.findElement({id: 'console'}).getText();
+    Promise.all([mochaReport, consoleReport]).then(([mochaReport, consoleReport]) => {
+      console.log(signature + 'finished');
+      console.log(consoleReport);
+      const hasErrors = processReport(mochaReport);
+      trySendSessionStatus(driver, signature, hasErrors);
+      driver.quit()
+        .then(() => !hasErrors ? resolve() : reject(new Error(`Tests failed`)));
+    })
   })
   // catch error and resolve with it to not stop Promise.all chain
   .catch(e => {

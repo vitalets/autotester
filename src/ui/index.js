@@ -50,6 +50,7 @@ function runTests(files) {
   const eventData = files
      ? {files}
      : {selectedTest: document.getElementById('testlist').value};
+  title.set('running...');
   messaging.send(RUN_TESTS, eventData);
 }
 

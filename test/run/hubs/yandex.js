@@ -8,8 +8,12 @@ const capabilities = require('../capabilities');
 
 const targets = [
   {
+    'platform': 'WINDOWS',
     'version' : '53.0',
-    'platform': 'WINDOWS'
+  },
+  {
+    'platform': 'LINUX',
+    'version' : '51.0',
   },
 ];
 

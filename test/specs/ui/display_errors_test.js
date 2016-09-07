@@ -4,6 +4,7 @@ test.describe('ui: display errors', function () {
   test.before(function () {
     driver = new Driver();
     driver.get(runContext.selftest.ui);
+    driver.wait(until.titleContains('loaded'));
   });
 
   test.after(function () {
@@ -37,7 +38,7 @@ test.describe('ui: display errors', function () {
 
   });
 
-  test.describe('inside test-runner', function () {
+  test.describe('with test-runner', function () {
 
     test.it('should show syntax error in describe()', function () {
       runCode(`
@@ -48,7 +49,7 @@ test.describe('ui: display errors', function () {
       getConsoleLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
         assert(lines[1]).equalTo('at Suite.<anonymous> (snippets/test.js:3:11)');
-      })
+      });
     });
 
     test.it('should show syntax error in it()', function () {
@@ -96,15 +97,18 @@ test.describe('ui: display errors', function () {
   }
 
   function getConsoleLines() {
-    return driver.findElement({id: 'console'}).getText().then(text => {
-      return text.split('\n').map(line => line.trim());
-    });
+    return driver.findElement({id: 'console'}).getText().then(textToLines);
   }
 
   function getMochaReportLines() {
-    return driver.findElement({css: '#mocha-report .error'}).getText().then(text => {
-      return text.split('\n').map(line => line.trim());
-    });
+    return driver.findElement({css: '#mocha-report .error'}).getText()
+      .then(textToLines)
+      .catch(e => [])
+  }
+
+  function textToLines(text) {
+    text = text.trim();
+    return text ? text.split('\n').map(line => line.trim()) : [];
   }
 });
 

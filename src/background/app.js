@@ -64,28 +64,34 @@ class App {
    * @param {Array<{code, path}>} [data.files] special case to run custom files from ui window.runTests
    */
   _runTests(data) {
-    const runnerOptions = {
-      uiWindow: getUiWindow(),
-      baseUrl: storage.get('baseUrl')
-    };
-    let runnerPromise;
-    if (data.files) {
-      runnerPromise = run.runSnippets(data.files, runnerOptions);
-    } else {
-      const tests = this._testsConfig.tests.filter(test => !data.selectedTest || test === data.selectedTest);
-      const setup = this._testsConfig.setup;
-      const files = setup.concat(tests);
-      runnerPromise = run.runRemoteFiles(files, runnerOptions);
+    // todo: refactor
+    try {
+      const runnerOptions = {
+        uiWindow: getUiWindow(),
+        baseUrl: storage.get('baseUrl')
+      };
+
+      let runnerPromise;
+      if (data.files) {
+        runnerPromise = run.runSnippets(data.files, runnerOptions);
+      } else {
+        const tests = this._testsConfig.tests.filter(test => !data.selectedTest || test === data.selectedTest);
+        const setup = this._testsConfig.setup;
+        const files = setup.concat(tests);
+        runnerPromise = run.runRemoteFiles(files, runnerOptions);
+      }
+      runnerPromise
+        .then(() => {
+          messaging.send(RUN_TESTS_DONE)
+        })
+        .catch(e => {
+          messaging.send(RUN_TESTS_DONE);
+          throw e;
+        });
+    } catch (e) {
+      messaging.send(RUN_TESTS_DONE);
+      throw e;
     }
-    messaging.send(RUN_TESTS_STARTED);
-    runnerPromise
-      .then(() => {
-        messaging.send(RUN_TESTS_DONE)
-      })
-      .catch(e => {
-        messaging.send(RUN_TESTS_DONE);
-        throw e;
-      });
   }
 
   _updateSelectedTest() {
