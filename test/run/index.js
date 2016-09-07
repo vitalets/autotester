@@ -50,6 +50,9 @@ function runForCapabilities(caps) {
       .build();
 
     driver.get(AUTOTESTER_UI_URL);
+    driver.executeScript(function() {
+      return navigator.userAgent + ' ' + navigator.language;
+    }).then(res => console.log(`${signature}actual: ${res}`));
     driver.findElement({id: 'run'}).click();
     driver.wait(webdriver.until.titleContains('done'));
     // todo: read htmlConsole as there can be errors
