@@ -30,13 +30,14 @@ class ScriptRunner {
     return new Promise((resolve, reject) => {
       this._resolve = resolve;
       this._reject = reject;
+      this._fulfilled = false;
       this._globalErrorListeners.on();
       return Promise.resolve()
         .then(() => this._loadScript())
         .then(() => this._waitFlow())
     })
     .then(() => logger.log(`Done: ${this._url}`))
-    //.catch(e => this._catch(e));
+    .catch(e => this._catch(e));
   }
 
   _loadScript() {
@@ -55,34 +56,40 @@ class ScriptRunner {
     this._fulfill();
   }
 
+  /**
+   * Notice that this event will not come from mocha as it wraps all errors
+   */
   _onFlowException(e) {
     this._fulfill(e);
   }
 
-  _onTestFileError(error) {
-    // mark error with special flag to inform user that error is inside test itself
-    error.isTestFile = true;
-    this._fulfill(error);
+  _onTestFileError(e) {
+    this._fulfill(e);
   }
 
   _fulfill(error) {
-    this._globalErrorListeners.off();
-    this._flowListeners.off();
+    this._fulfilled = true;
+    this._offListeners();
     if (error) {
-      this._flow.reset();
+      // this._flow.reset();
       this._reject(error);
     } else {
       this._resolve();
     }
   }
 
+  /**
+   * We can appear here after calling this._reject() or some other error
+   * In second case we should cleanup listeners
+   *
+   * @param {Error} error
+   */
   _catch(error) {
-    console.warn('catched')
-    this._globalErrorListeners.off();
-    // todo: do we really need this?
-    // this._flowListeners.off();
-    // this._flow.reset();
-    throw error;
+    if (!this._fulfilled) {
+      this._fulfilled = true;
+      this._offListeners();
+    }
+    return Promise.reject(error);
   }
 
   _setListeners() {
@@ -93,6 +100,11 @@ class ScriptRunner {
     this._globalErrorListeners = new ListenerSwitch([
       [this._context.__onTestFileError, this._onTestFileError],
     ], this);
+  }
+
+  _offListeners() {
+    this._globalErrorListeners.off();
+    this._flowListeners.off();
   }
 }
 
