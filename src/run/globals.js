@@ -31,3 +31,15 @@ exports.export = function (target, uiWindow) {
     __onTestFileError: new Channel()
   });
 };
+
+/**
+ * Clear some keys
+ *
+ * @param {Window} target
+ */
+exports.clear = function (target) {
+  delete target.runContext;
+  delete target.require;
+  delete target.uiConsole;
+  delete target.__onTestFileError;
+};

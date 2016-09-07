@@ -108,6 +108,7 @@ class Runner {
   _cleanUp() {
     this._flow.reset();
     this._localUrls.length = 0;
+    globals.clear(this._context);
     this._cleanScriptTags();
     // todo: remove cleaning whole dir in future
     return localFs.removeDir(this._params.localBaseDir);
