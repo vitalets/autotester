@@ -5,7 +5,7 @@
 const utils = require('../utils');
 const evaluate = require('../utils/evaluate');
 const messaging = require('./messaging');
-const runner = require('../runner');
+const run = require('../run');
 const storage = require('./storage');
 
 const {
@@ -70,12 +70,12 @@ class App {
     };
     let runnerPromise;
     if (data.files) {
-      runnerPromise = runner.runSnippets(data.files, runnerOptions);
+      runnerPromise = run.runSnippets(data.files, runnerOptions);
     } else {
       const tests = this._testsConfig.tests.filter(test => !data.selectedTest || test === data.selectedTest);
       const setup = this._testsConfig.setup;
       const files = setup.concat(tests);
-      runnerPromise = runner.runRemoteFiles(files, runnerOptions);
+      runnerPromise = run.runRemoteFiles(files, runnerOptions);
     }
     messaging.send(RUN_TESTS_STARTED);
     runnerPromise

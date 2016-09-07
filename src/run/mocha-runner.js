@@ -40,12 +40,16 @@ class MochaRunner {
       })
   }
 
-  hasTests() {
+  tryRun() {
+    return this._hasTests() ? this._run() : Promise.resolve();
+  }
+
+  _hasTests() {
     const suite = this._getMocha().suite;
     return suite.suites.length || suite.tests.length;
   }
 
-  run() {
+  _run() {
     const suitesCount = this._getMocha().suite.suites.length;
     logger.log(`Run mocha for ${suitesCount} suite(s)`);
     return new Promise(resolve => {
