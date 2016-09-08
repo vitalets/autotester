@@ -26,7 +26,7 @@ exports.export = function (target, uiWindow) {
     // for debug
     uiConsole: uiWindow.sharedConsole,
     // for custom reporting
-    //report: uiWindow.report,
+    report: uiWindow.report,
     // this channel is used in test-file wrapper for catching errors
     __onTestFileError: new Channel()
   });

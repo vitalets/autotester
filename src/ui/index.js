@@ -34,8 +34,10 @@ function start() {
 
   loadConfig();
 
-  // export runTests for custom calls
+  // for programmatic run
   window.runTests = runTests;
+  // for custom reporting
+  window.report = document.getElementById('report');
 }
 
 /**
