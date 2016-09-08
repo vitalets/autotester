@@ -8,13 +8,20 @@ const path = require('path');
 const cpx = require('cpx');
 const fs = require('fs-extra');
 
-const source = 'dist/unpacked-dev/**/!(*.map)';
+const source = 'dist/unpacked-dev/{core/**/!(*.map),manifest.json}';
 const dest = 'dist/unpacked-dev-selftest/';
+
+// copy examples
+const sourceExamples = 'examples/**';
+const destExamples = path.join(dest, 'tests');
+
 const manifestPath = path.join(dest, 'manifest.json');
 const method = process.argv[2];
+
 const options = {clean: true};
 
 if (method === 'watch') {
+  cpx.watch(sourceExamples, destExamples, options);
   cpx.watch(source, dest, options)
     .on('copy', e => {
       console.log(`Copy ${e.srcPath} --> ${e.dstPath}`);
@@ -24,6 +31,7 @@ if (method === 'watch') {
     });
 } else {
   cpx.copySync(source, dest, options);
+  cpx.copySync(sourceExamples, destExamples, options);
   updateManifest();
 }
 
