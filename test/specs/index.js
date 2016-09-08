@@ -11,6 +11,7 @@
 module.exports = {
   setup: [
     'setup.js',
+    'ui-helpers.js',
   ],
   tests: [
     'playground.js',
@@ -19,7 +20,8 @@ module.exports = {
     'extra/extension_switching_test.js',
     'extra/collect_network_requests_test.js',
     // === ui ===
-    'ui/display_errors_test.js',
+    'ui/show_errors_test.js',
+    'ui/show_success_test.js',
     'ui/examples_test.js',
     // === specs to be contributed to selenium
     'selenium-contrib/form_handling_test.js',

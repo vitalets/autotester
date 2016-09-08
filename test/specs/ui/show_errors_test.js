@@ -1,8 +1,10 @@
-test.describe('ui: display errors', function () {
-  var driver;
+test.describe('show errors', function () {
+  let driver;
+
+  const {runCode, getConsoleLines, textToLines} = runContext;
 
   test.before(function () {
-    driver = new Driver();
+    driver = runContext.driver = new Driver();
     driver.get(runContext.selftest.ui);
     driver.wait(until.titleContains('loaded'));
   });
@@ -60,7 +62,7 @@ test.describe('ui: display errors', function () {
           })
         })
       `);
-      getMochaReportLines().then(lines => {
+      getMochaErrorLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
         assert(lines[1]).equalTo('at Context.<anonymous> (snippets/test.js:4:13)');
       })
@@ -81,7 +83,7 @@ test.describe('ui: display errors', function () {
           })
         })
       `);
-      getMochaReportLines().then(lines => {
+      getMochaErrorLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
         assert(lines[1]).equalTo('at driver.call (snippets/test.js:7:15)');
       })
@@ -89,26 +91,10 @@ test.describe('ui: display errors', function () {
 
   });
 
-  function runCode(code) {
-    driver.executeScript(tests => {
-      runTests(tests);
-    }, [{path: 'test.js', code}]);
-    driver.wait(until.titleContains('done'));
-  }
-
-  function getConsoleLines() {
-    return driver.findElement({id: 'console'}).getText().then(textToLines);
-  }
-
-  function getMochaReportLines() {
+  function getMochaErrorLines() {
     return driver.findElement({css: '#mocha-report .error'}).getText()
       .then(textToLines)
       .catch(e => [])
-  }
-
-  function textToLines(text) {
-    text = text.trim();
-    return text ? text.split('\n').map(line => line.trim()) : [];
   }
 });
 
