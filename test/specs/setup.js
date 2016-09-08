@@ -46,7 +46,7 @@ function setupRunContext() {
       handle: `extension-${SELFTEST_EXTENSION_ID}`,
       bg: `chrome-extension://${SELFTEST_EXTENSION_ID}/_generated_background_page.html`,
       ui: `chrome-extension://${SELFTEST_EXTENSION_ID}/core/ui/ui.html`,
-      configUrl: `chrome-extension://${SELFTEST_EXTENSION_ID}/test/index.js`,
+      configUrl: `chrome-extension://${SELFTEST_EXTENSION_ID}/tests/index.js`,
     }
   });
 }

@@ -4,7 +4,7 @@
 
 const DEFAULTS = {
   sourceType: 'extension', // from where take tests: snippet|extension|url
-  baseUrl: 'test',
+  baseUrl: 'tests',
   //baseUrl: 'filesystem:chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/persistent/',
   //baseUrl: 'http://127.0.0.1:8080',
   selectedTest: '',  // currently selected test
