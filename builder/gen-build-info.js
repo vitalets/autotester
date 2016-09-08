@@ -10,8 +10,8 @@ const fs = require('fs-extra');
 const targetFile = path.join(process.env.npm_config_outdir, 'core', 'build-info.js');
 const info = {
   timestamp: Date.now(),
-  buildNumber: process.env.BUILD_NUMBER || 'dev',
-  hash: process.env.BUILD_VCS_NUMBER || 'dev',
+  buildNumber: process.env.BUILD_NUMBER || '',
+  hash: process.env.BUILD_VCS_NUMBER || '',
 };
 
 const content = 'window.__buildInfo = ' + JSON.stringify(info, false, 2) + ';';

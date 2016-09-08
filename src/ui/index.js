@@ -30,9 +30,9 @@ function start() {
   messaging.on(RUN_TESTS_DONE, onTestsDone);
   messaging.on(BG_LOAD_DONE, () => location.reload());
 
-  loadConfig();
-
   welcome();
+
+  loadConfig();
 
   // export runTests for custom calls
   window.runTests = runTests;
@@ -110,8 +110,9 @@ function onTestSelected(event) {
 }
 
 function welcome() {
+  const buildNumber = chrome.extension.getBackgroundPage().__buildInfo.buildNumber;
   const msg = [
-    `Welcome to **Autotester!**\n`,
+    `Welcome to **Autotester**${buildNumber ? ' (build #**' + buildNumber + '**)' : ''}!\n`,
     `For convenient testing please enable two **chrome flags**:\n`,
     `[silent-debugger-extension-api](chrome://flags#silent-debugger-extension-api) - to remove annoying bar about using debugger api\n`,
     `[extensions-on-chrome-urls](chrome://flags#extensions-on-chrome-urls) - to allow testing other chrome extensions`,
