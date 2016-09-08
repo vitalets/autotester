@@ -1,5 +1,5 @@
 /**
- * Background entry point
+ * Background app entry point
  */
 
 const App = require('./app');

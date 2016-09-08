@@ -25,7 +25,7 @@ const targets = [
 exports.name = 'browserstack';
 exports.serverUrl = `http://hub-cloud.browserstack.com/wd/hub`;
 exports.capabilities = function () {
-  return capabilities.remote()
+  return capabilities.get()
     .then(caps => {
       return targets.map(target => {
         return Object.assign({}, caps, target, {

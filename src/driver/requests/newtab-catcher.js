@@ -3,31 +3,33 @@
  * WebNavigation module is required to get url of new tab as tab.onCreated not always has it.
  */
 
-const utils = require('../../utils');
+const Subscription = require('../../utils/subscription');
 const Channel = require('chnl');
-const logger = require('../../utils/logger').create('Newtab catcher');
 
 class NewTabCatcher {
 
   constructor() {
     this.onCatched = new Channel();
     this._tabs = new Set();
-    this._onTabCreated = this._onTabCreated.bind(this);
-    this._onBeforeNavigate = this._onBeforeNavigate.bind(this);
+    this._listeners = new Subscription([
+      {
+        channel: chrome.tabs.onCreated,
+        listener: this._onTabCreated.bind(this)
+      },
+      {
+        channel: chrome.webNavigation.onBeforeNavigate,
+        listener: this._onBeforeNavigate.bind(this)
+      },
+    ]);
   }
 
   start() {
     this._tabs.clear();
-    this._manageListeners('set');
+    this._listeners.on();
   }
 
   stop() {
-    this._manageListeners('unset');
-  }
-
-  _manageListeners(action) {
-    utils.manageListener(chrome.tabs.onCreated, this._onTabCreated, action);
-    utils.manageListener(chrome.webNavigation.onBeforeNavigate, this._onBeforeNavigate, action);
+    this._listeners.off();
   }
 
   _onTabCreated(tab) {

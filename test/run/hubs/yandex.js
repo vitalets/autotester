@@ -8,17 +8,19 @@ const capabilities = require('../capabilities');
 
 const targets = [
   {
-    'version' : '48.0',
+    'platform': 'WINDOWS',
+    'version' : '53.0',
   },
-  // {
-  //   'version' : '48.0',
-  // },
+  {
+    'platform': 'LINUX',
+    'version' : '51.0',
+  },
 ];
 
 exports.name = 'yandex';
-exports.serverUrl = `http://selenium:selenium@sg.yandex-team.ru:4444/wd/hub`;
+exports.serverUrl = `http://${process.env.YANDEX_USER}:${process.env.YANDEX_KEY}@sg.yandex-team.ru:4444/wd/hub`;
 exports.capabilities = function () {
-  return capabilities.remote()
+  return capabilities.get()
     .then(caps => {
       return targets.map(target => {
         return Object.assign({}, caps, target);

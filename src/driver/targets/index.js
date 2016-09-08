@@ -30,6 +30,9 @@ const usedTabIds = new Set();
 const debuggers = [];
 
 const Targets = module.exports = {
+  // todo: refactor - move to somewhere else
+  dontCloseTabs: false,
+
   get handle() {
     return currentTarget.handle;
   },
@@ -174,9 +177,9 @@ function detachDebuggers() {
 }
 
 function closeUsedTabs() {
-  // dont use thenChrome.tabs.remove(<array of tab ids>)
+  // dont use chrome.tabs.remove(<array of tab ids>)
   // as it fails on first non-existent tab
-  const tasks = [...usedTabIds].map(closeTabSafe);
+  const tasks = Targets.dontCloseTabs ? [] : [...usedTabIds].map(closeTabSafe);
   return Promise.all(tasks)
     .then(() => usedTabIds.clear());
 }

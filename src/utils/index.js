@@ -2,21 +2,35 @@
  * Utils
  */
 
+const escapeStringRegexp = require('escape-string-regexp');
+
 /**
  * Loads script via <script> tag
  *
  * @param {String} url
+ * @param {Object} targetDocument
  * @returns {Promise}
  */
-exports.loadScript = function (url) {
+exports.loadScript = function (url, doc = document) {
   return new Promise(function (resolve, reject) {
-    console.log('Loading script', url);
-    const script = document.createElement('script');
+    const script = doc.createElement('script');
     script.type = 'text/javascript';
-    document.getElementsByTagName('head')[0].appendChild(script);
-    script.onload = resolve;
+    doc.getElementsByTagName('head')[0].appendChild(script);
+    script.onload = () => resolve(script);
     script.onerror = () => reject(new Error(`Can not load script ${url}`));
     script.src = url;
+  });
+};
+
+/**
+ * Remove elements by selector
+ *
+ * @param {String} selector
+ * @param {Document} [doc]
+ */
+exports.removeBySelector = function (selector, doc = document) {
+  [].forEach.call(doc.querySelectorAll(selector), el => {
+    el.parentNode.removeChild(el);
   });
 };
 
@@ -69,19 +83,21 @@ exports.trimSlashes = function (str) {
 };
 
 /**
- * Sets/unsets listener to channel
+ * Remove useless paths from error stack:
+ * - filesystem:chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/persistent/
+ * - chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/
  *
- * @param {Object} channel
- * @param {Function} listener
- * @param {String} action 'set|unset'
+ * @param {String} stack
  */
-exports.manageListener = function(channel, listener, action) {
-  if (action === 'set') {
-    const has = channel.hasListener && channel.hasListener(listener);
-    if (!has) {
-      channel.addListener(listener);
-    }
-  } else {
-    channel.removeListener(listener);
+exports.cleanStack = function(stack) {
+  if (typeof stack !== 'string') {
+    return stack;
   }
+  const url = chrome.runtime.getURL('');
+  const urlFs = `filesystem:${url}persistent/`;
+  const urlRe = new RegExp(escapeStringRegexp(url), 'g');
+  const urlFsRe = new RegExp(escapeStringRegexp(urlFs), 'g');
+  return stack
+    .replace(urlFsRe, '')
+    .replace(urlRe, '')
 };

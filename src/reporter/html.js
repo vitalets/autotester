@@ -9,7 +9,6 @@ var Progress = require('mocha/lib/browser/progress');
 var escapeRe = require('escape-string-regexp');
 var escape = utils.escape;
 
-
 exports.getReporter = function (win) {
 
   // overwrite globals
@@ -154,7 +153,9 @@ exports.getReporter = function (win) {
         stackString = '\n(' + test.err.sourceURL + ':' + test.err.line + ')';
       }
 
-      stackString = stackString || '';
+      // vitalets: clean stack
+      // (although mocha cleans stack itself we need to remove 'filesystem:persistent'
+      stackString = (stackString || '').replace(/filesystem:persistent\//g, '');
 
       if (test.err.htmlMessage && stackString) {
         el.appendChild(fragment('<div class="html-error">%s\n<pre class="error">%e</pre></div>',
@@ -162,8 +163,7 @@ exports.getReporter = function (win) {
       } else if (test.err.htmlMessage) {
         el.appendChild(fragment('<div class="html-error">%s</div>', test.err.htmlMessage));
       } else {
-        // vitalets: changed %e%e to %e%s to enable html in stack
-        el.appendChild(fragment('<pre class="error">%e%s</pre>', message, stackString));
+        el.appendChild(fragment('<pre class="error">%e%e</pre>', message, stackString));
       }
 
       self.addCodeToggle(el, test.body);

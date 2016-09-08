@@ -1,7 +1,11 @@
+/**
+ * Main ui file
+ */
 
 const thenChrome = require('then-chrome');
 const messaging = require('../background/messaging');
 const title = require('./title');
+const smartUrlOpener = require('../utils/smart-url-opener');
 
 const {
   BG_LOAD_DONE,
@@ -18,8 +22,7 @@ function start() {
   document.getElementById('run').addEventListener('click', () => runTests());
   document.getElementById('testlist').addEventListener('change', onTestSelected);
 
-  openAllLinksInNewTab();
-
+  smartUrlOpener.listen();
   title.setListeners();
   messaging.start();
 
@@ -27,28 +30,37 @@ function start() {
   messaging.on(RUN_TESTS_DONE, onTestsDone);
   messaging.on(BG_LOAD_DONE, () => location.reload());
 
-  loadConfig();
-
   welcome();
+
+  loadConfig();
 
   // export runTests for custom calls
   window.runTests = runTests;
 }
 
+/**
+ * Run tests from files
+ *
+ * @param {Array<{code, path}>} [files] for running custom code snippets
+ * todo: split to runSnippets / runFiles
+ */
 function runTests(files) {
   if (files && !Array.isArray(files)) {
     throw new Error('files should be array');
   }
   sharedConsole.clear();
   document.getElementById('report').innerHTML = '';
-  const eventData = files
-     ? {files}
-     : {selectedTest: document.getElementById('testlist').value};
+  const eventData = {
+    files,
+    selectedTest: document.getElementById('testlist').value,
+    noQuit: document.getElementById('no-quit').checked
+  };
+  title.set(title.MSG_RUNNING);
   messaging.send(RUN_TESTS, eventData);
 }
 
 function loadConfig() {
-  title.set('loading...');
+  title.set(title.MSG_LOADING);
   messaging.send(LOAD_TESTS_CONFIG);
 }
 
@@ -100,29 +112,12 @@ function onTestSelected(event) {
 }
 
 function welcome() {
+  const buildNumber = chrome.extension.getBackgroundPage().__buildInfo.buildNumber;
   const msg = [
-    `Welcome to **Autotester!**\n`,
+    `Welcome to **Autotester**${buildNumber ? ' (build #**' + buildNumber + '**)' : ''}!\n`,
     `For convenient testing please enable two **chrome flags**:\n`,
     `[silent-debugger-extension-api](chrome://flags#silent-debugger-extension-api) - to remove annoying bar about using debugger api\n`,
     `[extensions-on-chrome-urls](chrome://flags#extensions-on-chrome-urls) - to allow testing other chrome extensions`,
   ].join('');
   htmlConsole.log(msg);
-}
-
-function openAllLinksInNewTab() {
-  document.body.addEventListener('click', event => {
-    if (event.target.tagName === 'A' && event.target.href) {
-      event.preventDefault();
-      openOrSwitchToUrl(event.target.href);
-    }
-  });
-}
-
-function openOrSwitchToUrl(url) {
-  thenChrome.tabs.query({url})
-    .then(tabs => {
-      return tabs.length
-        ? thenChrome.tabs.update(tabs[0].id, {active: true})
-        : thenChrome.tabs.create({url});
-    })
 }

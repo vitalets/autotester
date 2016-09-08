@@ -24,6 +24,10 @@ body {
     color: white;
 }
 
+#no-quit-label {
+    margin-left: 20px;
+}
+
 #mocha-stats {
     top: 55px;
 }

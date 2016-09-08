@@ -5,11 +5,9 @@
 const utils = require('../utils');
 const evaluate = require('../utils/evaluate');
 const messaging = require('./messaging');
-const runner = require('../runner');
+const run = require('../run');
 const storage = require('./storage');
-
-// export thenChrome for debug
-window.thenChrome = require('then-chrome');
+const specialUrlCatcher = require('./special-url-catcher');
 
 const {
   BG_LOAD_DONE,
@@ -30,6 +28,7 @@ class App {
     messaging.start();
     this._setListeners();
     messaging.send(BG_LOAD_DONE);
+    specialUrlCatcher.start();
   }
 
   _setListeners() {
@@ -64,30 +63,39 @@ class App {
    *
    * @param {Object} data
    * @param {String} data.selectedTest
+   * @param {String} [data.noQuit]
    * @param {Array<{code, path}>} [data.files] special case to run custom files from ui window.runTests
    */
   _runTests(data) {
-    const runnerOptions = {
-      window: getUiWindow(),
-    };
-    let runnerPromise;
-    if (data.files) {
-      runnerPromise = runner.runFiles(data.files, runnerOptions);
-    } else {
-      const tests = this._testsConfig.tests.filter(test => !data.selectedTest || test === data.selectedTest);
-      const setup = this._testsConfig.setup;
-      const urls = setup.concat(tests).map(addBaseUrl);
-      runnerPromise = runner.runUrls(urls, runnerOptions);
+    // todo: refactor
+    try {
+      const runnerOptions = {
+        uiWindow: getUiWindow(),
+        baseUrl: storage.get('baseUrl'),
+        noQuit: data.noQuit,
+      };
+
+      let runnerPromise;
+      if (data.files) {
+        runnerPromise = run.runSnippets(data.files, runnerOptions);
+      } else {
+        const tests = this._testsConfig.tests.filter(test => !data.selectedTest || test === data.selectedTest);
+        const setup = this._testsConfig.setup;
+        const files = setup.concat(tests);
+        runnerPromise = run.runRemoteFiles(files, runnerOptions);
+      }
+      runnerPromise
+        .then(() => {
+          messaging.send(RUN_TESTS_DONE)
+        })
+        .catch(e => {
+          messaging.send(RUN_TESTS_DONE);
+          throw e;
+        });
+    } catch (e) {
+      messaging.send(RUN_TESTS_DONE);
+      throw e;
     }
-    messaging.send(RUN_TESTS_STARTED);
-    runnerPromise
-      .then(() => {
-        messaging.send(RUN_TESTS_DONE)
-      })
-      .catch(e => {
-        messaging.send(RUN_TESTS_DONE);
-        throw e;
-      });
   }
 
   _updateSelectedTest() {

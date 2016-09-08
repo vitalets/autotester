@@ -3,7 +3,7 @@
  */
 
 const errorCatcher = require('../utils/error-catcher');
-const HtmlConsole = require('./html-console');
+const HtmlConsole = require('../utils/html-console');
 const shareCalls = require('../utils/share-calls');
 
 require('mocha/mocha.css');
