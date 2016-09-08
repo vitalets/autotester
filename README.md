@@ -1,5 +1,5 @@
 # Autotester
-Chrome extension allowing to write and run selenium tests right in browser
+Chrome extension allowing to write and run automation tests right in browser
 
 ## Key features
 * easy setup: just chrome with installed extension is needed
