@@ -9,6 +9,7 @@ const TITLE_PREFIX = chrome.runtime.getManifest().name;
 exports.MSG_LOADING = 'loading...';
 exports.MSG_LOADED = 'loaded';
 exports.MSG_RUNNING = 'running...';
+exports.MSG_RUNNING_INDEX = 'running test #{i}...';
 exports.MSG_DONE = 'done';
 
 exports.set = function (status) {

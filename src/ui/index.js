@@ -5,6 +5,7 @@
 const thenChrome = require('then-chrome');
 const messaging = require('../background/messaging');
 const title = require('./title');
+const api = require('./api');
 const smartUrlOpener = require('../utils/smart-url-opener');
 
 const {
@@ -25,6 +26,7 @@ function start() {
   smartUrlOpener.listen();
   title.setListeners();
   messaging.start();
+  api.setup();
 
   messaging.on(LOAD_TESTS_CONFIG_DONE, onConfigLoaded);
   messaging.on(RUN_TESTS_DONE, onTestsDone);
@@ -35,9 +37,8 @@ function start() {
   loadConfig();
 
   // for programmatic run
+  // todo: move to api
   window.runTests = runTests;
-  // for custom reporting
-  window.report = document.getElementById('report');
 }
 
 /**
@@ -51,7 +52,7 @@ function runTests(files) {
     throw new Error('files should be array');
   }
   sharedConsole.clear();
-  document.getElementById('report').innerHTML = '';
+  window.report.innerHTML = '';
   const eventData = {
     files,
     selectedTest: document.getElementById('testlist').value,

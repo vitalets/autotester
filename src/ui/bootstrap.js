@@ -14,6 +14,7 @@ window.sharedConsole = shareCalls(console, htmlConsole);
 errorCatcher.attach(window, errorHandler);
 
 function errorHandler(error) {
-  const msg = '[UI]: ' + error.stack.split('\n').slice(0, 2).join('\n');
+  error = error || '';
+  const msg = '[UI]: ' + (error.stack || error.message || String(error));
   htmlConsole.error(msg);
 }

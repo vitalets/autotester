@@ -96,7 +96,10 @@ class Runner {
 
   _setupTestRunner() {
     const reporter = htmlReporter.getReporter(this._params.uiWindow);
-    this._testRunner = new MochaRunner({reporter});
+    this._testRunner = new MochaRunner({
+      reporter,
+      uiWindow: this._params.uiWindow,
+    });
     return this._testRunner.setup(this._context);
   }
 

@@ -17,11 +17,13 @@ class MochaRunner {
   /**
    * Constructor
    *
-   * @param {Object} options
-   * @param {Object} options.reporter
+   * @param {Object} params
+   * @param {Object} params.reporter
+   * @param {Object} params.uiWindow
    */
-  constructor(options) {
-    this._mochaOptions = Object.assign({}, DEFAULT_OPTIONS, {reporter: options.reporter});
+  constructor(params) {
+    this._params = params;
+    this._mochaOptions = Object.assign({}, DEFAULT_OPTIONS, {reporter: params.reporter});
   }
 
   /**
@@ -31,7 +33,7 @@ class MochaRunner {
    */
   setup(context) {
     this._context = context;
-    this._remove();
+    this._cleanUp();
     return Promise.resolve()
       .then(() => this._load())
       .then(() => {
@@ -54,8 +56,9 @@ class MochaRunner {
     const suitesCount = this._getMocha().suite.suites.length;
     logger.log(`Run mocha for ${suitesCount} suite(s)`);
     return new Promise(resolve => {
-        const runner = this._getMocha().run(resolve);
-        proxyNonAssertionErrors(runner);
+        this._runner = this._getMocha().run(resolve);
+        this._proxyNonAssertionErrors();
+        this._startUpdatingTitle();
       })
       .then(failures => logger.log(`Finish mocha with ${failures} failure(s)`));
   }
@@ -68,22 +71,30 @@ class MochaRunner {
     return this._context.mocha;
   }
 
-  _remove() {
+  _cleanUp() {
+    this._testIndex = 0;
     utils.removeBySelector(`script[src="${MOCHA_PATH}"]`, this._context.document);
   }
-}
 
-function proxyNonAssertionErrors(runner) {
-  // to see pretty error messages in background console, proxy non-assertion errors from mocha
-  runner.on('fail', function (test) {
-    if (test.err.name !== 'AssertionError') {
-      // mark error with flag to not show it in htmlConsole
-      // (as mocha reporter shows errors itself)
-      test.err.isMocha = true;
-      // use asyncThrow to go out of promise chain
-      utils.asyncThrow(test.err);
-    }
-  });
+  _proxyNonAssertionErrors() {
+    // to see pretty error messages in background console, proxy non-assertion errors from mocha
+    this._runner.on('fail', test => {
+      if (test.err.name !== 'AssertionError') {
+        // mark error with flag to not show it in htmlConsole
+        // (as mocha reporter shows errors itself)
+        test.err.isMocha = true;
+        // use asyncThrow to go out of promise chain
+        utils.asyncThrow(test.err);
+      }
+    });
+  }
+
+  _startUpdatingTitle() {
+    this._runner.on('test', () => {
+      this._testIndex++;
+      this._params.uiWindow.setRunningTestIndex(this._testIndex);
+    });
+  }
 }
 
 module.exports = MochaRunner;
