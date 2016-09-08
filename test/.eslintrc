@@ -1,0 +1,19 @@
+{
+  "plugins": [
+    "mocha"
+  ],
+  "rules": {
+    "mocha/no-exclusive-tests": "error",
+    "mocha/no-mocha-global-arrows": "error",
+    "mocha/no-sibling-hooks": "error",
+    "mocha/no-return-and-callback": "error",
+    "mocha/no-identical-title": "error"
+  },
+  "settings": {
+    "mocha/additionalTestFunctions": [
+      // not working yet: https://github.com/lo1tuma/eslint-plugin-mocha/issues/102
+      "test.describe",
+      "test.it"
+    ]
+  }
+}

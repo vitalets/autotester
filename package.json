@@ -67,6 +67,8 @@
     "css-loader": "^0.24.0",
     "es6-promisify-all": "^0.1.0",
     "escape-string-regexp": "^1.0.5",
+    "eslint": "^3.4.0",
+    "eslint-plugin-mocha": "^4.5.1",
     "exports-loader": "^0.6.3",
     "express": "^4.14.0",
     "fs-extra": "^0.30.0",
