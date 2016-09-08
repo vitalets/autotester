@@ -5,7 +5,7 @@
 const thenChrome = require('then-chrome');
 const messaging = require('../background/messaging');
 const title = require('./title');
-const smartLinkOpener = require('./smart-link-opener');
+const smartLinkOpener = require('./helpers/smart-link-opener');
 
 const {
   BG_LOAD_DONE,
