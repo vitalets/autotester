@@ -53,12 +53,12 @@ function runTests(files) {
   const eventData = files
      ? {files}
      : {selectedTest: document.getElementById('testlist').value};
-  title.set('running...');
+  title.set(title.MSG_RUNNING);
   messaging.send(RUN_TESTS, eventData);
 }
 
 function loadConfig() {
-  title.set('loading...');
+  title.set(title.MSG_LOADING);
   messaging.send(LOAD_TESTS_CONFIG);
 }
 
