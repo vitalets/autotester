@@ -1,6 +1,6 @@
 {
   "name": "Autotester",
-  "description": "Chrome extension allowing to write and run selenium tests right in browser",
+  "description": "Chrome extension allowing to write and run automation tests right in browser",
   "version": "0.1.0",
   "manifest_version": 2,
 
