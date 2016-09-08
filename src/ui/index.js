@@ -1,7 +1,11 @@
+/**
+ * Main ui file
+ */
 
 const thenChrome = require('then-chrome');
 const messaging = require('../background/messaging');
 const title = require('./title');
+const smartLinkOpener = require('./smart-link-opener');
 
 const {
   BG_LOAD_DONE,
@@ -18,8 +22,7 @@ function start() {
   document.getElementById('run').addEventListener('click', () => runTests());
   document.getElementById('testlist').addEventListener('change', onTestSelected);
 
-  openAllLinksInNewTab();
-
+  smartLinkOpener.start();
   title.setListeners();
   messaging.start();
 
@@ -114,22 +117,4 @@ function welcome() {
     `[extensions-on-chrome-urls](chrome://flags#extensions-on-chrome-urls) - to allow testing other chrome extensions`,
   ].join('');
   htmlConsole.log(msg);
-}
-
-function openAllLinksInNewTab() {
-  document.body.addEventListener('click', event => {
-    if (event.target.tagName === 'A' && event.target.href) {
-      event.preventDefault();
-      openOrSwitchToUrl(event.target.href);
-    }
-  });
-}
-
-function openOrSwitchToUrl(url) {
-  thenChrome.tabs.query({url})
-    .then(tabs => {
-      return tabs.length
-        ? thenChrome.tabs.update(tabs[0].id, {active: true})
-        : thenChrome.tabs.create({url});
-    })
 }
