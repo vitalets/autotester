@@ -5,17 +5,17 @@
 
 var webdriver = require('selenium-webdriver'),
     By = webdriver.By,
+    Key = webdriver.Key,
     until = webdriver.until;
 
 var driver = new webdriver.Builder()
     .forBrowser('firefox') // 'firefox' here has no effect for Autotester, it will run in chrome anyway :)
     .build();
 
-driver.get('http://www.google.com/ncr');
-driver.findElement(By.name('q')).sendKeys('webdriver');
-driver.findElement(By.name('btnG')).click();
+driver.get('http://www.google.com');
+driver.findElement(By.name('q')).sendKeys('webdriver' + Key.ENTER);
 driver.wait(until.titleContains('webdriver'), 2000);
 driver.getTitle().then(title => {
-  console.log('Title is:', title);
+  console.log('Title is (selenium-compatible):', title);
 });
 driver.quit();

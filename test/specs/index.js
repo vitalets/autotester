@@ -20,6 +20,7 @@ module.exports = {
     'extra/collect_network_requests_test.js',
     // === ui ===
     'ui/display_errors_test.js',
+    'ui/examples_test.js',
     // === specs to be contributed to selenium
     'selenium-contrib/form_handling_test.js',
     'selenium-contrib/execute_async_script_test.js',

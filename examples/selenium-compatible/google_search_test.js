@@ -5,6 +5,7 @@
 
 var webdriver = require('selenium-webdriver'),
     By = webdriver.By,
+    Key = webdriver.Key,
     until = webdriver.until,
     test = require('selenium-webdriver/testing');
 
@@ -19,8 +20,7 @@ test.describe('Google Search (selenium compatible)', function() {
 
   test.it('should append query to title (selenium compatible)', function() {
     driver.get('http://www.google.com');
-    driver.findElement(By.name('q')).sendKeys('webdriver');
-    driver.findElement(By.name('btnG')).click();
+    driver.findElement(By.name('q')).sendKeys('webdriver' + Key.ENTER);
     driver.wait(until.titleContains('webdriver'), 2000);
   });
 

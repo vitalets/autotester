@@ -60,6 +60,7 @@ function runForCapabilities(caps) {
     const consoleReport = driver.findElement({id: 'console'}).getText();
     Promise.all([mochaReport, consoleReport]).then(([mochaReport, consoleReport]) => {
       console.log(signature + 'finished');
+      console.log('console:');
       console.log(consoleReport);
       const hasErrors = processReport(mochaReport);
       trySendSessionStatus(driver, signature, hasErrors);
