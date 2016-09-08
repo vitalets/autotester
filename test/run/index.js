@@ -9,7 +9,7 @@ const htmlToText = require('html-to-text');
 const capabilities = require('./capabilities');
 const hub = require('./hubs/' + process.argv[2]);
 
-const AUTOTESTER_UI_URL = 'chrome-extension://cidkhbpkgpdkadkjpkfooofilpmfneog/core/ui/ui.html';
+const AUTOTESTER_UI_URL = 'http://autotester';
 
 // run tests in all capabilities combination
 run();

@@ -5,7 +5,7 @@
 const thenChrome = require('then-chrome');
 const messaging = require('../background/messaging');
 const title = require('./title');
-const smartLinkOpener = require('./helpers/smart-link-opener');
+const smartUrlOpener = require('../utils/smart-url-opener');
 
 const {
   BG_LOAD_DONE,
@@ -22,7 +22,7 @@ function start() {
   document.getElementById('run').addEventListener('click', () => runTests());
   document.getElementById('testlist').addEventListener('change', onTestSelected);
 
-  smartLinkOpener.start();
+  smartUrlOpener.listen();
   title.setListeners();
   messaging.start();
 

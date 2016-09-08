@@ -7,6 +7,7 @@ const evaluate = require('../utils/evaluate');
 const messaging = require('./messaging');
 const run = require('../run');
 const storage = require('./storage');
+const specialUrlCatcher = require('./special-url-catcher');
 
 const {
   BG_LOAD_DONE,
@@ -27,6 +28,7 @@ class App {
     messaging.start();
     this._setListeners();
     messaging.send(BG_LOAD_DONE);
+    specialUrlCatcher.start();
   }
 
   _setListeners() {

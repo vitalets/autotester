@@ -2,7 +2,7 @@
  * Handler for uncaught errors that proxies it to ui
  */
 
-const utils = require('../utils');
+const utils = require('../../utils');
 
 module.exports = function (error) {
   if (error.isMocha) {

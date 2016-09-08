@@ -1,18 +1,10 @@
 /**
- * Opening links via chrome api:
- * - open chrome:// urls
- * - check existing tabs and activate instead of opening for then same url
+ * Open urls via chrome api:
+ * - check existing tabs and activate instead of opening the same url
+ * - can listen <A> clicks and open system chrome:// urls
  */
 
 const thenChrome = require('then-chrome');
-
-exports.start = function () {
-  document.body.addEventListener('click', onClick);
-};
-
-exports.stop = function () {
-  document.body.removeEventListener('click', onClick);
-};
 
 exports.open = function (url) {
   thenChrome.tabs.query({})
@@ -22,6 +14,14 @@ exports.open = function (url) {
         ? thenChrome.tabs.update(tab.id, {active: true})
         : thenChrome.tabs.create({url});
     })
+};
+
+exports.listen = function () {
+  document.body.addEventListener('click', onClick);
+};
+
+exports.stop = function () {
+  document.body.removeEventListener('click', onClick);
 };
 
 function onClick(event) {
