@@ -61,6 +61,7 @@ class App {
    *
    * @param {Object} data
    * @param {String} data.selectedTest
+   * @param {String} [data.noQuit]
    * @param {Array<{code, path}>} [data.files] special case to run custom files from ui window.runTests
    */
   _runTests(data) {
@@ -68,7 +69,8 @@ class App {
     try {
       const runnerOptions = {
         uiWindow: getUiWindow(),
-        baseUrl: storage.get('baseUrl')
+        baseUrl: storage.get('baseUrl'),
+        noQuit: data.noQuit,
       };
 
       let runnerPromise;

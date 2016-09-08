@@ -50,9 +50,11 @@ function runTests(files) {
   }
   sharedConsole.clear();
   document.getElementById('report').innerHTML = '';
-  const eventData = files
-     ? {files}
-     : {selectedTest: document.getElementById('testlist').value};
+  const eventData = {
+    files,
+    selectedTest: document.getElementById('testlist').value,
+    noQuit: document.getElementById('no-quit').checked
+  };
   title.set(title.MSG_RUNNING);
   messaging.send(RUN_TESTS, eventData);
 }

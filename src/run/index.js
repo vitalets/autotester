@@ -17,6 +17,7 @@ const LOCAL_SNIPPETS_DIR = 'snippets';
  * @param {Object} options
  * @param {String} options.baseUrl
  * @param {Object} options.uiWindow
+ * @param {Boolean} options.noQuit
  * @returns {Promise}
  */
 exports.runRemoteFiles = function (files, options) {
@@ -26,7 +27,8 @@ exports.runRemoteFiles = function (files, options) {
     .then(tests => new Runner().run({
       tests,
       localBaseDir: LOCAL_TESTS_DIR,
-      uiWindow: options.uiWindow
+      uiWindow: options.uiWindow,
+      noQuit: options.noQuit,
     }));
 };
 
@@ -36,6 +38,7 @@ exports.runRemoteFiles = function (files, options) {
  * @param {Array<{path, code}>} snippets
  * @param {Object} options
  * @param {Object} options.uiWindow
+ * @param {Boolean} options.noQuit
  * @returns {Promise}
  */
 exports.runSnippets = function (snippets, options) {
@@ -43,7 +46,8 @@ exports.runSnippets = function (snippets, options) {
   return new Runner().run({
     tests: snippets,
     localBaseDir: LOCAL_SNIPPETS_DIR,
-    uiWindow: options.uiWindow
+    uiWindow: options.uiWindow,
+    noQuit: options.noQuit,
   });
 };
 

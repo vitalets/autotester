@@ -31,7 +31,7 @@ var webdriver = require('selenium-webdriver'),
 
 
 
-/*
+
 test.describe('Yandex Search', function() {
 
   var driver;
@@ -52,7 +52,7 @@ test.describe('Yandex Search', function() {
     //   xxx();
     // });
 
-    assert(driver.getTitle()).equalTo('adsfgadfg')
+    assert(driver.getTitle()).equalTo('Яндекс')
     //assert(1).equalTo(2)
 
     //assert.equal(1, 2)
@@ -67,7 +67,7 @@ test.describe('Yandex Search', function() {
     driver.quit();
   });
 });
-*/
+
 
 // let driver = new Driver();
 //

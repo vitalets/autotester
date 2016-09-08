@@ -58,11 +58,17 @@ class Runner {
    * @param {Array<{path, code}>} params.tests
    * @param {String} params.localBaseDir base directory to save test-files
    * @param {Object} params.uiWindow
+   * @param {Boolean} params.noQuit
    */
   run(params) {
     // keep this abstraction if someday we will need run in iframe
     this._context = window;
     this._params = params;
+
+    // todo: refactor - remove somewhere else
+    const Targets = require('../driver/targets');
+    Targets.dontCloseTabs = params.noQuit;
+
     return Promise.resolve()
       .then(() => this._cleanUp())
       .then(() => this._saveToLocalFs())
