@@ -7,6 +7,29 @@ const Capabilities = require('selenium-webdriver/lib/capabilities').Capabilities
 const Executor = require('./executor');
 const Requests = require('./requests');
 const TargetLocator = require('./target-locator');
+const chrome = require('selenium-webdriver/chrome');
+const firefox = require('selenium-webdriver/firefox');
+
+
+// set process.platfom for correct work of selenium-webdriver/net/index.js
+const os = require('os');
+process.platform = 'darwin';
+os.networkInterfaces = os.getNetworkInterfaces = function () {
+  return {
+    lo0: [{
+      family: 'IPv4',
+      internal: true,
+      address: 'localhost',
+    }]
+  };
+};
+
+const service = new chrome.ServiceBuilder()
+  .usingPort(9515)
+  .build();
+
+chrome.setDefaultService(service);
+
 
 /**
  * Creates a new WebDriver client for Chrome.
@@ -48,24 +71,5 @@ class Driver extends WebDriver {
   }
 }
 
-module.exports = Driver;
+module.exports = chrome.Driver;
 
-/*
-
- const prefs = new logging.Preferences();
- prefs.setLevel(logging.Type.BROWSER, logging.Level.ALL);
- prefs.setLevel(logging.Type.CLIENT, logging.Level.ALL);
- prefs.setLevel(logging.Type.DRIVER, logging.Level.ALL);
- prefs.setLevel(logging.Type.PERFORMANCE, logging.Level.ALL);
- prefs.setLevel(logging.Type.SERVER, logging.Level.ALL);
-
-
- logging.getLogger('').setLevel(logging.Level.FINER);
- logging.getLogger('').addHandler(entry => {
- if (entry.message.indexOf('enqueue') >= 0
- && entry.message.indexOf('<then>') == -1
- && entry.message.indexOf('<catch>') == -1) {
- console.log('[selenium]', entry.message);
- }
- });
- */

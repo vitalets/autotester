@@ -4,70 +4,52 @@
 var webdriver = require('selenium-webdriver'),
   By = webdriver.By,
   until = webdriver.until,
-  Key = webdriver.Key,
-  test = require('selenium-webdriver/testing');
+  Key = webdriver.Key;
+
+var test = require('selenium-webdriver/testing');
+var assert = require('selenium-webdriver/testing/assert');
 
 
 // =======
 
-//  const driver = new Driver();
-//  driver.get('https://ya.ru');
-// driver.requests().collect();
-// driver.call(() => {
-//   throw new Error('some error');
-// });
-
-// driver.sleep(1000);
-// driver.findElement(By.name('text')).sendKeys('qwertty');
-// driver.sleep(1000);
-// //setTimeout(() => sadfsdf, 10)
-// sdfgs
-//
-// driver.call(() => {
-//   xxx();
-// });
-//
-// driver.quit();
-
-
 
 /*
+
+ const driver = new Driver();
+ driver.get('https://ya.ru');
+ driver.sleep(1000);
+ driver.findElement(By.name('text')).sendKeys('qwerty');
+ driver.sleep(1000);
+ driver.quit();
+
+*/
+
+
 test.describe('Yandex Search', function() {
 
   var driver;
   test.before(function() {
     driver = new webdriver.Builder()
-      .forBrowser('chrome')
+      .usingServer('http://127.0.0.1:4444/wd/hub')
+      //.forBrowser('chrome')
+      .forBrowser('firefox')
       .build();
   });
 
   test.it('should append query to title', function() {
     driver.get('https://ya.ru');
     driver.sleep(1000);
-
     driver.findElement(By.name('text')).sendKeys('hello');
-    driver.sleep(1000);
-
-    // driver.call(() => {
-    //   xxx();
-    // });
-
-    assert(driver.getTitle()).equalTo('Яндекс')
-    //assert(1).equalTo(2)
-
-    //assert.equal(1, 2)
-    // throw new Error('abc')
-
+    assert(driver.getTitle()).equalTo('Яндекс');
     //driver.findElement(By.name('text')).submit();
    // driver.findElement(By.name('text')).sendKeys(Key.ENTER);
-
   });
 
   test.after(function() {
     driver.quit();
   });
 });
-*/
+
 
 // let driver = new Driver();
 //

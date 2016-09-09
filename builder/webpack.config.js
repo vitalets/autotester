@@ -1,3 +1,7 @@
+
+const webpack = require('webpack');
+const webpackAlias = require('./webpack-alias');
+
 module.exports = {
   entry: {
     'core/background/bundle': './src/background/',
@@ -15,5 +19,8 @@ module.exports = {
       { test: /\.css$/, loader: "style-loader!css-loader" },
     ]
   },
+  plugins: [
+    new webpack.NormalModuleReplacementPlugin(/./, webpackAlias.newResource),
+  ],
   devtool: '#source-map'
 };
