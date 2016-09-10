@@ -24,7 +24,7 @@ var assert = require('selenium-webdriver/testing/assert');
 
 */
 
-/*
+
 test.describe('Yandex Search', function() {
 
   var driver;
@@ -49,7 +49,7 @@ test.describe('Yandex Search', function() {
     driver.quit();
   });
 });
-*/
+
 
 
 // let driver = new Driver();
