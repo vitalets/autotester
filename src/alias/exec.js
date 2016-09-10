@@ -1,7 +1,7 @@
 
 module.exports = function exec(command, opt_options = {}) {
   const args = opt_options.args || [];
-  console.info(`exec: ${command}`, args.join(' '));
+  // console.info(`exec: ${command}`, args.join(' '));
   return new Command();
 };
 

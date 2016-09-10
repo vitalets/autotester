@@ -3,26 +3,24 @@
  */
 
 const Channel = require('chnl');
-const seleniumAssert = require('selenium-webdriver/testing/assert');
-const webdriver = require('./selenium-webdriver');
-const seleniumTesting = require('./selenium-testing');
-const Driver = require('../driver');
-const fakeRequire = require('./fake-require');
+const webdriver = require('selenium-webdriver');
 
 exports.export = function (target, uiWindow) {
   Object.assign(target, {
     // webdriver
-    Driver: Driver,
+    webdriver: webdriver,
     By: webdriver.By,
     Key: webdriver.Key,
     until: webdriver.until,
+    // autotester specials
+    Driver: require('../driver'),
     // for running tests
-    test: seleniumTesting,
-    assert: seleniumAssert,
+    test: require('selenium-webdriver/testing'),
+    assert: require('selenium-webdriver/testing/assert'),
     // for custom user data
     runContext: {},
-    // for running selenium tests as is
-    require: fakeRequire,
+    // for running tests writen for node
+    require: require('./fake-require').getFn(),
     // for debug
     uiConsole: uiWindow.sharedConsole,
     // for custom reporting
@@ -33,7 +31,7 @@ exports.export = function (target, uiWindow) {
 };
 
 /**
- * Clear some keys
+ * Clear some keys on each session
  *
  * @param {Window} target
  */
@@ -42,4 +40,7 @@ exports.clear = function (target) {
   delete target.require;
   delete target.uiConsole;
   delete target.__onTestFileError;
+
+  // remove selenium-webdriver/testing from cache as it wraps mocha globals on start
+  delete require.cache[require.resolve('selenium-webdriver/testing')];
 };
