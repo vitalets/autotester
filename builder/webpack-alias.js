@@ -15,7 +15,17 @@ const aliases = [
   },
   {
     beforeResolve: true,
+    request: 'child_process',
+    replace: './src/alias/child_process.js',
+  },
+  {
+    beforeResolve: true,
     request: 'adm-zip',
+    replace: './src/alias/adm-zip.js',
+  },
+  {
+    beforeResolve: true,
+    request: 'ws',
     replace: './src/alias/adm-zip.js',
   },
   {

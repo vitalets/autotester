@@ -48,6 +48,7 @@
     "copy": "run-p copy:** && npm run copy-test",
     "copy-test": "if [[ -n $npm_config_copytest ]]; then npm run copy-$npm_config_copytest; fi",
     "fileserver": "node ./node_modules/selenium-webdriver/lib/test/fileserver.js",
+    "hub": "selenium-standalone start",
     "unpacked": "run-s clean webpack copy gen-build-info",
     "gen-build-info": "node builder/gen-build-info",
     "zip": "pushd $npm_config_outdir && rimraf $npm_config_outzip && zip -rT $npm_config_outzip . && popd",

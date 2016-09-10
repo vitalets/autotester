@@ -3,7 +3,8 @@
  */
 
 const map = {
-  'selenium-webdriver': require('./selenium-webdriver'),
+  'selenium-webdriver': require('selenium-webdriver'),
+ // 'selenium-webdriver': require('./selenium-webdriver'),
   'selenium-webdriver/testing': require('./selenium-testing'),
   'selenium-webdriver/testing/assert': require('selenium-webdriver/testing/assert'),
   'selenium-webdriver/lib/promise': require('selenium-webdriver/lib/promise'),

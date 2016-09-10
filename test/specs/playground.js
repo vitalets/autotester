@@ -30,9 +30,8 @@ test.describe('Yandex Search', function() {
   var driver;
   test.before(function() {
     driver = new webdriver.Builder()
-      .usingServer('http://127.0.0.1:4444/wd/hub')
       //.forBrowser('chrome')
-      .forBrowser('firefox')
+      //.forBrowser('firefox')
       .build();
   });
 

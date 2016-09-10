@@ -14,6 +14,14 @@ const firefox = require('selenium-webdriver/firefox');
 // set process.platfom for correct work of selenium-webdriver/net/index.js
 const os = require('os');
 process.platform = 'darwin';
+// for safari
+process.env.USER = 'USER';
+process.env.APPDATA = 'APPDATA';
+process.env.SELENIUM_REMOTE_URL = 'http://127.0.0.1:4444/wd/hub';
+process.env.SELENIUM_BROWSER = 'chrome';
+//process.env.SELENIUM_BROWSER = 'firefox';
+//process.env.SELENIUM_BROWSER = 'safari';
+
 os.networkInterfaces = os.getNetworkInterfaces = function () {
   return {
     lo0: [{
