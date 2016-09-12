@@ -36,6 +36,8 @@ function start() {
 
   loadConfig();
 
+  fillCaps();
+
   // for programmatic run
   // todo: move to api
   window.runTests = runTests;
@@ -55,6 +57,7 @@ function runTests(files) {
   window.report.innerHTML = '';
   const eventData = {
     files,
+    capsId: document.getElementById('caps').value,
     selectedTest: document.getElementById('testlist').value,
     noQuit: document.getElementById('no-quit').checked
   };
@@ -112,6 +115,20 @@ function onTestsDone() {
 
 function onTestSelected(event) {
   messaging.send(SELECT_TEST, {name: event.target.value});
+}
+
+function fillCaps() {
+  const el = document.getElementById('caps');
+  el.options.length = 0;
+  const items = [
+    {text: 'This chrome', value: ''},
+    {text: 'http://localhost:4444/wd/hub', value: 'http://localhost:4444/wd/hub'},
+    {text: 'http://ondemand.saucelabs.com:80/wd/hub', value: 'http://ondemand.saucelabs.com:80/wd/hub'},
+  ];
+  items.forEach(item => {
+    const option = new Option(item.text, item.value, false);
+    return el.options[el.options.length] = option;
+  });
 }
 
 function welcome() {

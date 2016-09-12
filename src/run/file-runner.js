@@ -1,16 +1,17 @@
 /**
- * Loads script from url and run
+ * Executes file via loading it to <script> tag
  * As script can contain driver commands, we check flow state after load.
+ * todo: dont watch control flow!
  */
 
 const promise = require('selenium-webdriver/lib/promise');
 const utils = require('../utils');
 const Subscription = require('../utils/subscription');
-const logger = require('../utils/logger').create('Script-runner');
+const logger = require('../utils/logger').create('File-runner');
 
 const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
 
-class ScriptRunner {
+class FileRunner {
   /**
    * Constructor
    *
@@ -119,4 +120,4 @@ class ScriptRunner {
   }
 }
 
-module.exports = ScriptRunner;
+module.exports = FileRunner;

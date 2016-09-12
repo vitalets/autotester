@@ -2,13 +2,15 @@
 const httpBrowserify = require('webpack/node_modules/node-libs-browser/node_modules/http-browserify');
 const fakeHttp = require('../utils/fake-http');
 
+// temp: wrap for logging
 const realHttpWrapped = wrapForLog(httpBrowserify, 'REAL');
 const fakeHttpWrapped = wrapForLog(fakeHttp, 'FAKE');
 
 module.exports = {
+  // this actually defines whether http module will be fake or not
+  loopback: true,
   get request () {
-    // todo: use fake public method
-    const http = window.fake ? fakeHttpWrapped : realHttpWrapped;
+    const http = module.exports.loopback ? fakeHttpWrapped : realHttpWrapped;
     return http.request;
   }
 };
@@ -21,9 +23,7 @@ function wrapForLog(http, prefix) {
     const req = origRequest.apply(http, arguments);
     req.on('response', response => {
       response.on('data', data => {
-        const r = data;
-        //const r = data ? JSON.stringify(JSON.parse(data), false, 2) : data;
-        console.info(`${prefix} response`, r);
+        console.info(`${prefix} response`, data);
       });
     });
 

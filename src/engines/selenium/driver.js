@@ -7,20 +7,6 @@ const Capabilities = require('selenium-webdriver/lib/capabilities').Capabilities
 const Executor = require('./executor');
 const Requests = require('./requests');
 const TargetLocator = require('./target-locator');
-const chrome = require('selenium-webdriver/chrome');
-const firefox = require('selenium-webdriver/firefox');
-
-const service = new chrome.ServiceBuilder()
-  .usingPort(9515)
-  .build();
-
-chrome.setDefaultService(service);
-
-
-
-
-
-
 
 /**
  * Creates a new WebDriver client for Chrome.

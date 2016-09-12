@@ -1,96 +1,99 @@
 /**
- * Run api
+ * Top-level Run class
  */
 
 const path = require('path');
 const utils = require('../utils');
 const Runner = require('./runner');
+const fakeHttp = require('../utils/fake-http');
+const extensionDriver = require('../extensiondriver');
+const aliasHttp = require('../alias/http');
+const engines = require('../engines');
 const logger = require('../utils/logger').create('Run');
 
 const LOCAL_TESTS_DIR = 'test';
 const LOCAL_SNIPPETS_DIR = 'snippets';
 
-// temp
-const fakeHttp = require('../utils/fake-http');
-const extensionDriver = require('../extensiondriver');
-fakeHttp.setHandler(extensionDriver.handler);
+class Run {
+  /**
+   * Constructor
+   *
+   * @param {Object} options
+   * @param {Object} options.uiWindow
+   * @param {Boolean} options.noQuit
+   * @param {String} options.engine
+   * @param {String} options.serverUrl
+   * @param {Object} options.caps
+   */
+  constructor(options) {
+    this._options = options;
+    this._snippets = [];
+    this._localBaseDir = null;
+    this._processOptions();
+  }
 
-// todo: move somethere!!
-// set process.platfom for correct work of selenium-webdriver/net/index.js
-const os = require('os');
-process.platform = 'darwin';
-// for safari
-process.env.USER = 'USER';
-process.env.APPDATA = 'APPDATA';
+  /**
+   * Run scenarios from array of remote files (paths) and baseUrl
+   *
+   * @param {Array<String>} files relative filepaths
+   * @param {String} baseUrl
+   * @returns {Promise}
+   */
+  runRemoteFiles(files, baseUrl) {
+    logger.log(`Running ${files.length} file(s)`);
+    this._localBaseDir = LOCAL_TESTS_DIR;
+    return Promise.resolve()
+      .then(() => this._fetchRemoteFiles(files, baseUrl))
+      .then(() => this._run());
+  }
 
+  /**
+   * Run snippets
+   *
+   * @param {Array<{path, code}>} snippets
+   * @returns {Promise}
+   */
+  runSnippets(snippets) {
+    logger.log(`Running ${snippets.length} snippet(s)`);
+    this._snippets = snippets;
+    this._localBaseDir = LOCAL_SNIPPETS_DIR;
+    return this._run();
+  }
 
-process.env.SELENIUM_REMOTE_URL = 'http://127.0.0.1:4444/wd/hub';
-//process.env.SELENIUM_REMOTE_URL = 'http://ondemand.saucelabs.com:80/wd/hub';
-process.env.SELENIUM_BROWSER = 'chrome';
-//process.env.SELENIUM_BROWSER = 'firefox';
-//process.env.SELENIUM_BROWSER = 'safari';
+  _run() {
+    return new Runner().run({
+      tests: this._snippets,
+      localBaseDir: this._localBaseDir,
+      uiWindow: this._options.uiWindow,
+      noQuit: this._options.noQuit,
+      engine: this._options.engine,
+    });
+  }
 
-os.networkInterfaces = os.getNetworkInterfaces = function () {
-  return {
-    lo0: [{
-      family: 'IPv4',
-      internal: true,
-      address: 'localhost',
-    }]
-  };
-};
+  _processOptions() {
+    const engine = engines[this._options.engine];
+    engine.setServerUrl(this._options.serverUrl);
+    if (!this._options.serverUrl) {
+      logger.log(`Run using this chrome (loopback)`);
+      aliasHttp.loopback = true;
+      fakeHttp.setHandler(extensionDriver.handler);
+      engine.setCapabilities({browserName: 'chrome'});
+    } else {
+      logger.log(`Run using remote server: ${this._options.serverUrl}`);
+      aliasHttp.loopback = false;
+      engine.setCapabilities(this._options.caps);
+    }
+  }
 
-
-
-
-/**
- * Run scenarios from array of remote files (paths) and baseUrl
- *
- * @param {Array<String>} files relative filepaths
- * @param {Object} options
- * @param {String} options.baseUrl
- * @param {Object} options.uiWindow
- * @param {Boolean} options.noQuit
- * @returns {Promise}
- */
-exports.runRemoteFiles = function (files, options) {
-  logger.log(`Running ${files.length} file(s)`);
-  return Promise.resolve()
-    .then(() => fetchFiles(files, options.baseUrl))
-    .then(tests => new Runner().run({
-      tests,
-      localBaseDir: LOCAL_TESTS_DIR,
-      uiWindow: options.uiWindow,
-      noQuit: options.noQuit,
-    }));
-};
-
-/**
- * Run snippets
- *
- * @param {Array<{path, code}>} snippets
- * @param {Object} options
- * @param {Object} options.uiWindow
- * @param {Boolean} options.noQuit
- * @returns {Promise}
- */
-exports.runSnippets = function (snippets, options) {
-  logger.log(`Running ${snippets.length} snippet(s)`);
-  return new Runner().run({
-    tests: snippets,
-    localBaseDir: LOCAL_SNIPPETS_DIR,
-    uiWindow: options.uiWindow,
-    noQuit: options.noQuit,
-  });
-};
-
-function fetchFiles(files, baseUrl) {
-  const tasks = files.map(file => {
-    const url = path.join(baseUrl, file);
-    return utils.fetchText(url)
-      .then(text => {
-        return {path: file, code: text};
-      });
-  });
-  return Promise.all(tasks);
+  _fetchRemoteFiles(files, baseUrl) {
+    this._snippets.length = 0;
+    const tasks = files.map(file => {
+      const url = path.join(baseUrl, file);
+      return utils.fetchText(url)
+        .then(text => this._snippets.push({path: file, code: text}));
+    });
+    return Promise.all(tasks);
+  }
 }
+
+module.exports = Run;

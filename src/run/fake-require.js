@@ -13,7 +13,6 @@ const aliases = new Map();
 exports.getFn = function () {
   modules.clear();
   aliases.clear();
-  registerDefaultModules();
   return fakeRequire;
 };
 
@@ -25,14 +24,6 @@ function fakeRequire(moduleName) {
     console.warn(moduleName, modules);
     throw new Error(`Unsupported module in fakeRequire: ${moduleName}`);
   }
-}
-
-function registerDefaultModules() {
-  fakeRequire.register('selenium-webdriver', require('selenium-webdriver'));
-  fakeRequire.register('selenium-webdriver/testing', require('selenium-webdriver/testing'));
-  fakeRequire.register('selenium-webdriver/testing/assert', require('selenium-webdriver/testing/assert'));
-  fakeRequire.register('selenium-webdriver/lib/promise', require('selenium-webdriver/lib/promise'));
-  fakeRequire.register('assert', require('assert'));
 }
 
 fakeRequire.register = function (path, module) {
