@@ -88,6 +88,7 @@
     "promises-aplus-tests": "^2.1.2",
     "raw-loader": "^0.5.1",
     "rimraf": "^2.5.4",
+    "route-parser": "0.0.5",
     "selenium-standalone": "^5.6.3",
     "selenium-webdriver": "^3.0.0-beta-2",
     "serve-index": "^1.8.0",

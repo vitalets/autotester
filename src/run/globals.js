@@ -13,7 +13,7 @@ exports.export = function (target, uiWindow) {
     Key: webdriver.Key,
     until: webdriver.until,
     // autotester specials
-    Driver: require('../driver'),
+    // Driver: require('../driver'),
     // for running tests
     test: require('selenium-webdriver/testing'),
     assert: require('selenium-webdriver/testing/assert'),

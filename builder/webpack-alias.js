@@ -29,6 +29,11 @@ const aliases = [
     replace: './src/alias/adm-zip.js',
   },
   {
+    beforeResolve: true,
+    request: 'http',
+    replace: './src/alias/http.js',
+  },
+  {
     request: 'selenium-webdriver/net/portprober.js',
     replace: './src/alias/portprober.js',
   },

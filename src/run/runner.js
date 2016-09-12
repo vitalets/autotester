@@ -66,7 +66,7 @@ class Runner {
     this._params = params;
 
     // todo: refactor - remove somewhere else
-    const Targets = require('../driver/targets');
+    const Targets = require('../extensiondriver/targets');
     Targets.dontCloseTabs = params.noQuit;
 
     return Promise.resolve()

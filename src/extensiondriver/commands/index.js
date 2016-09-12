@@ -2,8 +2,6 @@
  * Map selenium commands to implementation
  */
 
-const cmd = require('selenium-webdriver/lib/command').Name;
-const extraCmd = require('./extra');
 
 const session = require('./session');
 const switchTo = require('./switch-to');

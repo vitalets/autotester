@@ -33,6 +33,9 @@ const Targets = module.exports = {
   // todo: refactor - move to somewhere else
   dontCloseTabs: false,
 
+  // session id is constant for loopback chrome
+  SESSION_ID: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+
   get handle() {
     return currentTarget.handle;
   },

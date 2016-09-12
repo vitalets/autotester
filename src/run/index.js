@@ -10,6 +10,39 @@ const logger = require('../utils/logger').create('Run');
 const LOCAL_TESTS_DIR = 'test';
 const LOCAL_SNIPPETS_DIR = 'snippets';
 
+// temp
+const fakeHttp = require('../utils/fake-http');
+const extensionDriver = require('../extensiondriver');
+fakeHttp.setHandler(extensionDriver.handler);
+
+// todo: move somethere!!
+// set process.platfom for correct work of selenium-webdriver/net/index.js
+const os = require('os');
+process.platform = 'darwin';
+// for safari
+process.env.USER = 'USER';
+process.env.APPDATA = 'APPDATA';
+
+
+process.env.SELENIUM_REMOTE_URL = 'http://127.0.0.1:4444/wd/hub';
+//process.env.SELENIUM_REMOTE_URL = 'http://ondemand.saucelabs.com:80/wd/hub';
+process.env.SELENIUM_BROWSER = 'chrome';
+//process.env.SELENIUM_BROWSER = 'firefox';
+//process.env.SELENIUM_BROWSER = 'safari';
+
+os.networkInterfaces = os.getNetworkInterfaces = function () {
+  return {
+    lo0: [{
+      family: 'IPv4',
+      internal: true,
+      address: 'localhost',
+    }]
+  };
+};
+
+
+
+
 /**
  * Run scenarios from array of remote files (paths) and baseUrl
  *
