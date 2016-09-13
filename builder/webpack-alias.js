@@ -53,7 +53,7 @@ exports.newResource = function (data) {
     const isMatched = (alias.beforeResolve && alias.request === data.request)
       || (!alias.beforeResolve && data.request.endsWith(alias.request));
     if (isMatched) {
-      console.log(`Replace ${data.rawRequest || data.request} in ${data.context}`);
+      // console.log(`Replace ${data.rawRequest || data.request} in ${data.context}`);
       // In before-resolve overwrite data.request as file actually does not exist and after-resolve will not occur
       data[alias.beforeResolve ? 'request' : 'resource'] = path.resolve(alias.replace);
       break;
