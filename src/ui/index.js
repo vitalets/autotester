@@ -8,6 +8,9 @@ const title = require('./title');
 const api = require('./api');
 const smartUrlOpener = require('../utils/smart-url-opener');
 
+// todo: get from background via message or event
+const targets = require('../background/targets');
+
 const {
   BG_LOAD_DONE,
   LOAD_TESTS_CONFIG,
@@ -36,7 +39,7 @@ function start() {
 
   loadConfig();
 
-  fillCaps();
+  fillTargets();
 
   // for programmatic run
   // todo: move to api
@@ -57,7 +60,7 @@ function runTests(files) {
   window.report.innerHTML = '';
   const eventData = {
     files,
-    capsId: document.getElementById('caps').value,
+    targetId: document.getElementById('targets').value,
     selectedTest: document.getElementById('testlist').value,
     noQuit: document.getElementById('no-quit').checked
   };
@@ -117,16 +120,11 @@ function onTestSelected(event) {
   messaging.send(SELECT_TEST, {name: event.target.value});
 }
 
-function fillCaps() {
-  const el = document.getElementById('caps');
+function fillTargets() {
+  const el = document.getElementById('targets');
   el.options.length = 0;
-  const items = [
-    {text: 'This chrome', value: 'http://autotester'},
-    {text: 'http://localhost:4444/wd/hub', value: 'http://localhost:4444/wd/hub'},
-    {text: 'http://ondemand.saucelabs.com:80/wd/hub', value: 'http://ondemand.saucelabs.com:80/wd/hub'},
-  ];
-  items.forEach(item => {
-    const option = new Option(item.text, item.value, false);
+  targets.getAll().forEach((target, index) => {
+    const option = new Option(target.name, index, false);
     return el.options[el.options.length] = option;
   });
 }

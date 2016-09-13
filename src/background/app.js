@@ -8,6 +8,8 @@ const messaging = require('./messaging');
 const storage = require('./storage');
 const specialUrlCatcher = require('./special-url-catcher');
 const Run = require('../run');
+const logger = require('../utils/logger').create('App');
+const targets = require('../background/targets');
 
 const {
   BG_LOAD_DONE,
@@ -63,20 +65,20 @@ class App {
    *
    * @param {Object} data
    * @param {String} data.selectedTest
-   * @param {String} data.capsId capabilities
+   * @param {String} data.targetId
    * @param {String} [data.noQuit]
    * @param {Array<{code, path}>} [data.files] special case to run custom files from ui window.runTests
    */
   _runTests(data) {
     // todo: refactor
     try {
+      const target = targets.get(data.targetId);
+
       const run = new Run({
         uiWindow: getUiWindow(),
         noQuit: data.noQuit,
         engine: 'selenium',
-        // temp
-        serverUrl: data.capsId,
-        caps: {},
+        target: target,
       });
 
       let runnerPromise;

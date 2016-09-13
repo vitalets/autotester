@@ -5,15 +5,14 @@
 const path = require('path');
 const utils = require('../utils');
 const Runner = require('./runner');
-const fakeHttp = require('../utils/fake-http');
-const extensionDriver = require('../extensiondriver');
 const engines = require('../engines');
+const loopback = require('./loopback');
 const logger = require('../utils/logger').create('Run');
 
 const LOCAL_TESTS_DIR = 'test';
 const LOCAL_SNIPPETS_DIR = 'snippets';
 
-class Run {
+module.exports = class Run {
   /**
    * Constructor
    *
@@ -21,14 +20,14 @@ class Run {
    * @param {Object} options.uiWindow
    * @param {Boolean} options.noQuit
    * @param {String} options.engine
-   * @param {String} options.serverUrl
-   * @param {Object} options.caps
+   * @param {Object} options.target {serverUrl, caps, name}
    */
   constructor(options) {
     this._options = options;
     this._snippets = [];
     this._localBaseDir = null;
-    this._processOptions();
+    this._setupEngine();
+    this._setupLoopback();
   }
 
   /**
@@ -69,16 +68,16 @@ class Run {
     });
   }
 
-  _processOptions() {
+  _setupEngine() {
+    logger.log(`Using target: ${this._options.target.name}`);
     const engine = engines[this._options.engine];
-    engine.setServerUrl(this._options.serverUrl);
-    if (this._options.serverUrl === 'http://autotester') {
-      logger.log(`Run using this chrome (loopback)`);
-      fakeHttp.setHandler(extensionDriver.getHandler(this._options.serverUrl));
-      engine.setCapabilities({browserName: 'chrome'});
-    } else {
-      logger.log(`Run using remote server: ${this._options.serverUrl}`);
-      engine.setCapabilities(this._options.caps);
+    engine.setServerUrl(this._options.target.serverUrl);
+    engine.setCapabilities(this._options.target.caps);
+  }
+
+  _setupLoopback() {
+    if (this._options.target.loopback) {
+      loopback.setup(this._options.target.serverUrl);
     }
   }
 
@@ -91,6 +90,4 @@ class Run {
     });
     return Promise.all(tasks);
   }
-}
-
-module.exports = Run;
+};
