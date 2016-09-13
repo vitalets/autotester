@@ -24,6 +24,7 @@ exports.initRouter = function (router) {
 
   router.post( '/session/:session/element', elementSearch.findElement);
   router.post( '/session/:session/element/:id/value', keyboard.sendKeysToElement);
+  router.get(  '/session/:session/element/:id/name', element.getElementTagName);
 
   // extra autotester routes
   router.post('/session/:session/newtab', switchTo.newTab);
