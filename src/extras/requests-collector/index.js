@@ -16,10 +16,13 @@ exports.setup = function () {
   addRequestsMethod();
 };
 
+/**
+ * Use PUT & POST here as we may need to pass filter in body
+ */
 function registerCommands() {
-  engines.selenium.registerCommand(commands.REQUESTS_COLLECT, 'POST', '/session/:sessionId/requests');
+  engines.selenium.registerCommand(commands.REQUESTS_COLLECT, 'PUT', '/session/:sessionId/requests');
   engines.selenium.registerCommand(commands.REQUESTS_STOP, 'DELETE', '/session/:sessionId/requests');
-  engines.selenium.registerCommand(commands.REQUESTS_GET, 'GET', '/session/:sessionId/requests');
+  engines.selenium.registerCommand(commands.REQUESTS_GET, 'POST', '/session/:sessionId/requests');
 }
 
 function addRequestsMethod() {

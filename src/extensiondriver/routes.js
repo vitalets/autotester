@@ -14,6 +14,7 @@ const elementSearch = require('./commands/element-search');
 const element = require('./commands/element');
 const evaluate = require('./commands/evaluate');
 const timeouts = require('./commands/timeouts');
+const requests = require('./commands/requests');
 
 exports.initRouter = function (router) {
   router.post('/session', session.newSession);
@@ -42,9 +43,9 @@ exports.initRouter = function (router) {
   // extra autotester routes
   router.post('/session/:sessionId/newtab', switchTo.newTab);
   router.post('/session/:sessionId/extension', switchTo.extension);
-  //
-  // router.post('/session/:session/requests', switchTo.extension);
-  // router.del('/session/:session/requests', switchTo.extension);
-  // router.get('/session/:session/requests', switchTo.extension);
+
+  router.put('/session/:session/requests', requests.collect);
+  router.del('/session/:session/requests', requests.stop);
+  router.post('/session/:session/requests', requests.get);
 };
 

@@ -21,22 +21,24 @@ test.suite(function(env) {
 
   describe('network requests', function () {
 
-    test.it('should collect normal navigation', function () {
+    test.it('should collect normal navigation and apply filter', function () {
       driver.requests().collect();
       driver.get(test.Pages.echoPage);
       driver.requests().stop();
       assert(driver.requests().getCount({type: 'document', url: test.Pages.echoPage})).equalTo(1);
+      assert(driver.requests().getCount({url: test.Pages.echoPage})).equalTo(1);
+      assert(driver.requests().getCount({type: 'document'})).equalTo(1);
+      assert(driver.requests().getCount({url: 'abc'})).equalTo(0);
     });
 
     test.it('should collect js navigation', function () {
       driver.requests().collect();
-      driver.executeScript(function() {
-        location.href = location.href + '?x=1';
-      });
-      // delay needed for navigation to occur
-      driver.sleep(200);
+      driver.executeScript(function(newUrl) {
+        location.href = newUrl;
+      }, test.Pages.simpleTestPage);
+      driver.wait(webdriver.until.urlIs(test.Pages.simpleTestPage));
       driver.requests().stop();
-      assert(driver.requests().getCount({url: test.Pages.echoPage + '?x=1'})).equalTo(1);
+      assert(driver.requests().getCount({url: test.Pages.simpleTestPage})).equalTo(1);
     });
 
     test.it('should collect XMLHttpREquest', function () {
@@ -133,19 +135,11 @@ test.suite(function(env) {
     });
 
     // we can not test it as error should be uncaught to stop request catcher
-    test.it.skip('should call .stop() in case of error', function () {
+    test.it.skip('should call .stop() in case of error / idle', function () {
       driver.requests().collect();
       driver.call(() => {
         throw new Error('some error');
       });
-    });
-
-    test.it('should limit requests', function () {
-      driver.requests().limit(1);
-      driver.requests().collect();
-      driver.get(test.Pages.echoPage);
-      driver.requests().stop();
-      assert(driver.requests().getCount()).equalTo(1);
     });
 
     test.it('should dump to string', function () {
