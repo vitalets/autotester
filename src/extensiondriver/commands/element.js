@@ -70,5 +70,5 @@ exports.submit = function (params) {
       el.form.submit();
     }
   `;
-  return evaluate.executeScript({script, args});
+  return evaluate.execute({script, args});
 };

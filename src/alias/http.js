@@ -10,7 +10,7 @@ const targets = require('../background/targets');
 // wrap for logging
 const realHttpWrapped = wrapForLog(httpBrowserify, 'REAL');
 const realHttpsWrapped = wrapForLog(httpsBrowserify, 'REAL');
-const fakeHttpWrapped = wrapForLog(fakeHttp, 'FAKE');
+const fakeHttpWrapped = wrapForLog(fakeHttp, 'LOOPBACK');
 
 let loopbackHost;
 

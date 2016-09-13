@@ -15,7 +15,7 @@ const prepareScript = require('./prepare-script');
  * @param {String} params.script
  * @param {Array} params.args
  */
-exports.executeScript = function (params) {
+exports.execute = function (params) {
   return execute(params.script, params.args)
     .then(success);
 };
@@ -27,7 +27,7 @@ exports.executeScript = function (params) {
  * @param {String} params.script
  * @param {Array} params.args
  */
-exports.executeAsyncScript = function (params) {
+exports.executeAsync = function (params) {
   return execute(params.script, params.args, true)
     .then(result => {
       return remotePromise.wait(result.objectId)

@@ -17,14 +17,24 @@ const timeouts = require('./commands/timeouts');
 
 exports.initRouter = function (router) {
   router.post('/session', session.newSession);
-  router.del( '/session/:session', session.deleteSession);
+  router.del('/session/:session', session.deleteSession);
   router.post('/session/:session/url', navigation.go);
-  router.get( '/session/:session/url', navigation.getCurrentUrl);
-  router.get( '/session/:session/title', navigation.getTitle);
+  router.get('/session/:session/url', navigation.getCurrentUrl);
+  router.get('/session/:session/title', navigation.getTitle);
 
-  router.post( '/session/:session/element', elementSearch.findElement);
-  router.post( '/session/:session/element/:id/value', keyboard.sendKeysToElement);
-  router.get(  '/session/:session/element/:id/name', element.getElementTagName);
+  router.post('/session/:session/element', elementSearch.findElement);
+  router.post('/session/:session/element/:id/value', keyboard.sendKeysToElement);
+  router.get('/session/:session/element/:id/name', element.getElementTagName);
+  router.get('/session/:session/element/:id/text', element.getElementText);
+  router.post('/session/:session/element/:id/click', mouse.clickElement);
+  router.post('/session/:session/element/:id/submit', element.submit);
+  router.post('/session/:session/element/:id/element', elementSearch.findChildElement);
+
+  router.post('/session/:session/execute', evaluate.execute);
+  router.post('/session/:session/execute_async', evaluate.executeAsync);
+  router.post('/session/:session/timeouts', timeouts.setTimeout);
+
+  router.del('/session/:session/window', windowCommand.close);
 
   // extra autotester routes
   router.post('/session/:session/newtab', switchTo.newTab);

@@ -11,14 +11,14 @@ exports.go = function (params) {
 };
 
 exports.getTitle = function () {
-  return evaluate.executeScript({
+  return evaluate.execute({
     script: 'return document.title',
     args: [],
   });
 };
 
 exports.getCurrentUrl = function () {
-  return evaluate.executeScript({
+  return evaluate.execute({
     script: 'return document.URL',
     args: [],
   });
