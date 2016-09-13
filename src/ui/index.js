@@ -121,7 +121,7 @@ function fillCaps() {
   const el = document.getElementById('caps');
   el.options.length = 0;
   const items = [
-    {text: 'This chrome', value: ''},
+    {text: 'This chrome', value: 'http://autotester'},
     {text: 'http://localhost:4444/wd/hub', value: 'http://localhost:4444/wd/hub'},
     {text: 'http://ondemand.saucelabs.com:80/wd/hub', value: 'http://ondemand.saucelabs.com:80/wd/hub'},
   ];

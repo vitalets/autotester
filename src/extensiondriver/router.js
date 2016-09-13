@@ -7,8 +7,8 @@
 const path = require('path');
 const RouteParser = require('route-parser');
 
-class Router {
-  constructor(basePath = '/wd/hub/') {
+module.exports = class Router {
+  constructor(basePath = '/') {
     this._basePath = basePath;
     this._routes = [];
     this._middleware = [];
@@ -53,6 +53,4 @@ class Router {
   _applyMiddleware(req) {
     this._middleware.forEach(fn => fn(req));
   }
-}
-
-module.exports = Router;
+};

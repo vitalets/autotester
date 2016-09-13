@@ -10,27 +10,25 @@ const Router = require('./router');
 const routes = require('./routes');
 const Targets = require('./targets');
 
-let router;
-
 /**
  * Main handler
  *
- * @param {Object} req
- * @returns {Promise} promise resolved with stringified response
+ * @param {Object} serverUrl supposed for requests (actually we take only pathname from it)
  */
-exports.handler = function (req) {
-  const router = getRouter();
-  return Promise.resolve()
-    .then(() => router.handle(req))
-    .then(result => formatResponse(result))
+exports.getHandler = function (serverUrl) {
+  const basePath = serverUrl ? new URL(serverUrl).pathname : '/';
+  const router = getRouter(basePath);
+  return function (req) {
+    return Promise.resolve()
+      .then(() => router.handle(req))
+      .then(result => formatResponse(result))
+  };
 };
 
-function getRouter() {
-  if (!router) {
-    router = new Router();
-    router.use(bodyParser);
-    routes.initRouter(router);
-  }
+function getRouter(basePath) {
+  router = new Router(basePath);
+  router.use(bodyParser);
+  routes.initRouter(router);
   return router;
 }
 

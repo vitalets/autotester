@@ -7,7 +7,6 @@ const utils = require('../utils');
 const Runner = require('./runner');
 const fakeHttp = require('../utils/fake-http');
 const extensionDriver = require('../extensiondriver');
-const aliasHttp = require('../alias/http');
 const engines = require('../engines');
 const logger = require('../utils/logger').create('Run');
 
@@ -73,14 +72,12 @@ class Run {
   _processOptions() {
     const engine = engines[this._options.engine];
     engine.setServerUrl(this._options.serverUrl);
-    if (!this._options.serverUrl) {
+    if (this._options.serverUrl === 'http://autotester') {
       logger.log(`Run using this chrome (loopback)`);
-      aliasHttp.loopback = true;
-      fakeHttp.setHandler(extensionDriver.handler);
+      fakeHttp.setHandler(extensionDriver.getHandler(this._options.serverUrl));
       engine.setCapabilities({browserName: 'chrome'});
     } else {
       logger.log(`Run using remote server: ${this._options.serverUrl}`);
-      aliasHttp.loopback = false;
       engine.setCapabilities(this._options.caps);
     }
   }

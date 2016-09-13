@@ -60,7 +60,9 @@ class Request extends Channel.EventEmitter {
   }
 
   end(chunk) {
-    this.write(chunk);
+    if (chunk) {
+      this.write(chunk);
+    }
     const req = Object.assign({}, this._options, {body: this._body});
     Promise.resolve()
       .then(() => handler(req))

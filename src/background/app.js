@@ -74,6 +74,7 @@ class App {
         uiWindow: getUiWindow(),
         noQuit: data.noQuit,
         engine: 'selenium',
+        // temp
         serverUrl: data.capsId,
         caps: {},
       });
