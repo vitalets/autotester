@@ -15,10 +15,10 @@ module.exports = {
   ],
   tests: [
     'playground.js',
-    // === specs for autotester extra features (not supported by selenium)
-    'extra/newtab_switching_test.js',
-    'extra/extension_switching_test.js',
-    'extra/collect_network_requests_test.js',
+    // === extra autotester features
+    'extras/newtab_switching_test.js',
+    'extras/extension_switching_test.js',
+    'extras/collect_network_requests_test.js',
     // === ui ===
     'ui/show_errors_test.js',
     'ui/show_success_test.js',

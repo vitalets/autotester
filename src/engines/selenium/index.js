@@ -3,6 +3,7 @@
  */
 
 const os = require('os');
+const customCommands = require('./custom-commands');
 
 /**
  * Add needed globals to context
@@ -14,6 +15,7 @@ exports.setGlobals = function (context) {
   supportNode();
   setVars(context);
   setupFakeRequire(context);
+  customCommands.setup();
 };
 
 /**
@@ -28,6 +30,17 @@ exports.setServerUrl = function (serverUrl) {
  */
 exports.setCapabilities = function (caps = {}) {
   process.env.SELENIUM_BROWSER = caps.browserName || 'chrome';
+};
+
+/**
+ * Register custom command
+ *
+ * @param {String} name
+ * @param {String} method
+ * @param {String} path
+ */
+exports.registerCommand = function (name, method, path) {
+  customCommands.register(name, method, path);
 };
 
 function setVars(context) {

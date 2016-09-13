@@ -7,6 +7,7 @@ const utils = require('../utils');
 const Runner = require('./runner');
 const engines = require('../engines');
 const loopback = require('./loopback');
+const extras = require('../extras');
 const logger = require('../utils/logger').create('Run');
 
 const LOCAL_TESTS_DIR = 'test';
@@ -26,6 +27,7 @@ module.exports = class Run {
     this._options = options;
     this._snippets = [];
     this._localBaseDir = null;
+    this._setupExtras();
     this._setupEngine();
     this._setupLoopback();
   }
@@ -66,6 +68,10 @@ module.exports = class Run {
       noQuit: this._options.noQuit,
       engine: this._options.engine,
     });
+  }
+
+  _setupExtras() {
+    extras.setup();
   }
 
   _setupEngine() {
