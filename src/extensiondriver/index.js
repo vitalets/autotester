@@ -46,6 +46,6 @@ function formatResponse(result) {
     // hCode: 1590374043,
     value: result !== undefined ? result : null,
     status: 0
-  }, result);
+  });
   return JSON.stringify(response);
 }

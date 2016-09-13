@@ -35,6 +35,8 @@ exports.initRouter = function (router) {
   router.post('/session/:session/timeouts', timeouts.setTimeout);
 
   router.del('/session/:session/window', windowCommand.close);
+  router.post('/session/:session/window', switchTo.window);
+  router.get('/session/:session/window_handle', windowCommand.getCurrentWindowHandle);
 
   // extra autotester routes
   router.post('/session/:session/newtab', switchTo.newTab);
