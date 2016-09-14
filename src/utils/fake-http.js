@@ -3,6 +3,7 @@
  */
 
 const Channel = require('chnl');
+const utils = require('.');
 
 const RESPONSE_DEFAULTS = {
   statusCode: 200,
@@ -68,7 +69,7 @@ class Request extends Channel.EventEmitter {
       .then(() => handler(req))
       .then(
         data => this._sendResponse(data),
-        e => this._sendResponse(e.stack || e.message, 500)
+        e => this._sendError(e)
       );
   }
 
@@ -89,8 +90,7 @@ class Request extends Channel.EventEmitter {
     const response = new Response(responseParams);
     this._callback(response);
     this.emit('response', response);
-    // manually end response to emit all needed events
-    // todo: settimeout?
+    // manually send response to emit all needed events
     response.send();
   }
 
@@ -111,6 +111,11 @@ class Request extends Channel.EventEmitter {
       responseParams.statusCode = statusCode;
     }
     return responseParams;
+  }
+
+  _sendError(e) {
+    this._sendResponse(e.message || String(e), 500);
+    return Promise.reject(e);
   }
 }
 

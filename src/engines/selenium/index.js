@@ -52,6 +52,8 @@ function setVars(context) {
     until: webdriver.until,
     test: require('selenium-webdriver/testing'),
     assert: require('selenium-webdriver/testing/assert'),
+    // useful shortcut for: let driver = new Driver();
+    Driver: function () { return new webdriver.Builder().build(); },
   });
 }
 

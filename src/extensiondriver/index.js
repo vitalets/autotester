@@ -21,7 +21,10 @@ exports.getHandler = function (serverUrl) {
   return function (req) {
     return Promise.resolve()
       .then(() => router.handle(req))
-      .then(result => formatResponse(result))
+      .then(
+        result => formatResponse(result)
+        // todo: format error
+      )
   };
 };
 
