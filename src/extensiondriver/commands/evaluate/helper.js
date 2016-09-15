@@ -3,6 +3,7 @@
  */
 
 const WebElement = require('selenium-webdriver/lib/webdriver').WebElement;
+const WebdriverError = require('../../error');
 const Targets = require('../../targets');
 
 /**
@@ -21,7 +22,7 @@ exports.evaluate = function (expression) {
       });
     })
     .then(res => {
-      exports.assertThrownError(res);
+      checkThrownError(res);
       return res.result;
     });
 };
@@ -49,7 +50,7 @@ exports.callFunctionOn = function (fnBody, args) {
       })
     })
     .then(res => {
-      exports.assertThrownError(res);
+      checkThrownError(res);
       return res.result;
     });
 };
@@ -79,13 +80,6 @@ exports.getWebElement = function (objectId) {
     .then(res => WebElement.buildId(String(res.nodeId)));
 };
 
-exports.assertThrownError = function (res) {
-  if (res.wasThrown) {
-    throw new Error('Error in evaluated script: ' + res.result.description);
-    //throw new Error('Error in evaluated script: ' + res.exceptionDetails.text);
-  }
-};
-
 /**
  * Resolves nodeId of WebElement to ObjectId
  * @param {String} id
@@ -101,3 +95,10 @@ exports.resolveNode = function (id) {
 exports.wait = function (ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
+
+function checkThrownError(res) {
+  if (res && res.wasThrown) {
+    const message = res.result.description || res.exceptionDetails.text;
+    throw new WebdriverError(WebdriverError.TYPES.JavaScriptError, message);
+  }
+}

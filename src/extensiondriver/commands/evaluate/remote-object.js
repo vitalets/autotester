@@ -1,14 +1,21 @@
 /**
  * Wrapper around debugger RemoteObject result
- * Resolves useful value.instead of entries like {"injectedScriptId":2,"id":1}
+ * Resolves useful value instead of entries like {"injectedScriptId":2,"id":1}
  */
 
+const WebdriverError = require('../../error');
 const helper = require('./helper');
 
 class RemoteObject {
   constructor(data) {
     this._data = data;
   }
+
+  /**
+   * Resolves remote object into actual value
+   *
+   * @returns {*|Promise}
+   */
   value() {
     return this._resolveByType();
   }
@@ -40,8 +47,7 @@ class RemoteObject {
       case 'date':
         return this._resolveDate();
       case 'error':
-        const ErrorConstructor = window[this._data.className] || Error;
-        throw new ErrorConstructor('Async error in evaluated script: ' + this._data.description);
+        return new WebdriverError(WebdriverError.TYPES.JavaScriptError, this._data.description);
       default:
         return this._resolvePlainObject();
     }
@@ -60,10 +66,10 @@ class RemoteObject {
     return helper.getWebElement(this._data.objectId);
   }
   _resolveRegexp() {
-    throw new Error('_resolveRegexp not implemented');
+    throw new Error('_resolveRegexp not implemented yet');
   }
   _resolveDate() {
-    throw new Error('_resolveDate not implemented');
+    throw new Error('_resolveDate not implemented yet');
   }
   _resolvePlainObject() {
     return helper.getOwnProperties(this._data.objectId)

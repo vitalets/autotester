@@ -101,3 +101,12 @@ exports.cleanStack = function(stack) {
     .replace(urlFsRe, '')
     .replace(urlRe, '')
 };
+
+/**
+ * Cuts local url
+ *
+ * @param {String} localUrl
+ */
+exports.cutLocalUrl = function (localUrl) {
+  return localUrl.replace(`filesystem:chrome-extension://${chrome.runtime.id}/persistent/`, '');
+};

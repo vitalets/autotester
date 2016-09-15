@@ -49,7 +49,7 @@ class Runner {
   constructor() {
     this._localUrls = [];
     // todo: use custom flow
-    // todo2: dont use custom flow :)
+    // todo2: dont use flow at all :)
     this._flow = promise.controlFlow();
   }
 

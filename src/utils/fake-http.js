@@ -3,12 +3,6 @@
  */
 
 const Channel = require('chnl');
-const utils = require('.');
-
-const RESPONSE_DEFAULTS = {
-  statusCode: 200,
-  headers: [],
-};
 
 let handler = null;
 
@@ -34,7 +28,11 @@ exports.request = function (opts, callback) {
  * @param {Function} h
  */
 exports.setHandler = function (h) {
-  handler = h;
+  if (typeof h !== 'function') {
+    throw new Error('Fake-http handler should be a funciton');
+  } else {
+    handler = h;
+  }
 };
 
 /**
@@ -51,7 +49,7 @@ class Request extends Channel.EventEmitter {
   }
 
   write(chunk) {
-    // todo: check chunk type and porcess Buffer
+    // todo: check chunk type and handle 'Buffer'
     if (chunk) {
       if (this._body === undefined) {
         this._body = '';
@@ -68,7 +66,7 @@ class Request extends Channel.EventEmitter {
     Promise.resolve()
       .then(() => handler(req))
       .then(
-        data => this._sendResponse(data),
+        result => this._sendResponse(result),
         e => this._sendError(e)
       );
   }
@@ -80,13 +78,18 @@ class Request extends Channel.EventEmitter {
     }
   }
 
-  _sendResponse(data, statusCode) {
+  _sendResponse({data, statusCode}) {
     if (this._finished) {
       return;
     } else {
       this._finished = true;
     }
-    const responseParams = this._getResponseParams(data, statusCode);
+    const responseParams = {
+      statusCode,
+      data,
+      method: this._options.method,
+      url: this._getUrl(),
+    };
     const response = new Response(responseParams);
     this._callback(response);
     this.emit('response', response);
@@ -99,22 +102,11 @@ class Request extends Channel.EventEmitter {
     return `${protocol}//${hostname}${port ? ':' + port : ''}${path}`;
   }
 
-  _getResponseParams(data, statusCode) {
-    const responseParams = {
-      method: this._options.method,
-      url: this._getUrl(),
-    };
-    if (data !== undefined) {
-      responseParams.data = data;
-    }
-    if (statusCode !== undefined) {
-      responseParams.statusCode = statusCode;
-    }
-    return responseParams;
-  }
-
   _sendError(e) {
-    this._sendResponse(e.message || String(e), 500);
+    this._sendResponse({
+      statusCode: 500,
+      data: e.message || String(e) || 'Internal fake-http server error',
+    });
     return Promise.reject(e);
   }
 }
@@ -135,7 +127,11 @@ class Response extends Channel.EventEmitter {
    */
   constructor (params = {}) {
     super();
-    Object.assign(this, RESPONSE_DEFAULTS, params);
+    this.statusCode = params.statusCode || 200;
+    this.headers = [];
+    this.data = params.data || '';
+    this.method = params.method;
+    this.url = params.url;
   }
   send() {
     if (this.data) {

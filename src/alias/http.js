@@ -37,7 +37,8 @@ function wrapForLog(http, prefix) {
     const req = origRequest.apply(http, arguments);
     req.on('response', response => {
       response.on('data', data => {
-        logger.log(`${prefix} response`, data);
+        //logger.log(`${prefix} response`, response.statusCode, JSON.parse(data));
+        logger.log(`${prefix} response`, response.statusCode, data);
       });
     });
 

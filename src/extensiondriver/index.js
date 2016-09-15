@@ -9,6 +9,7 @@
 const Router = require('./router');
 const routes = require('./routes');
 const Targets = require('./targets');
+const WebdriverError = require('./error');
 
 /**
  * Main handler
@@ -22,9 +23,9 @@ exports.getHandler = function (serverUrl) {
     return Promise.resolve()
       .then(() => router.handle(req))
       .then(
-        result => formatResponse(result)
-        // todo: format error
-      )
+        formatSuccess,
+        formatError
+      );
   };
 };
 
@@ -41,14 +42,38 @@ function bodyParser(req) {
   }
 }
 
-function formatResponse(result) {
-  const response = Object.assign({
+function formatSuccess(result) {
+  const data = {
     state: 'success',
     sessionId: Targets.SESSION_ID,
-    // class: 'org.openqa.selenium.remote.Response',
-    // hCode: 1590374043,
     value: result !== undefined ? result : null,
     status: 0
-  });
-  return JSON.stringify(response);
+  };
+  return {
+    statusCode: 200,
+    data: JSON.stringify(data),
+  };
+}
+
+function formatError(e) {
+  return e instanceof WebdriverError
+    ? formatWebdriverError(e)
+    : Promise.reject(e);
+}
+
+function formatWebdriverError(e) {
+  const data = {
+    state: e.state,
+    sessionId: Targets.SESSION_ID,
+    value: {
+      class: e.name,
+      message: e.message,
+      stackTrace: e.stack.split('\n'),
+    },
+    status: e.code,
+  };
+  return {
+    statusCode: e.httpStatus || 500,
+    data: JSON.stringify(data)
+  };
 }

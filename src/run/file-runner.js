@@ -20,6 +20,7 @@ class FileRunner {
    */
   constructor(url, context) {
     this._url = url;
+    this._shortUrl = utils.cutLocalUrl(url);
     this._context = context;
     // todo: use custom control flow?
     this._flow = promise.controlFlow();
@@ -27,7 +28,7 @@ class FileRunner {
   }
 
   run() {
-    logger.log(`Loading: ${this._url}`);
+    logger.log(`Loading: ${this._shortUrl}`);
     return new Promise((resolve, reject) => {
       this._resolve = resolve;
       this._reject = reject;
@@ -37,7 +38,7 @@ class FileRunner {
         .then(() => this._loadScript())
         .then(() => this._waitFlow())
     })
-    .then(() => logger.log(`Done: ${this._url}`))
+    .then(() => logger.log(`Done: ${this._shortUrl}`))
     .catch(e => this._catch(e));
   }
 

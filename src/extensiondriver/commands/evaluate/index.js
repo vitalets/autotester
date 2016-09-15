@@ -17,7 +17,10 @@ const prepareScript = require('./prepare-script');
  */
 exports.execute = function (params) {
   return execute(params.script, params.args)
-    .then(success);
+    .then(
+      handleSuccess,
+      handleError
+    );
 };
 
 /**
@@ -31,7 +34,10 @@ exports.executeAsync = function (params) {
   return execute(params.script, params.args, true)
     .then(result => {
       return remotePromise.wait(result.objectId)
-        .then(success, error);
+        .then(
+          handleSuccess,
+          handleError
+        );
     })
 };
 
@@ -64,10 +70,17 @@ function execute(script, args, isAsync) {
     })
 }
 
-function success(result) {
+function handleSuccess(result) {
   return new RemoteObject(result).value();
 }
 
-function error(err) {
-  return err.objectId ? new RemoteObject(err).value() : err;
+function handleError(err) {
+  // if error came as remoteObject --> resolve it first
+  if (err.objectId) {
+    return Promise.resolve()
+      .then(() => new RemoteObject(err).value())
+      .then(value => Promise.reject(value))
+  } else {
+    return Promise.reject(err);
+  }
 }
