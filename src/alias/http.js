@@ -36,7 +36,14 @@ function wrapForLog(http, prefix) {
     logger.log(`${prefix} request`, opts.method, getUrl(opts));
     const req = origRequest.apply(http, arguments);
     req.on('response', response => {
-      response.on('data', data => {
+      const chunks = [];
+      response.on('data', chunk => chunks.push(chunk));
+      response.on('end', () => {
+        let data = chunks.join('').replace(/\0/g, '');
+        // strip big 'screen' prop with encoded screenshot
+        if (response.statusCode !== 200) {
+          data = data.replace(/"screen":"[^"]+"/, '"screen":"_stripped_"');
+        }
         //logger.log(`${prefix} response`, response.statusCode, JSON.parse(data));
         logger.log(`${prefix} response`, response.statusCode, data);
       });

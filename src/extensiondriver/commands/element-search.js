@@ -4,6 +4,7 @@
 
 const WebElement = require('selenium-webdriver/lib/webdriver').WebElement;
 const Targets = require('../targets');
+const errors = require('../errors');
 
 exports.findElement = function (params) {
   return Promise.resolve()
@@ -76,7 +77,7 @@ class Finder {
     } else {
       return res.nodeId
         ? Finder.toSeleniumElement(res.nodeId)
-        : Promise.reject(`Element not found by ${this._value}`);
+        : Promise.reject(new errors.NoSuchElementError(`Element not found by ${this._value}`));
     }
   }
 

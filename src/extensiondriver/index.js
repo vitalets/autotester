@@ -9,7 +9,7 @@
 const Router = require('./router');
 const routes = require('./routes');
 const Targets = require('./targets');
-const WebdriverError = require('./error');
+const errors = require('./errors');
 
 /**
  * Main handler
@@ -47,7 +47,8 @@ function formatSuccess(result) {
     state: 'success',
     sessionId: Targets.SESSION_ID,
     value: result !== undefined ? result : null,
-    status: 0
+    // dont send status as it is selenium legacy and not in spec
+    // status: 0
   };
   return {
     statusCode: 200,
@@ -56,24 +57,27 @@ function formatSuccess(result) {
 }
 
 function formatError(e) {
-  return e instanceof WebdriverError
-    ? formatWebdriverError(e)
+  return e instanceof errors.WebDriverError
+    ? formatWebDriverError(e)
     : Promise.reject(e);
 }
 
-function formatWebdriverError(e) {
+function formatWebDriverError(e) {
+  const errorObj = errors.encodeError(e);
   const data = {
-    state: e.state,
+    state: errorObj.error,
     sessionId: Targets.SESSION_ID,
     value: {
       class: e.name,
-      message: e.message,
+      message: errorObj.message,
+      localizedMessage: errorObj.message,
       stackTrace: e.stack.split('\n'),
     },
-    status: e.code,
+    // dont send status as it is selenium legacy and not in spec
+    // status: errors.getLegacyCode(e)
   };
   return {
-    statusCode: e.httpStatus || 500,
+    statusCode: 500,
     data: JSON.stringify(data)
   };
 }

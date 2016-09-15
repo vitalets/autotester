@@ -39,9 +39,9 @@ test.describe('Yandex Search', function() {
     driver.get('https://ya.ru');
     // driver.sleep(1000);
    // driver.findElement(By.name('text123'));
-    //driver.findElement(By.name('text')).sendKeys('hello');
+    driver.findElement(By.name('text')).sendKeys('hello');
     // assert(driver.getTitle()).equalTo('Яндекс');
-     //driver.sleep(1000);
+     driver.sleep(1000);
     //driver.findElement(By.name('text')).submit();
    // driver.findElement(By.name('text')).sendKeys(Key.ENTER);
   });

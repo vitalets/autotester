@@ -3,7 +3,7 @@
  */
 
 const WebElement = require('selenium-webdriver/lib/webdriver').WebElement;
-const WebdriverError = require('../../error');
+const errors = require('../../errors');
 const Targets = require('../../targets');
 
 /**
@@ -96,9 +96,16 @@ exports.wait = function (ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
 
+/**
+ * Creates error meaning error in executed javascript
+ * @param {String} message
+ */
+exports.createError = function (message) {
+  return new errors.JavascriptError(message);
+};
+
 function checkThrownError(res) {
   if (res && res.wasThrown) {
-    const message = res.result.description || res.exceptionDetails.text;
-    throw new WebdriverError(WebdriverError.TYPES.JavaScriptError, message);
+    throw exports.createError(res.result.description || res.exceptionDetails.text);
   }
 }

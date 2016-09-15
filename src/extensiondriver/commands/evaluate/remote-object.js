@@ -3,7 +3,6 @@
  * Resolves useful value instead of entries like {"injectedScriptId":2,"id":1}
  */
 
-const WebdriverError = require('../../error');
 const helper = require('./helper');
 
 class RemoteObject {
@@ -47,7 +46,7 @@ class RemoteObject {
       case 'date':
         return this._resolveDate();
       case 'error':
-        return new WebdriverError(WebdriverError.TYPES.JavaScriptError, this._data.description);
+        return helper.createError(this._data.description);
       default:
         return this._resolvePlainObject();
     }
