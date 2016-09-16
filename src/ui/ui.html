@@ -8,16 +8,24 @@
     <span>Tests:</span>
     <select id="testlist"></select>
     <button id="run">Run</button>
-    <label id="no-quit-label"><input type="checkbox" id="no-quit">no quit</label>
+    <label id="no-quit-label"><input type="checkbox" id="no-quit">don't close testing tab</label>
     <div class="top-right">
         <span>Target:</span>
         <select id="targets"></select>
+        <i id="btn-settings" class="fa fa-cog fa-lg clickable"></i>
     </div>
 </div>
-<pre id="console" class="console"></pre>
-<pre id="report" class="report"></pre>
-<div id="mocha" class="report"></div>
+<div id="results">
+    <pre id="console" class="console"></pre>
+    <pre id="report" class="report"></pre>
+    <div id="mocha" class="report"></div>
+</div>
+<div id="snippets">
+</div>
+<div id="settings">
+</div>
 <script src="bootstrap.js"></script>
+<script src="assets.js"></script>
 <script src="bundle.js"></script>
 </body>
 </html>

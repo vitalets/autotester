@@ -1,3 +1,7 @@
+/*
+Color scheme: http://paletton.com/#uid=32P0u0kw0w0jyC+oRxVy4oIDfjr
+*/
+
 * {
     box-sizing: border-box;
 }
@@ -11,7 +15,7 @@ body {
     position: fixed;
     height: 30px;
     padding: 5px;
-    background-color: green;
+    background-color: #009E00;
     top: 0;
     left: 0;
     right: 0;
@@ -20,12 +24,16 @@ body {
     z-index: 10;
 }
 
-.top-panel a, .top-panel a:visited {
-    color: white;
+#btn-settings {
+    margin-left: 7px;
+}
+
+.clickable:hover {
+    color: #FF7400;
 }
 
 #no-quit-label {
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 #mocha-stats {

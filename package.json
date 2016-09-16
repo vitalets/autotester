@@ -34,7 +34,7 @@
     "no-only-in-test": "if [ \"$(git diff --cached -- 'test/**/*.js'| grep '\\+' | grep '\\.only')\" != \"\" ]; then exit 1; fi",
     "webpack": "webpack --config ./builder/webpack.config.js",
     "copy:manifest": "cpx -v src/manifest.json $npm_config_outdir/",
-    "copy:ui": "cpx -v 'src/ui/ui.{html,css}' $npm_config_outdir/core/ui/",
+    "copy:ui": "cpx -v 'src/ui/ui.html' $npm_config_outdir/core/ui/",
     "copy:mocha": "cpx -v 'node_modules/mocha/mocha.js' $npm_config_outdir/core/background/",
     "copy-unpacked-selftest": "node builder/cpx-unpacked-selftest.js copy",
     "copy-specs": "cpx -v 'test/specs/**' $npm_config_outdir/tests/",
@@ -63,6 +63,7 @@
     "check-dependencies": "^1.0.1",
     "chnl": "^0.2.3",
     "chromedriver": "^2.24.1",
+    "codemirror": "^5.18.2",
     "cpx": "^1.5.0",
     "crx": "^3.0.3",
     "css-loader": "^0.25.0",
@@ -72,6 +73,8 @@
     "eslint-plugin-mocha": "^4.5.1",
     "exports-loader": "^0.6.3",
     "express": "^4.14.0",
+    "file-loader": "^0.9.0",
+    "font-awesome": "^4.6.3",
     "fs-extra": "^0.30.0",
     "geckodriver": "^1.1.2",
     "ghooks": "^1.3.2",
@@ -94,6 +97,7 @@
     "serve-index": "^1.8.0",
     "style-loader": "^0.13.1",
     "then-chrome": "^1.0.5",
+    "url-loader": "^0.5.7",
     "webpack": "^1.13.2"
   },
   "config": {
