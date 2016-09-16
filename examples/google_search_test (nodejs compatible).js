@@ -1,6 +1,6 @@
 /**
- * Test is similar to own selenium from `selenium-webdriver/exampels/google_search_test.js`
- * But it can be executed via both Selenium webdriverjs or Autotester
+ * Test is the same as own selenium example from `selenium-webdriver/exampels/google_search_test.js`
+ * But Autotester can xecute it also.
  */
 
 var webdriver = require('selenium-webdriver'),
@@ -9,16 +9,16 @@ var webdriver = require('selenium-webdriver'),
     until = webdriver.until,
     test = require('selenium-webdriver/testing');
 
-test.describe('Google Search (selenium compatible)', function() {
+test.describe('Google Search (nodejs compatible)', function() {
   var driver;
 
   test.before(function() {
     driver = new webdriver.Builder()
-        .forBrowser('firefox') // 'firefox' here has no effect for Autotester, it will run in chrome anyway :)
+        .forBrowser('chrome')
         .build();
   });
 
-  test.it('should append query to title (selenium compatible)', function() {
+  test.it('should append query to title (nodejs compatible)', function() {
     driver.get('http://www.google.com');
     driver.findElement(By.name('q')).sendKeys('webdriver' + Key.ENTER);
     driver.wait(until.titleContains('webdriver'), 2000);
