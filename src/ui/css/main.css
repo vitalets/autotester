@@ -25,7 +25,9 @@ body {
 }
 
 #btn-settings {
-    margin-left: 7px;
+    margin: 0 5px;
+    font-size: 1.4em;
+    vertical-align: middle;
 }
 
 .clickable:hover {

@@ -2,7 +2,7 @@
  * Manage title text
  */
 
-const messaging = require('../background/messaging');
+const messaging = require('../../background/messaging');
 
 const TITLE_PREFIX = chrome.runtime.getManifest().name;
 

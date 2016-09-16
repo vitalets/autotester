@@ -2,6 +2,6 @@
  * Assets bundle
  */
 
-require('font-awesome/css/font-awesome.css');
 require('mocha/mocha.css');
-require('./ui.css');
+require('./css/icomoon.css');
+require('./css/main.css');

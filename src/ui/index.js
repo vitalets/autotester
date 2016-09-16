@@ -4,8 +4,8 @@
 
 const thenChrome = require('then-chrome');
 const messaging = require('../background/messaging');
-const title = require('./title');
-const api = require('./api');
+const title = require('./app/title');
+const api = require('./app/api');
 const smartUrlOpener = require('../utils/smart-url-opener');
 
 // todo: get from background via message or event
