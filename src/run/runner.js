@@ -35,10 +35,11 @@ const path = require('path');
 const promise = require('selenium-webdriver/lib/promise');
 const utils = require('../utils');
 const MochaRunner = require('./mocha-runner');
-const ScriptRunner = require('./script-runner');
+const FileRunner = require('./file-runner');
 const htmlReporter = require('../reporter/html');
 const globals = require('./globals');
 const localFs = require('../utils/local-fs');
+const engines = require('../engines');
 const logger = require('../utils/logger').create('Runner');
 
 class Runner {
@@ -48,6 +49,7 @@ class Runner {
   constructor() {
     this._localUrls = [];
     // todo: use custom flow
+    // todo2: dont use flow at all :)
     this._flow = promise.controlFlow();
   }
 
@@ -59,6 +61,7 @@ class Runner {
    * @param {String} params.localBaseDir base directory to save test-files
    * @param {Object} params.uiWindow
    * @param {Boolean} params.noQuit
+   * @param {String} params.engine
    */
   run(params) {
     // keep this abstraction if someday we will need run in iframe
@@ -66,7 +69,7 @@ class Runner {
     this._params = params;
 
     // todo: refactor - remove somewhere else
-    const Targets = require('../driver/targets');
+    const Targets = require('../extensiondriver/targets');
     Targets.dontCloseTabs = params.noQuit;
 
     return Promise.resolve()
@@ -104,13 +107,14 @@ class Runner {
   }
 
   _setupGlobals() {
-    globals.export(this._context, this._params.uiWindow);
+    globals.setGlobals(this._context, this._params.uiWindow);
+    engines[this._params.engine].setGlobals(this._context);
   }
 
   _runLocalUrls() {
     return this._localUrls.reduce((res, url) => {
       return res
-        .then(() => new ScriptRunner(url, this._context).run())
+        .then(() => new FileRunner(url, this._context).run())
     }, Promise.resolve());
   }
 

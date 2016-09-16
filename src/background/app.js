@@ -5,9 +5,11 @@
 const utils = require('../utils');
 const evaluate = require('../utils/evaluate');
 const messaging = require('./messaging');
-const run = require('../run');
 const storage = require('./storage');
 const specialUrlCatcher = require('./special-url-catcher');
+const Run = require('../run');
+const logger = require('../utils/logger').create('App');
+const targets = require('../background/targets');
 
 const {
   BG_LOAD_DONE,
@@ -63,26 +65,30 @@ class App {
    *
    * @param {Object} data
    * @param {String} data.selectedTest
+   * @param {String} data.targetId
    * @param {String} [data.noQuit]
    * @param {Array<{code, path}>} [data.files] special case to run custom files from ui window.runTests
    */
   _runTests(data) {
     // todo: refactor
     try {
-      const runnerOptions = {
+      const target = targets.get(data.targetId);
+
+      const run = new Run({
         uiWindow: getUiWindow(),
-        baseUrl: storage.get('baseUrl'),
         noQuit: data.noQuit,
-      };
+        engine: 'selenium',
+        target: target,
+      });
 
       let runnerPromise;
       if (data.files) {
-        runnerPromise = run.runSnippets(data.files, runnerOptions);
+        runnerPromise = run.runSnippets(data.files);
       } else {
         const tests = this._testsConfig.tests.filter(test => !data.selectedTest || test === data.selectedTest);
         const setup = this._testsConfig.setup;
         const files = setup.concat(tests);
-        runnerPromise = run.runRemoteFiles(files, runnerOptions);
+        runnerPromise = run.runRemoteFiles(files, storage.get('baseUrl'));
       }
       runnerPromise
         .then(() => {

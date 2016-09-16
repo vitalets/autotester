@@ -38,6 +38,16 @@ test.describe('show errors', function () {
       })
     });
 
+    test.it('should show Webdriver error', function () {
+      runCode(`
+        const driver = new Driver();
+        driver.findElement({css: 'abc'});
+      `);
+      getConsoleLines().then(lines => {
+        assert(lines[0]).equalTo('NoSuchElementError: Element not found by abc');
+      })
+    });
+
   });
 
   test.describe('with test-runner', function () {
@@ -86,6 +96,24 @@ test.describe('show errors', function () {
       getMochaErrorLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
         assert(lines[1]).equalTo('at driver.call (snippets/test.js:7:15)');
+      })
+    });
+
+    test.it('should show Webdriver error', function () {
+      runCode(`
+        test.describe('suite', function () {
+          let driver;
+          test.it('test', function () {
+            driver = new Driver();
+            driver.findElement({css: 'abc'});
+          })
+          test.after(function () {
+            driver.quit();
+          })
+        })
+      `);
+      getMochaErrorLines().then(lines => {
+        assert(lines[0]).equalTo('NoSuchElementError: Element not found by abc');
       })
     });
 

@@ -1,28 +1,21 @@
 /**
- * Globals available in tests
+ * Base globals available in tests.
+ * Can be extended by engine specific globals
  */
 
 const Channel = require('chnl');
-const seleniumAssert = require('selenium-webdriver/testing/assert');
-const webdriver = require('./selenium-webdriver');
-const seleniumTesting = require('./selenium-testing');
-const Driver = require('../driver');
-const fakeRequire = require('./fake-require');
 
-exports.export = function (target, uiWindow) {
-  Object.assign(target, {
-    // webdriver
-    Driver: Driver,
-    By: webdriver.By,
-    Key: webdriver.Key,
-    until: webdriver.until,
-    // for running tests
-    test: seleniumTesting,
-    assert: seleniumAssert,
-    // for custom user data
+/**
+ * Set globals to context
+ *
+ * @param {Object} context
+ * @param {Object} uiWindow
+ */
+exports.setGlobals = function (context, uiWindow) {
+  Object.assign(context, {
     runContext: {},
-    // for running selenium tests as is
-    require: fakeRequire,
+    // for running tests writen for node
+    require: require('./fake-require').getFn(),
     // for debug
     uiConsole: uiWindow.sharedConsole,
     // for custom reporting
@@ -33,13 +26,14 @@ exports.export = function (target, uiWindow) {
 };
 
 /**
- * Clear some keys
+ * Clear keys before each session
+ * Especially global `require` breaks loading mocha
  *
- * @param {Window} target
+ * @param {Window} context
  */
-exports.clear = function (target) {
-  delete target.runContext;
-  delete target.require;
-  delete target.uiConsole;
-  delete target.__onTestFileError;
+exports.clear = function (context) {
+  delete context.runContext;
+  delete context.require;
+  delete context.uiConsole;
+  delete context.__onTestFileError;
 };

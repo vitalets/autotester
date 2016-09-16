@@ -3,8 +3,8 @@
  */
 
 const utils = require('../utils');
-const seleniumTesting = require('./selenium-testing');
 const logger = require('../utils/logger').create('Mocha-runner');
+
 
 const MOCHA_PATH = 'core/background/mocha.js';
 const DEFAULT_OPTIONS = {
@@ -38,7 +38,6 @@ class MochaRunner {
       .then(() => this._load())
       .then(() => {
         this._getMocha().setup(this._mochaOptions);
-        seleniumTesting.wrapMochaGlobals(this._context);
         logger.log('Mocha loaded and ready');
       })
   }

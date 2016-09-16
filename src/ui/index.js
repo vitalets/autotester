@@ -8,6 +8,9 @@ const title = require('./title');
 const api = require('./api');
 const smartUrlOpener = require('../utils/smart-url-opener');
 
+// todo: get from background via message or event
+const targets = require('../background/targets');
+
 const {
   BG_LOAD_DONE,
   LOAD_TESTS_CONFIG,
@@ -36,6 +39,8 @@ function start() {
 
   loadConfig();
 
+  fillTargets();
+
   // for programmatic run
   // todo: move to api
   window.runTests = runTests;
@@ -55,6 +60,7 @@ function runTests(files) {
   window.report.innerHTML = '';
   const eventData = {
     files,
+    targetId: document.getElementById('targets').value,
     selectedTest: document.getElementById('testlist').value,
     noQuit: document.getElementById('no-quit').checked
   };
@@ -112,6 +118,15 @@ function onTestsDone() {
 
 function onTestSelected(event) {
   messaging.send(SELECT_TEST, {name: event.target.value});
+}
+
+function fillTargets() {
+  const el = document.getElementById('targets');
+  el.options.length = 0;
+  targets.getAll().forEach((target, index) => {
+    const option = new Option(target.name, index, false);
+    return el.options[el.options.length] = option;
+  });
 }
 
 function welcome() {

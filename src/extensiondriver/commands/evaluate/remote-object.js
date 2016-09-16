@@ -1,0 +1,91 @@
+/**
+ * Wrapper around debugger RemoteObject result
+ * Resolves useful value instead of entries like {"injectedScriptId":2,"id":1}
+ */
+
+const helper = require('./helper');
+
+class RemoteObject {
+  constructor(data) {
+    this._data = data;
+  }
+
+  /**
+   * Resolves remote object into actual value
+   *
+   * @returns {*|Promise}
+   */
+  value() {
+    return this._resolveByType();
+  }
+  _resolveByType() {
+    switch (this._data.type) {
+      case 'object':
+        return this._resolveBySubtype();
+      case 'function':
+        return this._data.description;
+      case 'undefined':
+        return null;
+      case 'string':
+      case 'number':
+      case 'boolean':
+      default:
+        return this._data.value;
+    }
+  }
+  _resolveBySubtype() {
+    switch (this._data.subtype) {
+      case 'array':
+        return this._resolveArray();
+      case 'null':
+        return null;
+      case 'node':
+        return this._resolveNode();
+      case 'regexp':
+        return this._resolveRegexp();
+      case 'date':
+        return this._resolveDate();
+      case 'error':
+        return helper.createError(this._data.description);
+      default:
+        return this._resolvePlainObject();
+    }
+  }
+  _resolveArray() {
+    return helper.getOwnProperties(this._data.objectId)
+      .then(props => {
+        const tasks = props
+          // keep only props that are indexes
+          .filter(prop => !Number.isNaN(Number(prop.name)))
+          .map(prop => new RemoteObject(prop.value).value());
+        return Promise.all(tasks);
+      });
+  }
+  _resolveNode() {
+    return helper.getWebElement(this._data.objectId);
+  }
+  _resolveRegexp() {
+    throw new Error('_resolveRegexp not implemented yet');
+  }
+  _resolveDate() {
+    throw new Error('_resolveDate not implemented yet');
+  }
+  _resolvePlainObject() {
+    return helper.getOwnProperties(this._data.objectId)
+      .then(props => {
+        const tasks = props
+          // keep only props that are enumerable (Object.keys())
+          .filter(prop => prop.enumerable)
+          .map(prop => new RemoteObject(prop.value).value());
+        return Promise.all(tasks)
+          .then(results => {
+            return props.reduce((out, prop, index) => {
+              out[prop.name] = results[index];
+              return out;
+            }, {});
+          })
+      });
+  }
+}
+
+module.exports = RemoteObject;
