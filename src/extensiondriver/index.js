@@ -44,11 +44,8 @@ function bodyParser(req) {
 
 function formatSuccess(result) {
   const data = {
-    state: 'success',
     sessionId: Targets.SESSION_ID,
     value: result !== undefined ? result : null,
-    // dont send status as it is selenium legacy and not in spec
-    // status: 0
   };
   return {
     statusCode: 200,
@@ -65,16 +62,10 @@ function formatError(e) {
 function formatWebDriverError(e) {
   const errorObj = errors.encodeError(e);
   const data = {
-    state: errorObj.error,
+    error: errorObj.error,
+    message: errorObj.message,
+    stacktrace: e.stack,
     sessionId: Targets.SESSION_ID,
-    value: {
-      class: e.name,
-      message: errorObj.message,
-      localizedMessage: errorObj.message,
-      stackTrace: e.stack.split('\n'),
-    },
-    // dont send status as it is selenium legacy and not in spec
-    // status: errors.getLegacyCode(e)
   };
   return {
     statusCode: 500,
