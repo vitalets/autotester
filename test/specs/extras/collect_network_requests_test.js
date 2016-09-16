@@ -118,7 +118,7 @@ test.suite(function(env) {
       }, test.Pages.simpleTestPage);
       driver.requests().collect();
       const oldHandles = driver.getAllWindowHandles();
-      driver.findElement({id: 'newtablink'}).click();
+      driver.wait(until.elementLocated({id: 'newtablink'}), 1000).click();
       // delay needed for newtab to open
       driver.sleep(200);
       driver.requests().stop();

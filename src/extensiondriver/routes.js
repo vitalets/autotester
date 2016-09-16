@@ -24,12 +24,14 @@ exports.initRouter = function (router) {
   router.get('/session/:sessionId/title', navigation.getTitle);
 
   router.post('/session/:sessionId/element', elementSearch.findElement);
+  router.post('/session/:sessionId/elements', elementSearch.findElements);
   router.post('/session/:sessionId/element/:id/value', keyboard.sendKeysToElement);
   router.get('/session/:sessionId/element/:id/name', element.getElementTagName);
   router.get('/session/:sessionId/element/:id/text', element.getElementText);
   router.post('/session/:sessionId/element/:id/click', mouse.clickElement);
   router.post('/session/:sessionId/element/:id/submit', element.submit);
   router.post('/session/:sessionId/element/:id/element', elementSearch.findChildElement);
+  router.post('/session/:sessionId/element/:id/elements', elementSearch.findChildElements);
 
   router.post('/session/:sessionId/execute', evaluate.execute);
   router.post('/session/:sessionId/execute_async', evaluate.executeAsync);
@@ -40,12 +42,12 @@ exports.initRouter = function (router) {
   router.get('/session/:sessionId/window_handle', windowCommand.getCurrentWindowHandle);
   router.get('/session/:sessionId/window_handles', windowCommand.getAllWindowHandles);
 
-  // extra autotester routes
-  router.post('/session/:sessionId/newtab', switchTo.newTab);
-  router.post('/session/:sessionId/extension', switchTo.extension);
+  // extra autotester routes: live over `autotester` vendor prefix
+  router.post('/session/:sessionId/autotester/newtab', switchTo.newTab);
+  router.post('/session/:sessionId/autotester/extension', switchTo.extension);
 
-  router.put('/session/:session/requests', requests.collect);
-  router.del('/session/:session/requests', requests.stop);
-  router.post('/session/:session/requests', requests.get);
+  router.put('/session/:session/autotester/requests', requests.collect);
+  router.del('/session/:session/autotester/requests', requests.stop);
+  router.post('/session/:session/autotester/requests', requests.get);
 };
 

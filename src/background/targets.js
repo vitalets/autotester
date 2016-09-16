@@ -33,7 +33,7 @@ const hubs = [
     }
   },
   {
-    id: 'local',
+    id: 'localhost',
     serverUrl: 'http://localhost:4444/wd/hub',
     caps: {
       'browserName': 'chrome'
@@ -63,19 +63,19 @@ const targets = [
     name: 'This chrome'
   },
   {
-    hubId: 'local',
-    name: 'Local (chrome)',
+    hubId: 'localhost',
+    name: 'Localhost grid (chrome)',
   },
   {
-    hubId: 'local',
-    name: 'Local (firefox)',
+    hubId: 'localhost',
+    name: 'Localhost grid (firefox)',
     caps: {
       'browserName': 'firefox'
     }
   },
   {
     hubId: 'yandex',
-    name: 'Yandex selenium (chrome 51, linux)',
+    name: 'Yandex grid (chrome 51, linux)',
     caps: {
       'platform': 'LINUX',
       'version' : '51.0',
@@ -83,7 +83,7 @@ const targets = [
   },
   {
     hubId: 'yandex',
-    name: 'Yandex selenium (chrome 53, win7)',
+    name: 'Yandex grid (chrome 53, win7)',
     caps: {
       'platform': 'WINDOWS',
       'version' : '53.0',

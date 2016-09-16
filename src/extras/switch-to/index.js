@@ -22,8 +22,8 @@ exports.setup = function () {
 };
 
 function registerCommands() {
-  engines.selenium.registerCommand(commands.SWITCH_TO_NEW_TAB, 'POST', '/session/:sessionId/newtab');
-  engines.selenium.registerCommand(commands.SWITCH_TO_EXTENSION, 'POST', '/session/:sessionId/extension');
+  engines.selenium.registerCommand(commands.SWITCH_TO_NEW_TAB, 'POST', '/session/:sessionId/autotester/newtab');
+  engines.selenium.registerCommand(commands.SWITCH_TO_EXTENSION, 'POST', '/session/:sessionId/autotester/extension');
 }
 
 function addNewtabMethod() {
