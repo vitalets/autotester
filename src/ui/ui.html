@@ -12,7 +12,7 @@
     <div class="top-right">
         <span>Target:</span>
         <select id="targets"></select>
-        <span id="btn-settings" class="icon-cog clickable"></span>
+        <span id="btn-show-settings" class="icon-cog clickable"></span>
     </div>
 </div>
 <div id="results">
@@ -21,8 +21,31 @@
     <div id="mocha" class="report"></div>
 </div>
 <div id="snippets">
+    <h3>Snippets</h3>
 </div>
 <div id="settings">
+    <h3>Settings</h3>
+    <div>
+        <h4>Tests source</h4>
+        <div>
+            <label>
+                <input type="radio" name="testSource" value="snippets"/>
+                Snippets
+            </label>
+            <label>
+                <input type="radio" name="testSource" value="url"/>
+                <span>URL</span>
+                <input type="text" style="width: 200px">
+            </label>
+            <label>
+                <input type="radio" name="testSource" value="extension"/>
+                Extension-self
+            </label>
+        </div>
+        <div>
+            <button id="btn-save-settings">Save</button>
+        </div>
+    </div>
 </div>
 <script src="bootstrap.js"></script>
 <script src="assets.js"></script>

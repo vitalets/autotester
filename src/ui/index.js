@@ -20,11 +20,18 @@ const {
   LOAD_TESTS_CONFIG_DONE,
 } = messaging.names;
 
+const state = {
+  panel: 'snippets'
+};
+
+
 start();
 
 function start() {
   document.getElementById('run').addEventListener('click', () => runTests());
   document.getElementById('testlist').addEventListener('change', onTestSelected);
+  document.getElementById('btn-show-settings').addEventListener('click', () => setVisiblePanel('settings'));
+  document.getElementById('btn-save-settings').addEventListener('click', () => setVisiblePanel('snippets'));
 
   smartUrlOpener.listen();
   title.setListeners();
@@ -40,6 +47,8 @@ function start() {
   loadConfig();
 
   fillTargets();
+
+  setVisiblePanel(state.panel);
 
   // for programmatic run
   // todo: move to api
@@ -138,4 +147,13 @@ function welcome() {
     `[extensions-on-chrome-urls](chrome://flags#extensions-on-chrome-urls) - to allow testing other chrome extensions`,
   ].join('');
   htmlConsole.log(msg);
+}
+
+function setVisiblePanel(panelId) {
+  state.panel = panelId;
+  const ids = ['results', 'snippets', 'settings'];
+  document.getElementById(panelId).style.display = 'block';
+  ids.filter(id => id !== panelId).forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  })
 }

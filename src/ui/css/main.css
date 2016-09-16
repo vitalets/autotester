@@ -24,7 +24,7 @@ body {
     z-index: 10;
 }
 
-#btn-settings {
+#btn-show-settings {
     margin: 0 5px;
     font-size: 1.4em;
     vertical-align: middle;
@@ -47,25 +47,6 @@ body {
     padding-top: 5px;
 }
 
-#infoblock {
-    padding: 5px;
-    border: solid 1px black;
-    color: black;
-    font-size: 1.3em;
-    display: none;
-    white-space: pre-wrap;
-}
-
-#infoblock.success {
-    border-color: green;
-    color: green;
-}
-
-#infoblock.error {
-    border-color: red;
-    color: red;
-}
-
 .top-right {
     position: absolute;
     top: 5px;
@@ -76,34 +57,18 @@ body {
     font-size: 13px;
 }
 
-.console {
-    overflow: auto;
-    border: solid 1px #e1e1e8;
-    padding: 9px 14px;
-    background-color: #f7f7f9;
-    border-radius: 4px;
-    font-size: 13px;
-    color: #333;
-    max-height: 200px;
+#snippets {
+    display: none;
 }
 
-.console p, .console ul {
-    margin: 0 0 7px 0;
-    padding: 0;
+#snippets {
+    display: none;
 }
 
-.console .log {
-    color: #333;
+#settings {
+    display: none;
 }
 
-.console .info {
-    color: #0066ff;
-}
-
-.console .warn {
-    color: #E67E22;
-}
-
-.console .error {
-    color: #cc0000;
+#settings label {
+    display: block;
 }
