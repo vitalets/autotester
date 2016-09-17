@@ -5,94 +5,7 @@
     <script src="assets.js"></script>
 </head>
 <body>
-
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">
-
-            <span style="margin-right: 5px" class="mdl-layout-title">Tests:</span>
-
-            <div style="margin: 0 8px" class="mdl-textfield mdl-js-textfield getmdl-select">
-                <input class="mdl-textfield__input" value="Belarus" type="text" id="country" readonly tabIndex="-1" data-val="BLR"/>
-
-                <label for="country">
-                    <i style="color: white" class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
-                </label>
-
-                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="country">
-                    <li class="mdl-menu__item" data-val="BLR">Belarus</li>
-                    <li class="mdl-menu__item" data-val="RUS">Russia</li>
-                </ul>
-            </div>
-
-
-            <button id="run" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                <span>Run</span>
-            </button>
-
-            <div class="mdl-layout-spacer"></div>
-
-            <span style="margin-right: 5px" class="mdl-layout-title">Target:</span>
-
-            <div style="margin: 0 8px" class="mdl-textfield mdl-js-textfield getmdl-select">
-                <input class="mdl-textfield__input" value="Belarus" type="text" id="country2" readonly tabIndex="-1" data-val="BLR"/>
-
-                <label for="country2">
-                    <i style="color: white" class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
-                </label>
-
-                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="country2">
-                    <li class="mdl-menu__item" data-val="BLR">Belarus</li>
-                    <li class="mdl-menu__item" data-val="RUS">Russia</li>
-                </ul>
-            </div>
-
-        </div>
-    </header>
-    <main class="mdl-layout__content">
-        <div class="page-content">
-
-            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-                <div class="mdl-tabs__tab-bar" style="justify-content: flex-start;">
-                    <a href="#starks-panel" class="mdl-tabs__tab is-active">Sources</a>
-                    <a href="#lannisters-panel" class="mdl-tabs__tab">Report</a>
-                    <a href="#targaryens-panel" class="mdl-tabs__tab" style="margin-left: auto">Settings</a>
-                </div>
-
-                <div class="mdl-tabs__panel is-active" id="starks-panel">
-                    <ul>
-                        <li>Eddard</li>
-                        <li>Catelyn</li>
-                        <li>Robb</li>
-                        <li>Sansa</li>
-                        <li>Brandon</li>
-                        <li>Arya</li>
-                        <li>Rickon</li>
-                    </ul>
-                </div>
-                <div class="mdl-tabs__panel" id="lannisters-panel">
-                    <ul>
-                        <li>Tywin</li>
-                        <li>Cersei</li>
-                        <li>Jamie</li>
-                        <li>Tyrion</li>
-                    </ul>
-                </div>
-                <div class="mdl-tabs__panel" id="targaryens-panel">
-                    <ul>
-                        <li>Viserys</li>
-                        <li>Daenerys</li>
-                    </ul>
-                </div>
-            </div>
-
-
-
-        </div>
-    </main>
-</div>
-
-
+<div id="app"></div>
 
 <!--
 <div class="top-panel">
@@ -141,7 +54,7 @@
     </div>
 </div>
 -->
-<script src="bootstrap.js"></script>
+<!--<script src="bootstrap.js"></script>-->
 <script src="bundle.js"></script>
 </body>
 </html>

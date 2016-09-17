@@ -3,6 +3,8 @@
  */
 
 const thenChrome = require('then-chrome');
+// const React = require('react');
+const ReactDOM = require('react-dom');
 const messaging = require('../background/messaging');
 const title = require('./app/title');
 const api = require('./app/api');
@@ -11,6 +13,8 @@ const CodeMirror = require('codemirror');
 require('codemirror/mode/javascript/javascript');
 require('material-design-lite/material.js');
 require('getmdl-select/getmdl-select.min.js');
+
+const Layout = require('./components/layout.jsx');
 
 // todo: get from background via message or event
 const targets = require('../background/targets');
@@ -28,8 +32,13 @@ const state = {
   panel: 'snippets'
 };
 
+ReactDOM.render(
+  <Layout/>,
+  document.getElementById('app')
+);
 
-start();
+
+//start();
 
 function start() {
   document.getElementById('run').addEventListener('click', () => runTests());
