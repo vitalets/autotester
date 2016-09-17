@@ -49,6 +49,17 @@ body {
     width: auto;
 }
 
+.getmdl-select ul li {
+    height: auto;
+    line-height: inherit;
+}
+
+.getmdl-select .mdl-icon-toggle__label, .getmdl-select.is-focused .mdl-icon-toggle__label {
+    color: white;
+}
+
+
+
 .top-panel {
     position: fixed;
     height: 30px;

@@ -41,6 +41,7 @@ module.exports = {
     // to not require('react') in every module
     new webpack.ProvidePlugin({
       'React': 'react',
+      'classNames': 'classnames',
     }),
     // todo: for prod builds
     /*
