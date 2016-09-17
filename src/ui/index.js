@@ -3,7 +3,6 @@
  */
 
 const thenChrome = require('then-chrome');
-// const React = require('react');
 const ReactDOM = require('react-dom');
 const messaging = require('../background/messaging');
 const title = require('./app/title');
@@ -13,7 +12,6 @@ const CodeMirror = require('codemirror');
 require('codemirror/mode/javascript/javascript');
 require('material-design-lite/material.js');
 require('getmdl-select/getmdl-select.min.js');
-
 const Layout = require('./components/layout.jsx');
 
 // todo: get from background via message or event
@@ -27,6 +25,9 @@ const {
   SELECT_TEST,
   LOAD_TESTS_CONFIG_DONE,
 } = messaging.names;
+
+// const uiStore = require('./stores/ui').store;
+// setTimeout(() => uiStore.activeTabId = 'settings', 2000);
 
 const state = {
   panel: 'snippets'
