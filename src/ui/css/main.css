@@ -1,51 +1,14 @@
-/*
-Color scheme: http://paletton.com/#uid=32P0u0kw0w0jyC+oRxVy4oIDfjr
-*/
-
-/** {*/
-    /*box-sizing: border-box;*/
-/*}*/
-/*
-body {
-    margin: 35px 5px 5px 5px;
-    font-family: Verdana, sans-serif;
-}
-*/
-
-@font-face {
-    font-family: 'Material Icons';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Material Icons'),
-         local('MaterialIcons-Regular'),
-         url(../fonts/MaterialIcons-Regular.woff) format('woff')
-}
-
-.material-icons {
-    font-family: 'Material Icons';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;  /* Preferred icon size */
-    display: inline-block;
-    line-height: 1;
-    text-transform: none;
-    letter-spacing: normal;
-    word-wrap: normal;
-    white-space: nowrap;
-    direction: ltr;
-
-    /* Support for all WebKit browsers. */
-    -webkit-font-smoothing: antialiased;
-    /* Support for Safari and Chrome. */
-    text-rendering: optimizeLegibility;
-}
-
 
 .mdl-layout__header-row {
     padding: 0 10px;
 }
 
-.mdl-textfield {
+.mdl-layout__header-row > * {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.getmdl-select {
     width: auto;
 }
 
@@ -54,9 +17,19 @@ body {
     line-height: inherit;
 }
 
-.getmdl-select .mdl-icon-toggle__label, .getmdl-select.is-focused .mdl-icon-toggle__label {
-    color: white;
+.getmdl-select.is-focused .mdl-icon-toggle__label {
+    color: rgb(255,82,82);
 }
+
+.mdl-textfield__input {
+    cursor: pointer;
+    background-color: white;
+    color: rgba(0,0,0,.87);
+    padding: 4px 6px;
+    border-radius: 4px;
+}
+
+
 
 
 
