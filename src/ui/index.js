@@ -7,6 +7,10 @@ const messaging = require('../background/messaging');
 const title = require('./app/title');
 const api = require('./app/api');
 const smartUrlOpener = require('../utils/smart-url-opener');
+const CodeMirror = require('codemirror');
+require('codemirror/mode/javascript/javascript');
+require('material-design-lite/material.js');
+require('getmdl-select/getmdl-select.min.js');
 
 // todo: get from background via message or event
 const targets = require('../background/targets');
@@ -49,6 +53,19 @@ function start() {
   fillTargets();
 
   setVisiblePanel(state.panel);
+
+  const editor = CodeMirror(document.getElementById('code'), {
+    lineNumbers: true,
+    mode: 'javascript',
+  });
+
+  editor.doc.setValue(`function myScript() {
+    return 100;
+  }`);
+
+  editor.on('changes', (a, b) => {
+    console.log(editor.doc.getValue());
+  });
 
   // for programmatic run
   // todo: move to api
