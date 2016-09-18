@@ -40,8 +40,7 @@ module.exports = {
     new webpack.NormalModuleReplacementPlugin(/./, webpackAlias.newResource),
     // to not require('react') in every module
     new webpack.ProvidePlugin({
-      'React': 'react',
-      'classNames': 'classnames',
+      'React': 'react'
     }),
     // todo: for prod builds
     /*

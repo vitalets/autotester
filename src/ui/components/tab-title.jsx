@@ -1,4 +1,5 @@
 const {observer} = require('mobx-react');
+const classNames = require('classnames');
 const uiStore = require('../stores/ui').store;
 
 module.exports = observer(class TabTitle extends React.Component {

@@ -29,6 +29,11 @@
     border-radius: 4px;
 }
 
+.mdl-layout__content {
+    padding: 10px;
+}
+
+
 .hidden {
     display: none;
 }
