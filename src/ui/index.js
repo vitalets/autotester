@@ -5,7 +5,6 @@
 const thenChrome = require('then-chrome');
 const ReactDOM = require('react-dom');
 const messaging = require('../background/messaging');
-const title = require('./app/title');
 const api = require('./app/api');
 const smartUrlOpener = require('../utils/smart-url-opener');
 const CodeMirror = require('codemirror');
@@ -13,6 +12,8 @@ require('codemirror/mode/javascript/javascript');
 require('material-design-lite/material.js');
 require('getmdl-select/getmdl-select.min.js');
 const Layout = require('./components/layout.jsx');
+const store = require('./store').store;
+const {APP_STATE} = require('./store/constants');
 
 // todo: get from background via message or event
 const targets = require('../background/targets');
@@ -31,14 +32,14 @@ ReactDOM.render(
   document.getElementById('app')
 );
 
-console.log('rendered');
+store.appState = APP_STATE.READY;
+
 
 //start();
 
 function start() {
 
   smartUrlOpener.listen();
-  title.setListeners();
   messaging.start();
   api.setup();
 

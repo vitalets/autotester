@@ -1,7 +1,7 @@
 
 const keyMirror = require('keymirror');
 
-exports.TABS = keyMirror({
+exports.TAB = keyMirror({
   SOURCES: null,
   REPORT: null,
   SETTINGS: null,
