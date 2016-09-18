@@ -14,4 +14,5 @@ module.exports = {
   activeTabId: TAB.SOURCES,
   testsSourceType: TESTS_SOURCE_TYPE.SNIPPETS,
   testsSourceUrl: '',
+  error: '',
 };

@@ -8,13 +8,13 @@ module.exports = {
     'core/background/bundle': './src/background/',
     'core/background/bootstrap': './src/background/bootstrap/',
     'core/ui/bundle': './src/ui/',
-    'core/ui/boot': './src/ui/boot',
     'core/ui/assets': './src/ui/assets',
   },
   output: {
     path: process.env.npm_config_outdir,
     filename: '[name].js',
-    sourceMapFilename: '[file].map'
+    chunkFilename: '[name].js',
+    sourceMapFilename: '[file].map',
   },
   resolve: {
     extensions: ['', '.js', '.jsx']
