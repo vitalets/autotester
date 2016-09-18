@@ -3,6 +3,21 @@
  */
 
 const mobx = require('mobx');
+const uiConstants = require('./constants');
+const bgConstants = require('../../background/constants');
+
+const {TABS} = uiConstants;
+const {TESTS_SOURCE_TYPES} = bgConstants;
+
+const initialData = {
+  activeTabId: TABS.SOURCES,
+  tests: [],
+  selectedTest: '',
+  targets: [],
+  selectedTarget: '',
+  testsSourceType: TESTS_SOURCE_TYPES.SNIPPETS,
+  testsSourceUrl: '',
+};
 
 let store = null;
 
@@ -16,9 +31,7 @@ module.exports = {
 };
 
 function createStore() {
-  return mobx.observable({
-    activeTabId: 'sources',
-  });
+  return mobx.observable(initialData);
 }
 
 

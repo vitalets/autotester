@@ -29,10 +29,6 @@ const {
 // const uiStore = require('./stores/ui').store;
 // setTimeout(() => uiStore.activeTabId = 'settings', 2000);
 
-const state = {
-  panel: 'snippets'
-};
-
 ReactDOM.render(
   <Layout/>,
   document.getElementById('app')
@@ -42,10 +38,6 @@ ReactDOM.render(
 //start();
 
 function start() {
-  document.getElementById('run').addEventListener('click', () => runTests());
-  document.getElementById('testlist').addEventListener('change', onTestSelected);
-  document.getElementById('btn-show-settings').addEventListener('click', () => setVisiblePanel('settings'));
-  document.getElementById('btn-save-settings').addEventListener('click', () => setVisiblePanel('snippets'));
 
   smartUrlOpener.listen();
   title.setListeners();
@@ -174,13 +166,4 @@ function welcome() {
     `[extensions-on-chrome-urls](chrome://flags#extensions-on-chrome-urls) - to allow testing other chrome extensions`,
   ].join('');
   htmlConsole.log(msg);
-}
-
-function setVisiblePanel(panelId) {
-  state.panel = panelId;
-  const ids = ['results', 'snippets', 'settings'];
-  document.getElementById(panelId).style.display = 'block';
-  ids.filter(id => id !== panelId).forEach(id => {
-    document.getElementById(id).style.display = 'none';
-  })
 }

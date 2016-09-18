@@ -8,7 +8,7 @@ module.exports = {
     'core/background/bundle': './src/background/',
     'core/background/bootstrap': './src/background/bootstrap/',
     'core/ui/bundle': './src/ui/',
-    'core/ui/bootstrap': './src/ui/bootstrap',
+    'core/ui/boot': './src/ui/boot',
     'core/ui/assets': './src/ui/assets',
   },
   output: {

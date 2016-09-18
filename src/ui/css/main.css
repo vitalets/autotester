@@ -38,34 +38,6 @@
     display: none;
 }
 
-
-.top-panel {
-    position: fixed;
-    height: 30px;
-    padding: 5px;
-    background-color: #009E00;
-    top: 0;
-    left: 0;
-    right: 0;
-    border-bottom: solid 1px lightgray;
-    color: white;
-    z-index: 10;
-}
-
-#btn-show-settings {
-    margin: 0 5px;
-    font-size: 1.4em;
-    vertical-align: middle;
-}
-
-.clickable:hover {
-    color: #FF7400;
-}
-
-#no-quit-label {
-    margin-left: 10px;
-}
-
 #mocha-stats {
     top: 55px;
 }
@@ -73,30 +45,4 @@
 #mocha {
     margin: 0;
     padding-top: 5px;
-}
-
-.top-right {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-}
-
-.report {
-    font-size: 13px;
-}
-
-#snippets {
-    display: none;
-}
-
-#snippets {
-    display: none;
-}
-
-#settings {
-    display: none;
-}
-
-#settings label {
-    display: block;
 }
