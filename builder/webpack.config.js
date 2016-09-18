@@ -5,10 +5,10 @@ const webpackAlias = require('./webpack-alias');
 
 module.exports = {
   entry: {
+    'core/background/boot': './src/background/boot/',
     'core/background/bundle': './src/background/',
-    'core/background/bootstrap': './src/background/bootstrap/',
-    'core/ui/bundle': './src/ui/',
     'core/ui/assets': './src/ui/assets',
+    'core/ui/bundle': './src/ui/',
   },
   output: {
     path: process.env.npm_config_outdir,

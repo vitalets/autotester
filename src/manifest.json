@@ -22,7 +22,7 @@
   "background": {
     "scripts": [
       "core/build-info.js",
-      "core/background/bootstrap.js",
+      "core/background/boot.js",
       "core/background/bundle.js"
     ],
     "persistent": true
