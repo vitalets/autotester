@@ -26,14 +26,12 @@ const {
   LOAD_TESTS_CONFIG_DONE,
 } = messaging.names;
 
-// const uiStore = require('./stores/ui').store;
-// setTimeout(() => uiStore.activeTabId = 'settings', 2000);
-
 ReactDOM.render(
   <Layout/>,
   document.getElementById('app')
 );
 
+console.log('rendered');
 
 //start();
 
