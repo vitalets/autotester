@@ -4,12 +4,12 @@ const store = require('../store').store;
 
 module.exports = observer(class TabTitle extends React.Component {
   handleClick() {
-    store.activeTabId = this.props.id;
+    store.selectedTab = this.props.id;
   }
 
   render() {
     const props = this.props;
-    const isActive = store.activeTabId === props.id;
+    const isActive = store.selectedTab === props.id;
     const className = classNames('mdl-tabs__tab', {'is-active': isActive});
     return (
       <a href={`#${props.id}`} className={className} style={props.style} onClick={e => this.handleClick(e)}>

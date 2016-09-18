@@ -2,23 +2,19 @@
  * This singleton store contains information about UI state
  */
 
-const mobx = require('mobx');
-const defaults = require('./defaults');
+const fields = require('./fields');
+const Store = require('./store');
 
 let store = null;
 
 module.exports = {
   get store() {
     if (!store) {
-      store = createStore();
+      store = new Store(fields);
     }
     return store;
   }
 };
-
-function createStore() {
-  return mobx.observable(defaults);
-}
 
 
 /*

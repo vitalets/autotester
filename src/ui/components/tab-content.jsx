@@ -3,7 +3,7 @@ const classNames = require('classnames');
 const store = require('../store').store;
 
 module.exports = observer(function TabContent(props) {
-  const isActive = store.activeTabId === props.id;
+  const isActive = store.selectedTab === props.id;
   const className = classNames({'hidden': !isActive});
   return (
     <div className={className}>{props.children}</div>

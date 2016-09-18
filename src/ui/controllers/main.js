@@ -2,19 +2,20 @@
  * Main ui file
  */
 
+const thenChrome = require('then-chrome');
 const store = require('../store').store;
 const {APP_STATE} = require('../store/constants');
 
 module.exports = class Main {
   run() {
-    console.log(store.appState);
-    store.appState = APP_STATE.READY;
+    store.load()
+      .then(() => store.appState = APP_STATE.READY);
   }
 };
 
 /*
 
-const thenChrome = require('then-chrome');
+
 const messaging = require('../background/messaging');
 const api = require('./app/api');
 const smartUrlOpener = require('../utils/smart-url-opener');
