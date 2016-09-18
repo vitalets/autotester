@@ -5,9 +5,11 @@
 const store = require('../store').store;
 const {APP_STATE} = require('../store/constants');
 
-exports.run = function() {
-  console.log(store.appState);
-  store.appState = APP_STATE.READY;
+module.exports = class Main {
+  run() {
+    console.log(store.appState);
+    store.appState = APP_STATE.READY;
+  }
 };
 
 /*

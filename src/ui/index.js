@@ -6,7 +6,7 @@ const ReactDOM = require('react-dom');
 require('material-design-lite/material');
 require('getmdl-select/getmdl-select.min');
 const Layout = require('./components/layout');
-const errors = require('./app/errors');
+const errors = require('./controllers/errors');
 const smartUrlOpener = require('../utils/smart-url-opener');
 
 ReactDOM.render(
@@ -17,7 +17,7 @@ ReactDOM.render(
 errors.init();
 smartUrlOpener.listen();
 
-require.ensure(['./app'], function(require) {
-  const App = require('./app');
-  App.run();
-}, '/core/ui/app');
+require.ensure(['./controllers/main'], function(require) {
+  const MainController = require('./controllers/main');
+  new MainController().run();
+}, '/core/ui/controllers');
