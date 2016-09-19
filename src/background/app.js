@@ -53,10 +53,10 @@ class App {
     this._verifyConfig(config);
     config.url = url;
     this._testsConfig = config;
-    this._updateSelectedTest();
+    //this._updateSelectedTest();
     messaging.send(LOAD_TESTS_CONFIG_DONE, {
       config: config,
-      selectedTest: storage.get('selectedTest'),
+      //selectedTest: storage.get('selectedTest'),
     });
   }
 

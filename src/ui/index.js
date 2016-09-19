@@ -3,14 +3,15 @@
  */
 
 const ReactDOM = require('react-dom');
-require('material-design-lite/material');
+//require('material-design-lite/material');
+require('react-mdl/extra/material');
 require('getmdl-select/getmdl-select.min');
-const Layout = require('./components/layout');
+const App = require('./components/app');
 const errors = require('./controllers/errors');
 const smartUrlOpener = require('../utils/smart-url-opener');
 
 ReactDOM.render(
-  <Layout/>,
+  <App/>,
   document.getElementById('app')
 );
 

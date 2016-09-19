@@ -3,7 +3,7 @@
  */
 
 const fields = require('./fields');
-const Store = require('./store');
+const Store = require('../../utils/mobx-store');
 
 let store = null;
 
@@ -15,22 +15,3 @@ module.exports = {
     return store;
   }
 };
-
-
-/*
-  class UIStore {
-    constructor() {
-      mobx.extendObservable(this, {
-        a: 1,
-        get computedA() {
-          console.log('computed');
-          return this.a + 1;
-        },
-        print: mobx.action(function () {
-          console.log('action', this.a)
-        })
-      });
-      mobx.autorun(() => console.info('autorun', this.a));
-    }
-  };
-*/

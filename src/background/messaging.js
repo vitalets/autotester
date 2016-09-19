@@ -74,6 +74,7 @@ function onMessage(msg, sender, sendResponse) {
         return listener(msg.payload, sender, sendResponse);
       } catch (e) {
         // we need to re-throw error in next tick to be out of onMessage handler and allow event to bubble
+        // todo: copy error stack
         setTimeout(() => {
           throw e;
         }, 0);

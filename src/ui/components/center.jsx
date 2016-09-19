@@ -16,6 +16,15 @@ module.exports = () => {
       <TabContent id={TAB.SETTINGS}>
         <ContentSettings/>
       </TabContent>
+
+      {/*<ul className="mdl-menu mdl-js-menu mdl-js-ripple-effect"*/}
+          {/*htmlFor="demo-menu-lower-right">*/}
+        {/*<li className="mdl-menu__item">Some Action</li>*/}
+        {/*<li className="mdl-menu__item">Another Action</li>*/}
+        {/*<li disabled className="mdl-menu__item">Disabled Action</li>*/}
+        {/*<li className="mdl-menu__item">Yet Another Action</li>*/}
+      {/*</ul>*/}
+
     </main>
   );
 };

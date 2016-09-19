@@ -2,8 +2,7 @@
  * Defaults for store to render before app loaded
  */
 
-const {TAB, APP_STATE} = require('./constants');
-const {TESTS_SOURCE_TYPE} = require('../../background/constants');
+const {APP_STATE, TAB, TESTS_SOURCE_TYPE} = require('./constants');
 
 module.exports = {
   appState: {
@@ -26,10 +25,6 @@ module.exports = {
     defaultValue: '',
     persistent: true,
   },
-  selectedTab: {
-    defaultValue: TAB.SOURCES,
-    persistent: true,
-  },
   testsSourceType: {
     defaultValue: TESTS_SOURCE_TYPE.SNIPPETS,
     persistent: true,
@@ -37,6 +32,14 @@ module.exports = {
   testsSourceUrl: {
     defaultValue: '',
     persistent: true,
+  },
+  selectedTab: {
+    defaultValue: TAB.SOURCES,
+    persistent: true,
+  },
+  noQuit: {
+    defaultValue: false,
+    persistent: false,
   },
   error: {
     defaultValue: '',

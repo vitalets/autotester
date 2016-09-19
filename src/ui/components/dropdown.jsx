@@ -1,19 +1,44 @@
 
-module.exports = props => {
-  const selectedItem = props.items.find(item => item.value = props.value);
-  const shownText = selectedItem && selectedItem.text || '';
-  return <div className="mdl-textfield mdl-js-textfield getmdl-select">
-    <input className="mdl-textfield__input" value={shownText} type="text" id={props.id} readOnly={true} tabIndex="-1"
-           data-val={props.value}/>
+const {Menu, MenuItem} = require('react-mdl');
 
-    <label htmlFor={props.id}>
-      <i className="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
-    </label>
+module.exports = class Dropdown extends React.Component {
+  constructor() {
+    super();
+    this._currentValue = null;
+  }
+  handleClick(item) {
+    if (this._currentValue !== item.value) {
+      this._currentValue = item.value;
+      if (this.props.onChange) {
+        this.props.onChange(item);
+      }
+    }
+  }
+  render() {
+    // generate unique key on every render to re-mount whole menu component.
+    // otherwise meniitems are broken after re-render
+    // see: https://github.com/tleunen/react-mdl/issues/400
+    // also, we cant use ripple effect on menu as we get error in mdl js :(
+    const key = Date.now() + Math.random();
+    const props = this.props;
+    const internalId = `dropdown-${props.id}`;
+    const items = props.items || [];
+    const selectedItem = items.filter(item => item.value === props.value)[0];
+    const shownText = selectedItem && selectedItem.text || '';
 
-    <ul className="mdl-menu mdl-menu--bottom-left mdl-js-menu" htmlFor={props.id}>
-      {props.items.map(item => {
-        return <li className="mdl-menu__item" key={item.value} data-val={item.value}>{item.text}</li>
-      })}
-    </ul>
-  </div>
+    return (
+      <div className="dropdown" id={props.id} key={key}>
+        <span className="dropdown__field" id={internalId}>
+          <span className="dropdown__value">{shownText}</span>
+          <i className="material-icons">expand_more</i>
+        </span>
+
+        <Menu target={internalId} align={props.align || 'left'}>
+          {items.map(item => {
+            return <MenuItem key={item.value} onClick={() => this.handleClick(item)}>{item.text}</MenuItem>
+          })}
+        </Menu>
+      </div>
+    );
+  }
 };

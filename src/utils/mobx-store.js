@@ -21,27 +21,25 @@ module.exports = class Store {
   load() {
     return thenChrome.storage.local.get(this._persistentFields)
       .then(mobx.action(data => {
-        console.info('loaded', data);
+        console.info('mobx-store: loaded', data);
         Object.assign(this, data);
       }))
       .then(() => this._loaded = true);
   }
 
   _setSaveReactions() {
+    // automatically save persistent fields to storage
     this._persistentFields.forEach(fieldName => {
-      mobx.autorun(() => this._save(fieldName));
+      mobx.observe(this, fieldName, newValue => this._save(fieldName, newValue));
     });
-    // todo: use single function for each field
-    // todo: using autorunAsync causes save right after load
-    // mobx.autorunAsync(() => this._save(), 200);
   }
 
-  _save(fieldName) {
-    const data = {
-      [fieldName]: mobx.toJS(this[fieldName])
-    };
+  _save(fieldName, newValue) {
     if (this._loaded) {
-      console.info('saving', data);
+      const data = {
+        [fieldName]: mobx.toJS(newValue)
+      };
+      console.info('mobx-store: saving', data);
       return thenChrome.storage.local.set(data);
     }
   }

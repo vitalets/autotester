@@ -3,26 +3,86 @@
  */
 
 const thenChrome = require('then-chrome');
+const mobx = require('mobx');
 const store = require('../store').store;
-const {APP_STATE} = require('../store/constants');
+const {APP_STATE, TAB} = require('../store/constants');
+const messaging = require('../../background/messaging');
+
+const {
+  BG_LOAD_DONE,
+  LOAD_TESTS_CONFIG,
+  RUN_TESTS,
+  RUN_TESTS_DONE,
+  SELECT_TEST,
+  LOAD_TESTS_CONFIG_DONE,
+  RUN_TESTS_STARTED,
+} = messaging.names;
 
 module.exports = class Main {
   run() {
     store.load()
-      .then(() => store.appState = APP_STATE.READY);
+      .then(() => {
+        this._setListeners();
+        return this._requestConfig();
+        // load config
+        // store.appState = APP_STATE.READY
+      });
+  }
+  _requestConfig() {
+    messaging.send(LOAD_TESTS_CONFIG);
+  }
+  _setListeners() {
+    messaging.start();
+    // always reload ui if bg reloaded
+    messaging.on(BG_LOAD_DONE, () => location.reload());
+    //messaging.on(LOAD_TESTS_CONFIG_DONE, onConfigLoaded);
+    messaging.on(LOAD_TESTS_CONFIG_DONE, mobx.action(onConfigLoaded));
+    //messaging.on(RUN_TESTS_DONE, onTestsDone);
   }
 };
+
+function onConfigLoaded(data = {}) {
+  console.log('config loaded', data.config.tests.length);
+  store.tests = (data.config.tests || []).map(test => {
+    return {value: test, text: test};
+  });
+  if (store.tests.length) {
+    store.tests.unshift({value: '', text: 'All tests'})
+  }
+  updateSelectedTest();
+  store.appState = APP_STATE.READY;
+  store.selectedTab = TAB.SOURCES;
+  store.targets = [
+    {value: '', text: 'this chrome'},
+    {value: 'localhost', text: 'localhost'},
+  ];
+  /*
+  if (data.error) {
+    htmlConsole.warn(data.error);
+  } else {
+    const msg = [
+      `Config successfully loaded from: **${data.config.url}**`,
+      `Test files found: **${data.config.tests.length}**`,
+    ].join('\n');
+    htmlConsole.info(msg);
+    */
+}
+
+function updateSelectedTest() {
+  if (store.selectedTest) {
+    const exists = store.tests.some(test => test.value === store.selectedTest);
+    if (!exists) {
+      store.selectedTest = '';
+    }
+  }
+}
+
 
 /*
 
 
 const messaging = require('../background/messaging');
 const api = require('./app/api');
-const smartUrlOpener = require('../utils/smart-url-opener');
-
-
-const store = require('./store').store;
-const {APP_STATE} = require('./store/constants');
 
 
 function start() {
@@ -31,13 +91,8 @@ function start() {
   messaging.start();
   api.setup();
 
-  messaging.on(LOAD_TESTS_CONFIG_DONE, onConfigLoaded);
-  messaging.on(RUN_TESTS_DONE, onTestsDone);
-  messaging.on(BG_LOAD_DONE, () => location.reload());
 
   welcome();
-
-  loadConfig();
 
   // for programmatic run
   // todo: move to api
@@ -75,6 +130,7 @@ function activateSelfTab() {
     .then(tab => thenChrome.tabs.update(tab.id, {active: true}));
 }
 
+/*
 function onConfigLoaded(data = {}) {
   if (data.error) {
     htmlConsole.warn(data.error);
@@ -84,16 +140,12 @@ function onConfigLoaded(data = {}) {
       `Test files found: **${data.config.tests.length}**`,
     ].join('\n');
     htmlConsole.info(msg);
-    fillTestList(data);
   }
 }
+*/
 
 function onTestsDone() {
   activateSelfTab();
-}
-
-function onTestSelected(event) {
-  messaging.send(SELECT_TEST, {name: event.target.value});
 }
 
 function welcome() {

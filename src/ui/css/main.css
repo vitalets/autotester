@@ -1,4 +1,8 @@
 
+* {
+    box-sizing: border-box;
+}
+
 .mdl-layout__header-row {
     padding: 0 10px;
 }
@@ -8,31 +12,9 @@
     margin-right: 4px;
 }
 
-.getmdl-select {
-    width: auto;
-}
-
-.getmdl-select ul li {
-    height: auto;
-    line-height: inherit;
-}
-
-.getmdl-select.is-focused .mdl-icon-toggle__label {
-    color: rgb(255,82,82);
-}
-
-.mdl-textfield__input {
-    cursor: pointer;
-    background-color: white;
-    color: rgba(0,0,0,.87);
-    padding: 4px 6px;
-    border-radius: 4px;
-}
-
 .mdl-layout__content {
     padding: 10px;
 }
-
 
 .hidden {
     display: none;
@@ -45,4 +27,14 @@
 #mocha {
     margin: 0;
     padding-top: 5px;
+}
+
+#tests {
+    min-width: 150px;
+    width: 35%;
+}
+
+#targets {
+    min-width: 150px;
+    width: 20%;
 }
