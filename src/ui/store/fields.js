@@ -35,7 +35,7 @@ module.exports = {
   },
   selectedTab: {
     defaultValue: TAB.SOURCES,
-    persistent: true,
+    persistent: false,
   },
   noQuit: {
     defaultValue: false,

@@ -51,7 +51,6 @@ function onConfigLoaded(data = {}) {
   }
   updateSelectedTest();
   store.appState = APP_STATE.READY;
-  store.selectedTab = TAB.SOURCES;
   store.targets = [
     {value: '', text: 'this chrome'},
     {value: 'localhost', text: 'localhost'},
