@@ -4,7 +4,6 @@
 
 const ReactDOM = require('react-dom');
 require('react-mdl/extra/material');
-require('getmdl-select/getmdl-select.min');
 const App = require('./components/app');
 const errors = require('./controllers/errors');
 const smartUrlOpener = require('../utils/smart-url-opener');
