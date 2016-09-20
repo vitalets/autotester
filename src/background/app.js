@@ -9,7 +9,6 @@ const storage = require('./storage');
 const specialUrlCatcher = require('./special-url-catcher');
 const Run = require('../run');
 const logger = require('../utils/logger').create('App');
-const targets = require('../background/targets');
 
 const {
   BG_LOAD_DONE,
@@ -72,13 +71,13 @@ class App {
   _runTests(data) {
     // todo: refactor
     try {
-      const target = targets.get(data.targetId);
+      // const target = targets.get(data.targetId);
 
       const run = new Run({
         uiWindow: getUiWindow(),
         noQuit: data.noQuit,
         engine: 'selenium',
-        target: target,
+        // target: target,
       });
 
       let runnerPromise;

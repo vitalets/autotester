@@ -4,8 +4,7 @@ const httpBrowserify = require('webpack/node_modules/node-libs-browser/node_modu
 const httpsBrowserify = require('webpack/node_modules/node-libs-browser/node_modules/https-browserify');
 const fakeHttp = require('../utils/fake-http');
 
-// temp
-const targets = require('../background/targets');
+const LOOPBACK_HOST = 'autotester';
 
 // wrap for logging
 const realHttpWrapped = wrapForLog(httpBrowserify, 'REAL');
@@ -16,19 +15,12 @@ let loopbackHost;
 
 module.exports = {
   request(opts) {
-    const http = opts.hostname === getLoopbackHost()
+    const http = opts.hostname === LOOPBACK_HOST
       ? fakeHttpWrapped
       : (opts.protocol === 'https:' ? realHttpsWrapped : realHttpWrapped);
     return http.request.apply(http, arguments);
   }
 };
-
-function getLoopbackHost() {
-  if (!loopbackHost) {
-    loopbackHost = new URL(targets.getLoopbackHub().serverUrl).hostname;
-  }
-  return loopbackHost;
-}
 
 function wrapForLog(http, prefix) {
   const origRequest = http.request;

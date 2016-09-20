@@ -39,7 +39,7 @@ module.exports = class Store {
       const data = {
         [fieldName]: mobx.toJS(newValue)
       };
-      console.info('mobx-store: saving', data);
+      // console.info('mobx-store: saving', data);
       return thenChrome.storage.local.set(data);
     }
   }

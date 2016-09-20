@@ -43,18 +43,11 @@ module.exports = class Main {
 
 function onConfigLoaded(data = {}) {
   console.log('config loaded', data.config.tests.length);
-  store.tests = (data.config.tests || []).map(test => {
-    return {value: test, text: test};
-  });
-  if (store.tests.length) {
-    store.tests.unshift({value: '', text: 'All tests'})
+  store.tests = data.config.tests || [];
+  if (store.selectedTest && store.tests.indexOf(store.selectedTest) === -1) {
+    store.selectedTest = '';
   }
-  updateSelectedTest();
   store.appState = APP_STATE.READY;
-  store.targets = [
-    {value: '', text: 'this chrome'},
-    {value: 'localhost', text: 'localhost'},
-  ];
   /*
   if (data.error) {
     htmlConsole.warn(data.error);
@@ -66,16 +59,6 @@ function onConfigLoaded(data = {}) {
     htmlConsole.info(msg);
     */
 }
-
-function updateSelectedTest() {
-  if (store.selectedTest) {
-    const exists = store.tests.some(test => test.value === store.selectedTest);
-    if (!exists) {
-      store.selectedTest = '';
-    }
-  }
-}
-
 
 /*
 

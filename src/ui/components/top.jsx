@@ -1,32 +1,20 @@
-const {observer} = require('mobx-react');
-const mobx = require('mobx');
 const {Header, HeaderRow} = require('react-mdl');
-const Dropdown = require('./dropdown');
 const TopText = require('./top-text');
 const TopButtonRun = require('./top-button-run');
-const store = require('../store').store;
+const TargetsDropdown = require('./targets-dropdown');
+const TestsDropdown = require('./tests-dropdown');
 
-module.exports = observer(function Top() {
+module.exports = function Top() {
   return (
     <Header>
       <HeaderRow>
         <TopText>Tests:</TopText>
-        <Dropdown id="tests" value={store.selectedTest} items={store.tests}
-                  onChange={handleTestChange}/>
+        <TestsDropdown/>
         <TopButtonRun/>
         <div className="mdl-layout-spacer"></div>
         <TopText>Target:</TopText>
-        <Dropdown id="targets" value={store.selectedTarget} items={store.targets} align="right"
-                  onChange={handleTargetChange}/>
+        <TargetsDropdown/>
       </HeaderRow>
     </Header>
   );
-});
-
-const handleTestChange = mobx.action(function(test) {
-  store.selectedTest = test.value;
-});
-
-const handleTargetChange = mobx.action(function(target) {
-  store.selectedTarget = target.value;
-});
+};

@@ -3,6 +3,7 @@
  */
 
 const {APP_STATE, TAB, TESTS_SOURCE_TYPE} = require('./constants');
+const data = require('./data');
 
 module.exports = {
   appState: {
@@ -18,11 +19,15 @@ module.exports = {
     persistent: true,
   },
   targets: {
-    defaultValue: [],
+    defaultValue: data.targets,
     persistent: true,
   },
   selectedTarget: {
-    defaultValue: '',
+    defaultValue: 0,
+    persistent: false,
+  },
+  hubs: {
+    defaultValue: data.hubs,
     persistent: true,
   },
   testsSourceType: {

@@ -1,29 +1,8 @@
 /**
- * todo: this will be in storage in future
+ * Pre-defined data
  */
 
-exports.getAll = function () {
-  return targets.map(target => {
-    const hub = hubs.find(hub => hub.id === target.hubId);
-    return {
-      name: target.name,
-      serverUrl: hub.serverUrl,
-      caps: Object.assign({}, hub.caps, target.caps),
-      loopback: hub.loopback,
-    };
-  })
-};
-
-exports.get = function (targetId) {
-  const all = exports.getAll();
-  return all[targetId];
-};
-
-exports.getLoopbackHub = function () {
-  return hubs[0];
-};
-
-const hubs = [
+exports.hubs = [
   {
     id: 'loopback',
     serverUrl: 'http://autotester',
@@ -50,14 +29,14 @@ const hubs = [
     id: 'sauce',
     serverUrl: 'http://ondemand.saucelabs.com:80/wd/hub',
     caps: {
-      'username': '<SAUCE_USER>',
-      'accessKey': '<SAUCE_KEY>',
+      'username': '',
+      'accessKey': '',
       'browserName': 'chrome'
     }
   },
 ];
 
-const targets = [
+exports.targets = [
   {
     hubId: 'loopback',
     name: 'This chrome'
@@ -73,6 +52,7 @@ const targets = [
       'browserName': 'firefox'
     }
   },
+  /*
   {
     hubId: 'yandex',
     name: 'Yandex grid (chrome 51, linux)',
@@ -89,6 +69,7 @@ const targets = [
       'version' : '53.0',
     }
   },
+  */
   {
     hubId: 'sauce',
     name: 'Sauce labs (chrome stable, win7)',
