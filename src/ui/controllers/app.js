@@ -9,33 +9,13 @@ const bgApi = require('./bg-api');
 const runController = require('./run');
 const testsList = require('./tests-list');
 
-
 exports.start = function() {
   runController.init();
   bgApi.init();
   store.load()
-    .then(() => testsList.load())
+    .then(() => store.isSnippets() ? null : testsList.load())
     .then(() => store.appState = APP_STATE.READY)
 };
-
-function onConfigLoaded(data = {}) {
-  console.log('config loaded', data.config.tests.length);
-  store.tests = data.config.tests || [];
-  if (store.selectedTest && store.tests.indexOf(store.selectedTest) === -1) {
-    store.selectedTest = '';
-  }
-  store.appState = APP_STATE.READY;
-  /*
-  if (data.error) {
-    htmlConsole.warn(data.error);
-  } else {
-    const msg = [
-      `Config successfully loaded from: **${data.config.url}**`,
-      `Test files found: **${data.config.tests.length}**`,
-    ].join('\n');
-    htmlConsole.info(msg);
-  */
-}
 
 /*
 

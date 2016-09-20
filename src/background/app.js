@@ -10,5 +10,5 @@ exports.start = function() {
   uiApi.init();
   uiApi.reloadUI();
   specialUrlCatcher.start();
-  logger.log('Background started');
+  logger.log('Loaded.');
 };

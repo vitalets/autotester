@@ -1,5 +1,7 @@
 /**
- * Defaults for store to render before app loaded
+ * List of props fully describing ui state.
+ * Default values are required to render layout before any communication
+ * persistance flag defned whether to load/save prop in storage
  */
 
 const {APP_STATE, TAB, TESTS_SOURCE_TYPE} = require('./constants');
@@ -16,6 +18,14 @@ module.exports = {
   },
   selectedTest: {
     defaultValue: '',
+    persistent: true,
+  },
+  snippets: {
+    defaultValue: data.snippets,
+    persistent: true,
+  },
+  selectedSnippet: {
+    defaultValue: 'snippet1',
     persistent: true,
   },
   targets: {

@@ -7,24 +7,43 @@ const Dropdown = require('./dropdown');
 module.exports = observer(class TestsDropdown extends React.Component {
   constructor() {
     super();
-    this.handleChange = mobx.action(this.handleChange.bind(this));
+    this.setSelected = mobx.action(this.setSelected.bind(this));
   }
-  handleChange(test) {
-    store.selectedTest = test.value;
+  getItems() {
+    const items = [];
+    if (store.isSnippets()) {
+      store.snippets.forEach(snippet => {
+        items.push({value: snippet.id, text: snippet.name});
+      });
+    } else {
+      store.tests.forEach(test => {
+        items.push({value: test, text: test});
+      });
+    }
+    if (items.length) {
+      items.unshift({value: '', text: 'All'})
+    }
+    return items
+  }
+  getSelected() {
+    return store.isSnippets() ? store.selectedSnippet : store.selectedTest;
+  }
+  setSelected(item) {
+    if (store.isSnippets()) {
+      store.selectedSnippet = item.value;
+    } else {
+      store.selectedTest = item.value;
+    }
   }
   render() {
     // todo: use computed
-    const items = store.tests.map(test => {
-      return {value: test, text: test};
-    });
-    if (items.length) {
-      items.unshift({value: '', text: 'All tests'})
-    }
+    const items = this.getItems();
     return (
       <Dropdown id="tests"
-                value={store.selectedTest}
+                value={this.getSelected()}
                 items={items}
-                onChange={this.handleChange}
+                onChange={this.setSelected}
+
       />
     );
   }
