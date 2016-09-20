@@ -2,6 +2,4 @@
  * Background app entry point
  */
 
-const App = require('./app');
-
-new App().start();
+require('./app').start();

@@ -8,7 +8,7 @@ module.exports = {
     'core/background/boot': './src/background/boot/',
     'core/background/bundle': './src/background/',
     'core/ui/assets': './src/ui/assets',
-    'core/ui/bundle': './src/ui/',
+    'core/ui/boot': './src/ui/',
   },
   output: {
     path: process.env.npm_config_outdir,

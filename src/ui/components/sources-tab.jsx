@@ -1,28 +1,15 @@
-
 const {observer} = require('mobx-react');
+const store = require('../store').store;
 // const CodeMirror = require('codemirror');
 // require('codemirror/mode/javascript/javascript');
 
 module.exports = observer(function SourcesTab() {
-  return <div>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-    sources<br/>
-  </div>
+  return (
+    <div>
+      <div>Tests successfully loaded from: {store.testsSourceUrl}</div>
+      <div>Files found: ${store.tests.length}</div>
+    </div>
+  );
 });
 
 /*

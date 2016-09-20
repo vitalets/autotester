@@ -1,6 +1,6 @@
 const {Header, HeaderRow} = require('react-mdl');
 const TopText = require('./top-text');
-const TopButtonRun = require('./top-button-run');
+const RunButton = require('./run-button');
 const TargetsDropdown = require('./targets-dropdown');
 const TestsDropdown = require('./tests-dropdown');
 
@@ -10,7 +10,7 @@ module.exports = function Top() {
       <HeaderRow>
         <TopText>Tests:</TopText>
         <TestsDropdown/>
-        <TopButtonRun/>
+        <RunButton/>
         <div className="mdl-layout-spacer"></div>
         <TopText>Target:</TopText>
         <TargetsDropdown/>

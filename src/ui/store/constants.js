@@ -5,7 +5,7 @@ exports.APP_STATE = keyMirror({
   INIT: null,
   READY: null,
   TESTS_RUNNING: null,
-  TESTS_FINISHED: null,
+  TESTS_DONE: null,
 });
 
 exports.TESTS_SOURCE_TYPE = keyMirror({

@@ -3,7 +3,7 @@
  */
 
 const errorCatcher = require('../../utils/error-catcher');
-const store = require('../store').store;
+//const store = require('../store').store;
 // const HtmlConsole = require('../../utils/html-console');
 //const shareCalls = require('../../utils/share-calls');
 
@@ -15,5 +15,5 @@ exports.init = function () {
 
 function errorHandler(error) {
   error = error || '';
-  store.error = '[UI]: ' + (error.stack || error.message || String(error));
+  // store.error = '[UI]: ' + (error.stack || error.message || String(error));
 }
