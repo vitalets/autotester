@@ -1,6 +1,6 @@
 const {observer} = require('mobx-react');
 
-module.exports = observer(function ContentReport() {
+module.exports = observer(function ReportTab() {
   return (
     <div>
       <pre id="console" className="console"></pre>

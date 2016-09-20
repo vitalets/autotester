@@ -1,6 +1,6 @@
 const {observer} = require('mobx-react');
 
-module.exports = observer(function ContentSettings() {
+module.exports = observer(function SettingsTab() {
   return (
     <div>
 

@@ -3,7 +3,7 @@ const {observer} = require('mobx-react');
 // const CodeMirror = require('codemirror');
 // require('codemirror/mode/javascript/javascript');
 
-module.exports = observer(function ContentSources() {
+module.exports = observer(function SourcesTab() {
   return <div>
     sources<br/>
     sources<br/>
