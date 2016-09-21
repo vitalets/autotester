@@ -3,36 +3,32 @@
  */
 
 const messaging = require('../utils/messaging');
-const eventNames = require('./event-names');
+const externalEvents = require('./external-events');
 const testsList = require('./tests-list');
 const testsRun = require('./tests-run');
+const {onTestsDone, onReady} = require('./internal-channels');
 
 const {
   RELOAD,
   TESTS_LIST_LOAD,
   TESTS_RUN,
   TESTS_DONE,
-} = eventNames;
+} = externalEvents;
 
 exports.init = function() {
-  messaging.registerEvents(eventNames);
+  messaging.registerEvents(externalEvents);
   messaging.on(TESTS_LIST_LOAD, loadTestsList);
   messaging.on(TESTS_RUN, runTests);
+  onReady.addListener(() => messaging.send(RELOAD));
+  onTestsDone.addListener(() => messaging.send(TESTS_DONE));
   messaging.start();
-};
-
-exports.reloadUI = function() {
-  messaging.send(RELOAD);
-};
-
-exports.testsDone = function() {
-  messaging.send(TESTS_DONE);
 };
 
 function loadTestsList() {
   console.log('loadTestsList')
 }
 
-function runTests() {
-  console.log('runTests')
+function runTests(data) {
+  console.log('running tests');
+  testsRun.run(data)
 }

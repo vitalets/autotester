@@ -4,10 +4,11 @@
 
 const thenChrome = require('then-chrome');
 const mobx = require('mobx');
+const path = require('path');
 const store = require('../store').store;
 const {APP_STATE, TAB} = require('../store/constants');
 const bgApi = require('./bg-api');
-const {onTestsRun, onTestsDone} = require('./internal-events');
+const {onTestsRun, onTestsDone} = require('./internal-channels');
 
 exports.init = function () {
   onTestsRun.addListener(mobx.action(run));
@@ -18,21 +19,51 @@ exports.init = function () {
  * Run
  */
 function run() {
-  // if (files && !Array.isArray(files)) {
-  //   throw new Error('files should be array');
-  // }
   // sharedConsole.clear();
   // window.report.innerHTML = '';
 
   store.appState = APP_STATE.TESTS_RUNNING;
   store.selectedTab = TAB.REPORT;
+
+  const data = prepareData();
+  bgApi.runTests(data);
+}
+
+function prepareData() {
   const data = {
-    tests: store.tests,
-    selectedTest: store.selectedTest,
     targetId: store.selectedTarget,
     noQuit: store.noQuit,
   };
-  bgApi.runTests(data);
+
+  if (store.isSnippets()) {
+    setSnippets(data);
+  } else {
+    setFiles(data);
+  }
+
+  return data;
+}
+
+function setSnippets(data) {
+  data.snippets = store.snippets
+    .filter(snippet => !store.selectedSnippet || snippet.id === store.selectedSnippet)
+    .map(snippet => {
+    return {
+      path: formatSnippetName(snippet.name),
+      code: snippet.code,
+    };
+  });
+}
+
+function setFiles(data) {
+  data.baseUrl = path.dirname(store.testsSourceUrl);
+  data.files = store.testsSetup.slice();
+  if (store.selectedTest) {
+    const test = store.tests.find(t => t === store.selectedTest);
+    data.files.push(test);
+  } else {
+    data.files = data.files.concat(store.tests.slice());
+  }
 }
 
 function done() {
@@ -44,4 +75,8 @@ function done() {
 function activateSelfTab() {
   return thenChrome.tabs.getCurrent()
     .then(tab => thenChrome.tabs.update(tab.id, {active: true}));
+}
+
+function formatSnippetName(name) {
+  return name.replace(/[ \/]/g, '_');
 }

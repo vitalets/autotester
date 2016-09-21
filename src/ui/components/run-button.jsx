@@ -1,6 +1,6 @@
 
 const {Button} = require('react-mdl');
-const {onTestsRun} = require('../controllers/internal-events');
+const {onTestsRun} = require('../controllers/internal-channels');
 
 module.exports = class RunButton extends React.Component {
   render() {

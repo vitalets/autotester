@@ -18,6 +18,7 @@ function success(data) {
   }
   console.log('tests list loaded', data.config.tests.length);
   store.tests = data.config.tests || [];
+  store.testsSetup = data.config.setup || [];
   verifySelectedTest();
 }
 

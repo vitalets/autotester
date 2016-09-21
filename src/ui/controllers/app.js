@@ -1,5 +1,5 @@
 /**
- * Main ui file
+ * Main ui entry
  */
 
 const mobx = require('mobx');
@@ -18,17 +18,6 @@ exports.start = function() {
 };
 
 /*
-
-
-function start() {
-
-  smartUrlOpener.listen();
-  messaging.start();
-  api.setup();
-
-
-  welcome();
-
   // for programmatic run
   // todo: move to api
   window.runTests = runTests;

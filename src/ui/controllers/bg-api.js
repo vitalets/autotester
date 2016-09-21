@@ -3,18 +3,18 @@
  */
 
 const messaging = require('../../utils/messaging');
-const eventNames = require('../../background/event-names');
-const {onTestsDone} = require('../controllers/internal-events');
+const externalEvents = require('../../background/external-events');
+const {onTestsDone} = require('../controllers/internal-channels');
 
 const {
   RELOAD,
   TESTS_LIST_LOAD,
   TESTS_RUN,
   TESTS_DONE,
-} = eventNames;
+} = externalEvents;
 
 exports.init = function() {
-  messaging.registerEvents(eventNames);
+  messaging.registerEvents(externalEvents);
   messaging.on(RELOAD, () => location.reload());
   messaging.on(TESTS_DONE, () => onTestsDone.dispatch());
   messaging.start();

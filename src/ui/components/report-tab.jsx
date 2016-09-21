@@ -1,6 +1,5 @@
-const {observer} = require('mobx-react');
 
-module.exports = observer(function ReportTab() {
+module.exports = function ReportTab() {
   return (
     <div>
       <pre id="console" className="console"></pre>
@@ -8,4 +7,4 @@ module.exports = observer(function ReportTab() {
       <div id="mocha" className="report"></div>
     </div>
   );
-});
+};

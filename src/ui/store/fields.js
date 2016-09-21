@@ -16,6 +16,10 @@ module.exports = {
     defaultValue: [],
     persistent: false,
   },
+  testsSetup: {
+    defaultValue: [],
+    persistent: false,
+  },
   selectedTest: {
     defaultValue: '',
     persistent: true,
