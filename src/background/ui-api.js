@@ -29,6 +29,5 @@ function loadTestsList() {
 }
 
 function runTests(data) {
-  console.log('running tests');
   testsRun.run(data)
 }

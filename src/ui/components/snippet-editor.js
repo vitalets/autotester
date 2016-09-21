@@ -4,6 +4,7 @@ const store = require('../store').store;
 const CodeMirror = require('react-codemirror');
 require('codemirror/mode/javascript/javascript');
 const debounce = require('lodash.debounce');
+const {TAB} = require('../store/constants');
 
 const options = {
   lineNumbers: true,
@@ -23,7 +24,7 @@ module.exports = class SnippetEditor extends React.Component {
     this.updateStore = debounce(mobx.action(this.updateStore.bind(this)), 500);
   }
   componentDidMount() {
-    this.disposer = mobx.autorun(() => {
+    this.disposerState = mobx.autorun(() => {
       if (store.selectedSnippet) {
         // todo: use computed
         const snippet = this.getSelectedSnippet();
@@ -34,9 +35,18 @@ module.exports = class SnippetEditor extends React.Component {
       }
       this.setState({name: '', code: ''});
     });
+
+    // see: http://stackoverflow.com/questions/8349571/codemirror-editor-is-not-loading-content-until-clicked
+    this.disposerEditor = mobx.autorun(() => {
+      if (store.selectedTab === TAB.TESTS) {
+        this.updateEditor();
+      }
+    });
+
   }
   componentWillUnmount() {
-    this.disposer();
+    this.disposerState();
+    this.disposerEditor();
   }
   changeName(e) {
     this.setState({name: e.target.value});
@@ -53,6 +63,13 @@ module.exports = class SnippetEditor extends React.Component {
       snippet.name = this.state.name;
       snippet.code = this.state.code;
     }
+  }
+  updateEditor() {
+    setTimeout(() => {
+      if (this._editor) {
+        this._editor.codeMirror.refresh();
+      }
+    }, 100);
   }
   getSelectedSnippet() {
     return store.snippets.find(s => s.id === store.selectedSnippet);
@@ -79,7 +96,7 @@ module.exports = class SnippetEditor extends React.Component {
         </div>
         <CodeMirror
           className="flex-container"
-          ref="editor"
+          ref={ref => this._editor = ref}
           value={this.state.code}
           onChange={this.changeCode}
           options={options}
