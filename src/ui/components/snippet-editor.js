@@ -28,7 +28,7 @@ module.exports = observer(class SnippetEditor extends React.Component {
   }
   render() {
     return (
-      <div>
+      <div className="flex-container">
         <Textfield
           onChange={this.changeName}
           value={this.state.name}
@@ -36,7 +36,13 @@ module.exports = observer(class SnippetEditor extends React.Component {
           floatingLabel
           style={{width: '200px'}}
         />
-        <CodeMirror ref="editor" value={this.state.code} onChange={this.changeCode} options={options}/>
+        <CodeMirror
+          className="flex-container"
+          ref="editor"
+          value={this.state.code}
+          onChange={this.changeCode}
+          options={options}
+        />
       </div>
     );
   }

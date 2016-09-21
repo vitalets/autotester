@@ -25,7 +25,7 @@
 }
 
 .dropdown__value {
-    line-height: 110%;
+    /*line-height: 110%;*/
     flex: 1;
     overflow: hidden;
     overflow-wrap: break-word;

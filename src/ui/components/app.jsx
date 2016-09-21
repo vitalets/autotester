@@ -1,5 +1,5 @@
 const {observer} = require('mobx-react');
-const {Layout} = require('react-mdl');
+const {Layout, Content} = require('react-mdl');
 const Title = require('./title');
 const Top = require('./top');
 const TabBar = require('./tab-bar');
@@ -11,7 +11,9 @@ module.exports = observer(function App() {
       <Title/>
       <Top/>
       <TabBar/>
-      <Center/>
+      <Content className="flex-container">
+        <Center/>
+      </Content>
     </Layout>
   );
 });

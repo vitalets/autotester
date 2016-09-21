@@ -6,7 +6,7 @@ const SettingsTab = require('./settings-tab');
 
 module.exports = () => {
   return (
-    <main className="mdl-layout__content">
+    <div className="flex-container">
       <TabContent id={TAB.SOURCES}>
         <SourcesTab/>
       </TabContent>
@@ -16,7 +16,7 @@ module.exports = () => {
       <TabContent id={TAB.SETTINGS}>
         <SettingsTab/>
       </TabContent>
-    </main>
+    </div>
   );
 };
 

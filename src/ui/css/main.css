@@ -1,4 +1,3 @@
-
 * {
     box-sizing: border-box;
 }
@@ -12,7 +11,15 @@
     margin-right: 4px;
 }
 
-.mdl-layout__content {
+.mdl-layout__header-row > *:first-child {
+    margin-left: 0;
+}
+
+.mdl-layout__header-row > *:last-child {
+    margin-right: 0;
+}
+
+.tab-content {
     padding: 10px;
 }
 
@@ -40,6 +47,21 @@
 }
 
 .CodeMirror {
-    border: 1px solid #eee;
+    border: 1px solid #e0e0e0;
     flex: 1;
+}
+
+header .dropdown__field {
+    font-size: 16px;
+    height: 36px;
+}
+
+.flex-container {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+}
+
+.tab-content .mdl-textfield {
+    padding-bottom: 10px;
 }
