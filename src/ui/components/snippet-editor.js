@@ -1,10 +1,10 @@
 const mobx = require('mobx');
-const {Textfield} = require('react-mdl');
+const {Textfield, Icon, Button} = require('react-mdl');
 const store = require('../store').store;
 const CodeMirror = require('react-codemirror');
 require('codemirror/mode/javascript/javascript');
 const debounce = require('lodash.debounce');
-window.store = store;
+
 const options = {
   lineNumbers: true,
   mode: 'javascript',
@@ -60,13 +60,23 @@ module.exports = class SnippetEditor extends React.Component {
   render() {
     return (
       <div className="flex-container">
-        <Textfield
-          onChange={this.changeName}
-          value={this.state.name}
-          label="Snippet name"
-          floatingLabel
-          style={{width: '200px'}}
-        />
+        <div style={{display: 'flex', alignItems: 'center'}}>
+          <Textfield
+            onChange={this.changeName}
+            value={this.state.name}
+            label="Snippet name"
+            floatingLabel
+            style={{width: '200px', marginRight: 'auto'}}
+          />
+          <Button raised style={{marginRight: '15px'}}>
+            <Icon name="add"/>
+            <span className="button-text">New snippet</span>
+          </Button>
+          <Button raised>
+            <Icon name="delete"/>
+            <span className="button-text">Delete</span>
+          </Button>
+        </div>
         <CodeMirror
           className="flex-container"
           ref="editor"

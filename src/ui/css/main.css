@@ -61,3 +61,8 @@ header .dropdown__field {
     flex-flow: column;
     flex: 1;
 }
+
+.button-text {
+    vertical-align: middle;
+    margin-left: 2px;
+}
