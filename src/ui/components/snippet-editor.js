@@ -83,7 +83,7 @@ module.exports = class SnippetEditor extends React.Component {
             value={this.state.name}
             label="Test name"
             floatingLabel
-            style={{width: '200px', marginRight: 'auto'}}
+            style={{width: '300px', marginRight: 'auto'}}
           />
           <Button raised style={{marginRight: '15px'}}>
             <Icon name="add"/>

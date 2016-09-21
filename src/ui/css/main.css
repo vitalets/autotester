@@ -33,8 +33,13 @@
 
 #mocha {
     margin: 0;
-    padding-top: 5px;
+    padding: 0;
 }
+
+#mocha h2 {
+    line-height: inherit;
+}
+
 
 #tests {
     min-width: 150px;

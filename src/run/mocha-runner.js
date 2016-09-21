@@ -2,9 +2,9 @@
  * Mocha runner
  */
 
+const Channel = require('chnl');
 const utils = require('../utils');
 const logger = require('../utils/logger').create('Mocha-runner');
-
 
 const MOCHA_PATH = 'core/background/mocha.js';
 const DEFAULT_OPTIONS = {
@@ -19,11 +19,11 @@ class MochaRunner {
    *
    * @param {Object} params
    * @param {Object} params.reporter
-   * @param {Object} params.uiWindow
    */
   constructor(params) {
     this._params = params;
     this._mochaOptions = Object.assign({}, DEFAULT_OPTIONS, {reporter: params.reporter});
+    this.onTestStart = new Channel();
   }
 
   /**
@@ -56,8 +56,7 @@ class MochaRunner {
     logger.log(`Run mocha for ${suitesCount} suite(s)`);
     return new Promise(resolve => {
         this._runner = this._getMocha().run(resolve);
-        this._proxyNonAssertionErrors();
-        this._startUpdatingTitle();
+        this._setRunnerListeners();
       })
       .then(failures => logger.log(`Finish mocha with ${failures} failure(s)`));
   }
@@ -75,24 +74,26 @@ class MochaRunner {
     utils.removeBySelector(`script[src="${MOCHA_PATH}"]`, this._context.document);
   }
 
-  _proxyNonAssertionErrors() {
+  _setRunnerListeners() {
     // to see pretty error messages in background console, proxy non-assertion errors from mocha
-    this._runner.on('fail', test => {
-      if (test.err.name !== 'AssertionError') {
-        // mark error with flag to not show it in htmlConsole
-        // (as mocha reporter shows errors itself)
-        test.err.isMocha = true;
-        // use asyncThrow to go out of promise chain
-        utils.asyncThrow(test.err);
-      }
-    });
+    this._runner.on('fail', test => this._proxyError(test));
+    this._runner.on('test', () => this._dispatchTestStart());
   }
 
-  _startUpdatingTitle() {
-    this._runner.on('test', () => {
-      this._testIndex++;
-      this._params.uiWindow.setRunningTestIndex(this._testIndex);
-    });
+  _proxyError(test) {
+    const err = test.err;
+    if (err && err.name !== 'AssertionError') {
+      // mark error with flag to not show it in htmlConsole
+      // (as mocha reporter shows errors itself)
+      err.isMocha = true;
+      // use asyncThrow to go out of promise chain
+      utils.asyncThrow(err);
+    }
+  }
+
+  _dispatchTestStart() {
+    this._testIndex++;
+    this.onTestStart.dispatch({index: this._testIndex});
   }
 }
 
