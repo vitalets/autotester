@@ -1,12 +1,13 @@
 const {observer} = require('mobx-react');
 const store = require('../store').store;
 const SnippetEditor = require('./snippet-editor');
+const SnippetIndex = require('./snippet-index');
 
 module.exports = observer(function SourcesTab() {
   if (store.isSnippets()) {
-    return (
-      <SnippetEditor/>
-    );
+    return store.selectedSnippet
+      ? <SnippetEditor/>
+      : <SnippetIndex count={store.snippets.length}/>;
   } else {
     return (
       <div>

@@ -66,3 +66,12 @@ header .dropdown__field {
     vertical-align: middle;
     margin-left: 2px;
 }
+
+.snippet-index {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    font-size: 1.2em;
+    text-align: center;
+}
