@@ -54,7 +54,7 @@ module.exports = {
     persistent: true,
   },
   selectedTab: {
-    defaultValue: TAB.TESTS,
+    defaultValue: -1, // better set -1 to avoid flushing content TAB.TESTS,
     persistent: false,
   },
   noQuit: {

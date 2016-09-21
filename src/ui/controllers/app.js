@@ -6,24 +6,28 @@ const mobx = require('mobx');
 const store = require('../store').store;
 const {APP_STATE, TAB} = require('../store/constants');
 const bgApi = require('./bg-api');
+const windowApi = require('./window-api');
 const runController = require('./run');
 const testsList = require('./tests-list');
 
+/**
+ * Start app
+ */
 exports.start = function() {
   runController.init();
   bgApi.init();
+  windowApi.init();
   store.load()
     .then(() => store.isSnippets() ? null : testsList.load())
-    .then(() => store.appState = APP_STATE.READY)
+    .then(mobx.action(ready));
 };
 
-/*
-  // for programmatic run
-  // todo: move to api
-  window.runTests = runTests;
+function ready() {
+  store.appState = APP_STATE.READY;
+  store.selectedTab = TAB.TESTS;
 }
-*/
 
+// todo: move somewhere
 function welcome() {
   const buildNumber = chrome.extension.getBackgroundPage().__buildInfo.buildNumber;
   const msg = [
