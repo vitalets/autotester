@@ -86,26 +86,3 @@ exports.targets = [
     }
   }
 ];
-
-exports.snippets = [
-  {
-    id: 'snippet1',
-    name: 'Google search test',
-    code: `
-    var driver = new Driver();
-    driver.get('http://yandex.ru');
-    driver.sleep(2000);
-    driver.quit();
-`
-  },
-  {
-    id: 'snippet2',
-    name: 'Google search test 2',
-    code: `
-    var driver = new Driver();
-    driver.get('http://google.ru');
-    driver.sleep(2000);
-    driver.quit();
-`
-  }
-];

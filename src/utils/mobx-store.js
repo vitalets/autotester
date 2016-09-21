@@ -12,7 +12,7 @@ module.exports = class Store {
     this._persistentFields = this._getPersistentFields();
     const obj = this._getObservableObj();
     mobx.extendObservable(this, obj);
-    this._setSaveReactions();
+    this._observePersistent();
   }
 
   /**
@@ -23,14 +23,30 @@ module.exports = class Store {
       .then(mobx.action(data => {
         console.info('mobx-store: loaded', data);
         Object.assign(this, data);
+        //mobx.extendObservable(this, data);
+        // Object.keys(data).forEach(key => {
+        //   if (Array.isArray(this[key].slice())) {
+        //     this[key].clear();
+        //     if (Array.isArray(data[key])) {
+        //       data[key].forEach(item => this[key].push(item));
+        //     }
+        //   } else {
+        //     this[key] = data[key];
+        //   }
+        // });
       }))
       .then(() => this._loaded = true);
   }
 
-  _setSaveReactions() {
+  _observePersistent() {
     // automatically save persistent fields to storage
     this._persistentFields.forEach(fieldName => {
-      mobx.observe(this, fieldName, newValue => this._save(fieldName, newValue));
+      // use here mobx.toJS as otherwise changes of deep objects/arrays are not tracked
+      // see: https://jsfiddle.net/xd2zxu8u/5/
+      mobx.reaction(() => mobx.toJS(this[fieldName]), newValue => {
+        // console.info('CHANGED', fieldName, newValue)
+        this._save(fieldName, newValue);
+      });
     });
   }
 

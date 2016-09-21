@@ -21,11 +21,12 @@ module.exports = {
     persistent: true,
   },
   snippets: {
-    defaultValue: data.snippets,
+    defaultValue: [],
+    // todo: save snippets code separately
     persistent: true,
   },
   selectedSnippet: {
-    defaultValue: 'snippet1',
+    defaultValue: '',
     persistent: true,
   },
   targets: {

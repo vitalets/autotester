@@ -61,7 +61,3 @@ header .dropdown__field {
     flex-flow: column;
     flex: 1;
 }
-
-.tab-content .mdl-textfield {
-    padding-bottom: 10px;
-}
