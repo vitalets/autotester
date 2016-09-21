@@ -3,7 +3,7 @@ const store = require('../store').store;
 const SnippetEditor = require('./snippet-editor');
 const SnippetIndex = require('./snippet-index');
 
-module.exports = observer(function SourcesTab() {
+module.exports = observer(function TestsTab() {
   if (store.isSnippets()) {
     return store.selectedSnippet
       ? <SnippetEditor/>

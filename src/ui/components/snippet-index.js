@@ -2,26 +2,26 @@
 const {Icon, Button} = require('react-mdl');
 
 module.exports = function SnippetIndex(props) {
-  const hasSnippets = (
+  const has = (
     <div>
-      You have <strong>{props.count}</strong> code snippet(s).<br/>
-      Select them in left dropdown, edit and run or create new.
+      You have <strong>{props.count}</strong> tests(s)<br/>
+      Select them in dropdown, edit and run or create new
     </div>
   );
 
-  const noSnippets = (
+  const no = (
     <div>
-      There are no code snippets yet.<br/>
+      There are no tests yet<br/>
       Feel free to create new one and start awesome testing!
     </div>
   );
 
   return (
     <div className="snippet-index">
-      {props.count ? hasSnippets : noSnippets}
+      {props.count ? has : no}
       <Button raised style={{marginTop: '25px'}}>
         <Icon name="add"/>
-        <span className="button-text">Create new snippet</span>
+        <span className="button-text">Create new test</span>
       </Button>
     </div>
   );

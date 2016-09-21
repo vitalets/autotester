@@ -6,7 +6,7 @@ const TabBarItem = require('./tab-bar-item');
 const {TAB} = require('../store/constants');
 
 const tabList = [
-  TAB.SOURCES,
+  TAB.TESTS,
   TAB.REPORT,
   TAB.SETTINGS,
 ];
@@ -19,8 +19,8 @@ module.exports = observer(function TabBar() {
   return (
     <MDLComponent>
       <Tabs ripple activeTab={activeTabIndex}>
-        <Tab onClick={() => selectTab(TAB.SOURCES)}>
-          <TabBarItem icon="code" text="Sources"/>
+        <Tab onClick={() => selectTab(TAB.TESTS)}>
+          <TabBarItem icon="code" text="Tests"/>
         </Tab>
         <Tab onClick={() => selectTab(TAB.REPORT)}>
           <TabBarItem icon="description" text="Report"/>

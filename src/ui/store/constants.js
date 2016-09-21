@@ -15,7 +15,7 @@ exports.TESTS_SOURCE_TYPE = keyMirror({
 });
 
 exports.TAB = keyMirror({
-  SOURCES: null,
+  TESTS: null,
   REPORT: null,
   SETTINGS: null,
 });

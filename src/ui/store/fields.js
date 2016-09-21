@@ -50,7 +50,7 @@ module.exports = {
     persistent: true,
   },
   selectedTab: {
-    defaultValue: TAB.SOURCES,
+    defaultValue: TAB.TESTS,
     persistent: false,
   },
   noQuit: {

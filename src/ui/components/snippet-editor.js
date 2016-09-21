@@ -64,13 +64,13 @@ module.exports = class SnippetEditor extends React.Component {
           <Textfield
             onChange={this.changeName}
             value={this.state.name}
-            label="Snippet name"
+            label="Test name"
             floatingLabel
             style={{width: '200px', marginRight: 'auto'}}
           />
           <Button raised style={{marginRight: '15px'}}>
             <Icon name="add"/>
-            <span className="button-text">New snippet</span>
+            <span className="button-text">New test</span>
           </Button>
           <Button raised>
             <Icon name="delete"/>
