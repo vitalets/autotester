@@ -126,3 +126,11 @@ exports.isValidUrl = function (str) {
     return false;
   }
 };
+
+/**
+ * Safer version of path.join() that can also join url with path
+ * (lib from node-browserify remove second slash after protocol `http://abc` --> `http:/abc`)
+ */
+exports.join = function () {
+  return [].map.call(arguments, arg => exports.trimSlashes(arg)).join('/');
+};

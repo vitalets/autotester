@@ -2,7 +2,6 @@
  * Top-level Run class
  */
 
-const path = require('path');
 const Channel = require('chnl');
 const utils = require('../utils');
 const Runner = require('./runner');
@@ -111,7 +110,7 @@ module.exports = class Run {
   _fetchRemoteFiles(files, baseUrl) {
     this._snippets.length = 0;
     const tasks = files.map(file => {
-      const url = path.join(baseUrl, file);
+      const url = utils.join(baseUrl, file);
       return utils.fetchText(url)
         .then(text => this._snippets.push({path: file, code: text}));
     });
