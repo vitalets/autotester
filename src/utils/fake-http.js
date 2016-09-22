@@ -42,6 +42,7 @@ exports.setHandler = function (h) {
 class Request extends Channel.EventEmitter {
   constructor(options, callback) {
     super();
+    this.isFake = true;
     this._options = options;
     this._callback = callback;
     this._body = undefined;
@@ -127,6 +128,7 @@ class Response extends Channel.EventEmitter {
    */
   constructor (params = {}) {
     super();
+    this.isFake = true;
     this.statusCode = params.statusCode || 200;
     this.headers = [];
     this.data = params.data || '';

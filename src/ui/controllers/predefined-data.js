@@ -52,6 +52,7 @@ const hubs = [
   {
     id: 'sauce',
     serverUrl: `http://${__buildInfo.sauceUser}:${__buildInfo.sauceKey}@ondemand.saucelabs.com:80/wd/hub`,
+    watchUrl: `https://saucelabs.com/beta/tests/:sessionId/watch`,
     caps: {
       // temp for demo
       'username': window.__buildInfo.sauceUser,

@@ -8,6 +8,7 @@ const Runner = require('./runner');
 const engines = require('../engines');
 const loopback = require('./loopback');
 const extras = require('../extras');
+const networkLogger = require('./network-logger');
 const logger = require('../utils/logger').create('Run');
 
 const LOCAL_TESTS_DIR = 'test';
@@ -27,6 +28,7 @@ module.exports = class Run {
     this._options = options;
     this._snippets = [];
     this._localBaseDir = null;
+    this._setupNetworkLogger();
     this._setupExtras();
     this._setupEngine();
     this._setupLoopback();
@@ -70,12 +72,16 @@ module.exports = class Run {
     });
   }
 
+  _setupNetworkLogger() {
+    networkLogger.init();
+  }
+
   _setupExtras() {
     extras.setup();
   }
 
   _setupEngine() {
-    logger.log(`Using target:`, this._options.target);
+    logger.log(`Running on target:`, this._options.target);
     const engine = engines[this._options.engine];
     engine.setServerUrl(this._options.target.serverUrl);
     engine.setCapabilities(this._options.target.caps);
