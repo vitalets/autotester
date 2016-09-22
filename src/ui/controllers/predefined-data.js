@@ -124,7 +124,7 @@ const targets = [
 const snippets = [{
       id: 'snippet1',
       name: 'Google search test',
-      code: require('raw!../../../examples/google_search_test'),
+      code: require('raw!../../../examples/google_search_simple'),
 }];
 
 

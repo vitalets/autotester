@@ -21,7 +21,8 @@ module.exports = observer(class TestsDropdown extends React.Component {
       });
     }
     if (items.length) {
-      items.unshift({value: '', text: 'All'})
+      const text = `All (${items.length} test${items.length === 1 ? '' : 's'})`;
+      items.unshift({value: '', text})
     }
     return items
   }

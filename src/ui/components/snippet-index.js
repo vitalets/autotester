@@ -4,8 +4,9 @@ const {Icon, Button} = require('react-mdl');
 module.exports = function SnippetIndex(props) {
   const has = (
     <div>
-      You have <strong>{props.count}</strong> tests(s)<br/>
-      Select them in dropdown, edit and run or create new
+      You have <strong>{props.count}</strong> test{props.count === 1 ? '' : 's'}!<br/>
+      Select tests in left dropdown, edit and run<br/>
+      or create new.
     </div>
   );
 

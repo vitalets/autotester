@@ -2,7 +2,7 @@
  * Simple google search test
  */
 
-test.describe('Google Search', function() {
+test.describe('Google Search (advanced)', function() {
   var driver;
 
   test.before(function() {

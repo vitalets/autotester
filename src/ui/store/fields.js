@@ -49,7 +49,7 @@ module.exports = {
     persistent: true,
   },
   testsSourceUrl: {
-    defaultValue: 'https://raw.githubusercontent.com/vitalets/autotester/master/examples/index.js',
+    defaultValue: 'https://raw.githubusercontent.com/vitalets/autotester/snippets/examples/index.js',
     persistent: true,
   },
   selectedTab: {
