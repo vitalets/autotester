@@ -24,8 +24,8 @@ exports.init = function() {
   messaging.start();
 };
 
-function loadTestsList() {
-  console.log('loadTestsList')
+function loadTestsList({url}) {
+  return testsList.load(url);
 }
 
 function runTests(data) {

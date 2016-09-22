@@ -108,5 +108,21 @@ exports.cleanStack = function(stack) {
  * @param {String} localUrl
  */
 exports.cutLocalUrl = function (localUrl) {
-  return localUrl.replace(`filesystem:chrome-extension://${chrome.runtime.id}/persistent/`, '');
+  return localUrl
+    .replace(`filesystem:chrome-extension://${chrome.runtime.id}/persistent/`, '')
+    .replace(`chrome-extension://${chrome.runtime.id}/`, '');
+};
+
+/**
+ * Is valid url
+ *
+ * @param {String} str
+ */
+exports.isValidUrl = function (str) {
+  try {
+    new URL(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
 };

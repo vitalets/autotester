@@ -82,20 +82,30 @@ function onMessage(msg, sender, sendResponse) {
 
   const msgListeners = registeredListeners.get(msg.name);
   if (msgListeners && msgListeners.length) {
-    const results = msgListeners.map(listener => {
+    let asyncResponse = false;
+    let result;
+    msgListeners.forEach(listener => {
       try {
-        return listener(msg.payload, sender, sendResponse);
+        result = listener(msg.payload, sender, sendResponse);
       } catch (e) {
         // we need to re-throw error in next tick to be out of onMessage handler and allow event to bubble
-        // todo: copy error stack
-        setTimeout(() => {
-          throw e;
-        }, 0);
+        // todo: try capture error stack
+        throwAsync(e);
+      }
+      if (result === true) {
+        asyncResponse = true;
+      }
+      if (isPromise(result)) {
+        asyncResponse = true;
+        result.then(
+          data => sendResponse(data),
+          e => sendResponse(e && e.stack || String(e))
+        );
       }
     });
-    // if at least some result is true, we should return it here
+    // if at least some result is true or promise, we should return true
     // to show that sendResponse will be called asynchroniously
-    return results.some(Boolean);
+    return asyncResponse;
   }
 }
 
@@ -113,4 +123,14 @@ function wrapKnownMessage(msg) {
   return Object.assign(msg, {
     isMessaging: true
   });
+}
+
+function isPromise(obj) {
+  return obj && typeof obj.then === 'function';
+}
+
+function throwAsync(e) {
+  setTimeout(() => {
+    throw e;
+  }, 0);
 }

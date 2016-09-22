@@ -21,4 +21,7 @@ class MyStore extends Store {
   isSnippets() {
     return this.testsSourceType === TESTS_SOURCE_TYPE.SNIPPETS;
   }
+  clearTests() {
+    this.reset(['tests', 'testsSetup', 'selectedTest']);
+  }
 }

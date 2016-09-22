@@ -38,6 +38,14 @@ module.exports = class Store {
       .then(() => this._loaded = true);
   }
 
+  reset(fieldNames = []) {
+    mobx.action(() => {
+      fieldNames.forEach(fieldName => {
+        this[fieldName] = this._fields[fieldName].defaultValue;
+      });
+    })();
+  }
+
   _observePersistent() {
     // automatically save persistent fields to storage
     this._persistentFields.forEach(fieldName => {
@@ -66,6 +74,9 @@ module.exports = class Store {
 
   _getObservableObj() {
     return Object.keys(this._fields).reduce((res, fieldName) => {
+      if (fieldName in this) {
+        throw new Error(`Field ${fieldName} already in mobx-store`);
+      }
       res[fieldName] = this._fields[fieldName].defaultValue;
       return res;
     }, {});

@@ -23,7 +23,7 @@ module.exports = class SnippetEditor extends React.Component {
     this.changeCode = this.changeCode.bind(this);
     this.updateStore = debounce(mobx.action(this.updateStore.bind(this)), 500);
   }
-  componentDidMount() {
+  componentWillMount() {
     this.disposerState = mobx.autorun(() => {
       if (store.selectedSnippet) {
         // todo: use computed

@@ -20,8 +20,8 @@ exports.init = function() {
   messaging.start();
 };
 
-exports.loadTestsList = function() {
-  return messaging.send(TESTS_LIST_LOAD);
+exports.loadTestsList = function(url) {
+  return messaging.send(TESTS_LIST_LOAD, {url});
 };
 
 exports.runTests = function(data) {

@@ -4,35 +4,23 @@
 
 const utils = require('../utils');
 const evaluate = require('../utils/evaluate');
+const logger = require('../utils/logger').create('Tests-list');
 
-exports.load = function () {
-  const url = addBaseUrl('index.js');
+exports.load = function (url) {
+  logger.log(`Loading from: ${url}`);
   return utils.fetchText(url)
-    .then(
-      text => parseConfig(text, url),
-      err => messaging.send(LOAD_TESTS_CONFIG_DONE, {error: `Config not found: **${url}**`})
-    );
+    .then(text => parseConfig(text, url));
 };
 
 function parseConfig(text, url) {
   const config = evaluate.asCommonJs(url, text);
-  this._verifyConfig(config);
+  validateConfig(config);
   config.url = url;
-  this._testsConfig = config;
-  //this._updateSelectedTest();
-  messaging.send(LOAD_TESTS_CONFIG_DONE, {
-    config: config,
-    //selectedTest: storage.get('selectedTest'),
-  });
+  logger.log('Loaded and validated:', config);
+  return config;
 }
 
-function addBaseUrl(path) {
-  const baseUrl = utils.trimSlashes(storage.get('baseUrl'));
-  path = utils.trimSlashes(path);
-  return `${baseUrl}/${path}`;
-}
-
-function verifyConfig(config) {
+function validateConfig(config) {
   if (!config) {
     throw new Error('Config is empty');
   }
