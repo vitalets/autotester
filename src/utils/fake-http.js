@@ -16,7 +16,7 @@ let handler = null;
  */
 exports.request = function (opts, callback) {
   if (typeof handler !== 'function') {
-    throw new Error('Fake request handler shoulb be a function');
+    throw new Error('Fake request handler should be a function');
   }
   return new Request(opts, callback);
 };

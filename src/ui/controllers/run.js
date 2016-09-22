@@ -35,6 +35,7 @@ function prepareData() {
     noQuit: store.noQuit,
   };
 
+  setTarget(data);
   if (store.isSnippets()) {
     setSnippets(data);
   } else {
@@ -64,6 +65,20 @@ function setFiles(data) {
   } else {
     data.files = data.files.concat(store.tests.slice());
   }
+}
+
+function setTarget(data) {
+  const target = store.targets[store.selectedTarget];
+  if (!target) {
+    throw new Error('Empty target');
+  }
+  const hub = store.hubs.find(h => h.id === target.hubId);
+  data.target = {
+    serverUrl: hub.serverUrl,
+    loopback: hub.loopback,
+    name: target.name,
+    caps: Object.assign({}, hub.caps, target.caps),
+  };
 }
 
 function done() {

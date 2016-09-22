@@ -9,7 +9,7 @@ const {onTestsDone} = require('./internal-channels');
  * Run tests
  *
  * @param {Object} data
- * @param {String} data.targetId where to run tests
+ * @param {Object} data.target where to run tests
  * @param {String} [data.baseUrl] base url for files
  * @param {Array<String>} [data.files] files relative to baseUrl to be downloaded and runned
  * @param {Array<{path, code}>} [data.snippets] snippets
@@ -17,22 +17,11 @@ const {onTestsDone} = require('./internal-channels');
  */
 exports.run = function (data) {
   try {
-    // temp
-    const target = {
-      id: 'loopback',
-      serverUrl: 'http://autotester',
-      name: 'This chrome',
-      loopback: true,
-      caps: {
-        'browserName': 'chrome'
-      }
-    };
-
     const run = new Run({
       uiWindow: getUiWindow(),
       noQuit: data.noQuit,
       engine: 'selenium',
-      target: target,
+      target: data.target,
     });
 
     const runningPromise = data.snippets

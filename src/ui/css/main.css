@@ -49,7 +49,7 @@
 }
 
 /* hide separate test run links for now */
-#mocha a.replay {
+#mocha .test a.replay {
     display: none;
 }
 

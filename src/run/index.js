@@ -21,7 +21,7 @@ module.exports = class Run {
    * @param {Object} options.uiWindow
    * @param {Boolean} options.noQuit
    * @param {String} options.engine
-   * @param {Object} options.target {serverUrl, caps, name}
+   * @param {Object} options.target {loopback, serverUrl, caps, name}
    */
   constructor(options) {
     this._options = options;
@@ -75,7 +75,7 @@ module.exports = class Run {
   }
 
   _setupEngine() {
-    logger.log(`Using target: ${this._options.target.name}`);
+    logger.log(`Using target:`, JSON.stringify(this._options.target, false, 2));
     const engine = engines[this._options.engine];
     engine.setServerUrl(this._options.target.serverUrl);
     engine.setCapabilities(this._options.target.caps);
