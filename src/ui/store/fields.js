@@ -4,7 +4,7 @@
  * persistance flag defned whether to load/save prop in storage
  */
 
-const {APP_STATE, TAB, TESTS_SOURCE_TYPE} = require('./constants');
+const {APP_STATE, TESTS_SOURCE_TYPE, SETTINGS_MENU} = require('./constants');
 
 module.exports = {
   appState: {
@@ -49,12 +49,16 @@ module.exports = {
     persistent: true,
   },
   testsSourceUrl: {
-    defaultValue: '',
+    defaultValue: 'https://raw.githubusercontent.com/vitalets/autotester/master/examples/index.js',
     persistent: true,
   },
   selectedTab: {
-    defaultValue: -1, // better set -1 to avoid flushing content TAB.TESTS,
+    defaultValue: -1, // better set -1 to avoid flushing content on start,
     persistent: false,
+  },
+  selectedSettingsMenuItem: {
+    defaultValue: SETTINGS_MENU.TESTS_SOURCE,
+    persistent: true,
   },
   noQuit: {
     defaultValue: false,

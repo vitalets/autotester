@@ -11,7 +11,7 @@ exports.APP_STATE = keyMirror({
 exports.TESTS_SOURCE_TYPE = keyMirror({
   SNIPPETS: null,
   URL: null,
-  EMBEDED: null,
+  PACKED: null,
 });
 
 exports.TAB = keyMirror({
@@ -20,3 +20,8 @@ exports.TAB = keyMirror({
   SETTINGS: null,
 });
 
+exports.SETTINGS_MENU = keyMirror({
+  TESTS_SOURCE: null,
+  HUBS: null,
+  TARGETS: null,
+});

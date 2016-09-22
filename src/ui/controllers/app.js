@@ -27,7 +27,8 @@ exports.start = function() {
 
 function ready() {
   store.appState = APP_STATE.READY;
-  store.selectedTab = TAB.TESTS;
+  //store.selectedTab = TAB.TESTS;
+  store.selectedTab = TAB.SETTINGS;
 }
 
 // todo: move somewhere

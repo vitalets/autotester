@@ -104,3 +104,37 @@ header .dropdown__field {
     font-size: 1.2em;
     text-align: center;
 }
+
+.settings-menu {
+    flex: 20;
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-content {
+    flex: 80;
+}
+
+.tests-source-url-radio {
+    width: 100%;
+}
+
+.tests-source-url-radio .mdl-radio__outer-circle {
+    top: 27px;
+}
+
+.tests-source-url-radio .mdl-radio__inner-circle {
+    top: 31px;
+}
+
+.settings-tests-source {
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.tests-source-url-input {
+    width: 70%;
+    margin-left: 8px;
+}

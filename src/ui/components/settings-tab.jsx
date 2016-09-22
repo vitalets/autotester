@@ -1,31 +1,33 @@
 const {observer} = require('mobx-react');
+const store = require('../store').store;
+const mobx = require('mobx');
+const SettingsMenu = require('./settings-menu');
+const SettingsContent = require('./settings-content');
+const SettingsTestsSource = require('./settings-tests-source');
 
-module.exports = observer(function SettingsTab() {
-  return (
-    <div>
-
-      <h4>Tests source</h4>
-      {/*
-      <div>
-        <label>
-          <input type="radio" name="testSource" value="snippets"/>
-          Snippets
-        </label>
-        <label>
-          <input type="radio" name="testSource" value="url"/>
-          <span>URL</span>
-          <input type="text" style="width: 200px"/>
-        </label>
-        <label>
-          <input type="radio" name="testSource" value="extension"/>
-          Extension-self
-        </label>
+module.exports = observer(class SettingsTab extends React.Component {
+  constructor() {
+    super();
+    this.handleMenuItemClick = mobx.action(this.handleMenuItemClick.bind(this));
+  }
+  handleMenuItemClick(itemId) {
+    store.selectedSettingsMenuItem = itemId;
+  }
+  render() {
+    return (
+      <div className="flex-container" style={{flexDirection: 'row'}}>
+        <SettingsMenu selected={store.selectedSettingsMenuItem} onClick={this.handleMenuItemClick}/>
+        <SettingsContent>
+          {this.renderContent()}
+        </SettingsContent>
       </div>
-*/}
-      <div>
-        <button id="btn-save-settings">Save</button>
-      </div>
-
-    </div>
-  );
+    );
+  }
+  renderContent() {
+    switch (store.selectedSettingsMenuItem) {
+      case 0: return <SettingsTestsSource/>;
+      default:
+        return <SettingsTestsSource/>;
+    }
+  }
 });
