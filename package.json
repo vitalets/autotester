@@ -50,7 +50,7 @@
     "fileserver": "node ./node_modules/selenium-webdriver/lib/test/fileserver.js",
     "hub": "selenium-standalone start",
     "unpacked": "run-s clean webpack copy gen-build-info",
-    "gen-build-info": "node builder/gen-build-info",
+    "gen-build-info": "source .env && node builder/gen-build-info",
     "mdl:css": "curl https://code.getmdl.io/1.2.1/material.teal-red.min.css -o src/ui/css/material.min.css",
     "zip": "pushd $npm_config_outdir && rimraf $npm_config_outzip && zip -rT $npm_config_outzip . && popd",
     "crx": "crx pack $npm_config_outdir -o $npm_config_outcrx -p $npm_config_crxkey",

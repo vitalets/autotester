@@ -75,7 +75,7 @@ module.exports = class Run {
   }
 
   _setupEngine() {
-    logger.log(`Using target:`, JSON.stringify(this._options.target, false, 2));
+    logger.log(`Using target:`, this._options.target);
     const engine = engines[this._options.engine];
     engine.setServerUrl(this._options.target.serverUrl);
     engine.setCapabilities(this._options.target.caps);

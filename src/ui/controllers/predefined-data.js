@@ -51,10 +51,11 @@ const hubs = [
   // },
   {
     id: 'sauce',
-    serverUrl: 'http://ondemand.saucelabs.com:80/wd/hub',
+    serverUrl: `http://${__buildInfo.sauceUser}:${__buildInfo.sauceKey}@ondemand.saucelabs.com:80/wd/hub`,
     caps: {
-      'username': '',
-      'accessKey': '',
+      // temp for demo
+      'username': window.__buildInfo.sauceUser,
+      'accessKey': window.__buildInfo.sauceKey,
       'browserName': 'chrome'
     }
   },
