@@ -2,16 +2,9 @@
 const {Menu, MenuItem} = require('react-mdl');
 
 module.exports = class Dropdown extends React.Component {
-  constructor() {
-    super();
-    this._currentValue = null;
-  }
   handleClick(item) {
-    if (this._currentValue !== item.value) {
-      this._currentValue = item.value;
-      if (this.props.onChange) {
-        this.props.onChange(item);
-      }
+    if (this.props.value !== item.value && this.props.onChange) {
+      this.props.onChange(item);
     }
   }
   render() {
