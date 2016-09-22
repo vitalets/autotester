@@ -4,6 +4,7 @@ const mobx = require('mobx');
 const SettingsMenu = require('./settings-menu');
 const SettingsContent = require('./settings-content');
 const SettingsTestsSource = require('./settings-tests-source');
+const {SETTINGS_MENU} = require('../store/constants');
 
 module.exports = observer(class SettingsTab extends React.Component {
   constructor() {
@@ -25,9 +26,11 @@ module.exports = observer(class SettingsTab extends React.Component {
   }
   renderContent() {
     switch (store.selectedSettingsMenuItem) {
-      case 0: return <SettingsTestsSource/>;
+      case SETTINGS_MENU.TESTS_SOURCE: return <SettingsTestsSource/>;
+      case SETTINGS_MENU.HUBS:
+      case SETTINGS_MENU.TARGETS:
       default:
-        return <SettingsTestsSource/>;
+        return <div></div>;
     }
   }
 });

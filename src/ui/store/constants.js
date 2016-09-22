@@ -22,6 +22,6 @@ exports.TAB = keyMirror({
 
 exports.SETTINGS_MENU = keyMirror({
   TESTS_SOURCE: null,
-  HUBS: null,
   TARGETS: null,
+  HUBS: null,
 });
