@@ -24,14 +24,14 @@ function onRequestData({request, data}) {
   logger.log(`${getPrefix(request)} request data`, data);
 }
 
-function onResponse({response, body}) {
+function onResponse({response, data}) {
   // copied from selenium-webdriver
-  body = body.replace(/\0/g, '');
+  data = data.replace(/\0/g, '');
   // strip big 'screen' prop with encoded screenshot
   if (response.statusCode !== 200) {
-    body = stripScreenshot(body);
+    data = stripScreenshot(data);
   }
-  logger.log(`${getPrefix(response)} response`, response.statusCode, body);
+  logger.log(`${getPrefix(response)} response`, response.statusCode, data);
 }
 
 function getPrefix(obj) {

@@ -40,7 +40,6 @@ const htmlReporter = require('../reporter/html');
 const globals = require('./globals');
 const localFs = require('../utils/local-fs');
 const engines = require('../engines');
-const logger = require('../utils/logger').create('Runner');
 
 class Runner {
   /**
@@ -79,7 +78,6 @@ class Runner {
       .then(() => this._setupGlobals())
       .then(() => this._runLocalUrls())
       .then(() => this._testRunner.tryRun())
-      .then(() => logger.log('Done'))
   }
 
   /**
@@ -99,10 +97,7 @@ class Runner {
 
   _setupTestRunner() {
     const reporter = htmlReporter.getReporter(this._params.uiWindow);
-    this._testRunner = new MochaRunner({
-      reporter,
-      uiWindow: this._params.uiWindow,
-    });
+    this._testRunner = new MochaRunner({reporter});
     return this._testRunner.setup(this._context);
   }
 

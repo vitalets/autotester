@@ -101,6 +101,14 @@ const targets = [
     }
   },
   {
+    hubId: 'sauce',
+    name: 'Sauce labs (firefox stable, win7)',
+    caps: {
+      'platform': 'Windows 7',
+      'browser': 'firefox',
+    }
+  },
+  {
     hubId: 'localhost',
     name: 'Localhost grid (chrome)',
   },

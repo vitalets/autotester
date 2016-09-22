@@ -75,6 +75,7 @@ function setTarget(data) {
   const hub = store.hubs.find(h => h.id === target.hubId);
   data.target = {
     serverUrl: hub.serverUrl,
+    watchUrl: hub.watchUrl,
     loopback: hub.loopback,
     name: target.name,
     caps: Object.assign({}, hub.caps, target.caps),

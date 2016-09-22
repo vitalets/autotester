@@ -36,7 +36,7 @@ function intercept(http) {
       const chunks = [];
       response.on('data', chunk => chunks.push(chunk));
       response.on('end', () => {
-        exports.onResponse.dispatch({response, body: chunks.join('')});
+        exports.onResponse.dispatch({response, data: chunks.join('')});
       });
     });
 
