@@ -1,15 +1,5 @@
 /**
- * Simple google search test to be executed with Autotester
- * Test is written in BDD style and executed with mocha.
- * Difference with mocha test is that you are not using global `describe`, `it` etc
- * Instead you are using `test.describe`, `test.it`.
- * There are some globals available for convenience:
- * - Driver
- * - By
- * - until
- * - test
- * - console
- * - ...
+ * Simple google search test
  */
 
 test.describe('Google Search', function() {
@@ -17,6 +7,11 @@ test.describe('Google Search', function() {
 
   test.before(function() {
     driver = new Driver();
+  });
+
+  test.it('should contain "google" in title', function() {
+    driver.get('http://www.google.com');
+    assert(driver.getTitle()).contains('Google');
   });
 
   test.it('should append query to title', function() {

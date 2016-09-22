@@ -9,6 +9,7 @@ const bgApi = require('./bg-api');
 const windowApi = require('./window-api');
 const runController = require('./run');
 const testsList = require('./tests-list');
+const predefinedData = require('./predefined-data');
 
 /**
  * Start app
@@ -17,7 +18,9 @@ exports.start = function() {
   runController.init();
   bgApi.init();
   windowApi.init();
-  store.load()
+  return Promise.resolve()
+    .then(() => predefinedData.storeOnFirstRun())
+    .then(() => store.load())
     .then(() => store.isSnippets() ? null : testsList.load())
     .then(mobx.action(ready));
 };
