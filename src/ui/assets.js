@@ -8,5 +8,6 @@ require('mocha/mocha.css');
 // require('./css/html-console.css');
 require('codemirror/lib/codemirror.css');
 require('./css/dropdown.css');
+require('./css/mocha-customize.css');
 require('./css/main.css');
 
