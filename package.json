@@ -1,7 +1,7 @@
 {
   "name": "autotester",
   "version": "0.1.0",
-  "description": "Chrome extension allowing to write and run automation tests right in browser",
+  "description": "Chrome extension allowing to develop and run automation tests right in browser",
   "author": {
     "name": "Vitaliy Potapov",
     "email": "noginsk@rambler.ru"
