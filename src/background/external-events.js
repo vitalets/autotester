@@ -15,4 +15,5 @@ module.exports = keyMirror({
   // from bg
   RELOAD: null,
   TESTS_DONE: null,
+  SESSION_STARTED: null,
 });

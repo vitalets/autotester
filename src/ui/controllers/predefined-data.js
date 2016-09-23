@@ -67,6 +67,17 @@ const targets = [
     hubId: 'loopback',
     name: 'This chrome'
   },
+  {
+    hubId: 'localhost',
+    name: 'Localhost server (chrome)',
+  },
+  {
+    hubId: 'localhost',
+    name: 'Localhost server (firefox)',
+    caps: {
+      'browserName': 'firefox'
+    }
+  },
   /*
    {
    hubId: 'yandex',
@@ -106,17 +117,6 @@ const targets = [
     caps: {
       'platform': 'Windows 7',
       'browser': 'firefox',
-    }
-  },
-  {
-    hubId: 'localhost',
-    name: 'Localhost grid (chrome)',
-  },
-  {
-    hubId: 'localhost',
-    name: 'Localhost grid (firefox)',
-    caps: {
-      'browserName': 'firefox'
     }
   },
 ];

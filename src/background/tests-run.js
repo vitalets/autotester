@@ -2,9 +2,8 @@
  * Runs tests
  */
 
-const thenChrome = require('then-chrome');
 const Run = require('../run');
-const {onTestsDone} = require('./internal-channels');
+const {onTestsDone, onSessionStarted} = require('./internal-channels');
 
 /**
  * Run tests
@@ -25,9 +24,12 @@ exports.run = function (data) {
       target: data.target,
     });
 
-    if (data.target.watchUrl) {
-      run.onSessionStarted.addListener(res => openWatchTab(res.sessionId, data.target.watchUrl));
-    }
+    run.onSessionStarted.addListener(res => {
+      onSessionStarted.dispatch({
+        sessionId: res.sessionId,
+        target: data.target,
+      });
+    });
 
     const runningPromise = data.snippets
       ? run.runSnippets(data.snippets)
@@ -59,9 +61,4 @@ function done() {
 function fail(e) {
   onTestsDone.dispatch();
   throw e;
-}
-
-function openWatchTab(sessionId, watchUrl) {
-  const url = watchUrl.replace(':sessionId', sessionId);
-  thenChrome.tabs.create({url});
 }
