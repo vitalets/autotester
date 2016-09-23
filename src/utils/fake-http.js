@@ -42,20 +42,20 @@ exports.setHandler = function (h) {
 class Request extends Channel.EventEmitter {
   constructor(options, callback) {
     super();
-    this.isFake = true;
+    this._headers = {};
     this._options = options;
+    this.body = [];
+    this.uri = this._getUri();
+    // extra fields
+    this.isFake = true;
     this._callback = callback;
-    this._body = undefined;
     this._finished = false;
   }
 
   write(chunk) {
     // todo: check chunk type and handle 'Buffer'
     if (chunk) {
-      if (this._body === undefined) {
-        this._body = '';
-      }
-      this._body += chunk;
+      this.body.push(chunk);
     }
   }
 
@@ -63,7 +63,7 @@ class Request extends Channel.EventEmitter {
     if (chunk) {
       this.write(chunk);
     }
-    const req = Object.assign({}, this._options, {body: this._body});
+    const req = Object.assign({}, this._options, {body: this.body.join('')});
     Promise.resolve()
       .then(() => handler(req))
       .then(
@@ -89,7 +89,7 @@ class Request extends Channel.EventEmitter {
       statusCode,
       data,
       method: this._options.method,
-      url: this._getUrl(),
+      url: this.uri,
     };
     const response = new Response(responseParams);
     this._callback(response);
@@ -98,7 +98,7 @@ class Request extends Channel.EventEmitter {
     response.send();
   }
 
-  _getUrl() {
+  _getUri() {
     const {protocol, hostname, port, path} = this._options;
     return `${protocol}//${hostname}${port ? ':' + port : ''}${path}`;
   }
@@ -128,9 +128,10 @@ class Response extends Channel.EventEmitter {
    */
   constructor (params = {}) {
     super();
-    this.isFake = true;
     this.statusCode = params.statusCode || 200;
-    this.headers = [];
+    this.headers = {};
+    // extra fields
+    this.isFake = true;
     this.data = params.data || '';
     this.method = params.method;
     this.url = params.url;

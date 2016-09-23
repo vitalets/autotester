@@ -30,13 +30,13 @@ function intercept(http) {
   const origRequest = http.request;
   http.request = function (options, callback) {
     const request = origRequest.apply(http, arguments);
-    // todo: dispatch async everywhere!
+    // todo: dispatch async everywhere, to not break flow
     exports.onRequest.dispatch({request, options});
     request.on('response', response => {
       const chunks = [];
       response.on('data', chunk => chunks.push(chunk));
       response.on('end', () => {
-        exports.onResponse.dispatch({response, data: chunks.join('')});
+        exports.onResponse.dispatch({request, options, response, data: chunks.join('')});
       });
     });
 

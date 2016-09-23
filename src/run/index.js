@@ -132,13 +132,18 @@ module.exports = class Run {
     this._subscription.off();
   }
 
-  _onHttpResponse({data}) {
-    const matches = data.match(NEW_SESSION_RESPONSE_REGEXP);
-    if (matches) {
-      this.onSessionStarted.dispatch({
-        sessionId: matches[1],
-        options: this._options,
-      });
+  _onHttpResponse({request, options, data}) {
+    if (options.method === 'POST' && request.uri.endsWith('/session')) {
+      try {
+        const parsed = JSON.parse(data);
+        this.onSessionStarted.dispatch({
+          sessionId: parsed.sessionId,
+          options: this._options,
+          response: parsed,
+        });
+      } catch (e) {
+        console.error(`Can not parse response data`, data)
+      }
     }
   }
 };
