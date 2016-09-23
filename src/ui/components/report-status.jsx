@@ -1,5 +1,6 @@
 
-const {onSessionStarted} = require('../controllers/internal-channels');
+const store = require('../store').store;
+const {onSessionStarted, onTestsRun} = require('../controllers/internal-channels');
 
 module.exports = class ReportStatus extends React.Component {
   constructor() {
@@ -8,12 +9,15 @@ module.exports = class ReportStatus extends React.Component {
       sessionId: '',
       targetName: '',
       watchUrl: '',
+      testsCount: 0,
     };
   }
   componentDidMount() {
+    onTestsRun.addListener(this.handleTestsRun, this);
     onSessionStarted.addListener(this.handleSessionStart, this);
   }
   componentWillUnmount() {
+    onTestsRun.removeListener(this.handleTestsRun, this);
     onSessionStarted.removeListener(this.handleSessionStart, this);
   }
   handleSessionStart({sessionId, target}) {
@@ -21,6 +25,12 @@ module.exports = class ReportStatus extends React.Component {
       sessionId: sessionId,
       targetName: target.name,
       watchUrl: this.getWatchUrl(target.watchUrl, sessionId),
+    });
+  }
+  handleTestsRun() {
+    this.setState({
+      sessionId: '',
+      testsCount: store.isSnippets() ? store.snippets.length : store.tests.length,
     });
   }
   getWatchUrl(watchUrlTpl, sessionId) {
@@ -33,6 +43,7 @@ module.exports = class ReportStatus extends React.Component {
       return (
         <div style={{fontSize: '1.1em'}}>
           <span>Session on: <strong>{this.state.targetName}</strong>,
+            tests: <strong>{this.state.testsCount}</strong>,
             id: <strong>{this.state.sessionId}</strong>
             {this.state.watchUrl ? <span>, video: <a href={this.state.watchUrl}>watch</a></span> : null}
           </span>
