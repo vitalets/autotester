@@ -18,7 +18,7 @@ module.exports = function SnippetIndex(props) {
   );
 
   return (
-    <div className="snippet-index">
+    <div className="tests-index">
       {props.count ? has : no}
       <Button raised style={{marginTop: '25px'}}>
         <Icon name="add"/>
