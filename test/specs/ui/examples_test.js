@@ -14,9 +14,9 @@ test.describe('examples', function () {
   test.it('should run all without errors', function () {
     driver.findElement({id: 'run'}).click();
     driver.wait(until.titleContains('done'));
-    assert(driver.findElement({id: 'console'}).getText()).equalTo('');
+    driver.findElements({css: '.report-tab .console'}).then(elems => assert(elems.length).equalTo(0));
     assert(driver.findElement({css: '#mocha-stats .failures em'}).getText()).equalTo('0');
-    assert(driver.findElement({css: '#mocha-stats .passes em'}).getText()).equalTo('2');
+    assert(driver.findElement({css: '#mocha-stats .passes em'}).getText()).equalTo('4');
   });
 
 });
