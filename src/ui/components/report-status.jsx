@@ -1,6 +1,10 @@
 
+const Channel = require('chnl');
 const store = require('../store').store;
-const {onSessionStarted, onTestsRun} = require('../controllers/internal-channels');
+const {
+  onSessionStarted,
+  onTestsRun,
+} = require('../controllers/internal-channels');
 
 module.exports = class ReportStatus extends React.Component {
   constructor() {
@@ -13,12 +17,13 @@ module.exports = class ReportStatus extends React.Component {
     };
   }
   componentDidMount() {
-    onTestsRun.addListener(this.handleTestsRun, this);
-    onSessionStarted.addListener(this.handleSessionStart, this);
+    this._subscription = new Channel.Subscription([
+      {channel: onTestsRun, listener: this.handleTestsRun.bind(this)},
+      {channel: onSessionStarted, listener: this.handleSessionStart.bind(this)},
+    ]).on();
   }
   componentWillUnmount() {
-    onTestsRun.removeListener(this.handleTestsRun, this);
-    onSessionStarted.removeListener(this.handleSessionStart, this);
+    this._subscription.off();
   }
   handleSessionStart({sessionId, target}) {
     this.setState({

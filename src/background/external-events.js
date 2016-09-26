@@ -16,4 +16,6 @@ module.exports = keyMirror({
   RELOAD: null,
   TESTS_DONE: null,
   SESSION_STARTED: null,
+  FILE_STARTED: null,
+  TEST_STARTED: null,
 });

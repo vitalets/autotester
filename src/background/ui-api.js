@@ -6,7 +6,13 @@ const messaging = require('../utils/messaging');
 const externalEvents = require('./external-events');
 const testsList = require('./tests-list');
 const testsRun = require('./tests-run');
-const {onTestsDone, onReady, onSessionStarted} = require('./internal-channels');
+const {
+  onTestsDone,
+  onReady,
+  onSessionStarted,
+  onFileStarted,
+  onTestStarted,
+} = require('./internal-channels');
 
 const {
   RELOAD,
@@ -14,6 +20,8 @@ const {
   TESTS_RUN,
   TESTS_DONE,
   SESSION_STARTED,
+  FILE_STARTED,
+  TEST_STARTED,
 } = externalEvents;
 
 exports.init = function() {
@@ -25,6 +33,8 @@ exports.init = function() {
   // todo: make this channeling in more automatic way (e.g. event flag isExternal: true)
   // todo: think also about disabling bi-directional external channels to avoid cyclic flow
   onSessionStarted.addListener(data => messaging.send(SESSION_STARTED, data));
+  onFileStarted.addListener(data => messaging.send(FILE_STARTED, data));
+  onTestStarted.addListener(data => messaging.send(TEST_STARTED, data));
   messaging.start();
 };
 

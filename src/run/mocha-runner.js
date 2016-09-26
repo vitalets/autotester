@@ -23,7 +23,7 @@ class MochaRunner {
   constructor(params) {
     this._params = params;
     this._mochaOptions = Object.assign({}, DEFAULT_OPTIONS, {reporter: params.reporter});
-    this.onTestStart = new Channel();
+    this.onTestStarted = new Channel();
   }
 
   /**
@@ -77,7 +77,7 @@ class MochaRunner {
   _setRunnerListeners() {
     // to see pretty error messages in background console, proxy non-assertion errors from mocha
     this._runner.on('fail', test => this._proxyError(test));
-    this._runner.on('test', () => this._dispatchTestStart());
+    this._runner.on('test', test => this._dispatchTestStart(test));
   }
 
   _proxyError(test) {
@@ -91,9 +91,9 @@ class MochaRunner {
     }
   }
 
-  _dispatchTestStart() {
+  _dispatchTestStart(test) {
     this._testIndex++;
-    this.onTestStart.dispatch({index: this._testIndex});
+    this.onTestStarted.dispatch({index: this._testIndex, title: test.fullTitle()});
   }
 }
 

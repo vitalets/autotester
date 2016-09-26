@@ -4,7 +4,12 @@
 
 const messaging = require('../../utils/messaging');
 const externalEvents = require('../../background/external-events');
-const {onTestsDone, onSessionStarted} = require('../controllers/internal-channels');
+const {
+  onTestsDone,
+  onSessionStarted,
+  onFileStarted,
+  onTestStarted,
+} = require('../controllers/internal-channels');
 
 const {
   RELOAD,
@@ -12,6 +17,8 @@ const {
   TESTS_RUN,
   TESTS_DONE,
   SESSION_STARTED,
+  FILE_STARTED,
+  TEST_STARTED,
 } = externalEvents;
 
 exports.init = function() {
@@ -20,6 +27,8 @@ exports.init = function() {
   messaging.on(TESTS_DONE, () => onTestsDone.dispatch());
   // todo: make this channeling in more automatic way (e.g. event flag isExternal: true)
   messaging.on(SESSION_STARTED, data => onSessionStarted.dispatch(data));
+  messaging.on(FILE_STARTED, data => onFileStarted.dispatch(data));
+  messaging.on(TEST_STARTED, data => onTestStarted.dispatch(data));
   messaging.start();
 };
 

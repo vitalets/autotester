@@ -3,7 +3,7 @@
  */
 
 const Run = require('../run');
-const {onTestsDone, onSessionStarted} = require('./internal-channels');
+const {onTestsDone, onSessionStarted, onFileStarted, onTestStarted} = require('./internal-channels');
 
 /**
  * Run tests
@@ -24,12 +24,7 @@ exports.run = function (data) {
       target: data.target,
     });
 
-    run.onSessionStarted.addListener(res => {
-      onSessionStarted.dispatch({
-        sessionId: res.sessionId,
-        target: data.target,
-      });
-    });
+    setRunnerListeners(run.runner, data);
 
     const runningPromise = data.snippets
       ? run.runSnippets(data.snippets)
@@ -52,6 +47,17 @@ function getUiWindow() {
   } else {
     throw new Error('Autotester tab not found!');
   }
+}
+
+function setRunnerListeners(runner, data) {
+  runner.onFileStarted.addListener(res => onFileStarted.dispatch(res));
+  runner.onTestStarted.addListener(res => onTestStarted.dispatch(res));
+  runner.onSessionStarted.addListener(res => {
+    onSessionStarted.dispatch({
+      sessionId: res.sessionId,
+      target: data.target,
+    });
+  });
 }
 
 function done() {

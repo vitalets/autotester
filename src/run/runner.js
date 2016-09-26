@@ -31,15 +31,17 @@
  * - wait until execution ends
  */
 
-const path = require('path');
+const Channel = require('chnl');
 const promise = require('selenium-webdriver/lib/promise');
 const utils = require('../utils');
+const httpAlias = require('../alias/http');
 const MochaRunner = require('./mocha-runner');
 const FileRunner = require('./file-runner');
 const htmlReporter = require('../reporter/html');
 const globals = require('./globals');
 const localFs = require('../utils/local-fs');
 const engines = require('../engines');
+const logger = require('../utils/logger').create('Runner');
 
 class Runner {
   /**
@@ -50,13 +52,20 @@ class Runner {
     // todo: use custom flow
     // todo2: dont use flow at all :)
     this._flow = promise.controlFlow();
+    // start of file execution
+    this.onFileStarted = new Channel();
+    // start of test execution
+    this.onTestStarted = new Channel();
+    // webdriver session started
+    this.onSessionStarted = new Channel();
+
   }
 
   /**
    * Run tests
    *
    * @param {Object} params
-   * @param {Array<{path, code}>} params.tests
+   * @param {Array<{path, code, isSetup}>} params.tests
    * @param {String} params.localBaseDir base directory to save test-files
    * @param {Object} params.uiWindow
    * @param {Boolean} params.noQuit
@@ -72,12 +81,14 @@ class Runner {
     Targets.dontCloseTabs = params.noQuit;
 
     return Promise.resolve()
-      .then(() => this._cleanUp())
+      .then(() => this._cleanBefore())
+      .then(() => this._listenHttp())
       .then(() => this._saveToLocalFs())
       .then(() => this._setupTestRunner())
       .then(() => this._setupGlobals())
       .then(() => this._runLocalUrls())
       .then(() => this._testRunner.tryRun())
+      .then(() => this._done(), e => this._fail(e));
   }
 
   /**
@@ -87,7 +98,7 @@ class Runner {
   _saveToLocalFs() {
     return this._params.tests.reduce((res, test) => {
       const content = wrapCode(test.code);
-      const localPath = path.join(this._params.localBaseDir, test.path);
+      const localPath = utils.join(this._params.localBaseDir, test.path);
       return res.then(() => localFs
         .save(localPath, content)
         .then(localUrl => this._localUrls.push(localUrl))
@@ -98,6 +109,7 @@ class Runner {
   _setupTestRunner() {
     const reporter = htmlReporter.getReporter(this._params.uiWindow);
     this._testRunner = new MochaRunner({reporter});
+    this._testRunner.onTestStarted.addListener(data => this.onTestStarted.dispatch(data));
     return this._testRunner.setup(this._context);
   }
 
@@ -107,24 +119,67 @@ class Runner {
   }
 
   _runLocalUrls() {
-    return this._localUrls.reduce((res, url) => {
+    const count = this._localUrls.length;
+    return this._localUrls.reduce((res, url, index) => {
       return res
+        .then(() => this.onFileStarted.dispatch({index, count, url}))
         .then(() => new FileRunner(url, this._context).run())
     }, Promise.resolve());
   }
 
-  _cleanUp() {
+  _listenHttp() {
+    this._subscription = new Channel.Subscription([
+      {channel: httpAlias.onResponse, listener: this._onHttpResponse.bind(this)}
+    ]).on();
+  }
+
+  _done() {
+    this._cleanAfter();
+    logger.log('Done');
+  }
+
+  _fail(e) {
+    this._cleanAfter();
+    logger.log('Failed');
+    throw e;
+  }
+
+  _cleanBefore() {
     this._flow.reset();
     this._localUrls.length = 0;
     globals.clear(this._context);
-    this._cleanScriptTags();
     // todo: remove cleaning whole dir in future
     return localFs.removeDir(this._params.localBaseDir);
+  }
+
+  _cleanAfter() {
+    this._cleanScriptTags();
+    this._subscription.off();
+    globals.clear(this._context);
   }
 
   _cleanScriptTags() {
     utils.removeBySelector('script[src^="filesystem:"]', this._context.document);
   }
+
+  _onHttpResponse({request, options, data}) {
+    if (isNewSessionRequest(request, options)) {
+      try {
+        const parsed = JSON.parse(data);
+        this.onSessionStarted.dispatch({
+          sessionId: parsed.sessionId,
+          options: this._options,
+          response: parsed,
+        });
+      } catch (e) {
+        console.error(`Can not parse response data`, data)
+      }
+    }
+  }
+}
+
+function isNewSessionRequest(request, options) {
+  return options.method === 'POST' && request.uri.endsWith('/session');
 }
 
 function wrapCode(code) {
