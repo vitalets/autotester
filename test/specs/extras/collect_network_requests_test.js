@@ -120,7 +120,7 @@ test.suite(function(env) {
       const oldHandles = driver.getAllWindowHandles();
       driver.wait(until.elementLocated({id: 'newtablink'}), 1000).click();
       // delay needed for newtab to open
-      driver.sleep(200);
+      driver.sleep(500);
       driver.requests().stop();
       // close opened tab
       // todo: find more convenient way, maybe switchTo by url ?

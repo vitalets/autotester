@@ -24,7 +24,7 @@ var assert = require('selenium-webdriver/testing/assert');
 
 */
 
-
+/*
 test.describe('Yandex Search', function() {
 
   var driver;
@@ -37,7 +37,6 @@ test.describe('Yandex Search', function() {
 
   test.it('should append query to title', function() {
     driver.get('https://ya.ru');
-    console.log(123, 'hi')
     // driver.sleep(1000);
    // driver.findElement(By.name('text123'));
     driver.findElement(By.name('text')).sendKeys('hello');
@@ -51,7 +50,7 @@ test.describe('Yandex Search', function() {
     driver.quit();
   });
 });
-
+*/
 
 
 // let driver = new Driver();
