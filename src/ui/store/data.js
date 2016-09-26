@@ -1,32 +1,8 @@
 /**
- * Store some predefined data in first run
- * To clear storage run from console: chrome.storage.local.clear()
+ * Pre-defined data
  */
 
-const thenChrome = require('then-chrome');
-const logger = require('../../utils/logger').create('Predefined data');
-
-exports.storeOnFirstRun = function() {
-  return isFirstRun()
-    .then(firstRun => firstRun ? writeToStorage() : null);
-};
-
-function isFirstRun() {
-  return thenChrome.storage.local.get('hubs')
-    .then(data => Object.keys(data).length === 0);
-}
-
-function writeToStorage() {
-  const data = {
-    hubs,
-    targets,
-    snippets,
-  };
-  logger.log('Storing predefined data', data);
-  return thenChrome.storage.local.set(data);
-}
-
-const hubs = [
+exports.hubs = [
   {
     id: 'loopback',
     serverUrl: 'http://autotester',
@@ -62,7 +38,7 @@ const hubs = [
   },
 ];
 
-const targets = [
+exports.targets = [
   {
     hubId: 'loopback',
     name: 'This chrome'
@@ -121,10 +97,8 @@ const targets = [
   },
 ];
 
-const snippets = [{
-      id: 'snippet1',
-      name: 'Google search test',
-      code: require('raw!../../../examples/google_search_simple'),
+exports.snippets = [{
+  id: 'snippet1',
+  name: 'Google search test',
+  code: require('raw!../../../examples/google_search_simple'),
 }];
-
-
