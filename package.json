@@ -12,7 +12,7 @@
   },
   "scripts": {
     "__DEVELOPMENT__": "==========================================================",
-    "dev": "npm run clean && run-p watch:** gen-build-info",
+    "dev": "run-p clean clean-selftest && run-p watch:** gen-build-info",
     "__TESTING__": "==============================================================",
     "test": "npm run test:l",
     "test:l": "run-p crx-dev crx-dev-selftest && node ./test/run local",
@@ -27,6 +27,7 @@
     "publish-to-npm": "npm run build-for-npm --outdir=dist/npm-publish/extension && npm publish dist/npm-publish",
     "__HELPERS__": "==============================================================",
     "clean": "rimraf $npm_config_outdir",
+    "clean-selftest": "rimraf dist/unpacked-dev-selftest",
     "clean-dist": "rimraf dist",
     "code": "run-s check-deps madge no-only-in-test",
     "madge": "madge --format=cjs --circular src",
