@@ -63,7 +63,7 @@ module.exports = class SettingsTestsSource extends React.Component {
                     value={this.state.type}
                     childContainer="div"
                     onChange={e => this.handleTypeChange(e)}>
-          <Radio value={TESTS_SOURCE_TYPE.SNIPPETS} ripple>In-extension snippets</Radio>
+          <Radio value={TESTS_SOURCE_TYPE.SNIPPETS} ripple>In-browser snippets</Radio>
           <Radio value={TESTS_SOURCE_TYPE.URL} ripple className="tests-source-url-radio">
             <span style={{paddingTop: '25px', float: 'left'}}>Remote URL</span>
             <Textfield
@@ -75,7 +75,7 @@ module.exports = class SettingsTestsSource extends React.Component {
               className="tests-source-url-input"
             />
           </Radio>
-          <Radio value={TESTS_SOURCE_TYPE.PACKED} ripple disabled>Packed</Radio>
+          <Radio value={TESTS_SOURCE_TYPE.PACKED} ripple>Built-in</Radio>
         </RadioGroup>
       </div>
     );
