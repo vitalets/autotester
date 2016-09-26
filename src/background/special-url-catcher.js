@@ -3,7 +3,7 @@
  */
 
 const thenChrome = require('then-chrome');
-const constants = require('./bootstrap/constants');
+const constants = require('./constants');
 
 const SPECIAL_HOSTNAME = 'autotester';
 

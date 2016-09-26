@@ -1,0 +1,41 @@
+#mocha {
+    margin: 0;
+    padding: 0;
+}
+
+#mocha h2 {
+    line-height: inherit;
+}
+
+#mocha ul {
+    line-height: 20px;
+}
+
+/* hide separate test run links for now */
+#mocha .test a.replay {
+    display: none;
+}
+
+ul#mocha-stats {
+    position: relative;
+    float: right;
+    right: 0;
+    top: 0;
+}
+
+ul#mocha-stats {
+    border: solid 1px rgba(0,0,0,.54);
+    border-radius: 4px;
+    margin-right: 10px;
+    padding: 4px 8px;
+}
+
+ul#mocha-stats li {
+    display: block;
+    padding-top: 0;
+}
+
+/* hide progress for now */
+ul#mocha-stats .progress {
+    display: none;
+}

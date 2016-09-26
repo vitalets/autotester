@@ -108,5 +108,29 @@ exports.cleanStack = function(stack) {
  * @param {String} localUrl
  */
 exports.cutLocalUrl = function (localUrl) {
-  return localUrl.replace(`filesystem:chrome-extension://${chrome.runtime.id}/persistent/`, '');
+  return localUrl
+    .replace(`filesystem:chrome-extension://${chrome.runtime.id}/persistent/`, '')
+    .replace(`chrome-extension://${chrome.runtime.id}/`, '');
+};
+
+/**
+ * Is valid url
+ *
+ * @param {String} str
+ */
+exports.isValidUrl = function (str) {
+  try {
+    new URL(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+/**
+ * Safer version of path.join() that can also join url with path
+ * (lib from node-browserify remove second slash after protocol `http://abc` --> `http:/abc`)
+ */
+exports.join = function () {
+  return [].map.call(arguments, arg => exports.trimSlashes(arg)).join('/');
 };

@@ -1,0 +1,102 @@
+* {
+    box-sizing: border-box;
+}
+
+.mdl-layout__header-row {
+    padding: 0 10px;
+}
+
+.mdl-layout__header-row > * {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.mdl-layout__header-row > *:first-child {
+    margin-left: 0;
+}
+
+.mdl-layout__header-row > *:last-child {
+    margin-right: 0;
+}
+
+.tab-content {
+    padding: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+#tests {
+    min-width: 150px;
+    width: 35%;
+}
+
+#targets {
+    min-width: 150px;
+    width: 25%;
+}
+
+.CodeMirror {
+    border: 1px solid #e0e0e0;
+    flex: 1;
+}
+
+header .dropdown__field {
+    font-size: 16px;
+    height: 36px;
+}
+
+.flex-container {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+}
+
+.button-text {
+    vertical-align: middle;
+    margin-left: 2px;
+}
+
+.tests-index {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.settings-menu {
+    flex: 20;
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-content {
+    flex: 80;
+}
+
+.tests-source-url-radio {
+    width: 100%;
+}
+
+.tests-source-url-radio .mdl-radio__outer-circle {
+    top: 27px;
+}
+
+.tests-source-url-radio .mdl-radio__inner-circle {
+    top: 31px;
+}
+
+.settings-tests-source {
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.tests-source-url-input {
+    width: 70%;
+    margin-left: 8px;
+}

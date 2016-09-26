@@ -2,22 +2,11 @@
 <head>
     <meta charset="utf-8">
     <title>Autotester</title>
+    <script src="/core/build-info.js"></script>
+    <script src="assets.js"></script>
 </head>
 <body>
-<div class="top-panel">
-    <span>Tests:</span>
-    <select id="testlist"></select>
-    <button id="run">Run</button>
-    <label id="no-quit-label"><input type="checkbox" id="no-quit">no quit</label>
-    <div class="top-right">
-        <span>Target:</span>
-        <select id="targets"></select>
-    </div>
-</div>
-<pre id="console" class="console"></pre>
-<pre id="report" class="report"></pre>
-<div id="mocha" class="report"></div>
-<script src="bootstrap.js"></script>
-<script src="bundle.js"></script>
+<div id="app"></div>
+<script src="boot.js"></script>
 </body>
 </html>

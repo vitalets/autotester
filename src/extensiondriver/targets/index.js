@@ -34,7 +34,7 @@ const Targets = module.exports = {
   dontCloseTabs: false,
 
   // session id is constant for loopback chrome
-  SESSION_ID: 'xxx',
+  SESSION_ID: 'loopback',
 
   get handle() {
     return currentTarget.handle;

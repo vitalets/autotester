@@ -1,20 +1,44 @@
 {
   "name": "Autotester",
-  "description": "Chrome extension allowing to write and run automation tests right in browser",
+  "description": "Chrome extension allowing to develop and run automation tests right in browser",
   "version": "0.1.0",
   "manifest_version": 2,
 
   "permissions": [
+    "alarms",
+    "bookmarks",
+    "browsingData",
+    "clipboardRead",
+    "clipboardWrite",
+    "contentSettings",
+    "contextMenus",
+    "cookies",
+    "debugger",
+    "desktopCapture",
+    "downloads",
+    "fontSettings",
+    "geolocation",
+    "history",
+    "idle",
+    "management",
+    "nativeMessaging",
+    "notifications",
+    "pageCapture",
+    "proxy",
+    "sessions",
+    "storage",
+    "system.cpu",
+    "system.display",
+    "system.memory",
+    "system.storage",
+    "tabCapture",
     "tabs",
+    "topSites",
+    "unlimitedStorage",
+    "webNavigation",
     "webRequest",
     "webRequestBlocking",
-    "webNavigation",
-    "<all_urls>",
-    "debugger",
-    "management",
-    "cookies",
-    "unlimitedStorage",
-    "history"
+    "<all_urls>"
   ],
 
   "browser_action": {},
@@ -22,7 +46,7 @@
   "background": {
     "scripts": [
       "core/build-info.js",
-      "core/background/bootstrap.js",
+      "core/background/boot.js",
       "core/background/bundle.js"
     ],
     "persistent": true
