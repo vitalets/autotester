@@ -52,6 +52,10 @@ module.exports = {
     defaultValue: 'https://raw.githubusercontent.com/vitalets/autotester/snippets/examples/index.js',
     persistent: true,
   },
+  testsSourceBuiltInPath: {
+    defaultValue: chrome.runtime.getURL('/tests/index.js'),
+    persistent: false,
+  },
   selectedTab: {
     defaultValue: -1, // better set -1 to avoid flushing content on start,
     persistent: false,

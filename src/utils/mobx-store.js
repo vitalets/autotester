@@ -21,7 +21,7 @@ module.exports = class Store {
   load() {
     return thenChrome.storage.local.get(this._persistentFields)
       .then(mobx.action(data => {
-        console.info('mobx-store: loaded', data);
+        // console.info('mobx-store: loaded', data);
         Object.assign(this, data);
         //mobx.extendObservable(this, data);
         // Object.keys(data).forEach(key => {
@@ -63,7 +63,7 @@ module.exports = class Store {
       const data = {
         [fieldName]: mobx.toJS(newValue)
       };
-      console.info('mobx-store: saving', data);
+      // console.info('mobx-store: saving', data);
       return thenChrome.storage.local.set(data);
     }
   }

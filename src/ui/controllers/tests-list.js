@@ -9,11 +9,12 @@ const {onError} = require('./internal-channels');
 const utils = require('../../utils');
 
 exports.load = function () {
-  if (utils.isValidUrl(store.testsSourceUrl)) {
-    return bgApi.loadTestsList(store.testsSourceUrl)
+  const url = store.getTestsUrl();
+  if (utils.isValidUrl(url)) {
+    return bgApi.loadTestsList(url)
       .then(success, fail)
   } else {
-    fail(new Error(`Invalid tests url ${store.testsSourceUrl}`));
+    fail(new Error(`Invalid tests url ${url}`));
   }
 };
 
@@ -24,7 +25,7 @@ const success = mobx.action(function (data) {
     store.tests = data.tests || [];
     verifySelectedTest();
   } else {
-    fail(new Error(`No tests found on ${store.testsSourceUrl}`));
+    fail(new Error(`No tests found on ${store.getTestsUrl()}`));
   }
 });
 

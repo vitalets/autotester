@@ -3,6 +3,10 @@
     padding: 0;
 }
 
+#mocha h1 {
+    font-size: 1.2em;
+}
+
 #mocha h2 {
     line-height: inherit;
 }
@@ -14,6 +18,10 @@
 /* hide separate test run links for now */
 #mocha .test a.replay {
     display: none;
+}
+
+#mocha .suite .suite h1 {
+    font-size: 1em;
 }
 
 ul#mocha-stats {

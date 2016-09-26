@@ -21,6 +21,11 @@ class MyStore extends Store {
   isSnippets() {
     return this.testsSourceType === TESTS_SOURCE_TYPE.SNIPPETS;
   }
+  getTestsUrl() {
+    return this.testsSourceType === TESTS_SOURCE_TYPE.URL
+      ? this.testsSourceUrl
+      : this.testsSourceBuiltInPath;
+  }
   clearTests() {
     this.reset(['tests', 'testsSetup', 'selectedTest']);
   }

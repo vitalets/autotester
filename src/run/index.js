@@ -12,7 +12,7 @@ const httpAlias = require('../alias/http');
 const networkLogger = require('./network-logger');
 const logger = require('../utils/logger').create('Run');
 
-const LOCAL_TESTS_DIR = 'test';
+const LOCAL_TESTS_DIR = 'tests';
 const LOCAL_SNIPPETS_DIR = 'snippets';
 
 const NEW_SESSION_RESPONSE_REGEXP = /"webdriver\.remote\.sessionid"\s*:\s*"([^"]+)"/;

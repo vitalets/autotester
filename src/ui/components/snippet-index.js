@@ -5,8 +5,8 @@ module.exports = function SnippetIndex(props) {
   const has = (
     <div>
       You have <strong>{props.count}</strong> test{props.count === 1 ? '' : 's'}!<br/>
-      Select tests in left dropdown, edit and run<br/>
-      or create new.
+      Select tests in left dropdown, edit and run.<br/><br/>
+      OR
     </div>
   );
 

@@ -57,7 +57,7 @@ function setSnippets(data) {
 }
 
 function setFiles(data) {
-  data.baseUrl = path.dirname(store.testsSourceUrl);
+  data.baseUrl = path.dirname(store.getTestsUrl());
   data.files = store.testsSetup.slice();
   if (store.selectedTest) {
     const test = store.tests.find(t => t === store.selectedTest);

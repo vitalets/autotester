@@ -40,7 +40,7 @@ module.exports = class SettingsTestsSource extends React.Component {
   }
   saveType() {
     store.testsSourceType = this.state.type;
-    if (store.testsSourceType !== TESTS_SOURCE_TYPE.SNIPPETS && !store.tests.length) {
+    if (store.testsSourceType !== TESTS_SOURCE_TYPE.SNIPPETS) {
       testsList.load();
     }
   }
