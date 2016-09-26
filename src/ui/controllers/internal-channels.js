@@ -10,3 +10,5 @@ exports.onSessionStarted = new Channel();
 exports.onFileStarted = new Channel();
 exports.onTestStarted = new Channel();
 exports.onError = new Channel();
+exports.onConsoleMessage = new Channel();
+exports.onConsoleClear = new Channel();

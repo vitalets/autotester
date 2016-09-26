@@ -27,7 +27,7 @@ module.exports = observer(class Title extends React.Component {
       runningTestIndex: null,
     };
   }
-  componentWillMount() {
+  componentDidMount() {
     this._subscription = new Channel.Subscription([
       {channel: onFileStarted, listener: this.onFileStarted.bind(this)},
       {channel: onTestStarted, listener: this.onTestStarted.bind(this)},

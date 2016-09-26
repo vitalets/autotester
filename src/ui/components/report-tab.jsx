@@ -1,11 +1,12 @@
 
 const ReportStatus = require('./report-status');
+const HtmlConsole = require('./html-console');
 
 module.exports = function ReportTab() {
   return (
-    <div>
+    <div className="report-tab">
       <ReportStatus/>
-      {/*<pre id="console" className="console"></pre>*/}
+      <HtmlConsole/>
       {/*<pre id="report" className="report"></pre>*/}
       <div id="mocha" className="report"></div>
     </div>

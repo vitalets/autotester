@@ -85,13 +85,11 @@ function getEventsDelta(event1, event2) {
 
 function getErrorFromEvent(errorEvent) {
   // here can be instance of PromiseRejectionEvent or ErrorEvent
-  if (errorEvent.promise) {
-    return typeof errorEvent.reason === 'object'
-      ? errorEvent.reason
-      : `Uncaught (in promise) ${errorEvent.reason}`;
-  } else {
-    return errorEvent.error;
-  }
+  const errorValue = errorEvent.promise ? errorEvent.reason : errorEvent.error;
+  const inPromise = errorEvent.promise ? '(in promise) ' : '';
+  return errorValue instanceof Error
+    ? errorValue
+    : new Error(`Uncaught ${inPromise}${errorEvent.message || errorValue}`);
 }
 
 function resetTimeout() {

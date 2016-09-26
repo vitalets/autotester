@@ -17,7 +17,7 @@ exports.setGlobals = function (context, uiWindow) {
     // for running tests writen for node
     require: require('./fake-require').getFn(),
     // for debug
-    uiConsole: uiWindow.sharedConsole,
+    uiConsole: uiWindow.htmlConsole,
     // for custom reporting
     report: uiWindow.report,
     // this channel is used in test-file wrapper for catching errors

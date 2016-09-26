@@ -9,12 +9,14 @@ const bgApi = require('./bg-api');
 const windowApi = require('./window-api');
 const testsRun = require('./tests-run');
 const testsList = require('./tests-list');
+const htmlConsole = require('./html-console');
 const setup = require('./setup');
 
 /**
  * Start app
  */
 exports.start = function() {
+  htmlConsole.init();
   testsRun.init();
   bgApi.init();
   windowApi.init();

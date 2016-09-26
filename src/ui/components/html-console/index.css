@@ -1,0 +1,40 @@
+.console {
+    overflow: auto;
+    border: solid 1px #e1e1e8;
+    padding: 8px 12px;
+    background-color: #f7f7f9;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #333;
+    max-height: 200px;
+    margin: 0;
+}
+
+.console-line-log {
+    color: #333;
+}
+
+.console-line-info {
+    color: #0066ff;
+}
+
+.console-line-warn {
+    color: #E67E22;
+}
+
+.console-line-error {
+    color: #cc0000;
+}
+
+.console-line-item-string {
+  /* no special format for strings */
+}
+
+.console-line-item-null-undefined {
+    font-style: italic;
+}
+
+.console-line-item-number {
+    font-weight: bold;
+    color: #0066ff;
+}

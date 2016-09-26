@@ -8,7 +8,7 @@ const path = require('path');
 const store = require('../store').store;
 const {APP_STATE, TAB} = require('../store/constants');
 const bgApi = require('./bg-api');
-const {onTestsRun, onTestsDone} = require('./internal-channels');
+const {onTestsRun, onTestsDone, onConsoleClear} = require('./internal-channels');
 
 exports.init = function () {
   onTestsRun.addListener(runOnCurrentData);
@@ -30,13 +30,9 @@ exports.runCustomSnippets = function(snippets) {
 };
 
 const run = mobx.action(function (data) {
-  // clear report!
-  // sharedConsole.clear();
-  // window.report.innerHTML = '';
-
   store.appState = APP_STATE.TESTS_RUNNING;
   store.selectedTab = TAB.REPORT;
-
+  onConsoleClear.dispatch();
   bgApi.runTests(data);
 });
 

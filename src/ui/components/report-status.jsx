@@ -46,7 +46,7 @@ module.exports = class ReportStatus extends React.Component {
   render() {
     if (this.state.sessionId) {
       return (
-        <div style={{fontSize: '1.1em'}}>
+        <div style={{fontSize: '1.1em', marginBottom: '10px'}}>
           <span>Session on: <strong>{this.state.targetName}</strong>,
             tests: <strong>{this.state.testsCount}</strong>,
             id: <strong>{this.state.sessionId}</strong>

@@ -34,7 +34,7 @@ test.describe('show success', function () {
     })
   });
 
-  test.it('should show custom report', function () {
+  test.it.skip('should show custom report', function () {
     runCode(`report.textContent = 'hello'`);
     assert(driver.findElement({id: 'report'}).getText()).equalTo('hello');
   });

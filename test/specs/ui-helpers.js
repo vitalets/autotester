@@ -16,7 +16,7 @@ runContext.runCode = function (code, path = 'test.js') {
 };
 
 runContext.getConsoleText = function () {
-  return runContext.driver.findElement({id: 'console'}).getText();
+  return runContext.driver.findElement({css: '.report-tab .console'}).getText();
 };
 
 runContext.getConsoleLines = function () {

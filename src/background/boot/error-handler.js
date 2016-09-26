@@ -1,5 +1,6 @@
 /**
  * Handler for uncaught errors that proxies it to ui
+ * Prefix not useful as there can be errors in tests that are executed in background.
  */
 
 const utils = require('../../utils');
@@ -12,8 +13,12 @@ module.exports = function (error) {
 
   const msg = getMsg(error);
   getViews().forEach(view => {
-    const console = view.sharedConsole || view.console;
-    console.error(msg);
+    // log to ui devtools console
+    view.console.error(msg);
+    // log to ui html console if exists
+    if (view.htmlConsole) {
+      view.htmlConsole.error(msg);
+    }
   });
 };
 

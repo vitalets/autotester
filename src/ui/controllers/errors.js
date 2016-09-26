@@ -3,17 +3,11 @@
  */
 
 const errorCatcher = require('../../utils/error-catcher');
-//const store = require('../store').store;
-// const HtmlConsole = require('../../utils/html-console');
-//const shareCalls = require('../../utils/share-calls');
+const {onError} = require('./internal-channels');
 
 exports.init = function () {
-  // window.htmlConsole = new HtmlConsole('#console');
-  // window.sharedConsole = shareCalls(console, htmlConsole);
-  errorCatcher.attach(window, errorHandler);
+  errorCatcher.attach(window, e => {
+    onError.dispatch(e);
+  });
 };
 
-function errorHandler(error) {
-  error = error || '';
-  // store.error = '[UI]: ' + (error.stack || error.message || String(error));
-}
