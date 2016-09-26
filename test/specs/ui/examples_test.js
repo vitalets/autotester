@@ -4,7 +4,7 @@ test.describe('examples', function () {
   test.before(function () {
     driver = new Driver();
     driver.get(runContext.selftest.ui);
-    driver.wait(until.titleContains('loaded'));
+    driver.wait(until.titleContains('ready'));
   });
 
   test.after(function () {

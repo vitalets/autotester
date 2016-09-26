@@ -173,7 +173,7 @@ test.suite(function(env) {
       driver.switchTo().window(runContext.selftest.handle);
       driver.requests().collect();
       driver.switchTo().newTab(runContext.selftest.ui);
-      driver.wait(until.titleContains('loaded'));
+      driver.wait(until.titleContains('ready'));
       driver.requests().stop();
       assert(driver.requests().getCount({url: runContext.selftest.configUrl})).equalTo(1);
     });

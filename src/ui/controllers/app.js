@@ -7,7 +7,7 @@ const store = require('../store').store;
 const {APP_STATE, TAB} = require('../store/constants');
 const bgApi = require('./bg-api');
 const windowApi = require('./window-api');
-const runController = require('./run');
+const testsRun = require('./tests-run');
 const testsList = require('./tests-list');
 const setup = require('./setup');
 
@@ -15,7 +15,7 @@ const setup = require('./setup');
  * Start app
  */
 exports.start = function() {
-  runController.init();
+  testsRun.init();
   bgApi.init();
   windowApi.init();
   return Promise.resolve()
