@@ -15,4 +15,4 @@ npm-debug.log
 /roadmap.txt
 /run-node-test.js
 /keys
-.env
+.env-dev

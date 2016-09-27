@@ -12,7 +12,7 @@ const info = {
   timestamp: Date.now(),
   buildNumber: process.env.BUILD_NUMBER || '',
   hash: process.env.BUILD_VCS_NUMBER || '',
-  isDev: Boolean(process.env.AUTOTESTER_DEV_BUILD),
+  isDev: Boolean(process.env.npm_config_devbuild),
 };
 
 // add yandex info if exists

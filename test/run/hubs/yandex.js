@@ -17,6 +17,10 @@ const targets = [
   },
 ];
 
+if (!process.env.YANDEX_USER) {
+  throw new Error('Empty: process.env.YANDEX_USER');
+}
+
 exports.name = 'yandex';
 exports.serverUrl = `http://${process.env.YANDEX_USER}:${process.env.YANDEX_KEY}@sg.yandex-team.ru:4444/wd/hub`;
 exports.capabilities = function () {
