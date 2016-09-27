@@ -35,7 +35,7 @@ todo: gif and link to crx
 
 
 ## Getting started
-1. Download latest [autotester.crx](/)
+1. Download latest [autotester.crx](https://vitalets.github.io/autotester/releases/autotester.crx)
 2. Open chrome on `chrome://extensions` page
 3. Drag-n-drop autotester.crx on that page, confirm permissions dialog
 4. Click `A` button in browser panel to open tests management page
