@@ -23,6 +23,7 @@ module.exports = {
     'ui/show_errors_test.js',
     'ui/show_success_test.js',
     'ui/examples_test.js',
+    'ui/snippets_test.js',
     // === specs to be contributed to selenium
     'selenium-contrib/form_handling_test.js',
     'selenium-contrib/execute_async_script_test.js',

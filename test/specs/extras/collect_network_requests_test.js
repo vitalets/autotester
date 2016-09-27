@@ -120,7 +120,7 @@ test.suite(function(env) {
       const oldHandles = driver.getAllWindowHandles();
       driver.wait(until.elementLocated({id: 'newtablink'}), 1000).click();
       // delay needed for newtab to open
-      driver.sleep(500);
+      driver.sleep(1000);
       driver.requests().stop();
       // close opened tab
       // todo: find more convenient way, maybe switchTo by url ?
@@ -169,13 +169,18 @@ test.suite(function(env) {
       });
     });
 
-    test.it('should collect requests from another target (extension bg)', function () {
+    test.it('should collect requests from another extension bg', function () {
       driver.switchTo().window(runContext.selftest.handle);
       driver.requests().collect();
       driver.switchTo().newTab(runContext.selftest.ui);
       driver.wait(until.titleContains('ready'));
+      const code = `fetch('${test.Pages.simpleTestPage}')`;
+      driver.executeScript(tests => {
+        runTests(tests);
+      }, [{path: 'test.js', code}]);
+      driver.wait(until.titleContains('done'));
       driver.requests().stop();
-      assert(driver.requests().getCount({url: runContext.selftest.configUrl})).equalTo(1);
+      assert(driver.requests().getCount({url: test.Pages.simpleTestPage})).equalTo(1);
     });
 
     test.it('should throw error on several .collect() calls', function () {

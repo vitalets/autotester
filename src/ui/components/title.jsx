@@ -11,7 +11,7 @@ const {onFileStarted, onTestStarted, onTestsDone} = require('../controllers/inte
 const TITLE_PREFIX = chrome.runtime.getManifest().name;
 
 const MSG = {
-  INIT: 'loading...',
+  LOADING: 'loading...',
   READY: 'ready',
   RUNNING: 'running...',
   RUNNING_FILE: 'running file #{i}...',
@@ -57,7 +57,7 @@ module.exports = observer(class Title extends React.Component {
   }
   getMessage() {
     switch (store.appState) {
-      case APP_STATE.INIT: return MSG.INIT;
+      case APP_STATE.LOADING: return MSG.LOADING;
       case APP_STATE.READY: return MSG.READY;
       case APP_STATE.TESTS_RUNNING: return this.getRunningTitle();
       case APP_STATE.TESTS_DONE: return MSG.DONE;

@@ -8,7 +8,7 @@ const {APP_STATE, TESTS_SOURCE_TYPE, SETTINGS_MENU} = require('./constants');
 
 module.exports = {
   appState: {
-    defaultValue: APP_STATE.INIT,
+    defaultValue: APP_STATE.LOADING,
     persistent: false,
   },
   tests: {
@@ -25,7 +25,7 @@ module.exports = {
   },
   snippets: {
     defaultValue: [],
-    // todo: save snippets code separately
+    // todo: save snippets code in separate keys
     persistent: true,
   },
   selectedSnippet: {
@@ -45,7 +45,8 @@ module.exports = {
     persistent: true,
   },
   testsSourceType: {
-    defaultValue: TESTS_SOURCE_TYPE.SNIPPETS,
+    // for dev builds make default tests source - packed
+    defaultValue: window.__buildInfo.isDev ? TESTS_SOURCE_TYPE.PACKED : TESTS_SOURCE_TYPE.SNIPPETS,
     persistent: true,
   },
   testsSourceUrl: {

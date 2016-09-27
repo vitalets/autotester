@@ -1,5 +1,17 @@
 /**
  * Entry point for running self-test on different selenium hubs
+ *
+ * This code runs chrome with 2 extensions:
+ * 1. autotester
+ * (dist/autotester-dev.crx, packed with all tests from `test/specs` dir)
+ *
+ * 2. autotester SELF TEST
+ * (dist/autotester-dev-selftest.crx, packed with tests from `examples` dir and one pre-installed snippet)
+ *
+ * First extension tests second.
+ * So from here we press RUN button in `Autotester` UI and it starts testing `Autotester SELF TEST`.
+ *
+ * We are waiting for `done` in title and grab data from mocha report.
  */
 
 'use strict';

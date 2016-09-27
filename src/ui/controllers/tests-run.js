@@ -65,7 +65,7 @@ function getData() {
 }
 
 function getSnippets() {
-  data.snippets = store.snippets
+  return store.snippets
     .filter(snippet => !store.selectedSnippet || snippet.id === store.selectedSnippet)
     .map(snippet => {
     return {

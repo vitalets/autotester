@@ -1,7 +1,7 @@
 const {RadioGroup, Radio, Textfield} = require('react-mdl');
 const debounce = require('lodash.debounce');
 const mobx = require('mobx');
-const {TESTS_SOURCE_TYPE} = require('../store/constants');
+const {TESTS_SOURCE_TYPE, APP_STATE} = require('../store/constants');
 const store = require('../store').store;
 const testsList = require('../controllers/tests-list');
 
@@ -41,7 +41,7 @@ module.exports = class SettingsTestsSource extends React.Component {
   saveType() {
     store.testsSourceType = this.state.type;
     if (store.testsSourceType !== TESTS_SOURCE_TYPE.SNIPPETS) {
-      testsList.load();
+      this.loadTests();
     }
   }
   saveUrl() {
@@ -53,8 +53,13 @@ module.exports = class SettingsTestsSource extends React.Component {
     if (!store.testsSourceUrl) {
       store.clearTests();
     } else {
-      testsList.load();
+      this.loadTests();
     }
+  }
+  loadTests() {
+    store.appState = APP_STATE.LOADING;
+    testsList.load()
+      .then(() => store.appState = APP_STATE.READY);
   }
   render() {
     return (

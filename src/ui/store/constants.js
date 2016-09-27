@@ -2,7 +2,7 @@
 const keyMirror = require('keymirror');
 
 exports.APP_STATE = keyMirror({
-  INIT: null,
+  LOADING: null,
   READY: null,
   TESTS_RUNNING: null,
   TESTS_DONE: null,
