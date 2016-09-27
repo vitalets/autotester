@@ -7,6 +7,7 @@ const store = require('../store').store;
 const bgApi = require('./bg-api');
 const {onError} = require('./internal-channels');
 const utils = require('../../utils');
+const logger = require('../../utils/logger').create('Tests-list');
 
 exports.load = function () {
   const url = store.getTestsUrl();
@@ -20,7 +21,7 @@ exports.load = function () {
 
 const done = mobx.action(function (data) {
   if (data && Array.isArray(data.tests)) {
-    console.log('Tests loaded:', data.tests.length);
+    logger.log('Tests loaded:', data.tests.length);
     store.testsSetup = data.setup || [];
     store.tests = data.tests || [];
     verifySelectedTest();

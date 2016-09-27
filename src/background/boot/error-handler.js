@@ -13,8 +13,6 @@ module.exports = function (error) {
 
   const msg = getMsg(error);
   getViews().forEach(view => {
-    // log to ui devtools console
-    view.console.error(msg);
     // log to ui html console if exists
     if (view.htmlConsole) {
       view.htmlConsole.error(msg);
