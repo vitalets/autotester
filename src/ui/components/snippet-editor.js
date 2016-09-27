@@ -77,6 +77,9 @@ module.exports = class SnippetEditor extends React.Component {
       store.deleteSelectedSnippet();
     }
   }
+  addSnippet() {
+    store.addSnippet();
+  }
   getSelectedSnippet() {
     return store.snippets.find(s => s.id === store.selectedSnippet);
   }
@@ -91,7 +94,7 @@ module.exports = class SnippetEditor extends React.Component {
             floatingLabel
             style={{width: '300px', marginRight: 'auto'}}
           />
-          <Button raised style={{marginRight: '15px'}}>
+          <Button raised style={{marginRight: '15px'}} onClick={this.addSnippet}>
             <Icon name="add"/>
             <span className="button-text">New test</span>
           </Button>

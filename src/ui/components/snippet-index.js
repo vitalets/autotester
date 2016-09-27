@@ -1,5 +1,6 @@
 
 const {Icon, Button} = require('react-mdl');
+const store = require('../store').store;
 
 module.exports = function SnippetIndex(props) {
   const has = (
@@ -20,7 +21,7 @@ module.exports = function SnippetIndex(props) {
   return (
     <div className="tests-index">
       {props.count ? has : no}
-      <Button raised style={{marginTop: '25px'}}>
+      <Button raised style={{marginTop: '25px'}} onClick={() => store.addSnippet()}>
         <Icon name="add"/>
         <span className="button-text">Create new test</span>
       </Button>
