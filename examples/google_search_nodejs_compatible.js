@@ -1,6 +1,6 @@
 /**
  * Test is the same as own selenium example from `selenium-webdriver/exampels/google_search_test.js`
- * But Autotester can xecute it also.
+ * But Autotester can execute it also.
  */
 
 var webdriver = require('selenium-webdriver'),
@@ -20,8 +20,9 @@ test.describe('Google Search (nodejs compatible)', function() {
 
   test.it('should append query to title (nodejs compatible)', function() {
     driver.get('http://www.google.com');
-    driver.findElement(By.name('q')).sendKeys('webdriver' + Key.ENTER);
-    driver.wait(until.titleContains('webdriver'), 2000);
+    driver.findElement(By.name('q')).sendKeys('kitten' + Key.ENTER);
+    driver.wait(until.titleContains('kitten'), 2000);
+    driver.sleep(1000);
   });
 
   test.after(function() {
