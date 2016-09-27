@@ -1,5 +1,9 @@
 /**
- * Updates manifest of selftest version of autotester
+ * Creates selftest version of Autotester:
+ *
+ * 1. Copy all files from unpacked-dev to unpacked-dev-selftest
+ * 2. Update Update name and key in selftest manifest to distinguish
+ * 3. Copy examples as built-in tests
  */
 
 'use strict';
