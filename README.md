@@ -3,7 +3,7 @@ Autotester is chrome extension that allows to develop and run automation tests r
 Tests are written in Javascript and can be executed over another tab of the same browser or any remote browser instance.
 
 ## Demo 
-todo: gif and link to crx
+<img src="https://vitalets.github.io/autotester/autotester-demo.gif"/>
 
 ## Key features
 * **zero setup**
@@ -53,18 +53,24 @@ Before non-trivial hacks please discuss approach in issues.
 
 1. Install [node.js](https://nodejs.org) if not yet
 2. Fork the repo and clone it:
-```bash
-git clone https://github.com/<your_name>/autotester.git
-```
+
+   ```bash
+   git clone https://github.com/<your_name>/autotester.git
+   ```
+   
 3. Install needed npm packages:
-```bash
-cd autotester
-npm i
-```
+
+   ```bash
+   cd autotester
+   npm i
+   ```
+   
 4. Run dev watcher:
-```bash
-npm run dev
-```
+
+   ```bash
+   npm run dev
+   ```
+   
 5. Open chrome and load unpacked extension from `dist/unpacked-dev`.
 6. Also load unpacked extension from `dist/unpacked-dev-selftest`. This is copy of Autotester needed for self testing.
 7. Hack, push and make pull request. 
