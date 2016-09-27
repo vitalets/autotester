@@ -2,6 +2,7 @@
  * This singleton store contains information about UI state
  */
 
+const mobx = require('mobx');
 const fields = require('./fields');
 const Store = require('../../utils/mobx-store');
 const {TESTS_SOURCE_TYPE} = require('./constants');
@@ -28,5 +29,13 @@ class MyStore extends Store {
   }
   clearTests() {
     this.reset(['tests', 'testsSetup', 'selectedTest']);
+  }
+  deleteSelectedSnippet() {
+    mobx.action(() => {
+      if (this.selectedSnippet) {
+        this.snippets = this.snippets.filter(snippet => snippet.id !== this.selectedSnippet);
+        this.selectedSnippet = '';
+      }
+    })();
   }
 }

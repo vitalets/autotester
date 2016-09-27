@@ -21,6 +21,7 @@ module.exports = class SnippetEditor extends React.Component {
     };
     this.changeName = this.changeName.bind(this);
     this.changeCode = this.changeCode.bind(this);
+    this.deleteSnippet = this.deleteSnippet.bind(this);
     this.updateStore = debounce(mobx.action(this.updateStore.bind(this)), 500);
   }
   componentWillMount() {
@@ -71,6 +72,11 @@ module.exports = class SnippetEditor extends React.Component {
       }
     }, 100);
   }
+  deleteSnippet() {
+    if (window.confirm('Sure?')) {
+      store.deleteSelectedSnippet();
+    }
+  }
   getSelectedSnippet() {
     return store.snippets.find(s => s.id === store.selectedSnippet);
   }
@@ -89,8 +95,8 @@ module.exports = class SnippetEditor extends React.Component {
             <Icon name="add"/>
             <span className="button-text">New test</span>
           </Button>
-          <Button raised>
-            <Icon name="delete"/>
+          <Button raised onClick={this.deleteSnippet}>
+            <Icon name="delete" disabled={!store.selectedSnippet}/>
             <span className="button-text">Delete</span>
           </Button>
         </div>

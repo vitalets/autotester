@@ -8,10 +8,15 @@ const testsList = require('../controllers/tests-list');
 module.exports = class SettingsTestsSource extends React.Component {
   constructor() {
     super();
+    this.state = {
+      type: '',
+      url: '',
+      urlError: '',
+    };
     this.saveType = debounce(mobx.action(this.saveType.bind(this)), 500);
     this.saveUrl = debounce(mobx.action(this.saveUrl.bind(this)), 1000);
   }
-  componentWillMount() {
+  componentDidMount() {
     this.disposer = mobx.autorun(() => {
       this.setState({
         type: store.testsSourceType,
