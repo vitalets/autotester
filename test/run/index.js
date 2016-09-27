@@ -34,7 +34,6 @@ function run() {
       Promise.all(tasks)
         .then(res => {
           const errors = res.filter(r => r instanceof Error);
-          errors.forEach(e => console.log(`ERROR: ${e.message}`));
           console.log(`FINISHED SESSIONS: ${res.length} (${hub.name})`);
           console.log(`ERRORS: ${errors.length}`);
           process.exit(errors.length ? 1 : 0);
@@ -66,30 +65,34 @@ function runForCapabilities(caps) {
       return navigator.userAgent + ' ' + navigator.language;
     }).then(res => console.log(`${signature}${res}`));
     driver.findElement({id: 'run'}).click();
-    driver.wait(webdriver.until.titleContains('done'));
+    let prevTitle = '';
+    driver.wait(() => {
+      return driver.getTitle().then(title =>{
+        if (title !== prevTitle) {
+          console.log(signature + title);
+          prevTitle = title;
+        }
+        return title.indexOf('done') >= 0;
+      })
+    });
     // todo: read htmlConsole as there can be errors
     const mochaReport = driver.findElement({id: 'mocha'}).getAttribute('innerHTML');
-    const consoleReport = driver.findElement({id: 'console'}).getText();
+    const consoleReport = driver.findElements({css: '.console'})
+        .then(elems => elems.length ? elems[0].getText() : '');
     Promise.all([mochaReport, consoleReport]).then(([mochaReport, consoleReport]) => {
-      console.log(signature + 'finished');
-      console.log('console:');
-      console.log(consoleReport);
-      const hasErrors = processReport(mochaReport);
+      console.log(`${signature}console: ${consoleReport}`);
+      console.log(`${signature}mocha report: `);
+      const hasErrors = processReport(mochaReport, signature);
       trySendSessionStatus(driver, signature, hasErrors);
       driver.quit()
-        .then(() => !hasErrors ? resolve() : reject(new Error(`Tests failed`)));
-    })
+        .then(
+          () => !hasErrors ? resolve() : reject(new Error(`Tests failed`)),
+          reject
+        );
+    }, reject)
   })
   // catch error and resolve with it to not stop Promise.all chain
-  .catch(e => {
-    if (driver.getSession()) {
-      driver.quit();
-    }
-    // todo: driver.quit().catch() ?
-    const msg = e.message || e.stack;
-    e.message = signature + msg;
-    return e;
-  });
+  .catch(e => fail(driver, signature, e));
 }
 
 function processReport(html) {
@@ -118,6 +121,16 @@ function trySendSessionStatus(driver, signature, hasErrors) {
         .catch(e => console.log(`${signature}session status sending error`, e));
     });
   }
+}
+
+function fail(driver, signature, e) {
+  if (driver.getSession()) {
+    driver.quit();
+  }
+  // todo: driver.quit().catch() ?
+  // better to show message first as stack is too big
+  console.log(`${signature}ERROR: ${e.message || e.stack}`);
+  return e;
 }
 
 function throwAsync(e) {
