@@ -32,7 +32,7 @@ runContext.enableTestsSourceBuiltIn = function () {
   // enable tests source=built-in from settings
   const driver = runContext.driver;
   driver.findElement({css: '.mdl-tabs__tab:nth-child(3)'}).click();
-  driver.findElement({css: '.settings-tests-source input[value="PACKED"]'}).click();
+  driver.findElement({css: '.settings-tests-source input[value="BUILT_IN"]'}).click();
   driver.sleep(600);
 };
 

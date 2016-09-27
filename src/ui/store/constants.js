@@ -11,7 +11,7 @@ exports.APP_STATE = keyMirror({
 exports.TESTS_SOURCE_TYPE = keyMirror({
   SNIPPETS: null,
   URL: null,
-  PACKED: null,
+  BUILT_IN: null,
 });
 
 exports.TAB = keyMirror({

@@ -80,7 +80,7 @@ module.exports = class SettingsTestsSource extends React.Component {
               className="tests-source-url-input"
             />
           </Radio>
-          <Radio value={TESTS_SOURCE_TYPE.PACKED} ripple>Built-in</Radio>
+          <Radio value={TESTS_SOURCE_TYPE.BUILT_IN} ripple>Built-in</Radio>
         </RadioGroup>
       </div>
     );
