@@ -114,7 +114,7 @@ if (window.__buildInfo.sauceUser) {
       name: 'Sauce labs (firefox stable, win7)',
       caps: {
         'platform': 'Windows 7',
-        'browser': 'firefox',
+        'browserName': 'firefox',
       }
     },
   ]);
