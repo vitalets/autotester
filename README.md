@@ -34,6 +34,10 @@ Tests are written in Javascript and can be executed over another tab of the same
     * any custom selenium grid
 
 
+## Project status
+Autotester is in **early beta** now. Not all webdriver commands and features are supported. Yet.  
+Please feel free to try it and share your feedback or ideas in [issues](/issues) - help us to make it better!
+
 ## Getting started
 1. Download latest [autotester.crx](https://vitalets.github.io/autotester/releases/autotester.crx)
 2. Open chrome on `chrome://extensions` page
@@ -43,9 +47,6 @@ Tests are written in Javascript and can be executed over another tab of the same
 ## Usage
 Write tests using [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html).  
 More detailed tutorial is coming soon.
-
-## How to help
-There are many directions to grow so feel free to share your ideas in [issues](/issues).
 
 ## How to contribute
 Contribution is very appreciated!  
