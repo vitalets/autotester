@@ -4,12 +4,14 @@ const store = require('../store').store;
 const {
   onSessionStarted,
   onTestsRun,
+  onTestsDone,
 } = require('../controllers/internal-channels');
 
 module.exports = class ReportStatus extends React.Component {
   constructor() {
     super();
     this.state = {
+      done: false,
       sessionId: '',
       targetName: '',
       watchUrl: '',
@@ -19,6 +21,7 @@ module.exports = class ReportStatus extends React.Component {
   componentDidMount() {
     this._subscription = new Channel.Subscription([
       {channel: onTestsRun, listener: this.handleTestsRun.bind(this)},
+      {channel: onTestsDone, listener: this.handleTestsDone.bind(this)},
       {channel: onSessionStarted, listener: this.handleSessionStart.bind(this)},
     ]).on();
   }
@@ -28,15 +31,20 @@ module.exports = class ReportStatus extends React.Component {
   handleSessionStart({sessionId, target}) {
     this.setState({
       sessionId: sessionId,
-      targetName: target.name,
       watchUrl: this.getWatchUrl(target.watchUrl, sessionId),
     });
   }
   handleTestsRun() {
     this.setState({
-      sessionId: '',
+      done: false,
+      targetName: store.targets[store.selectedTarget].name,
       testsCount: store.isSnippets() ? store.snippets.length : store.tests.length,
+      sessionId: '',
+      watchUrl: '',
     });
+  }
+  handleTestsDone() {
+    this.setState({done: true});
   }
   getWatchUrl(watchUrlTpl, sessionId) {
     return watchUrlTpl && sessionId
@@ -44,14 +52,18 @@ module.exports = class ReportStatus extends React.Component {
       : '';
   }
   render() {
-    if (this.state.sessionId) {
+    if (this.state.targetName) {
       return (
         <div style={{fontSize: '1.1em', marginBottom: '10px'}}>
-          <span>Session on: <strong>{this.state.targetName}</strong>,
+          <div>
+            Session on: <strong>{this.state.targetName}</strong>,
             tests: <strong>{this.state.testsCount}</strong>,
-            id: <strong>{this.state.sessionId}</strong>
+            id: {this.state.sessionId ? <strong>{this.state.sessionId}</strong> : <i>waiting...</i>}
             {this.state.watchUrl ? <span>, video: <a href={this.state.watchUrl}>watch</a></span> : null}
-          </span>
+          </div>
+          <div>
+            Status: <strong>{this.state.done ? 'done' : 'running...'}</strong>
+          </div>
         </div>
       );
     } else {
