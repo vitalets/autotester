@@ -1,6 +1,7 @@
 
 const {Icon, Button} = require('react-mdl');
 const store = require('../store').store;
+const FlagsNote = require('./flags-note');
 
 module.exports = function SnippetIndex(props) {
   const has = (
@@ -25,6 +26,7 @@ module.exports = function SnippetIndex(props) {
         <Icon name="add"/>
         <span className="button-text">Create new test</span>
       </Button>
+      <FlagsNote/>
     </div>
   );
 };

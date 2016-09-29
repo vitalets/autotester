@@ -1,4 +1,6 @@
 
+const FlagsNote = require('./flags-note');
+
 module.exports = function FilesIndex(props) {
   const has = (
     <div>
@@ -18,6 +20,7 @@ module.exports = function FilesIndex(props) {
   return (
     <div className="tests-index">
       {props.count ? has : no}
+      <FlagsNote/>
     </div>
   );
 };

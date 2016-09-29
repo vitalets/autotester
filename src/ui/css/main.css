@@ -65,6 +65,7 @@ header .dropdown__field {
     padding-top: 20px;
     font-size: 1.2em;
     text-align: center;
+    flex: 1;
 }
 
 .settings-menu {
@@ -100,4 +101,12 @@ header .dropdown__field {
 .tests-source-url-input {
     width: 70%;
     margin-left: 8px;
+}
+
+.flags-note {
+    font-size: 0.7em;
+    text-align: center;
+    color: gray;
+    margin-top: auto;
+    margin-bottom: 20px;
 }
