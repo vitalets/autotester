@@ -54,12 +54,13 @@ Have a look on [Autotester self tests](test/specs).
 *More detailed tutorial is coming..*
 
 ## Where to store tests
-You can create as many tests as you like and store them right in browser as snippets.
-This is the easiest way but less reliable: if you occasionally remove extension tests will be lost.  
-For more serious things it is recommended to serve tests from local or remote http server
-and keep them under version control.  
-The third option is to load tests from local directory without http server.
-For that install unpacked extension from zip (not crx) and use `/tests` directory inside.
+1. You can create as many tests as you like and store them right in browser as snippets.
+This is the easiest way but less reliable: if you occasionally remove extension tests will be lost.
+2. For more serious things it is recommended to serve tests from local or remote http server
+and keep them under version control.
+3. The third option is to load tests from local directory without http server.
+For that you should install extension as unpacked from [autotester.zip](https://vitalets.github.io/autotester/releases/autotester.zip)
+(not crx) and use `/tests` directory inside.
 
 ## Roadmap
 There are many directions to grow. The current plan is following:
