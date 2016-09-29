@@ -17,14 +17,7 @@ exports.hubs = [
     caps: {
       'browserName': 'chrome'
     }
-  },
-  {
-    id: 'localhost',
-    serverUrl: 'http://localhost:4444/wd/hub',
-    caps: {
-      'browserName': 'chrome'
-    }
-  },
+  }
 ];
 
 exports.targets = [
@@ -32,18 +25,34 @@ exports.targets = [
     hubId: 'loopback',
     name: 'This chrome'
   },
-  {
-    hubId: 'localhost',
-    name: 'Localhost server (chrome)',
-  },
-  {
-    hubId: 'localhost',
-    name: 'Localhost server (firefox)',
-    caps: {
-      'browserName': 'firefox'
-    }
-  }
 ];
+
+// add localhost hub and target (currently for dev build only)
+if (window.__buildInfo.isDev) {
+  exports.hubs = exports.hubs.concat([
+    {
+      id: 'localhost',
+      serverUrl: 'http://localhost:4444/wd/hub',
+      caps: {
+        'browserName': 'chrome'
+      }
+    },
+  ]);
+
+  exports.targets = exports.targets.concat([
+    {
+      hubId: 'localhost',
+      name: 'Localhost server (chrome)',
+    },
+    {
+      hubId: 'localhost',
+      name: 'Localhost server (firefox)',
+      caps: {
+        'browserName': 'firefox'
+      }
+    }
+  ]);
+}
 
 // add yandex hub and targets
 if (window.__buildInfo.yandexUser) {

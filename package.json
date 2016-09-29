@@ -23,7 +23,7 @@
     "__BUILD__": "================================================================",
     "build": "run-s unpacked zip crx --outdir=dist/unpacked",
     "build-with-examples": "run-s unpacked zip --outdir=dist/unpacked --copytest=examples --outzip=../autotester-with-examples.zip",
-    "build-in-docs": "npm run build && cpx -v 'dist/autotester.crx' docs/releases/",
+    "build-in-docs": "npm run build && cpx -v 'dist/autotester.{crx,zip}' docs/releases/",
     "__PUBLISH__": "==============================================================",
     "build-for-npm": "npm run unpacked && cpx -v package.json $npm_config_outdir/../",
     "publish-to-npm": "npm run build-for-npm --outdir=dist/npm-publish/extension && npm publish dist/npm-publish",
