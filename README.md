@@ -39,8 +39,8 @@ Tests are written in Javascript and can be executed over another tab of the same
 
 
 ## Project status
-Autotester is in **early beta** now. Not all webdriver commands and features are supported. Yet.  
-Please feel free to try it and share your feedback or ideas in [issues](issues) - help us to make it better!
+Autotester is in **early beta** now. Not all webdriver commands and features are supported. Yet. And there can be bugs.   
+But feel free to try it and share your feedback or ideas in [issues](issues) - help us to make it better!
 
 ## Getting started
 1. Download latest [autotester.crx](https://vitalets.github.io/autotester/releases/autotester.crx)
@@ -49,8 +49,9 @@ Please feel free to try it and share your feedback or ideas in [issues](issues) 
 4. Click `A` button in browser panel to open tests management page
 
 ## Usage
-Write tests using [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html).  
-*More detailed tutorial is coming soon..*
+Start with in-browser snippets using [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html).  
+Have a look on [Autotester self tests](test/specs).  
+*More detailed tutorial is coming..*
 
 ## Where to store tests
 You can create as many tests as you like and store them right in browser as snippets. 
@@ -59,7 +60,19 @@ For more serious things it is recommended to serve tests from local or remote ht
 The third option is to load tests from local directory without http server.
 For that install unpacked extension from zip (not crx) and use `/tests` directory inside.
 
-## How to contribute
+## Roadmap
+There are many directions to grow. The current plan is following:
+
+* implement rest of webdriver commands
+* improve docs and tutorials
+* add capabilities manager to setup targets
+* integrate with other webdriver implementations (webdriverio, nightwatchjs, codeceptJS, spectron)
+* integrate with Appium
+* run tests in parallel
+* autocomplete commands in editor
+* ...your idea?
+
+## Contribution
 If you see how to fix bug, typo or add new feature - you are welcome to contribute.
 
 1. Install [node.js](https://nodejs.org) if not yet
