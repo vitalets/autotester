@@ -50,7 +50,7 @@ Please feel free to try it and share your feedback or ideas in [issues](issues) 
 
 ## Usage
 Write tests using [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html).  
-More detailed tutorial is coming soon..
+*More detailed tutorial is coming soon..*
 
 ## Where to store tests
 You can create as many tests as you like and store them right in browser as snippets. 
