@@ -6,37 +6,41 @@ Tests are written in Javascript and can be executed over another tab of the same
 <img src="https://vitalets.github.io/autotester/autotester-demo.gif"/>
 
 ## Key features
-* **zero setup**
-    * just install extension in chrome
-    * no other stuff like Selenium, Node.js or Chromedriver is needed
+* **Zero setup**  
+  The setup is just drag-n-drop extension in chrome. No other stuff like Selenium, Node.js or Chromedriver is needed.
    
-* **convenient development**
-    * develop tests right in browser
-    * toggle between tabs to see test source and result page
-    * use devtools to check css selectors
-    * select particular test to run and debug
+* **Convenient development**  
+  Developing tests right in browser has some advantages. You can edit tests in first tab and check results in second.
+  You can easily run particular test to debug. You can keep tab open after tests to inspect with devtools.
     
-* **extra commands out of box**
-    * capture and mock network requests
-    * opening new tabs
-    * testing chrome extensions, attach to background pages
-    * use any [chrome extensions API](https://developer.chrome.com/extensions/api_index) needed for your tests
-    * (more commands coming soon)
+* **Capturing network requests**  
+  Capturing network requests is working out of box. You can capture page loads, resources (img, script, etc),
+  xhr requests and new tabs. No proxy needed. Please see [example](test/specs/extras/collect_network_requests_test.js).
+    
+* **Custom commands**  
+  Tests are executed in extension context, so all of rich [chrome extensions API](https://developer.chrome.com/extensions/api_index)
+  are available. You can defined custom commands to work with cookies, downloads, tabs, history etc and use it in your tests.
 
-* **various tests origins**
-    * stored in browser
-    * loaded from remote URL (e.g. github)
-    * loaded from local directory
+* **Selenium compatible syntax**  
+  Tests syntax is compatible with [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html)
+  so it can be executed in nodejs and visa-versa (except custom commands).
 
-* **run on remote server**
-    * sauce labs
-    * browser stack
-    * any custom selenium grid
+* **Testing other chrome extensions**  
+  With Autotester it is possible to attach to extensions background pages for testing.
+  Please see [example](test/specs/extras/extension_switching_test.js).
+
+* **Various places to store tests**  
+  Tests can be stored right in browser, loaded from any local or remote http server (for example github) or loaded from local directory. 
+
+* **Running tests on remote server**  
+  Besides running tests in the same chrome instance it is possible to route commands to any selenium server.
+  It can be [localhost standalone server](https://www.npmjs.com/package/selenium-standalone),
+  [saucelabs](https://saucelabs.com), [browserstack](https://www.browserstack.com), etc.
 
 
 ## Project status
 Autotester is in **early beta** now. Not all webdriver commands and features are supported. Yet.  
-Please feel free to try it and share your feedback or ideas in [issues](/issues) - help us to make it better!
+Please feel free to try it and share your feedback or ideas in [issues](issues) - help us to make it better!
 
 ## Getting started
 1. Download latest [autotester.crx](https://vitalets.github.io/autotester/releases/autotester.crx)
@@ -46,11 +50,18 @@ Please feel free to try it and share your feedback or ideas in [issues](/issues)
 
 ## Usage
 Write tests using [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html).  
-More detailed tutorial is coming soon.
+More detailed tutorial is coming soon..
+
+## Where to store tests
+You can create as many tests as you like and store them right in browser as snippets. 
+This is the easiest way but less reliable: if you occasionally remove extension tests will be lost. 
+For more serious things it is recommended to serve tests from local or remote http server and keep them under version control.
+The third option is to load tests from local directory without http server.
+For that install unpacked extension from zip (not crx) and use `/tests` directory inside.
 
 ## How to contribute
-Contribution is very appreciated!  
-Before non-trivial hacks please discuss approach in issues.
+Contribution is appreciated!  
+Before non-trivial hacks please discuss it in issues.
 
 1. Install [node.js](https://nodejs.org) if not yet
 2. Fork the repo and clone it:
