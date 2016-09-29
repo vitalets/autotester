@@ -1,6 +1,6 @@
 # Autotester
 Autotester is chrome extension that allows to develop and run automation tests right in browser.  
-Tests are written in Javascript and can be executed over another tab of the same browser or any remote browser instance.
+Tests are written in javascript and can be executed over another tab of the same browser or any remote browser instance.
 
 ## Demo 
 <img src="https://vitalets.github.io/autotester/autotester-demo.gif"/>
@@ -12,22 +12,18 @@ Tests are written in Javascript and can be executed over another tab of the same
 * **Convenient development**  
   Developing tests right in browser has some advantages. You can edit tests in first tab and check results in second.
   You can easily run particular test to debug. You can keep tab open after tests to inspect with devtools.
-    
-* **Capturing network requests**  
-  Capturing network requests is working out of box. You can capture page loads, resources (img, script, etc),
-  xhr requests and new tabs. No proxy needed. Please see [example](test/specs/extras/collect_network_requests_test.js).
-    
-* **Custom commands**  
-  Tests are executed in extension context, so all of rich [chrome extensions API](https://developer.chrome.com/extensions/api_index)
-  are available. You can defined custom commands to work with cookies, downloads, tabs, history etc and use it in your tests.
 
 * **Selenium compatible syntax**  
   Tests syntax is compatible with [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html)
-  so it can be executed in nodejs and visa-versa (except custom commands).
+  so it can be executed ether in nodejs and visa-versa (except custom commands).
 
-* **Testing other chrome extensions**  
-  With Autotester it is possible to attach to extensions background pages for testing.
-  Please see [example](test/specs/extras/extension_switching_test.js).
+* **Custom commands**  
+  Because tests are executed via extension all of rich [chrome extensions API](https://developer.chrome.com/extensions/api_index)
+  are available. You can define custom commands to work with cookies, downloads, tabs, history etc and use it in your tests.
+
+* **Capturing network requests**  
+  Capturing network requests is working out of box. You can capture page loads, resources (img, script, etc),
+  xhr/fetch requests and new tabs. No proxy needed. Please see [example](test/specs/extras/collect_network_requests_test.js).
 
 * **Various places to store tests**  
   Tests can be stored right in browser, loaded from any local or remote http server (for example github) or loaded from local directory. 
@@ -37,6 +33,9 @@ Tests are written in Javascript and can be executed over another tab of the same
   It can be [localhost standalone server](https://www.npmjs.com/package/selenium-standalone),
   [saucelabs](https://saucelabs.com), [browserstack](https://www.browserstack.com), etc.
 
+* **Testing other chrome extensions**  
+  With Autotester it is possible to attach to other extensions background pages for testing.
+  Please see [example](test/specs/extras/extension_switching_test.js).
 
 ## Project status
 Autotester is in **early beta** now. Not all webdriver commands and features are supported. Yet. And there can be bugs.   
