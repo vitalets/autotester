@@ -60,8 +60,7 @@ The third option is to load tests from local directory without http server.
 For that install unpacked extension from zip (not crx) and use `/tests` directory inside.
 
 ## How to contribute
-Contribution is appreciated!  
-Before non-trivial hacks please discuss it in issues.
+If you see how to fix bug, typo or add new feature - you are welcome to contribute.
 
 1. Install [node.js](https://nodejs.org) if not yet
 2. Fork the repo and clone it:
