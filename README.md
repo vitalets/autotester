@@ -83,13 +83,15 @@ If you have an idea how to fix bug or implement new feature - you are welcome to
 Please see [CONTRIBUTING.md](CONTRIBUTING.md). Thanks for your support!
 
 ## FAQ
+
 **Where to store tests?**
+
 1. You can create as many tests as you like and store them right in browser as snippets.
-This is the easiest way but less reliable: if you occasionally remove extension tests will be lost.
+   This is the easiest way but less reliable: if you occasionally remove extension tests will be lost.
 2. For more serious things it is recommended to serve tests from local or remote http server
-and keep them under version control.
+   and keep them under version control.
 3. The third option is to load tests from local directory without http server.
-For that you should create tests inside `/tests` directory of unpacked extension.
+   For that you should create tests inside `/tests` directory of unpacked extension.
 
 ## Links
 * [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html)
