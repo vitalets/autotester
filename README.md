@@ -55,9 +55,8 @@ But feel free to try it and share your feedback or ideas in [issues](issues) - h
 
 ## Installation
 1. Download and unpack latest [autotester.zip](https://vitalets.github.io/autotester/releases/autotester.zip)
-2. Open `chrome://extensions` page
-3. Drag-n-drop unpacked *autotester* directory on that page
-4. Click `A` button in browser panel to open Autotester page
+2. Drag-n-drop unpacked *autotester* directory on `chrome://extensions` page
+3. Click `A` button in browser panel to open Autotester app
 
 ## Usage
 Start with in-browser snippets using [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html).  
