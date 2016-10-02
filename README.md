@@ -42,7 +42,7 @@ Tests are written in javascript and can be executed over another tab of the same
 
 * **Running tests on remote server**  
   Besides running tests in the same chrome instance it is possible to route commands to any selenium server.
-  It can be [localhost standalone server](https://www.npmjs.com/package/selenium-standalone),
+  It can be [localhost](https://www.npmjs.com/package/selenium-standalone),
   [saucelabs](https://saucelabs.com), [browserstack](https://www.browserstack.com), etc.
 
 * **Testing other chrome extensions**  
@@ -58,8 +58,6 @@ But feel free to try it and share your feedback or ideas in [issues](issues) - h
 2. Open `chrome://extensions` page
 3. Drag-n-drop unpacked *autotester* directory on that page
 4. Click `A` button in browser panel to open Autotester page
-5. Optionally enable `silent-debugger-extension-api` on `chrome;//flags` 
-to remove annoying top bar about using debugger api
 
 ## Usage
 Start with in-browser snippets using [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html).  
