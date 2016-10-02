@@ -2,6 +2,18 @@
 Autotester is chrome extension that allows to develop and run automation tests right in browser.  
 Tests are written in javascript and can be executed over another tab of the same browser or any remote browser instance.
 
+## Contents
+* [Demo](#demo)
+* [Key features](#key-features)
+* [Project status](#project-status)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Roadmap](#roadmap)
+* [Contribution](#contribution)
+* [FAQ](#faq)
+* [Links](#links)
+* [License](#license)
+
 ## Demo 
 <img src="https://vitalets.github.io/autotester/autotester-demo.gif"/>
 
@@ -41,25 +53,18 @@ Tests are written in javascript and can be executed over another tab of the same
 Autotester is in **early beta** now. Not all webdriver commands and features are supported. Yet. And there can be bugs.   
 But feel free to try it and share your feedback or ideas in [issues](issues) - help us to make it better!
 
-## Getting started
-1. Download latest [autotester.crx](https://vitalets.github.io/autotester/releases/autotester.crx)
-2. Open chrome on `chrome://extensions` page
-3. Drag-n-drop autotester.crx on that page, confirm permissions dialog
-4. Click `A` button in browser panel to open tests management page
+## Installation
+1. Download and unpack latest [autotester.zip](https://vitalets.github.io/autotester/releases/autotester.zip)
+2. Open `chrome://extensions` page
+3. Drag-n-drop unpacked *autotester* directory on that page
+4. Click `A` button in browser panel to open Autotester page
+5. Optionally enable `silent-debugger-extension-api` on `chrome;//flags` 
+to remove annoying top bar about using debugger api
 
 ## Usage
 Start with in-browser snippets using [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html).  
 Have a look on [Autotester self tests](test/specs).  
 *More detailed tutorial is coming..*
-
-## Where to store tests
-1. You can create as many tests as you like and store them right in browser as snippets.
-This is the easiest way but less reliable: if you occasionally remove extension tests will be lost.
-2. For more serious things it is recommended to serve tests from local or remote http server
-and keep them under version control.
-3. The third option is to load tests from local directory without http server.
-For that you should install extension as unpacked from [autotester.zip](https://vitalets.github.io/autotester/releases/autotester.zip)
-(not crx) and use `/tests` directory inside.
 
 ## Roadmap
 There are many directions to grow. The current plan is following:
@@ -74,31 +79,24 @@ There are many directions to grow. The current plan is following:
 * ...your idea?
 
 ## Contribution
-If you see how to fix bug, typo or add new feature - you are welcome to contribute.
+If you have an idea how to fix bug or implement new feature - you are welcome to contribute.  
+Please see [CONTRIBUTING.md](CONTRIBUTING.md). Thanks for your support!
 
-1. Install [node.js](https://nodejs.org) if not yet
-2. Fork the repo and clone it:
+## FAQ
+**Where to store tests?**
+1. You can create as many tests as you like and store them right in browser as snippets.
+This is the easiest way but less reliable: if you occasionally remove extension tests will be lost.
+2. For more serious things it is recommended to serve tests from local or remote http server
+and keep them under version control.
+3. The third option is to load tests from local directory without http server.
+For that you should create tests inside `/tests` directory of unpacked extension.
 
-   ```bash
-   git clone https://github.com/<your_name>/autotester.git
-   ```
-   
-3. Install needed npm packages:
-
-   ```bash
-   cd autotester
-   npm i
-   ```
-   
-4. Run dev watcher:
-
-   ```bash
-   npm run dev
-   ```
-   
-5. Open chrome and load unpacked extension from `dist/unpacked-dev`.
-6. Also load unpacked extension from `dist/unpacked-dev-selftest`. This is copy of Autotester needed for self testing.
-7. Hack, push and make pull request. 
+## Links
+* [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html)
+* [W3C Webdriver](https://w3c.github.io/webdriver/webdriver-spec.html)
+* [Chrome Debugger Protocol](https://chromedevtools.github.io/debugger-protocol-viewer/1-1/)
+* [Awesome Javascript Test Automation](https://github.com/atinfo/awesome-test-automation/blob/master/javascript-test-automation.md)
+* [Awesome Selenium](https://github.com/christian-bromann/awesome-selenium)
 
 ## License
 MIT
