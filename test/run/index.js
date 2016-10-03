@@ -2,14 +2,14 @@
  * Entry point for running self-test on different selenium hubs
  *
  * This code runs chrome with 2 extensions:
- * 1. autotester
+ * 1. autotester-dev
  * (dist/autotester-dev.crx, packed with all tests from `test/specs` dir)
  *
- * 2. autotester SELF TEST
- * (dist/autotester-dev-selftest.crx, packed with tests from `examples` dir and one pre-installed snippet)
+ * 2. SELF TEST autotester
+ * (dist/autotester.crx, packed with tests from `examples` dir and one pre-installed snippet)
  *
- * First extension tests second.
- * So from here we press RUN button in `Autotester` UI and it starts testing `Autotester SELF TEST`.
+ * First extension runs tests over second.
+ * So from here we press RUN button in `Autotester` UI and it starts testing `SELF TEST Autotester`.
  *
  * We are waiting for `done` in title and grab data from mocha report.
  */
@@ -19,9 +19,11 @@
 const webdriver = require('selenium-webdriver');
 const htmlToText = require('html-to-text');
 const capabilities = require('./capabilities');
+// try load env vars
+try { require('../../tasks/env') } catch (e) {}
 const hub = require('./hubs/' + process.argv[2]);
 
-const AUTOTESTER_UI_URL = 'http://autotester';
+const AUTOTESTER_UI_URL = 'chrome-extension://inilfehdbldcjcffbakeabignfomfbdh/core/ui/ui.html';
 
 // run tests in all capabilities combination
 run();

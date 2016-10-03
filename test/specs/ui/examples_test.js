@@ -5,7 +5,9 @@ test.describe('examples', function () {
     driver = runContext.driver = new Driver();
     driver.get(runContext.selftest.ui);
     driver.wait(until.titleContains('ready'));
-    runContext.enableTestsSourceBuiltIn();
+    runContext.enableTestsSource('URL');
+    // todo: wait title
+    driver.sleep(500);
   });
 
   test.after(function () {

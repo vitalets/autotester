@@ -56,7 +56,7 @@ test.suite(function (env) {
         const popup = driver.executeAsyncScript(function () {
           chrome.browserAction.getTitle({}, arguments[arguments.length - 1]);
         });
-        assert(popup).equalTo('SELF TEST Autotester');
+        assert(popup).equalTo('Autotester');
       });
 
       test.it('should switch via .extension(id)', function () {

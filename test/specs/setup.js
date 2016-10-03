@@ -5,7 +5,7 @@
 
 // const FILE_SERVER_BASE_URL = 'http://127.0.0.1:2310/common/';
 const FILE_SERVER_BASE_URL = 'http://selenium-fileserver.herokuapp.com/common/';
-const SELFTEST_EXTENSION_ID = 'inilfehdbldcjcffbakeabignfomfbdh';
+const SELFTEST_EXTENSION_ID = 'cidkhbpkgpdkadkjpkfooofilpmfneog';
 
 setup();
 

@@ -5,7 +5,7 @@ test.describe('snippets', function () {
     driver = runContext.driver = new Driver();
     driver.get(runContext.selftest.ui);
     driver.wait(until.titleContains('ready'));
-    runContext.enableTestsSourceSnippets();
+    runContext.enableTestsSource('SNIPPETS');
   });
 
   test.after(function () {

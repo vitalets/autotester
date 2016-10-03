@@ -11,7 +11,7 @@ exports.get = function () {
   const caps = defaults();
   const options = new chrome.Options();
   options.addExtensions(`${__dirname}/../../dist/autotester-dev.crx`);
-  options.addExtensions(`${__dirname}/../../dist/autotester-dev-selftest.crx`);
+  options.addExtensions(`${__dirname}/../../dist/autotester.crx`);
   const tasks = options[Symbols.serialize]().extensions;
   return Promise.all(tasks)
     .then(extensions => {

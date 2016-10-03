@@ -28,5 +28,11 @@ Currently development is only possible on OSX.
    ```
 
 5. Open chrome and load unpacked extension from `dist/unpacked-dev`.
-6. Also load unpacked extension from `dist/unpacked-dev-selftest`. This is copy of Autotester needed for self testing.
+6. Also load unpacked extension from `dist/unpacked-mirror`. This is copy of Autotester needed for self testing.
 7. Now you can make changes in files and reload extension to see the result
+
+## Self testing
+As Autotester is testing tool it can test itself.
+Exactly for that there should be two instances of Autotester loaded in browser during development.
+One is from `dist/unpacked-dev` - the main runner you are working with.
+And second from `dist/unpacked-mirror` - the instance being tested.
