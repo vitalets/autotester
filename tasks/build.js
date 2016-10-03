@@ -10,7 +10,7 @@ const crx = require('./helper/crx');
 
 const outDir = 'dist/unpacked';
 
-//ensureCleanBranch('shelljs');
+ensureCleanBranch('master');
 clean.run(outDir);
 buildInfo.create({outDir});
 copy.core({outDir});
