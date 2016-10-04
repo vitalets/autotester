@@ -14,30 +14,10 @@ exports.core = function (options) {
   ], options);
 };
 
-exports.specs = function (options) {
+exports.tests = function (options) {
   processItems([
     {src: 'test/specs/**', dest: `${options.outDir}/tests/`},
   ], options);
-};
-
-exports.examples = function (options) {
-  processItems([
-    {src: 'test/examples/**', dest: `${options.outDir}/tests/`},
-  ], options);
-};
-
-exports.mirror = function (options) {
-  processItems([
-    {src: `${options.outDir}/core/**/!(*.map)`, dest: `${options.mirrorDir}/core/`},
-    {src: `src/manifest.json`, dest: `${options.mirrorDir}/`},
-    {src: `examples/**`, dest: `${options.mirrorDir}/tests/`},
-  ], options);
-};
-
-exports.latest = function () {
-  processItems([
-    {src: `dist/autotester.zip`, dest: `docs/releases/`},
-  ]);
 };
 
 function processItems(items, options = {}) {

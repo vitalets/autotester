@@ -1,3 +1,6 @@
+/**
+ * Packs 2 crx for self testing
+ */
 'use strict';
 
 const crx = require('./helper/crx');

@@ -7,7 +7,7 @@
 const Crx = require('crx');
 const fs = require('fs-extra');
 
-exports.pack = function (dir, key, out) {
+exports.pack = function ({dir, key, out}) {
   const crx = new Crx({
     privateKey: fs.readFileSync(key)
   });

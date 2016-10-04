@@ -1,22 +1,18 @@
+/**
+ * Builds 2 unpacked versions of extension in `dist/unpacked-dev` and `dist/unpacked-mirror` for self testing.
+ */
 'use strict';
 
-const clean = require('./helper/clean');
-const copy = require('./helper/copy');
-const webpack = require('./helper/webpack');
-const buildInfo = require('./helper/build-info');
-// optionally require env vars
-try { require('./env') } catch (e) {}
+const unpacked = require('./helper/unpacked');
 
-const outDir = 'dist/unpacked-dev';
-const mirrorDir = 'dist/unpacked-mirror';
-const dev = true;
-const watch = true;
-const copyOptions = {outDir, mirrorDir, dev, watch};
+unpacked.create({
+  outDir: 'dist/unpacked-dev',
+  dev: true,
+  watch: true,
+});
 
-clean.run(outDir);
-clean.run(mirrorDir);
-buildInfo.create({outDir, dev});
-copy.core(copyOptions);
-copy.specs(copyOptions);
-copy.mirror(copyOptions);
-webpack.watch({outDir});
+unpacked.create({
+  outDir: 'dist/unpacked-mirror',
+  dev: false,
+  watch: true,
+});

@@ -17,13 +17,13 @@
     "dev": "node tasks/dev",
     "hub": "selenium-standalone start",
     "code": "node tasks/code",
-    "build": "node tasks/build",
-    "build-latest": "npm run build && node ./test/run local && node tasks/copy-latest",
     "test": "npm run test:l",
-    "test:l": "node tasks/pre-test && node ./test/run local",
-    "test:b": "node tasks/pre-test && node ./test/run browserstack",
-    "test:s": "node tasks/pre-test && node ./test/run sauce",
-    "test:y": "node tasks/pre-test && node ./test/run yandex"
+    "test:l": "node tasks/pack4test && node ./test/run local",
+    "test:b": "node tasks/pack4test && node ./test/run browserstack",
+    "test:s": "node tasks/pack4test && node ./test/run sauce",
+    "test:y": "node tasks/pack4test && node ./test/run yandex",
+    "build-master": "node tasks/build-master && node ./test/run local",
+    "build-master-release": "npm run build-master && node tasks/copy2releases"
   },
   "dependencies": {},
   "devDependencies": {
