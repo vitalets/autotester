@@ -5,9 +5,7 @@ Please follow the instructions below.
 
 ## Development setup
 
-Currently development is only possible on OSX.
-
-1. Install [node.js](https://nodejs.org) if not yet
+1. Install [git](https://git-scm.com) and [node.js](https://nodejs.org) >= 6
 2. Fork the repo and clone it:
 
    ```bash
