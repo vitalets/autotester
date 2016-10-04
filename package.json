@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git://github.com/vitalets/autotester.git"
   },
+  "engines": {
+    "node": ">=5"
+  },
   "scripts": {
     "dev": "node tasks/dev",
     "hub": "selenium-standalone start",
