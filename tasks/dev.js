@@ -1,5 +1,5 @@
 /**
- * Builds 2 unpacked versions of extension in `dist/unpacked-dev` and `dist/unpacked-mirror` for self testing.
+ * Builds 2 unpacked versions of extension in `dist/unpacked-dev` and `dist/unpacked` for self testing.
  */
 'use strict';
 
@@ -12,7 +12,7 @@ unpacked.create({
 });
 
 unpacked.create({
-  outDir: 'dist/unpacked-mirror',
+  outDir: 'dist/unpacked',
   dev: false,
   watch: true,
 });

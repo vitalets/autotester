@@ -3,6 +3,13 @@
 Contribution is really appreciated.
 Please follow the instructions below.
 
+## Self testing
+As Autotester is testing tool it can test itself.
+Exactly for that there should be two instances of Autotester loaded in browser during development.
+One is from `dist/unpacked-dev` - the DEV version built with selftests.
+And second from `dist/unpacked` - the PROD version to be tested.
+Mainly you work with DEV that runs tests over PROD and also easier to debug because of source maps.
+
 ## Development setup
 
 1. Install [git](https://git-scm.com) and [node.js](https://nodejs.org) >= 6
@@ -25,12 +32,7 @@ Please follow the instructions below.
    npm run dev
    ```
 
-5. Open chrome and load unpacked extension from `dist/unpacked-dev`.
-6. Also load unpacked extension from `dist/unpacked-mirror`. This is copy of Autotester needed for self testing.
-7. Now you can make changes in files and reload extension to see the result
-
-## Self testing
-As Autotester is testing tool it can test itself.
-Exactly for that there should be two instances of Autotester loaded in browser during development.
-One is from `dist/unpacked-dev` - the main runner you are working with.
-And second from `dist/unpacked-mirror` - the instance being tested.
+5. Launch chrome and open `chrome://extensions` page
+6. Enable *developer mode* checkbox
+7. Load 2 unpacked extensions from `dist/unpacked-dev` and `dist/unpacked`
+8. Now you can make changes in files and reload extensions to see the result
