@@ -49,6 +49,7 @@
     "geckodriver": "^1.1.3",
     "ghooks": "^1.3.2",
     "got": "^6.5.0",
+    "html-to-text": "^2.1.3",
     "html5-fs": "^0.1.0",
     "http-browserify": "^1.7.0",
     "https-browserify": "0.0.1",
