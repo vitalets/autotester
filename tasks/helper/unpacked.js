@@ -25,8 +25,7 @@ exports.create = function ({outDir, dev, watch}) {
   if (dev) {
     copy.tests({outDir, watch});
   }
-  const webpackTask = watch ? webpack.watch({outDir}) : webpack.run({outDir});
-  return webpackTask.catch(e => {
+  return webpack.run({outDir, dev, watch}).catch(e => {
       console.log(e);
       process.exit(1);
     });

@@ -3,29 +3,21 @@ const path = require('path');
 const webpack = require('webpack');
 const webpackAlias = require('./webpack-alias');
 
-exports.run = function (options) {
+exports.run = function ({outDir, dev, watch}) {
   return new Promise(resolve => {
-    const config = getConfig(options.outDir);
-    console.log(`webpack: build to ${config.output.path}`);
-    webpack(config).run((err, stats) => {
-      finishHandler(err, stats);
+    const config = getConfig({outDir, dev});
+    console.log(`webpack: building to ${config.output.path}`);
+    const handler = (err, stats) => {
+      errorHandler(err, stats);
+      logStats(stats);
+      console.log(`webpack: ${watch ? 'done and watching...' : 'done.'}`);
       resolve();
-    });
+    };
+    return watch ? webpack(config).watch({}, handler) : webpack(config).run(handler);
   });
 };
 
-exports.watch = function (options) {
-  return new Promise(resolve => {
-    const config = getConfig(options.outDir);
-    console.log(`webpack: build and watch to ${config.output.path}`);
-    webpack(config).watch({}, (err, stats) => {
-      finishHandler(err, stats);
-      resolve();
-    });
-  })
-};
-
-function getConfig(outDir) {
+function getConfig({outDir, dev}) {
   return {
     entry: {
       'core/background/boot': './src/background/boot/',
@@ -65,31 +57,33 @@ function getConfig(outDir) {
       new webpack.ProvidePlugin({
         'React': 'react'
       }),
-      // todo: for prod builds
-      /*
-       new webpack.DefinePlugin({
-       "process.env": {
-       NODE_ENV: JSON.stringify("production")
-       }
-       })
-       */
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(dev ? 'dev' : 'production')
+      })
     ],
-      devtool: '#source-map'
+    devtool: dev ? '#source-map' : null
   }
 }
 
-function finishHandler(err, stats) {
+function errorHandler(err, stats) {
   if (err) {
     throw err;
   }
-  const jsonStats = stats.toJson();
-  if (jsonStats.errors.length > 0) {
-    jsonStats.errors.forEach(error => console.log(error));
+  if (stats.hasErrors()) {
+    console.log('webpack: ERRORS');
+    stats.toJson('errors-only').errors.forEach(error => console.log(error));
     throw new Error('Errors in webpack');
   }
-  if (jsonStats.warnings.length > 0) {
-    jsonStats.warnings.forEach(error => console.log(error));
-    throw new Error('Errors in webpack');
+  if (stats.hasWarnings()) {
+    console.log('webpack: WARNINGS');
+    stats.toJson('errors-only').warnings.forEach(warning => console.log(warning));
   }
-  console.log('webpack: done.')
+}
+
+function logStats(stats) {
+  const statsStr = stats.toString({
+    chunks: false,
+    colors: true
+  });
+  console.log(statsStr);
 }

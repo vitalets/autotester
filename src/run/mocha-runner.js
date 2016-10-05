@@ -86,7 +86,7 @@ class MochaRunner {
       // mark error with flag to not show it in htmlConsole
       // (as mocha reporter shows errors itself)
       err.isMocha = true;
-      // use asyncThrow to go out of promise chain
+      // use asyncThrow to go out of promise chain but show correct stack in bg console
       utils.asyncThrow(err);
     }
   }

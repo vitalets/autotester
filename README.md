@@ -1,6 +1,6 @@
 # Autotester
 Autotester is chrome extension that allows to develop and run automation tests right in browser.  
-Tests are written in javascript and can be executed over another tab of the same browser or any remote browser instance.
+Tests are written in javascript and can be executed over another tab of the same chrome or any remote browser.
 
 ## Contents
 * [Demo](#demo)
