@@ -4,8 +4,8 @@
 
 const Channel = require('chnl');
 const logger = require('../utils/logger').create('Http');
-const httpBrowserify = require('webpack/node_modules/node-libs-browser/node_modules/http-browserify');
-const httpsBrowserify = require('webpack/node_modules/node-libs-browser/node_modules/https-browserify');
+const httpBrowserify = require('http-browserify');
+const httpsBrowserify = require('https-browserify');
 const fakeHttp = require('../utils/fake-http');
 
 const LOOPBACK_HOST = 'autotester';
