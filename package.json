@@ -23,8 +23,7 @@
     "test:s": "node tasks/pack4test && node ./test/run sauce",
     "test:y": "node tasks/pack4test && node ./test/run yandex",
     "build-master": "node tasks/build-master && node ./test/run local",
-    "build-master-release": "npm run build-master && node tasks/copy2releases",
-    "postinstall": "selenium-standalone install"
+    "build-master-release": "npm run build-master && node tasks/copy2releases"
   },
   "dependencies": {},
   "devDependencies": {
