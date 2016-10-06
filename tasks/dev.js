@@ -3,6 +3,8 @@
  */
 'use strict';
 
+require('./helper/utils').ensureNode6();
+
 const unpacked = require('./helper/unpacked');
 
 unpacked.create({
