@@ -89,7 +89,7 @@ function getErrorFromEvent(errorEvent) {
   const inPromise = errorEvent.promise ? '(in promise) ' : '';
   return errorValue instanceof Error
     ? errorValue
-    : new Error(`Uncaught ${inPromise}${errorEvent.message || errorValue}`);
+    : new Error(`Uncaught ${inPromise}${errorValue.message || errorValue}`);
 }
 
 function resetTimeout() {
