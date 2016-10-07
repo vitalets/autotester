@@ -61,6 +61,7 @@
     "mobx": "^2.5.2",
     "mobx-react": "^3.5.6",
     "mocha": "^3.1.0",
+    "normalize-path": "^2.0.1",
     "promises-aplus-tests": "^2.1.2",
     "raw-loader": "^0.5.1",
     "react": "^15.3.2",

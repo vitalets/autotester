@@ -6,6 +6,7 @@
 'use strict';
 
 const path = require('path');
+const normalizePath = require('normalize-path');
 
 const aliases = [
   {
@@ -50,8 +51,9 @@ const aliases = [
 exports.newResource = function (data) {
   for (let i = 0; i < aliases.length; i++) {
     const alias = aliases[i];
-    const isMatched = (alias.beforeResolve && alias.request === data.request)
-      || (!alias.beforeResolve && data.request.endsWith(alias.request));
+    const request = normalizePath(data.request);
+    const isMatched = (alias.beforeResolve && alias.request === request)
+      || (!alias.beforeResolve && request.endsWith(alias.request));
     if (isMatched) {
       // console.log(`Replace ${data.rawRequest || data.request} in ${data.context}`);
       // In before-resolve overwrite data.request as file actually does not exist and after-resolve will not occur
