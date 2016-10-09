@@ -14,7 +14,7 @@ module.exports = observer(class NoQuit extends React.Component {
   render() {
     return (
       <label>
-        <input type="checkbox" checked={store.noQuit} onChange={this.onChange}/>
+        <input type="checkbox" checked={store.noQuit} onChange={this.onChange} style={{verticalAlign: 'middle'}}/>
         <span>no quit</span>
       </label>
     );
