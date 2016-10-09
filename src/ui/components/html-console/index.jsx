@@ -68,8 +68,19 @@ module.exports = class HtmlConsole extends React.Component {
   renderArg(arg, key) {
     const type = arg && arg.type || 'string';
     const text = typeof arg === 'string' ? arg : (arg && arg.text || '');
+    const renderValue = isLink(text) ? this.renderLink(text) : text;
     return (
-      <span key={key} className={'console-line-item-' + type}>{key > 0 ? ' ' : ''}{text}</span>
+      <span key={key} className={'console-line-item-' + type}>{key > 0 ? ' ' : ''}{renderValue}</span>
+    );
+  }
+
+  renderLink(url) {
+    return (
+      <a href={url}>{url}</a>
     );
   }
 };
+
+function isLink(str) {
+  return /^(https?|chrome|chrome\-extension):\/\//.test(str);
+}

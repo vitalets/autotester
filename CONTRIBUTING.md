@@ -35,4 +35,5 @@ Mainly you work with DEV that runs tests over PROD and also easier to debug beca
 5. Launch chrome and open `chrome://extensions` page
 6. Enable *developer mode* checkbox
 7. Load 2 unpacked extensions from `dist/unpacked-dev` and `dist/unpacked`
-8. Now you can make changes in files and reload extensions to see the result
+8. Enable chrome flag to allow debug of extensions: `chrome://flags/#extensions-on-chrome-urls`
+9. You are done! Now you can make changes in files and reload extensions to see the result
