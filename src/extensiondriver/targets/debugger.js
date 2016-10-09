@@ -19,7 +19,8 @@ class Debugger {
 
   attach(target) {
     return thenChrome.debugger.attach(target, PROTOCOL_VERSION)
-      .then(() => this._afterAttach(target));
+      .then(() => this._afterAttach(target))
+      .catch(prettyError);
   }
 
   sendCommand(name, params = {}) {
@@ -37,7 +38,8 @@ class Debugger {
     // In that case second call of detach() should not fail
     if (this._target) {
       return thenChrome.debugger.detach(this._target)
-        .then(() => this._afterDetach('self'));
+        .then(() => this._afterDetach('self'))
+        .catch(prettyError);
     } else {
       return Promise.resolve();
     }

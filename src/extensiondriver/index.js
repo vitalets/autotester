@@ -54,19 +54,21 @@ function formatSuccess(result) {
 }
 
 function formatError(e) {
-  return e instanceof errors.WebDriverError
-    ? formatWebDriverError(e)
-    : Promise.reject(e);
-}
-
-function formatWebDriverError(e) {
-  const errorObj = errors.encodeError(e);
   const data = {
-    error: errorObj.error,
-    message: errorObj.message,
     stacktrace: e.stack,
     sessionId: Targets.SESSION_ID,
   };
+  if (e instanceof errors.WebDriverError) {
+    const errorObj = errors.encodeError(e);
+    data.error = errorObj.error;
+    data.message = errorObj.message;
+  } else if (e instanceof Error) {
+    data.error = e.name;
+    data.message = e.message;
+  } else {
+    data.error = 'error';
+    data.message = String(e);
+  }
   return {
     statusCode: 500,
     data: JSON.stringify(data)
