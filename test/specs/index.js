@@ -1,20 +1,13 @@
 /**
- * This is index file loaded by autotester
- * Make sure to start selenium fileserver to serve static html pages
- * ```
- * npm run fileserver
- * ```
- *
- * This file is also used by ./run-node-test to get actual tests.
+ * Tests configuration and paths
  */
 
 module.exports = {
   setup: [
     'setup.js',
-    'ui-helpers.js',
+    'helpers.js',
   ],
   tests: [
-    'playground.js',
     // === extra autotester features
     'extras/newtab_switching_test.js',
     'extras/extension_switching_test.js',
