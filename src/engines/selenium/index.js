@@ -62,6 +62,7 @@ function setupFakeRequire(context) {
   context.require.register('selenium-webdriver/testing', require('selenium-webdriver/testing'));
   context.require.register('selenium-webdriver/testing/assert', require('selenium-webdriver/testing/assert'));
   context.require.register('selenium-webdriver/lib/promise', require('selenium-webdriver/lib/promise'));
+  context.require.register('selenium-webdriver/chrome', require('selenium-webdriver/chrome'));
   context.require.register('assert', require('assert'));
 }
 
