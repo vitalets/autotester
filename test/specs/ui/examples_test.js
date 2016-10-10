@@ -20,7 +20,7 @@ test.describe('examples', function () {
     driver.wait(until.titleContains('done'));
     driver.findElements({css: '.report-tab .console'}).then(elems => assert(elems.length).equalTo(0));
     assert(driver.findElement({css: '#mocha-stats .failures em'}).getText()).equalTo('0');
-    assert(driver.findElement({css: '#mocha-stats .passes em'}).getText()).equalTo('4');
+    assert(driver.findElement({css: '#mocha-stats .passes em'}).getText()).equalTo('2');
   });
 
 });
