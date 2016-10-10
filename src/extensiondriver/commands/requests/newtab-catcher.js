@@ -3,7 +3,6 @@
  * WebNavigation module is required to get url of new tab as tab.onCreated not always has it.
  */
 
-const Subscription = require('../../../utils/subscription');
 const Channel = require('chnl');
 
 class NewTabCatcher {
@@ -11,7 +10,7 @@ class NewTabCatcher {
   constructor() {
     this.onCatched = new Channel();
     this._tabs = new Set();
-    this._listeners = new Subscription([
+    this._listeners = new Channel.Subscription([
       {
         channel: chrome.tabs.onCreated,
         listener: this._onTabCreated.bind(this)

@@ -2,7 +2,6 @@
  * Catch network requests via debugger requestWillBeSent event and notify listeners.
  */
 
-const Subscription = require('../../../utils/subscription');
 const Channel = require('chnl');
 const Targets = require('../../targets');
 const logger = require('../../../utils/logger').create('Request catcher');
@@ -16,7 +15,7 @@ class RequestCatcher {
 
   start() {
     this._debugger = Targets.debugger;
-    this._listeners = new Subscription([
+    this._listeners = new Channel.Subscription([
       {
         channel: this._debugger.onEvent,
         listener: this._onDebuggerEvent.bind(this)

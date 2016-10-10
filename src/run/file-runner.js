@@ -5,8 +5,8 @@
  */
 
 const promise = require('selenium-webdriver/lib/promise');
+const Channel = require('chnl');
 const utils = require('../utils');
-const Subscription = require('../utils/subscription');
 const logger = require('../utils/logger').create('File-runner');
 
 const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
@@ -95,7 +95,7 @@ class FileRunner {
   }
 
   _setListeners() {
-    this._flowListeners = new Subscription([
+    this._flowListeners = new Channel.Subscription([
       {
         channel: this._flow,
         event: IDLE,
@@ -107,7 +107,7 @@ class FileRunner {
         listener: this._onFlowException.bind(this),
       }
     ]);
-    this._globalErrorListeners = new Subscription([
+    this._globalErrorListeners = new Channel.Subscription([
       {
         channel: this._context.__onTestFileError,
         listener: this._onTestFileError.bind(this),
