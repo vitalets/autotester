@@ -6,7 +6,7 @@
 exports.snippets = [{
   id: 'snippet1',
   name: 'Google search test',
-  code: require('raw!../../../examples/google_search_simple'),
+  code: require('raw!../../../examples/google_search'),
 }];
 
 exports.hubs = [

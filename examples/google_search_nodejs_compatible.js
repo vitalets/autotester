@@ -18,14 +18,14 @@ test.describe('Google Search (nodejs compatible)', function() {
         .build();
   });
 
+  test.after(function() {
+    driver.quit();
+  });
+
   test.it('should append query to title (nodejs compatible)', function() {
     driver.get('http://www.google.com');
     driver.findElement(By.name('q')).sendKeys('kitten' + Key.ENTER);
     driver.wait(until.titleContains('kitten'), 2000);
     driver.sleep(1000);
-  });
-
-  test.after(function() {
-     driver.quit();
   });
 });
