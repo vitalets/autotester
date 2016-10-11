@@ -32,5 +32,5 @@ exports.create = function (options) {
   const content = `window.__buildInfo = ${jsonStr};`;
   fs.outputFileSync(targetFile, content);
   console.log(`build-info: created ${targetFile}`);
-  console.log(content);
+  // console.log(content);
 };
