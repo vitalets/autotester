@@ -1,3 +1,6 @@
+/**
+ * Bump version to manifest.json
+ */
 'use strict';
 
 const fs = require('fs-extra');
