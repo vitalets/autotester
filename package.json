@@ -26,8 +26,7 @@
     "build-travis": "node tasks/build && node ./test/run sauce",
     "preversion": "npm run code && npm run build-local",
     "version": "node tasks/version",
-    "postversion1": "git push --follow-tags",
-    "release-patch": "npm version patch"
+    "release-patch": "npm version patch && git push --follow-tags"
   },
   "dependencies": {},
   "devDependencies": {
