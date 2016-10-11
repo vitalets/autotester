@@ -4,3 +4,11 @@ node_js:
   - "6.1"
 
 script: npm run build-travis
+
+deploy:
+  provider: releases
+  api_key:
+    secure: waT0t36APH2RkNAmnVPKBrO6cxxmXYv5mwHw350q0QlBv9OZZ5LkmPwgRA1nyKRlMCM8YdMGhmu4i3w43ItilZdQtpW9tIaPX3Np5pWX6yfvfWGk7jKkwskzI70pnzEzdVkdR/jeuQjWNO+NKrZ8+ZF1dUJBvFbmIXU62I+RMVarzweuQ/DIc0fJVbr7dXgyaKn7dExGtk/Emb3SJTFQK+pV+nC3DGUO+IappSKBX7l0d1XRpNhxeJKle2dx237WeE3i9Fm+6VTXsbDn0EtwkYeSCkzZ45ZskEI4q+cAzG/VD2Rv5XRTdMmmSaTPrx7YHfslLJ+gK0GA03cT9jyxgieqqmM4tRs91CWQZUiPoGp0a3q6pbI+8C4nZQG2DB9kPaldkScB9vtNZdEXGmChMICLjZT17RdDJffrvK1IzJwop00ZLrN05GHWglgQnhHu3x6/HNiQ+zGA/b9Z/s5J+KWphRuahORjAIkFf40YolA+7gz5+6GOci6N6cOf1M2nfEkOstmiy0p1E14A60MHLofgslc9DeV7RPdiNZWzWZUuE1Ih8zcyxRr+KCKMtXp00cwI6lswkoO+/T/l1dJ7WDwGUvubHIdZUEpHY2TgxIXrFsPnfDmDQz0dOVoXhyR5EAY/hnCClwkCmlwgXnKDxzdg6t59T4Chnd6dWxCcctE=
+  file: "./dist/autotester.zip"
+  on:
+    tags: true
