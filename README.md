@@ -18,7 +18,7 @@ Tests are written in javascript and can be executed over another tab of the same
 * [License](#license)
 
 ## Demo 
-<img src="https://vitalets.github.io/autotester/autotester-demo.gif"/>
+<img src="https://cloud.githubusercontent.com/assets/1473072/19283567/0763a4b4-8ffb-11e6-8c82-8ab266df7a4e.gif"/>
 
 ## Key features
 * **Zero setup**  
@@ -103,4 +103,4 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md). Thanks for your support!
 ## License
 MIT
 
-[1]: releases/download/v0.1.1/autotester.zip
+[1]: https://github.com/vitalets/autotester/releases/download/v0.1.1/autotester.zip
