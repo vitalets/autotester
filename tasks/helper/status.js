@@ -11,12 +11,14 @@ exports.getChanges = function () {
 };
 
 exports.ensureCleanBranch = function (branch) {
-  if (exports.getBranch() !== branch) {
-    console.log(`Invalid branch: ${exports.getBranch()}, expected: ${branch}`);
+  const actualBranch = exports.getBranch();
+  if (actualBranch !== branch && actualBranch !== 'HEAD') {
+    console.log(`Invalid branch: ${actualBranch}, expected: ${branch}`);
     process.exit(1);
   }
-  if (exports.getChanges()) {
-    console.log('Dirty state:', exports.getChanges());
+  const changes = exports.getChanges();
+  if (changes) {
+    console.log('Dirty state:', changes);
     process.exit(1);
   }
 };
