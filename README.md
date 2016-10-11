@@ -57,7 +57,7 @@ Autotester is in **early beta** now. Not all webdriver commands and features are
 But feel free to try it and share your feedback or ideas in [issues](issues) - help us to make it better!
 
 ## Installation
-1. Download and unpack latest [autotester.zip](https://vitalets.github.io/autotester/releases/autotester.zip)
+1. Download and unpack latest [autotester.zip][1]
 2. Drag-n-drop unpacked *autotester* directory on `chrome://extensions` page
 3. Click `A` button in browser panel to open Autotester app
 
@@ -96,9 +96,11 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md). Thanks for your support!
 ## Links
 * [Selenium Javascript API](http://seleniumhq.github.io/selenium/docs/api/javascript/index.html)
 * [W3C Webdriver](https://w3c.github.io/webdriver/webdriver-spec.html)
-* [Chrome Debugger Protocol](https://chromedevtools.github.io/debugger-protocol-viewer/1-1/)
+* [Chrome Debugger Protocol](https://chromedevtools.github.io/debugger-protocol-viewer)
 * [Awesome Javascript Test Automation](https://github.com/atinfo/awesome-test-automation/blob/master/javascript-test-automation.md)
 * [Awesome Selenium](https://github.com/christian-bromann/awesome-selenium)
 
 ## License
 MIT
+
+[1]: releases/download/v0.1.1/autotester.zip
