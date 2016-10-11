@@ -1,6 +1,6 @@
 {
   "name": "autotester",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Chrome extension allowing to develop and run automation tests right in browser",
   "author": {
     "name": "Vitaliy Potapov",
