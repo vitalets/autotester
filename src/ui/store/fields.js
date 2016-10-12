@@ -65,7 +65,7 @@ module.exports = {
     defaultValue: SETTINGS_MENU.TESTS_SOURCE,
     persistent: true,
   },
-  noQuit: {
+  stopOnError: {
     defaultValue: false,
     persistent: false,
   },

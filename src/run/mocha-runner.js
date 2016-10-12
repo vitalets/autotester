@@ -10,6 +10,8 @@ const MOCHA_PATH = 'core/background/mocha.js';
 const DEFAULT_OPTIONS = {
   ui: 'bdd',
   timeout: 30 * 1000,
+  bail: false,
+  reporter: null,
   // allowUncaught: true, // i did not managed to get it working
 };
 
@@ -17,12 +19,10 @@ class MochaRunner {
   /**
    * Constructor
    *
-   * @param {Object} params
-   * @param {Object} params.reporter
+   * @param {Object} options mocha options
    */
-  constructor(params) {
-    this._params = params;
-    this._mochaOptions = Object.assign({}, DEFAULT_OPTIONS, {reporter: params.reporter});
+  constructor(options) {
+    this._mochaOptions = Object.assign({}, DEFAULT_OPTIONS, options);
     this.onTestStarted = new Channel();
   }
 
@@ -31,7 +31,7 @@ class MochaRunner {
    *
    * @param {Object} context
    */
-  setup(context) {
+  loadTo(context) {
     this._context = context;
     this._cleanUp();
     return Promise.resolve()

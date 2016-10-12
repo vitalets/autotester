@@ -13,13 +13,13 @@ const {onTestsDone, onSessionStarted, onFileStarted, onTestStarted} = require('.
  * @param {String} [data.baseUrl] base url for files
  * @param {Array<String>} [data.files] files relative to baseUrl to be downloaded and runned
  * @param {Array<{path, code}>} [data.snippets] snippets
- * @param {String} [data.noQuit]
+ * @param {Boolean} [data.stopOnError]
  */
 exports.run = function (data) {
   try {
     const run = new Run({
       uiWindow: getUiWindow(),
-      noQuit: data.noQuit,
+      stopOnError: data.stopOnError,
       engine: 'selenium',
       target: data.target,
     });

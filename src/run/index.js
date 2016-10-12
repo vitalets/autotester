@@ -19,7 +19,7 @@ module.exports = class Run {
    *
    * @param {Object} options
    * @param {Object} options.uiWindow
-   * @param {Boolean} options.noQuit
+   * @param {Boolean} options.stopOnError
    * @param {String} options.engine
    * @param {Object} options.target {loopback, serverUrl, caps, name}
    */
@@ -68,7 +68,7 @@ module.exports = class Run {
       tests: this._snippets,
       localBaseDir: this._localBaseDir,
       uiWindow: this._options.uiWindow,
-      noQuit: this._options.noQuit,
+      stopOnError: this._options.stopOnError,
       engine: this._options.engine,
     });
   }

@@ -68,7 +68,7 @@ class Runner {
    * @param {Array<{path, code, isSetup}>} params.tests
    * @param {String} params.localBaseDir base directory to save test-files
    * @param {Object} params.uiWindow
-   * @param {Boolean} params.noQuit
+   * @param {Boolean} params.stopOnError
    * @param {String} params.engine
    */
   run(params) {
@@ -78,7 +78,7 @@ class Runner {
 
     // todo: refactor - remove somewhere else
     const Targets = require('../extensiondriver/targets');
-    Targets.dontCloseTabs = params.noQuit;
+    Targets.dontCloseTabs = params.stopOnError;
 
     return Promise.resolve()
       .then(() => this._cleanBefore())
@@ -108,9 +108,12 @@ class Runner {
 
   _setupTestRunner() {
     const reporter = htmlReporter.getReporter(this._params.uiWindow);
-    this._testRunner = new MochaRunner({reporter});
+    this._testRunner = new MochaRunner({
+      reporter,
+      bail: this._params.stopOnError,
+    });
     this._testRunner.onTestStarted.addListener(data => this.onTestStarted.dispatch(data));
-    return this._testRunner.setup(this._context);
+    return this._testRunner.loadTo(this._context);
   }
 
   _setupGlobals() {

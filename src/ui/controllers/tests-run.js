@@ -22,7 +22,7 @@ exports.init = function () {
  */
 exports.runCustomSnippets = function(snippets) {
   const data = {
-    noQuit: false,
+    stopOnError: false,
     target: getTarget(0),
     snippets: snippets,
   };
@@ -49,7 +49,7 @@ function runOnCurrentData() {
 
 function getData() {
   const data = {
-    noQuit: store.noQuit,
+    stopOnError: store.stopOnError,
     target: getTarget(store.selectedTarget),
   };
 
