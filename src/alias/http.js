@@ -30,19 +30,18 @@ function intercept(http) {
   const origRequest = http.request;
   http.request = function (options, callback) {
     const request = origRequest.apply(http, arguments);
-    // todo: dispatch async everywhere, to not break flow
-    exports.onRequest.dispatch({request, options});
+    exports.onRequest.dispatchAsync({request, options});
     request.on('response', response => {
       const chunks = [];
       response.on('data', chunk => chunks.push(chunk));
       response.on('end', () => {
-        exports.onResponse.dispatch({request, options, response, data: chunks.join('')});
+        exports.onResponse.dispatchAsync({request, options, response, data: chunks.join('')});
       });
     });
 
     const origWrite = request.write;
     request.write = function (data) {
-      exports.onRequestData.dispatch({request, data});
+      exports.onRequestData.dispatchAsync({request, data});
       return origWrite.apply(request, arguments);
     };
 
