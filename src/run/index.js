@@ -10,8 +10,7 @@ const extras = require('../extras');
 const networkLogger = require('./network-logger');
 const logger = require('../utils/logger').create('Run');
 
-const LOCAL_TESTS_DIR = 'tests';
-const LOCAL_SNIPPETS_DIR = 'snippets';
+const RUNTIME_DIR = 'runtime';
 
 module.exports = class Run {
   /**
@@ -26,7 +25,6 @@ module.exports = class Run {
   constructor(options) {
     this._options = options;
     this._snippets = [];
-    this._localBaseDir = null;
     networkLogger.init();
     extras.setup();
     this._setupEngine();
@@ -43,7 +41,6 @@ module.exports = class Run {
    */
   runRemoteFiles(files, baseUrl) {
     logger.log(`Running ${files.length} file(s) from baseUrl: ${baseUrl}`);
-    this._localBaseDir = LOCAL_TESTS_DIR;
     return Promise.resolve()
       .then(() => this._fetchRemoteFiles(files, baseUrl))
       .then(() => this._run())
@@ -58,7 +55,6 @@ module.exports = class Run {
   runSnippets(snippets) {
     logger.log(`Running ${snippets.length} snippet(s)`);
     this._snippets = snippets;
-    this._localBaseDir = LOCAL_SNIPPETS_DIR;
     return Promise.resolve()
       .then(() => this._run())
   }
@@ -66,7 +62,7 @@ module.exports = class Run {
   _run() {
     return this.runner.run({
       tests: this._snippets,
-      localBaseDir: this._localBaseDir,
+      localBaseDir: RUNTIME_DIR,
       uiWindow: this._options.uiWindow,
       stopOnError: this._options.stopOnError,
       engine: this._options.engine,

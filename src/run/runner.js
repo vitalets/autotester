@@ -151,7 +151,7 @@ class Runner {
     this._flow.reset();
     this._localUrls.length = 0;
     globals.clear(this._context);
-    // todo: remove cleaning whole dir in future
+    // todo: maybe dont clean whole dir in future
     return localFs.removeDir(this._params.localBaseDir);
   }
 
