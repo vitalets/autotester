@@ -2,11 +2,28 @@
  * Pre-defined data
  */
 
-exports.snippets = [{
-  id: 'snippet1',
-  name: 'Google search test',
-  code: require('raw!../../../examples/google_search'),
-}];
+const {TESTS_SOURCE_TYPE} = require('./constants');
+exports.snippetsCode = {
+  'google_search': require('raw!../../../examples/google_search'),
+};
+
+exports.projects = [
+  {
+    id: 'default',
+    // for dev builds make default tests source - built-in
+    testsSource: {
+      type: window.__buildInfo.isDev ? TESTS_SOURCE_TYPE.BUILT_IN : TESTS_SOURCE_TYPE.SNIPPETS,
+      url: 'https://raw.githubusercontent.com/vitalets/autotester/master/examples/index.js',
+      path: 'tests/index.js',
+    },
+    snippets: [{filename: 'google_search'}],
+    selectedTest: {
+      snippetType: '',
+      urlType: '',
+      builtInType: '',
+    },
+  }
+];
 
 exports.hubs = [
   {

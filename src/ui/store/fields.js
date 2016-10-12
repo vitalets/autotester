@@ -4,33 +4,28 @@
  * persistance flag defned whether to load/save prop in storage
  */
 
-const {APP_STATE, TESTS_SOURCE_TYPE, SETTINGS_MENU} = require('./constants');
+const {APP_STATE, SETTINGS_MENU} = require('./constants');
 
 module.exports = {
   appState: {
     defaultValue: APP_STATE.LOADING,
     persistent: false,
   },
-  tests: {
+  projects: {
     defaultValue: [],
-    persistent: false,
+    persistent: true,
   },
-  testsSetup: {
+  selectedProjectId: {
+    defaultValue: '',
+    persistent: true,
+  },
+  tests: {
     defaultValue: [],
     persistent: false,
   },
   selectedTest: {
     defaultValue: '',
-    persistent: true,
-  },
-  snippets: {
-    defaultValue: [],
-    // todo: save snippets code in separate keys
-    persistent: true,
-  },
-  selectedSnippet: {
-    defaultValue: '',
-    persistent: true,
+    persistent: false,
   },
   targets: {
     defaultValue: [],
@@ -44,19 +39,10 @@ module.exports = {
     defaultValue: [],
     persistent: true,
   },
-  testsSourceType: {
-    // for dev builds make default tests source - built-in
+  // testsSourceBuiltInPath: {
+  //   defaultValue: chrome.runtime.getURL('/tests/index.js'),
     defaultValue: buildInfo.isDev ? TESTS_SOURCE_TYPE.BUILT_IN : TESTS_SOURCE_TYPE.SNIPPETS,
-    persistent: true,
-  },
-  testsSourceUrl: {
-    defaultValue: 'https://raw.githubusercontent.com/vitalets/autotester/master/examples/index.js',
-    persistent: true,
-  },
-  testsSourceBuiltInPath: {
-    defaultValue: chrome.runtime.getURL('/tests/index.js'),
-    persistent: false,
-  },
+  // },
   selectedTab: {
     defaultValue: -1, // better set -1 to avoid flushing content on start,
     persistent: false,
@@ -67,10 +53,6 @@ module.exports = {
   },
   stopOnError: {
     defaultValue: false,
-    persistent: false,
-  },
-  error: {
-    defaultValue: '',
     persistent: false,
   },
 };
