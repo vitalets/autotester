@@ -4,7 +4,6 @@
 
 'use strict';
 
-const status = require('./helper/status');
 const unpacked = require('./helper/unpacked');
 const crx = require('./helper/crx');
 const zip = require('./helper/zip');
@@ -12,7 +11,6 @@ const zip = require('./helper/zip');
 const outDir = 'dist/unpacked-master';
 const outDirDev = 'dist/unpacked-master-dev';
 
-status.ensureCleanBranch('master');
 Promise.all([
   unpacked.create({
     outDir: outDir,

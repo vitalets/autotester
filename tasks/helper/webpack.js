@@ -13,7 +13,7 @@ exports.run = function ({outDir, dev, watch}) {
       logStats(stats);
       console.log(`webpack: ${watch ? 'done and watching...' : 'done.'}`);
       if (!watch && !dev) {
-        fs.outputJsonSync('dist/stats.json', stats.toJson());
+        writeStats(stats);
       }
       resolve();
     };
@@ -63,7 +63,9 @@ function getConfig({outDir, dev}) {
       }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(dev ? 'dev' : 'production')
-      })
+      }),
+      // does not work yet because of ES6 (let)
+      // new webpack.optimize.UglifyJsPlugin()
     ],
     devtool: dev ? '#source-map' : null
   }
@@ -90,4 +92,10 @@ function logStats(stats) {
     colors: true
   });
   console.log(statsStr);
+}
+
+function writeStats(stats) {
+  const statsFile = 'dist/stats.json';
+  fs.outputJsonSync(statsFile, stats.toJson());
+  console.log(`webpack: written ${statsFile}`);
 }

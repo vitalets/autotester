@@ -22,11 +22,11 @@
     "test:b": "node tasks/pack4test && node ./test/run browserstack",
     "test:s": "node tasks/pack4test && node ./test/run sauce",
     "test:y": "node tasks/pack4test && node ./test/run yandex",
-    "build-local": "node tasks/build && node ./test/run local",
+    "build": "node tasks/build",
     "build-travis": "node tasks/build && node ./test/run sauce",
-    "preversion": "npm run code && npm run build-local",
+    "pre-release": "node tasks/branch && npm run code && npm run build-local && node ./test/run local",
     "version": "node tasks/version",
-    "release-patch": "npm version patch && git push --follow-tags"
+    "release-patch": "npm run pre-release && npm version patch && git push --follow-tags"
   },
   "dependencies": {},
   "devDependencies": {
