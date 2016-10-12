@@ -1,5 +1,6 @@
 
 const path = require('path');
+const fs = require('fs-extra');
 const webpack = require('webpack');
 const webpackAlias = require('./webpack-alias');
 
@@ -11,6 +12,9 @@ exports.run = function ({outDir, dev, watch}) {
       errorHandler(err, stats);
       logStats(stats);
       console.log(`webpack: ${watch ? 'done and watching...' : 'done.'}`);
+      if (!watch && !dev) {
+        fs.outputJsonSync('dist/stats.json', stats.toJson());
+      }
       resolve();
     };
     return watch ? webpack(config).watch({}, handler) : webpack(config).run(handler);
