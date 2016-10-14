@@ -5,19 +5,13 @@ const webpack = require('webpack');
 const webpackAlias = require('./webpack-alias');
 
 exports.run = function ({outDir, dev, watch}) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const config = getConfig({outDir, dev});
     console.log(`webpack: building to ${config.output.path}`);
-    const handler = (err, stats) => {
-      errorHandler(err, stats);
-      logStats(stats);
-      console.log(`webpack: ${watch ? 'done and watching...' : 'done.'}`);
-      if (!watch && !dev) {
-        writeStats(stats);
-      }
-      resolve();
-    };
-    return watch ? webpack(config).watch({}, handler) : webpack(config).run(handler);
+    const handler = getHandler({resolve, reject, watch, dev});
+    return watch
+      ? webpack(config).watch({}, handler)
+      : webpack(config).run(handler);
   });
 };
 
@@ -77,19 +71,40 @@ function getConfig({outDir, dev}) {
   }
 }
 
+function getHandler({resolve, reject, watch, dev}) {
+  return (err, stats) => {
+    const hasErrors = errorHandler(err, stats);
+    logStats(stats);
+    if (!watch && !dev) {
+      writeStats(stats);
+    }
+    const doneMsg = `webpack: done${hasErrors ? ' (with errors)': ''}`;
+    if (watch) {
+      console.log(`${doneMsg} and watching...`);
+    } else {
+      console.log(doneMsg);
+      const fulfill = hasErrors ? reject : resolve;
+      fulfill();
+    }
+  };
+}
+
 function errorHandler(err, stats) {
   if (err) {
-    throw err;
+    console.log(err);
+    return true;
   }
   if (stats.hasErrors()) {
     console.log('webpack: ERRORS');
     stats.toJson('errors-only').errors.forEach(error => console.log(error));
-    throw new Error('Errors in webpack');
+    return true;
   }
   if (stats.hasWarnings()) {
     console.log('webpack: WARNINGS');
     stats.toJson('errors-only').warnings.forEach(warning => console.log(warning));
+    return true;
   }
+  return false;
 }
 
 function logStats(stats) {
