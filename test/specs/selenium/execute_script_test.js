@@ -17,14 +17,13 @@
 
 'use strict';
 
-var path = require('path');
 var fail = require('assert').fail;
 
 var webdriver = require('..'),
-    Browser = webdriver.Browser,
-    By = webdriver.By,
-    assert = require('../testing/assert'),
-    test = require('../lib/test');
+  Browser = webdriver.Browser,
+  By = webdriver.By,
+  assert = require('../testing/assert'),
+  test = require('../lib/test');
 
 
 test.suite(function(env) {
@@ -47,20 +46,20 @@ test.suite(function(env) {
 
     test.it('fails if script throws', function() {
       execute('throw new Error("boom")')
-          .then(function() { throw shouldHaveFailed; })
-          .catch(function(e) {
-            // The java WebDriver server adds a bunch of crap to error messages.
-            // Error message will just be "JavaScript error" for IE.
-            assert(e.message).matches(/.*(JavaScript error|boom).*/);
-          });
+        .then(function() { throw shouldHaveFailed; })
+        .catch(function(e) {
+          // The java WebDriver server adds a bunch of crap to error messages.
+          // Error message will just be "JavaScript error" for IE.
+          assert(e.message).matches(/.*(JavaScript error|boom).*/);
+        });
     });
 
     test.it('fails if script does not parse', function() {
       execute('throw function\\*')
-          .then(function() { throw shouldHaveFailed; })
-          .catch(function(e) {
-            assert(e).notEqualTo(shouldHaveFailed);
-          });
+        .then(function() { throw shouldHaveFailed; })
+        .catch(function(e) {
+          assert(e).notEqualTo(shouldHaveFailed);
+        });
     });
 
     describe('scripts;', function() {
@@ -107,12 +106,12 @@ test.suite(function(env) {
 
       test.it('can return an array of primitives', function() {
         execute('var x; return [1, false, null, 3.14, x]')
-            .then(verifyJson([1, false, null, 3.14, null]));
+          .then(verifyJson([1, false, null, 3.14, null]));
       });
 
       test.it('can return nested arrays', function() {
         execute('return [[1, 2, [3]]]')
-            .then(verifyJson([[1, 2, [3]]]));
+          .then(verifyJson([[1, 2, [3]]]));
       });
 
       test.ignore(env.browsers(Browser.IE, Browser.SAFARI)).
@@ -135,37 +134,37 @@ test.suite(function(env) {
 
       test.it('can return dom elements as web elements', function() {
         execute('return document.querySelector(".header.host")')
-            .then(function(result) {
-              assert(result).instanceOf(webdriver.WebElement);
-              assert(result.getText()).startsWith('host: ');
-            });
+          .then(function(result) {
+            assert(result).instanceOf(webdriver.WebElement);
+            assert(result.getText()).startsWith('host: ');
+          });
       });
 
       test.it('can return array of dom elements', function() {
         execute('var nodes = document.querySelectorAll(".request,.host");' +
-                'return [nodes[0], nodes[1]];')
-            .then(function(result) {
-              assert(result.length).equalTo(2);
+          'return [nodes[0], nodes[1]];')
+          .then(function(result) {
+            assert(result.length).equalTo(2);
 
-              assert(result[0]).instanceOf(webdriver.WebElement);
-              assert(result[0].getText()).startsWith('GET ');
+            assert(result[0]).instanceOf(webdriver.WebElement);
+            assert(result[0].getText()).startsWith('GET ');
 
-              assert(result[1]).instanceOf(webdriver.WebElement);
-              assert(result[1].getText()).startsWith('host: ');
-            });
+            assert(result[1]).instanceOf(webdriver.WebElement);
+            assert(result[1].getText()).startsWith('host: ');
+          });
       });
 
       test.it('can return a NodeList as an array of web elements', function() {
         execute('return document.querySelectorAll(".request,.host");')
-            .then(function(result) {
-              assert(result.length).equalTo(2);
+          .then(function(result) {
+            assert(result.length).equalTo(2);
 
-              assert(result[0]).instanceOf(webdriver.WebElement);
-              assert(result[0].getText()).startsWith('GET ');
+            assert(result[0]).instanceOf(webdriver.WebElement);
+            assert(result[0].getText()).startsWith('GET ');
 
-              assert(result[1]).instanceOf(webdriver.WebElement);
-              assert(result[1].getText()).startsWith('host: ');
-            });
+            assert(result[1]).instanceOf(webdriver.WebElement);
+            assert(result[1].getText()).startsWith('host: ');
+          });
       });
 
       test.it('can return object literal with element property', function() {
@@ -219,17 +218,17 @@ test.suite(function(env) {
 
       test.it('can pass object literal', function() {
         execute(
-            'return [typeof arguments[0], arguments[0].a]', {a: 'hello'})
-            .then(function(result) {
-              assert(result[0]).equalTo('object');
-              assert(result[1]).equalTo('hello');
-            });
+          'return [typeof arguments[0], arguments[0].a]', {a: 'hello'})
+          .then(function(result) {
+            assert(result[0]).equalTo('object');
+            assert(result[1]).equalTo('hello');
+          });
       });
 
       test.it('WebElement arguments are passed as DOM elements', function() {
         var el = driver.findElement(By.tagName('div'));
         assert(execute('return arguments[0].tagName.toLowerCase();', el))
-            .equalTo('div');
+          .equalTo('div');
       });
 
       test.it('can pass array containing object literals', function() {
@@ -276,7 +275,7 @@ test.suite(function(env) {
             }
             return ret;
           }, {words: [{word: 'fa'}, {word: 'fe'}, {word: 'fi'}]})
-          .then(verifyJson(['fa', 'fe', 'fi']));
+            .then(verifyJson(['fa', 'fe', 'fi']));
         });
 
         describe('recursive functions;', function() {
@@ -287,7 +286,7 @@ test.suite(function(env) {
               function build_response(thearray, ret) {
                 ret.push(thearray.shift());
                 return (!thearray.length && ret
-                    || build_response(thearray, ret));
+                || build_response(thearray, ret));
               }
               return build_response(thearray, ret);
             }, input).then(verifyJson(input));
@@ -301,7 +300,7 @@ test.suite(function(env) {
                 var item = thing.words.shift();
                 ret.push(item.word);
                 return (!thing.words.length && ret
-                    || build_response(thing, ret));
+                || build_response(thing, ret));
               }
               return build_response(thing, ret);
             }, input).then(verifyJson(['fa', 'fe', 'fi']));

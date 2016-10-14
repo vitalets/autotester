@@ -32,10 +32,6 @@ function setupRequire() {
 
   // selenium uses special `test` object to run same tests over several browsers
   require.register('selenium-webdriver/lib/test', test);
-
-  // this is strange unused require in execute_script_test.js
-  // fixed in: https://github.com/SeleniumHQ/selenium/pull/2598
-  require.register('path', {});
 }
 
 function setupRunContext() {
