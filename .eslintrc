@@ -13,6 +13,10 @@
     "node": true
   },
 
+  "globals": {
+    "buildInfo": false
+  },
+
   "rules": {
    // "comma-dangle": ["error", "only-multiline"],
    // "no-multi-spaces": 2,

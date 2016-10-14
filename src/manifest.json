@@ -43,7 +43,6 @@
   "browser_action": {},
   "background": {
     "scripts": [
-      "core/build-info.js",
       "core/background/boot.js",
       "core/background/bundle.js"
     ],

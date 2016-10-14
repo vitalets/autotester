@@ -6,10 +6,6 @@
 const clean = require('./clean');
 const copy = require('./copy');
 const webpack = require('./webpack');
-const buildInfo = require('./build-info');
-
-// optionally require env vars
-try { require('../env') } catch (e) {}
 
 /**
  *
@@ -20,7 +16,6 @@ try { require('../env') } catch (e) {}
  */
 exports.create = function ({outDir, dev, watch}) {
   clean.run(outDir);
-  buildInfo.create({outDir, dev});
   copy.core({outDir, dev, watch});
   if (dev) {
     copy.tests({outDir, watch});

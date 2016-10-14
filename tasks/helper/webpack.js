@@ -61,9 +61,15 @@ function getConfig({outDir, dev}) {
       new webpack.ProvidePlugin({
         'React': 'react'
       }),
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(dev ? 'dev' : 'production')
-      }),
+      new webpack.DefinePlugin(Object.assign({
+        'process.env.NODE_ENV': JSON.stringify(dev ? 'dev' : 'production'),
+        buildInfo: {
+          timestamp: Date.now(),
+          buildNumber: process.env.BUILD_NUMBER || '',
+          hash: process.env.BUILD_VCS_NUMBER || '',
+          isDev: Boolean(dev),
+        }
+      }, getEnvData())),
       // does not work yet because of ES6 (let)
       // new webpack.optimize.UglifyJsPlugin()
     ],
@@ -98,4 +104,14 @@ function writeStats(stats) {
   const statsFile = 'dist/stats.json';
   fs.outputJsonSync(statsFile, stats.toJson());
   console.log(`webpack: written ${statsFile}`);
+}
+
+function getEnvData() {
+  try {
+    const env = require('../../env');
+    return Object.keys(env).reduce((res, key) => {
+      res[`process.env.${key}`] = JSON.stringify(env[key]);
+      return res;
+    }, {});
+  } catch (e) { }
 }

@@ -2,7 +2,6 @@
  * Pre-defined data
  */
 
-
 exports.snippets = [{
   id: 'snippet1',
   name: 'Google search test',
@@ -28,7 +27,7 @@ exports.targets = [
 ];
 
 // add localhost hub and target (currently for dev build only)
-if (window.__buildInfo.isDev) {
+if (buildInfo.isDev) {
   exports.hubs = exports.hubs.concat([
     {
       id: 'localhost',
@@ -55,11 +54,11 @@ if (window.__buildInfo.isDev) {
 }
 
 // add yandex hub and targets
-if (window.__buildInfo.yandexUser) {
+if (buildInfo.isDev && process.env.YANDEX_USER) {
   exports.hubs = exports.hubs.concat([
     {
       id: 'yandex',
-      serverUrl: `http://${__buildInfo.yandexUser}:${__buildInfo.yandexKey}@sg.yandex-team.ru:4444/wd/hub`,
+      serverUrl: `http://${process.env.YANDEX_USER}:${process.env.YANDEX_KEY}@sg.yandex-team.ru:4444/wd/hub`,
       caps: {
         'browserName': 'chrome'
       }
@@ -87,16 +86,16 @@ if (window.__buildInfo.yandexUser) {
 }
 
 // add sauce hub and targets
-if (window.__buildInfo.sauceUser) {
+if (buildInfo.isDev && process.env.SAUCE_USER) {
   exports.hubs = exports.hubs.concat([
     {
       id: 'sauce',
-      serverUrl: `http://${__buildInfo.sauceUser}:${__buildInfo.sauceKey}@ondemand.saucelabs.com:80/wd/hub`,
+      serverUrl: `http://${process.env.SAUCE_USER}:${process.env.SAUCE_KEY}@ondemand.saucelabs.com:80/wd/hub`,
       watchUrl: `https://saucelabs.com/beta/tests/:sessionId/watch`,
       caps: {
         // temp for demo
-        'username': window.__buildInfo.sauceUser,
-        'accessKey': window.__buildInfo.sauceKey,
+        'username': process.env.SAUCE_USER,
+        'accessKey': process.env.SAUCE_KEY,
         'browserName': 'chrome'
       }
     }

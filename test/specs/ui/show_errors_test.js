@@ -21,7 +21,7 @@ test.describe('show errors', function () {
       `);
       getConsoleLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-        assert(lines[1]).equalTo('at snippets/test.js:2:9');
+        assert(lines[1]).equalTo('at runtime/test.js:2:9');
       })
     });
 
@@ -34,7 +34,7 @@ test.describe('show errors', function () {
       `);
       getConsoleLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-        assert(lines[1]).equalTo('at driver.call (snippets/test.js:4:11)');
+        assert(lines[1]).equalTo('at driver.call (runtime/test.js:4:11)');
       })
     });
 
@@ -60,7 +60,7 @@ test.describe('show errors', function () {
       `);
       getConsoleLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-        assert(lines[1]).equalTo('at Suite.<anonymous> (snippets/test.js:3:11)');
+        assert(lines[1]).equalTo('at Suite.<anonymous> (runtime/test.js:3:11)');
       });
     });
 
@@ -74,7 +74,7 @@ test.describe('show errors', function () {
       `);
       getMochaErrorLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-        assert(lines[1]).equalTo('at Context.<anonymous> (snippets/test.js:4:13)');
+        assert(lines[1]).equalTo('at Context.<anonymous> (runtime/test.js:4:13)');
       })
     });
 
@@ -95,7 +95,7 @@ test.describe('show errors', function () {
       `);
       getMochaErrorLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-        assert(lines[1]).equalTo('at driver.call (snippets/test.js:7:15)');
+        assert(lines[1]).equalTo('at driver.call (runtime/test.js:7:15)');
       })
     });
 

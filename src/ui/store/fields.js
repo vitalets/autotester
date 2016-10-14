@@ -46,7 +46,7 @@ module.exports = {
   },
   testsSourceType: {
     // for dev builds make default tests source - built-in
-    defaultValue: window.__buildInfo.isDev ? TESTS_SOURCE_TYPE.BUILT_IN : TESTS_SOURCE_TYPE.SNIPPETS,
+    defaultValue: buildInfo.isDev ? TESTS_SOURCE_TYPE.BUILT_IN : TESTS_SOURCE_TYPE.SNIPPETS,
     persistent: true,
   },
   testsSourceUrl: {

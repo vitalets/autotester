@@ -20,7 +20,10 @@ const webdriver = require('selenium-webdriver');
 const htmlToText = require('html-to-text');
 const capabilities = require('./capabilities');
 // try load env vars
-try { require('../../tasks/env') } catch (e) {}
+try {
+  const env = require('../../env');
+  Object.assign(process.env, env);
+} catch (e) {}
 const hub = require('./hubs/' + process.argv[2]);
 
 const AUTOTESTER_UI_URL = 'chrome-extension://inilfehdbldcjcffbakeabignfomfbdh/core/ui/ui.html';
