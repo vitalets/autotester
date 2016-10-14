@@ -21,8 +21,12 @@ function fakeRequire(moduleName) {
   if (modules.has(moduleName)) {
     return modules.get(moduleName);
   } else {
-    console.warn(moduleName, modules);
-    throw new Error(`Unsupported module in fakeRequire: ${moduleName}`);
+    throw new Error([`Unsupported module in fakeRequire: ${moduleName}`,
+      `[Registered modules]:`,
+      stringifyMapKeys(modules),
+      `[Aliases]:`,
+      stringifyMap(aliases),
+    ].join('\n'));
   }
 }
 
@@ -39,4 +43,16 @@ function applyAliases(moduleName) {
     moduleName = moduleName.replace(alias, path);
   });
   return moduleName;
+}
+
+function stringifyMapKeys(map) {
+  const res = [];
+  map.forEach((value, key) => res.push(key));
+  return res.join('\n');
+}
+
+function stringifyMap(map) {
+  const res = [];
+  map.forEach((value, key) => res.push(`${key} = ${value}`));
+  return res.join(', ');
 }
