@@ -8,11 +8,12 @@ exports.APP_STATE = keyMirror({
   TESTS_DONE: null,
 });
 
-exports.TESTS_SOURCE_TYPE = keyMirror({
-  SNIPPETS: null,
-  URL: null,
-  BUILT_IN: null,
-});
+// dont use keyMirror here as these values stored on client side
+exports.TESTS_SOURCE_TYPE = {
+  SNIPPETS: 'SNIPPETS',
+  URL: 'URL',
+  BUILT_IN: 'BUILT_IN',
+};
 
 exports.TAB = keyMirror({
   TESTS: null,

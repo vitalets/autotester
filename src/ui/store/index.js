@@ -2,23 +2,24 @@
  * This singleton store contains information about UI state
  */
 
-const mobx = require('mobx');
-const fields = require('./fields');
-const Store = require('../../utils/mobx-store');
+// const Store = require('../../utils/mobx-store');
+const State = require('./state');
 const {TESTS_SOURCE_TYPE} = require('./constants');
 const snippetTpl = require('raw!./snippet-tpl');
 
-let store = null;
+let state = null;
 
 module.exports = {
+  // todo: rename to state
   get store() {
-    if (!store) {
-      store = new MyStore(fields);
+    if (!state) {
+      state = new State();
     }
-    return store;
+    return state;
   }
 };
 
+/*
 class MyStore extends Store {
   isSnippets() {
     return this.testsSourceType === TESTS_SOURCE_TYPE.SNIPPETS;
@@ -65,3 +66,4 @@ function findFreeName(snippets) {
   }
   return `new test`;
 }
+*/

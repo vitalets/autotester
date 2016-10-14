@@ -4,8 +4,62 @@
  * persistance flag defned whether to load/save prop in storage
  */
 
-const {APP_STATE, SETTINGS_MENU} = require('./constants');
+const {APP_STATE, TESTS_SOURCE_TYPE, SETTINGS_MENU} = require('./constants');
 
+exports.runtime = {
+  // todo: rename to appStatus
+  appState: APP_STATE.LOADING,
+  files: [],
+  selectedTab: -1,
+  stopOnError: false,
+};
+
+exports.persistent = {
+  projects: [],
+  selectedProjectId: '',
+  targets: [],
+  selectedTargetId: '',
+  hubs: [],
+  selectedSettingsMenuItem: SETTINGS_MENU.TESTS_SOURCE,
+};
+
+exports.computed = {
+  get selectedProject() {
+    return this.projects.find(project => project.id === this.selectedProjectId);
+  },
+  get testsSourceType() {
+    return this.selectedProject.testsSource.type;
+  },
+  get selectedFile() {
+    return this.selectedProject.selectedFile[this.testsSourceType] || '';
+  },
+  set selectedFile(value) {
+    this.selectedProject.selectedFile[this.testsSourceType] = value;
+  },
+  get selectedTarget() {
+    return this.targets.find(target => target.id === this.selectedTargetId);
+  },
+  get testsSourceUrl() {
+    switch (this.testsSourceType) {
+      case TESTS_SOURCE_TYPE.URL:
+        return this.selectedProject.testsSource.url;
+      case TESTS_SOURCE_TYPE.BUILT_IN:
+        return chrome.runtime.getURL(this.selectedProject.testsSource.path);
+      case TESTS_SOURCE_TYPE.SNIPPETS:
+      default:
+        return '';
+    }
+  }
+};
+
+exports.all = Object.assign(
+  exports.computed,
+  exports.runtime,
+  exports.persistent
+);
+
+
+/*
 module.exports = {
   appState: {
     defaultValue: APP_STATE.LOADING,
@@ -56,3 +110,4 @@ module.exports = {
     persistent: false,
   },
 };
+*/

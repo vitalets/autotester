@@ -16,12 +16,8 @@ exports.projects = [
       url: 'https://raw.githubusercontent.com/vitalets/autotester/master/examples/index.js',
       path: 'tests/index.js',
     },
-    snippets: [{filename: 'google_search'}],
-    selectedTest: {
-      snippetType: '',
-      urlType: '',
-      builtInType: '',
-    },
+    snippets: [{path: 'google_search'}],
+    selectedFile: { },
   }
 ];
 
@@ -38,6 +34,7 @@ exports.hubs = [
 
 exports.targets = [
   {
+    id: 'loopback-1',
     hubId: 'loopback',
     name: 'This chrome'
   },
@@ -57,10 +54,12 @@ if (buildInfo.isDev) {
 
   exports.targets = exports.targets.concat([
     {
+      id: 'localhost-1',
       hubId: 'localhost',
       name: 'Localhost server (chrome)',
     },
     {
+      id: 'localhost-2',
       hubId: 'localhost',
       name: 'Localhost server (firefox)',
       caps: {
@@ -84,6 +83,7 @@ if (buildInfo.isDev && process.env.YANDEX_USER) {
 
   exports.targets = exports.targets.concat([
     {
+      id: 'yandex-1',
       hubId: 'yandex',
       name: 'Yandex grid (chrome 51, linux)',
       caps: {
@@ -92,6 +92,7 @@ if (buildInfo.isDev && process.env.YANDEX_USER) {
       }
     },
     {
+      id: 'yandex-2',
       hubId: 'yandex',
       name: 'Yandex grid (chrome 53, win7)',
       caps: {
@@ -120,6 +121,7 @@ if (buildInfo.isDev && process.env.SAUCE_USER) {
 
   exports.targets = exports.targets.concat([
     {
+      id: 'sauce-1',
       hubId: 'sauce',
       name: 'Sauce labs (chrome stable, win7)',
       caps: {
@@ -127,6 +129,7 @@ if (buildInfo.isDev && process.env.SAUCE_USER) {
       }
     },
     {
+      id: 'sauce-2',
       hubId: 'sauce',
       name: 'Sauce labs (chrome beta, win7)',
       caps: {
@@ -135,6 +138,7 @@ if (buildInfo.isDev && process.env.SAUCE_USER) {
       }
     },
     {
+      id: 'sauce-3',
       hubId: 'sauce',
       name: 'Sauce labs (firefox stable, win7)',
       caps: {
