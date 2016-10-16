@@ -16,32 +16,41 @@ exports.applyOnFirstRun = function() {
 };
 
 /**
- * Detects first run by checking `hub` key in storage
+ * Detects first run by checking `installDate` key in storage
  */
 function isFirstRun() {
-  return thenChrome.storage.local.get('hubs')
+  return thenChrome.storage.local.get('installDate')
     .then(data => Object.keys(data).length === 0);
 }
 
 function storeDefaults() {
   return Promise.all([
+    storeInstallDate(),
+    saveInnerFile(),
     storeExtraField('hubs'),
     storeExtraField('targets'),
-    storeInnerFile(),
   ]);
+}
+
+function storeInstallDate() {
+  return store('installDate', Date.now());
 }
 
 function storeExtraField(field) {
   if (defaultsExtra[field].length) {
-    const data = mobx.toJS({
-      [field]: defaults[field].concat(defaultsExtra[field])
-    });
-    logger.log(`Storing extra defaults ${field}`, data);
-    return thenChrome.storage.local.set(data);
+    return store(field, mobx.toJS(defaults[field].concat(defaultsExtra[field])));
   }
 }
 
-function storeInnerFile() {
+function store(field, value) {
+  const data = {
+    [field]: value
+  };
+  logger.log(`Storing ${field}`, value);
+  return thenChrome.storage.local.set(data);
+}
+
+function saveInnerFile() {
   const path = `projects/${defaults.projectId}/${defaults.innerFile.path}`;
   const content = defaults.innerFile.code;
   logger.log(`Storing default inner file: ${path}`);

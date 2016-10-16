@@ -46,6 +46,9 @@ exports.computed = {
   get filesSourceType() {
     return this.selectedProject.filesSource.type;
   },
+  set filesSourceType(value) {
+    return this.selectedProject.filesSource.type = value;
+  },
   get isInnerFiles() {
     return this.filesSourceType === FILES_SOURCE_TYPE.INNER;
   },
