@@ -20,5 +20,5 @@ if (onlyChanged) {
 } else {
   const paths = ['src', 'test', 'tasks'];
   exec(`eslint ${paths.join(' ')}`);
-  console.log(`eslint: ${paths.length} path(s) linted.`);
+  console.log(`eslint: all linted.`);
 }
