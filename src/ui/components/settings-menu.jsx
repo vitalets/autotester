@@ -1,6 +1,6 @@
 
 const {Button} = require('react-mdl');
-const {SETTINGS_MENU} = require('../store/constants');
+const {SETTINGS_MENU} = require('../state/constants');
 
 const texts = {
   [SETTINGS_MENU.TESTS_SOURCE]: 'Tests source',

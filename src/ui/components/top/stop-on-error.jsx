@@ -1,7 +1,7 @@
 
 const {observer} = require('mobx-react');
 const mobx = require('mobx');
-const store = require('../../store').store;
+const state = require('../../state');
 
 module.exports = observer(class StopOnError extends React.Component {
   constructor() {
@@ -9,12 +9,12 @@ module.exports = observer(class StopOnError extends React.Component {
     this.onChange = mobx.action(this.onChange.bind(this));
   }
   onChange(e) {
-    store.stopOnError = e.target.checked;
+    state.stopOnError = e.target.checked;
   }
   render() {
     return (
       <label>
-        <input type="checkbox" checked={store.stopOnError} onChange={this.onChange} style={{verticalAlign: 'middle'}}/>
+        <input type="checkbox" checked={state.stopOnError} onChange={this.onChange} style={{verticalAlign: 'middle'}}/>
         <span style={{marginLeft: '2px'}}>stop on error</span>
       </label>
     );

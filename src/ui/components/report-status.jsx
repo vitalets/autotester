@@ -1,6 +1,6 @@
 
 const Channel = require('chnl');
-const store = require('../store').store;
+const state = require('../state');
 const {
   onSessionStarted,
   onTestsRun,
@@ -37,8 +37,8 @@ module.exports = class ReportStatus extends React.Component {
   handleTestsRun() {
     this.setState({
       done: false,
-      targetName: store.targets[store.selectedTarget].name,
-      testsCount: store.isSnippets() ? store.snippets.length : store.tests.length,
+      targetName: state.targets[state.selectedTarget].name,
+      testsCount: state.isInnerFiles ? state.innerFiles.length : state.files.length,
       sessionId: '',
       watchUrl: '',
     });

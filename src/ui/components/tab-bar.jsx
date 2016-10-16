@@ -1,9 +1,9 @@
 const {observer} = require('mobx-react');
 const {Tabs, Tab, MDLComponent} = require('react-mdl');
 const mobx = require('mobx');
-const store = require('../store').store;
+const state = require('../state');
 const TabBarItem = require('./tab-bar-item');
-const {TAB} = require('../store/constants');
+const {TAB} = require('../state/constants');
 
 const tabList = [
   TAB.TESTS,
@@ -13,7 +13,7 @@ const tabList = [
 
 module.exports = observer(function TabBar() {
   // unfortunately mdl-tabs component works only with tab indexes, not ids
-  const activeTabIndex = tabList.indexOf(store.selectedTab);
+  const activeTabIndex = tabList.indexOf(state.selectedTab);
   // MDLComponent is needed because of: https://github.com/tleunen/react-mdl/issues/394
   // ripple effect also does not work
   return (
@@ -34,5 +34,5 @@ module.exports = observer(function TabBar() {
 });
 
 const selectTab = mobx.action(function (tabId) {
-  store.selectedTab = tabId;
+  state.selectedTab = tabId;
 });

@@ -4,8 +4,8 @@
 
 const Channel = require('chnl');
 const {observer} = require('mobx-react');
-const store = require('../store').store;
-const {APP_STATE} = require('../store/constants');
+const state = require('../state');
+const {APP_STATE} = require('../state/constants');
 const {onFileStarted, onTestStarted, onTestsDone} = require('../controllers/internal-channels');
 
 const TITLE_PREFIX = chrome.runtime.getManifest().name;
@@ -56,7 +56,7 @@ module.exports = observer(class Title extends React.Component {
     });
   }
   getMessage() {
-    switch (store.appState) {
+    switch (state.appState) {
       case APP_STATE.LOADING: return MSG.LOADING;
       case APP_STATE.READY: return MSG.READY;
       case APP_STATE.TESTS_RUNNING: return this.getRunningTitle();

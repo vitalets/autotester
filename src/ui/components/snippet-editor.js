@@ -1,10 +1,10 @@
 const mobx = require('mobx');
 const {Textfield, Icon, Button} = require('react-mdl');
-const store = require('../store').store;
+const state = require('../state');
 const CodeMirror = require('react-codemirror');
 require('codemirror/mode/javascript/javascript');
 const debounce = require('lodash.debounce');
-const {TAB} = require('../store/constants');
+const {TAB} = require('../state/constants');
 
 const options = {
   lineNumbers: true,
@@ -22,11 +22,11 @@ module.exports = class SnippetEditor extends React.Component {
     this.changeName = this.changeName.bind(this);
     this.changeCode = this.changeCode.bind(this);
     this.deleteSnippet = this.deleteSnippet.bind(this);
-    this.updateStore = debounce(mobx.action(this.updateStore.bind(this)), 500);
+    this.updateStore = debounce(mobx.action(this.updatestate.bind(this)), 500);
   }
   componentWillMount() {
     this.disposerState = mobx.autorun(() => {
-      if (store.selectedSnippet) {
+      if (state.selectedSnippet) {
         // todo: use computed
         const snippet = this.getSelectedSnippet();
         if (snippet) {
@@ -39,7 +39,7 @@ module.exports = class SnippetEditor extends React.Component {
 
     // see: http://stackoverflow.com/questions/8349571/codemirror-editor-is-not-loading-content-until-clicked
     this.disposerEditor = mobx.autorun(() => {
-      if (store.selectedTab === TAB.TESTS) {
+      if (state.selectedTab === TAB.TESTS) {
         this.updateEditor();
       }
     });
@@ -74,14 +74,14 @@ module.exports = class SnippetEditor extends React.Component {
   }
   deleteSnippet() {
     if (window.confirm('Sure?')) {
-      store.deleteSelectedSnippet();
+      state.deleteSelectedSnippet();
     }
   }
   addSnippet() {
-    store.addSnippet();
+    state.addSnippet();
   }
   getSelectedSnippet() {
-    return store.snippets.find(s => s.id === store.selectedSnippet);
+    return state.innerFiles.find(s => s.id === state.selectedSnippet);
   }
   render() {
     return (
@@ -99,7 +99,7 @@ module.exports = class SnippetEditor extends React.Component {
             <span className="button-text">New test</span>
           </Button>
           <Button raised onClick={this.deleteSnippet}>
-            <Icon name="delete" disabled={!store.selectedSnippet}/>
+            <Icon name="delete" disabled={!state.selectedSnippet}/>
             <span className="button-text">Delete</span>
           </Button>
         </div>

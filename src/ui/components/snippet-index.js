@@ -1,6 +1,6 @@
 
 const {Icon, Button} = require('react-mdl');
-const store = require('../store').store;
+const state = require('../state');
 const FlagsNote = require('./flags-note');
 
 module.exports = function SnippetIndex(props) {
@@ -22,7 +22,7 @@ module.exports = function SnippetIndex(props) {
   return (
     <div className="tests-index">
       {props.count ? has : no}
-      <Button raised style={{marginTop: '25px'}} onClick={() => store.addSnippet()}>
+      <Button raised style={{marginTop: '25px'}} onClick={() => state.addSnippet()}>
         <Icon name="add"/>
         <span className="button-text">Create new test</span>
       </Button>

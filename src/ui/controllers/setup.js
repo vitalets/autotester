@@ -4,13 +4,15 @@
  */
 
 const thenChrome = require('then-chrome');
-const predefinedData = require('../store/data');
+const mobx = require('mobx');
+const defaults = require('../state/defaults');
+const defaultsExtra = require('../state/defaults-extra');
 const localFs = require('../../utils/local-fs');
 const logger = require('../../utils/logger').create('Setup');
 
 exports.applyOnFirstRun = function() {
   return isFirstRun()
-    .then(firstRun => firstRun ? storePreDefinedData() : null);
+    .then(firstRun => firstRun ? storeDefaults() : null);
 };
 
 /**
@@ -21,29 +23,27 @@ function isFirstRun() {
     .then(data => Object.keys(data).length === 0);
 }
 
-function storePreDefinedData() {
+function storeDefaults() {
   return Promise.all([
-    storeInStorage(),
-    storeInFs(),
+    storeExtraField('hubs'),
+    storeExtraField('targets'),
+    storeInnerFile(),
   ]);
 }
 
-function storeInStorage() {
-  const data = {
-    hubs: predefinedData.hubs,
-    targets: predefinedData.targets,
-    projects: predefinedData.projects,
-    selectedProjectId: predefinedData.projects[0].id,
-  };
-  logger.log('Storing pre-defined data in storage', data);
-  return thenChrome.storage.local.set(data);
+function storeExtraField(field) {
+  if (defaultsExtra[field].length) {
+    const data = mobx.toJS({
+      [field]: defaults[field].concat(defaultsExtra[field])
+    });
+    logger.log(`Storing extra defaults ${field}`, data);
+    return thenChrome.storage.local.set(data);
+  }
 }
 
-function storeInFs() {
-  const project = predefinedData.projects[0];
-  const snippet = project.snippets[0];
-  const path = `projects/${project.id}/${snippet.filename}`;
-  const content = predefinedData.snippetsCode[snippet.filename];
-  logger.log(`Storing pre-defined snippet: ${path}`);
+function storeInnerFile() {
+  const path = `projects/${defaults.projectId}/${defaults.innerFile.path}`;
+  const content = defaults.innerFile.code;
+  logger.log(`Storing default inner file: ${path}`);
   return localFs.save(path, content);
 }

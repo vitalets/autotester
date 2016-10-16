@@ -1,44 +1,9 @@
 /**
- * Pre-defined data
+ * Extra targets defined by buildInfo.isDev and process.env variables and applied in install controller
  */
 
-const {TESTS_SOURCE_TYPE} = require('./constants');
-exports.snippetsCode = {
-  'google_search': require('raw!../../../examples/google_search'),
-};
-
-exports.projects = [
-  {
-    id: 'default',
-    // for dev builds make default tests source - built-in
-    testsSource: {
-      type: window.__buildInfo.isDev ? TESTS_SOURCE_TYPE.BUILT_IN : TESTS_SOURCE_TYPE.SNIPPETS,
-      url: 'https://raw.githubusercontent.com/vitalets/autotester/master/examples/index.js',
-      path: 'tests/index.js',
-    },
-    snippets: [{path: 'google_search'}],
-    selectedFile: { },
-  }
-];
-
-exports.hubs = [
-  {
-    id: 'loopback',
-    serverUrl: 'http://autotester',
-    loopback: true,
-    caps: {
-      'browserName': 'chrome'
-    }
-  }
-];
-
-exports.targets = [
-  {
-    id: 'loopback-1',
-    hubId: 'loopback',
-    name: 'This chrome'
-  },
-];
+exports.hubs = [];
+exports.targets = [];
 
 // add localhost hub and target (currently for dev build only)
 if (buildInfo.isDev) {

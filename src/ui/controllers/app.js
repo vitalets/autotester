@@ -3,8 +3,8 @@
  */
 
 const mobx = require('mobx');
-const store = require('../store').store;
-const {APP_STATE, TAB} = require('../store/constants');
+const state = require('../state');
+const {APP_STATE, TAB} = require('../state/constants');
 const bgApi = require('./bg-api');
 const windowApi = require('./window-api');
 const testsRun = require('./tests-run');
@@ -22,12 +22,12 @@ exports.start = function() {
   windowApi.init();
   return Promise.resolve()
     .then(() => setup.applyOnFirstRun())
-    .then(() => store.load())
-    .then(() => store.isSnippets() ? null : testsList.load())
+    .then(() => state.load())
+    .then(() => state.isInnerFiles ? null : testsList.load())
     .then(mobx.action(ready));
 };
 
 function ready() {
-  store.appState = APP_STATE.READY;
-  store.selectedTab = TAB.TESTS;
+  state.appState = APP_STATE.READY;
+  state.selectedTab = TAB.TESTS;
 }

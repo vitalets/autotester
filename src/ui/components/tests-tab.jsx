@@ -1,17 +1,17 @@
 const {observer} = require('mobx-react');
-const store = require('../store').store;
+const state = require('../state');
 const SnippetEditor = require('./snippet-editor');
 const SnippetIndex = require('./snippet-index');
 const FilesIndex = require('./files-index');
 
 module.exports = observer(function TestsTab() {
-  if (store.isSnippets()) {
-    return store.selectedSnippet
+  if (state.isInnerFiles) {
+    return state.selectedSnippet
       ? <SnippetEditor/>
-      : <SnippetIndex count={store.snippets.length}/>;
+      : <SnippetIndex count={state.innerFiles.length}/>;
   } else {
     return (
-      <FilesIndex count={store.tests.length} url={store.testsSourceUrl}/>
+      <FilesIndex count={state.files.length} url={state.filesSourceUrl}/>
     );
   }
 });

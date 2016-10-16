@@ -3,41 +3,38 @@
  */
 
 const mobx = require('mobx');
-const store = require('../store').store;
+const state = require('../state');
 const bgApi = require('./bg-api');
 const {onError} = require('./internal-channels');
 const utils = require('../../utils');
 const logger = require('../../utils/logger').create('Tests-list');
 
 exports.load = function () {
-  const url = store.getTestsUrl();
+  const url = state.filesSourceUrl;
   if (utils.isValidUrl(url)) {
     return bgApi.loadTestsList(url)
       .then(done, fail)
   } else {
-    fail(new Error(`Invalid tests url ${url}`));
+    fail(new Error(`Invalid files url ${url}`));
   }
 };
 
 const done = mobx.action(function (data) {
   if (data && Array.isArray(data.tests)) {
-    logger.log('Tests loaded:', data.tests.length);
-    store.testsSetup = data.setup || [];
-    store.tests = data.tests || [];
-    verifySelectedTest();
+    logger.log('Files list loaded:', data.tests.length);
+    const setupFiles = (data.setup || []).map(path => {
+      return {path, setup: true};
+    });
+    const regularFiles = data.tests.map(path => {
+      return {path};
+    });
+    state.outerFiles = setupFiles.concat(regularFiles);
   } else {
-    fail(new Error(`No tests found on ${store.getTestsUrl()}`));
+    fail(new Error(`No files found on ${state.filesSourceUrl}`));
   }
 });
 
 const fail = mobx.action(function(e) {
-  store.clearTests();
+  // todo: store.clearTests();
   onError.dispatch(e);
 });
-
-// todo: move to store and run automatically on every tests change?
-function verifySelectedTest() {
-  if (store.selectedTest && store.tests.indexOf(store.selectedTest) === -1) {
-    store.selectedTest = '';
-  }
-}
