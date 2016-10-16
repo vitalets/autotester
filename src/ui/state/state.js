@@ -4,7 +4,7 @@
 
 const mobx = require('mobx');
 const PersistentState = require('../../utils/mobx/persistent-state');
-const fields = require('./fields');
+const fields = require('./state-fields');
 // const innerFileTpl = require('raw!./inner-file-tpl');
 
 module.exports = class State extends PersistentState {
@@ -15,20 +15,9 @@ module.exports = class State extends PersistentState {
     mobx.reaction(() => mobx.toJS(this.files), mobx.action(this._verifySelectedFile.bind(this)));
   }
 
-
   // clearTests() {
   //   this.reset(['tests', 'testsSetup', 'selectedTest']);
   // }
-
-  /**
-   * Automatically reset selected file if it is not found in current files
-   * @private
-   */
-  _verifySelectedFile() {
-    if (this.selectedFile && !this.files.find(file => file.path === this.selectedFile)) {
-      this.selectedFile = '';
-    }
-  }
 
   deleteSnippet() {
     if (this.isSnippets && this.selectedFile) {
@@ -49,6 +38,16 @@ module.exports = class State extends PersistentState {
     const snippet = {path};
     this.snippets.push(snippet);
     this.selectedFile = snippet.path;
+  }
+
+  /**
+   * Automatically reset selected file if it is not found in current files
+   * @private
+   */
+  _verifySelectedFile() {
+    if (this.selectedFile && !this.files.find(file => file.path === this.selectedFile)) {
+      this.selectedFile = '';
+    }
   }
 };
 

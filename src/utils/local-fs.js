@@ -39,6 +39,17 @@ exports.removeDir = function (dir) {
     .catch(e => e.name === 'NotFoundError' ? null : Promise.reject(e))
 };
 
+/**
+ * Read file content
+ *
+ * @param {String} filepath
+ */
+exports.readFile = function (filepath) {
+  return Promise.resolve()
+    .then(() => ensureFs())
+    .then(() => fs.readFileAsync(filepath))
+};
+
 function ensureFs() {
   return fsInited ? Promise.resolve() : fs.initAsync(0).then(() => fsInited = true);
 }

@@ -3,7 +3,12 @@
  */
 
 const Run = require('../run');
-const {onTestsDone, onSessionStarted, onFileStarted, onTestStarted} = require('./internal-channels');
+const {
+  onTestsDone,
+  onSessionStarted,
+  onFileStarted,
+  onTestStarted
+} = require('./internal-channels');
 
 /**
  * Run tests

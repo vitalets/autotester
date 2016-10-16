@@ -15,7 +15,11 @@ const defaultProject = {
   innerFiles: [
     {path: defaults.innerFile.path}
   ],
-  selectedFile: {/* for each source type */},
+  selectedFile: {
+    [FILES_SOURCE_TYPE.INNER]: '',
+    [FILES_SOURCE_TYPE.URL]: '',
+    [FILES_SOURCE_TYPE.BUILT_IN]: '',
+  },
 };
 
 exports.runtime = {

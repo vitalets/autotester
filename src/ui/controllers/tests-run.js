@@ -5,6 +5,7 @@
 const thenChrome = require('then-chrome');
 const mobx = require('mobx');
 const path = require('path');
+const localFs = require('../../utils/local-fs');
 const state = require('../state');
 const {APP_STATE, TAB} = require('../state/constants');
 const bgApi = require('./bg-api');
@@ -22,9 +23,9 @@ exports.init = function () {
  */
 exports.runCustomSnippets = function(snippets) {
   const data = {
-    stopOnError: false,
-    target: getTarget(0),
+    target: getSelectedTargetInfo(),
     snippets: snippets,
+    stopOnError: false,
   };
   run(data);
 };
@@ -43,70 +44,65 @@ const done = mobx.action(function () {
 });
 
 function runOnCurrentData() {
-  const data = getData();
-  run(data);
-}
-
-function getData() {
   const data = {
+    target: getSelectedTargetInfo(),
+    baseUrl: getBaseUrl(),
+    files: getFiles(),
     stopOnError: state.stopOnError,
-    target: getTarget(state.selectedTarget),
   };
-
-  if (state.isSnippets()) {
-    data.snippets = getSnippets();
+  if (state.isInnerFiles) {
+    getSnippets(data.baseUrl, data.files).then(snippets => {
+      data.snippets = snippets;
+      run(data);
+    });
   } else {
-    const {files, baseUrl} = getFiles();
-    data.baseUrl = baseUrl;
-    data.files = files;
+    run(data);
   }
-
-  return data;
-}
-
-function getSnippets() {
-  return state.snippets
-    .filter(snippet => !state.selectedSnippet || snippet.id === state.selectedSnippet)
-    .map(snippet => {
-    return {
-      path: formatSnippetName(snippet.name),
-      code: snippet.code,
-    };
-  });
 }
 
 function getFiles() {
-  const baseUrl = path.dirname(state.getTestsUrl());
-  const files = state.testsSetup.slice();
-  if (state.selectedTest) {
-    const test = state.tests.find(t => t === state.selectedTest);
-    files.push(test);
+  if (state.selectedFile) {
+    return state.files
+      .filter(file => file.isSetup)
+      .map(file => file.path)
+      .concat([state.selectedFile]);
   } else {
-    state.tests.forEach(test => files.push(test));
+    return state.files.map(file => file.path);
   }
-  return {baseUrl, files};
 }
 
-function getTarget(targetIndex) {
-  const target = state.targets[targetIndex];
-  if (!target) {
+function getBaseUrl() {
+  return state.isInnerFiles
+    ? `projects/${state.selectedProject.id}`
+    : path.dirname(state.filesSourceUrl);
+}
+
+function getSnippets(basePath, paths) {
+  const tasks = paths.map(path => {
+    const fullPath = basePath + '/' + path;
+    return localFs.readFile(fullPath)
+      .then(code => {
+        return {path, code};
+      });
+  });
+  return Promise.all(tasks);
+}
+
+function getSelectedTargetInfo() {
+  if (!state.selectedTarget) {
     throw new Error('Empty target');
   }
-  const hub = state.hubs.find(h => h.id === target.hubId);
+  const hub = state.hubs.find(hub => hub.id === state.selectedTarget.hubId);
   return {
     serverUrl: hub.serverUrl,
     watchUrl: hub.watchUrl,
     loopback: hub.loopback,
-    name: target.name,
-    caps: Object.assign({}, hub.caps, target.caps),
+    name: state.selectedTarget.name,
+    caps: Object.assign({}, hub.caps, state.selectedTarget.caps),
   };
 }
 
 function activateSelfTab() {
   return thenChrome.tabs.getCurrent()
     .then(tab => thenChrome.tabs.update(tab.id, {active: true}));
-}
-
-function formatSnippetName(name) {
-  return name.replace(/[ \/]/g, '_');
 }

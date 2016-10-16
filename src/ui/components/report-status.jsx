@@ -37,8 +37,8 @@ module.exports = class ReportStatus extends React.Component {
   handleTestsRun() {
     this.setState({
       done: false,
-      targetName: state.targets[state.selectedTarget].name,
-      testsCount: state.isInnerFiles ? state.innerFiles.length : state.files.length,
+      targetName: state.selectedTarget.name,
+      testsCount: state.files.length,
       sessionId: '',
       watchUrl: '',
     });

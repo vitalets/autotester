@@ -23,7 +23,7 @@ const done = mobx.action(function (data) {
   if (data && Array.isArray(data.tests)) {
     logger.log('Files list loaded:', data.tests.length);
     const setupFiles = (data.setup || []).map(path => {
-      return {path, setup: true};
+      return {path, isSetup: true};
     });
     const regularFiles = data.tests.map(path => {
       return {path};
