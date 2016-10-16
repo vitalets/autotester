@@ -226,9 +226,9 @@ function switchToExtensionTarget(target) {
     .then(() => attachDebugger({extensionId: target.extensionId}));
 }
 
-function switchToFrame(frameId) {
-  // todo
-}
+// function switchToFrame(frameId) {
+//   // todo
+// }
 
 function clearCurrentTargetProps() {
   Object.keys(currentTarget).forEach(key => currentTarget[key] = null);

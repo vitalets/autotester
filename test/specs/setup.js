@@ -47,14 +47,14 @@ function setupRunContext() {
   });
 }
 
-function suite(fn, opt_options) {
+function suite(fn) {
   const browser = 'chrome';
   test.describe('[' + browser + ']', function() {
     fn(new TestEnvironment(browser));
   });
 }
 
-function TestEnvironment(browserName, server) {
+function TestEnvironment(browserName) {
   this.currentBrowser = function() {
     return browserName;
   };
@@ -63,7 +63,7 @@ function TestEnvironment(browserName, server) {
     return false;
   };
 
-  this.browsers = function(var_args) {
+  this.browsers = function() {
     var browsersToIgnore = Array.prototype.slice.apply(arguments, [0]);
     return browsers(browserName, browsersToIgnore);
   };

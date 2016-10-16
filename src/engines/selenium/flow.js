@@ -3,9 +3,9 @@
  */
 
 const Channel = require('chnl');
-const promise = require('selenium-webdriver/lib/promise');
+//const promise = require('selenium-webdriver/lib/promise');
 
-const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
+// const {IDLE, UNCAUGHT_EXCEPTION} = promise.ControlFlow.EventType;
 
 exports.onError = new Channel();
 exports.onIdle = new Channel();

@@ -98,7 +98,9 @@ function prettyError(e) {
     try {
       const parsed = JSON.parse(e.message);
       prettyMessage = `${parsed.message} ${parsed.data}`;
-    } catch (e) {}
+    } catch (e) {
+      // if can not parse, just return error message as is
+    }
     return Promise.reject(new Error(`Debugger error '${prettyMessage}'`));
   } else {
     return Promise.reject(e);

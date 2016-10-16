@@ -10,7 +10,7 @@
 
 runContext.runCode = function (code, path = 'test.js') {
   runContext.driver.executeScript(tests => {
-    runTests(tests);
+    window.runTests(tests);
   }, [{path, code}]);
   runContext.driver.wait(until.titleContains('done'));
 };

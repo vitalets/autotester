@@ -24,7 +24,7 @@ module.exports = class Router {
         }
       }
     }
-    throw new Error(`Unsupported route: ${req.method} ${req.path}`);
+    throw new Error(`Unsupported route command: ${req.method} ${req.path}`);
   }
   use(fn) {
     this._middleware.push(fn);

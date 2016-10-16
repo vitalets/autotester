@@ -175,7 +175,7 @@ class Runner {
           response: parsed,
         });
       } catch (e) {
-        console.error(`Can not parse response data`, data)
+        logger.error(`Can not parse response data`, e, data);
       }
     }
   }

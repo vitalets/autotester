@@ -1,0 +1,9 @@
+{
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "no-empty": 0,
+    "no-console": 0
+  }
+}

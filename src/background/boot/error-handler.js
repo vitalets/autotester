@@ -20,7 +20,7 @@ module.exports = function (error) {
   showInAllViews('error', msg);
 };
 
-function showInAllViews(method, msg) {
+function showInAllViews(method/*, msg1, msg2, ...*/) {
   const args = Array.prototype.slice.call(arguments, 1);
   chrome.extension.getViews({type: 'tab'}).forEach(view => {
     if (view.htmlConsole) {

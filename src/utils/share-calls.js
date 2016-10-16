@@ -3,6 +3,8 @@
  * and if it exists share call
  */
 
+/* eslint no-console: 0 */
+
 module.exports = function (original, secondary) {
   return new Proxy(original, {
     get: (target, prop) => {

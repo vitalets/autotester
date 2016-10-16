@@ -2,10 +2,8 @@
  * Local html5 filesystem api
  */
 
-const path = require('path');
-var promisifyAll = require('es6-promisify-all');
-var fs = promisifyAll(require('html5-fs'));
-const utils = require('.');
+const promisifyAll = require('es6-promisify-all');
+const fs = promisifyAll(require('html5-fs'));
 const logger = require('./logger').create('LocalFs');
 
 let fsInited = false;

@@ -2,6 +2,8 @@
  * Simple console logger
  */
 
+/* eslint no-console: 0 */
+
 class Logger {
   constructor(prefix) {
     this._prefix = `[${prefix}]:`;

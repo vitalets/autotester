@@ -16,6 +16,7 @@
   "scripts": {
     "dev": "node tasks/dev",
     "hub": "selenium-standalone start",
+    "eslint": "eslint src test tasks",
     "code": "node tasks/code",
     "test": "npm run test:l",
     "test:l": "node tasks/pack4test && node ./test/run local",
@@ -46,6 +47,7 @@
     "escape-string-regexp": "^1.0.5",
     "eslint": "^3.7.0",
     "eslint-plugin-mocha": "^4.7.0",
+    "eslint-plugin-react": "^6.4.1",
     "exports-loader": "^0.6.3",
     "file-loader": "^0.9.0",
     "fs-extra": "^0.30.0",

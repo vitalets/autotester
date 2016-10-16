@@ -17,11 +17,7 @@
 
 'use strict';
 
-var By = require('..').By,
-  until = require('..').until,
-  Key = require('..').Key,
-  assert = require('../testing/assert'),
-  test = require('../lib/test');
+var test = require('../lib/test');
 
 test.suite(function(env) {
   var driver;

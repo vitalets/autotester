@@ -1,5 +1,5 @@
 
-exports.existsSync = function (path) {
-  // console.info('fs.existsSync', path);
+exports.existsSync = function () {
+  // console.info('fs.existsSync', arguments);
   return true;
 };

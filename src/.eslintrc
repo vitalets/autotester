@@ -1,0 +1,10 @@
+{
+  "env": {
+    "browser": true,
+    "webextensions": true
+  },
+
+  "globals": {
+    "buildInfo": false
+  }
+}

@@ -4,7 +4,6 @@
 
 const Channel = require('chnl');
 const Targets = require('../../targets');
-const logger = require('../../../utils/logger').create('Request catcher');
 
 class RequestCatcher {
 

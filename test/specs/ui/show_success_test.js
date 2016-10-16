@@ -1,7 +1,7 @@
 test.describe('show success', function () {
   let driver;
 
-  const {runCode, getConsoleLines, textToLines} = runContext;
+  const {runCode, getConsoleLines} = runContext;
 
   test.before(function () {
     driver = runContext.driver = new Driver();

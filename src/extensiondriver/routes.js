@@ -16,38 +16,43 @@ const evaluate = require('./commands/evaluate');
 const timeouts = require('./commands/timeouts');
 const requests = require('./commands/requests');
 
-exports.initRouter = function (router) {
-  router.post('/session', session.newSession);
-  router.del('/session/:sessionId', session.deleteSession);
-  router.post('/session/:sessionId/url', navigation.go);
-  router.get('/session/:sessionId/url', navigation.getCurrentUrl);
-  router.get('/session/:sessionId/title', navigation.getTitle);
+// lodash added for equal length to visually indent
+const GET_ = 'get';
+const POST = 'post';
+const PUT_ = 'put';
+const DEL_ = 'delete';
 
-  router.post('/session/:sessionId/element', elementSearch.findElement);
-  router.post('/session/:sessionId/elements', elementSearch.findElements);
-  router.post('/session/:sessionId/element/:id/value', keyboard.sendKeysToElement);
-  router.get('/session/:sessionId/element/:id/name', element.getElementTagName);
-  router.get('/session/:sessionId/element/:id/text', element.getElementText);
-  router.post('/session/:sessionId/element/:id/click', mouse.clickElement);
-  router.post('/session/:sessionId/element/:id/submit', element.submit);
-  router.post('/session/:sessionId/element/:id/element', elementSearch.findChildElement);
-  router.post('/session/:sessionId/element/:id/elements', elementSearch.findChildElements);
+module.exports = [
+  [POST, '/session', session.newSession],
+  [DEL_, '/session/:sessionId', session.deleteSession],
+  [POST, '/session/:sessionId/url', navigation.go],
+  [GET_, '/session/:sessionId/url', navigation.getCurrentUrl],
+  [GET_, '/session/:sessionId/title', navigation.getTitle],
 
-  router.post('/session/:sessionId/execute', evaluate.execute);
-  router.post('/session/:sessionId/execute_async', evaluate.executeAsync);
-  router.post('/session/:sessionId/timeouts', timeouts.setTimeout);
+  [POST, '/session/:sessionId/element', elementSearch.findElement],
+  [POST, '/session/:sessionId/elements', elementSearch.findElements],
+  [POST, '/session/:sessionId/element/:id/value', keyboard.sendKeysToElement],
+  [GET_, '/session/:sessionId/element/:id/name', element.getElementTagName],
+  [GET_, '/session/:sessionId/element/:id/text', element.getElementText],
+  [POST, '/session/:sessionId/element/:id/click', mouse.clickElement],
+  [POST, '/session/:sessionId/element/:id/submit', element.submit],
+  [POST, '/session/:sessionId/element/:id/element', elementSearch.findChildElement],
+  [POST, '/session/:sessionId/element/:id/elements', elementSearch.findChildElements],
 
-  router.del('/session/:sessionId/window', windowCommand.close);
-  router.post('/session/:sessionId/window', switchTo.window);
-  router.get('/session/:sessionId/window_handle', windowCommand.getCurrentWindowHandle);
-  router.get('/session/:sessionId/window_handles', windowCommand.getAllWindowHandles);
+  [POST, '/session/:sessionId/execute', evaluate.execute],
+  [POST, '/session/:sessionId/execute_async', evaluate.executeAsync],
+  [POST, '/session/:sessionId/timeouts', timeouts.setTimeout],
+
+  [DEL_, '/session/:sessionId/window', windowCommand.close],
+  [POST, '/session/:sessionId/window', switchTo.window],
+  [GET_, '/session/:sessionId/window_handle', windowCommand.getCurrentWindowHandle],
+  [GET_, '/session/:sessionId/window_handles', windowCommand.getAllWindowHandles],
 
   // extra autotester routes: live over `autotester` vendor prefix
-  router.post('/session/:sessionId/autotester/newtab', switchTo.newTab);
-  router.post('/session/:sessionId/autotester/extension', switchTo.extension);
+  [POST, '/session/:sessionId/autotester/newtab', switchTo.newTab],
+  [POST, '/session/:sessionId/autotester/extension', switchTo.extension],
 
-  router.put('/session/:session/autotester/requests', requests.collect);
-  router.del('/session/:session/autotester/requests', requests.stop);
-  router.post('/session/:session/autotester/requests', requests.get);
-};
-
+  [PUT_, '/session/:session/autotester/requests', requests.collect],
+  [DEL_, '/session/:session/autotester/requests', requests.stop],
+  [POST, '/session/:session/autotester/requests', requests.get],
+];

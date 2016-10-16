@@ -176,7 +176,7 @@ test.suite(function(env) {
       driver.wait(until.titleContains('ready'));
       const code = `fetch('${test.Pages.simpleTestPage}')`;
       driver.executeScript(tests => {
-        runTests(tests);
+        window.runTests(tests);
       }, [{path: 'test.js', code}]);
       driver.wait(until.titleContains('done'));
       driver.requests().stop();

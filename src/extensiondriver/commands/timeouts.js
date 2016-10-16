@@ -3,12 +3,12 @@
  * http://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/lib/webdriver_exports_Timeouts.html
  */
 
-const Targets = require('../targets');
-
-const TYPES = [
-  'script',
-  'page load',
-];
+// const Targets = require('../targets');
+//
+// const TYPES = [
+//   'script',
+//   'page load',
+// ];
 
 /**
  * Set timeout for some type
@@ -17,6 +17,6 @@ const TYPES = [
  * @param {String} params.type
  * @param {Number} params.ms
  */
-exports.setTimeout = function (params) {
+exports.setTimeout = function () {
   return Promise.resolve();
 };

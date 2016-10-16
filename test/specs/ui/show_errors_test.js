@@ -122,7 +122,7 @@ test.describe('show errors', function () {
   function getMochaErrorLines() {
     return driver.findElement({css: '#mocha-report .error'}).getText()
       .then(textToLines)
-      .catch(e => [])
+      .catch(() => [])
   }
 });
 

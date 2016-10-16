@@ -30,9 +30,9 @@ exports.getHandler = function (serverUrl) {
 };
 
 function getRouter(basePath) {
-  router = new Router(basePath);
+  const router = new Router(basePath);
   router.use(bodyParser);
-  routes.initRouter(router);
+  routes.forEach(route => router.addRoute(route[0], route[1], route[2]));
   return router;
 }
 

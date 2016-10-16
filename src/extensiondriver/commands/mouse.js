@@ -127,7 +127,7 @@ function scrollToXY(x, y) {
     expression: `window.scrollTo(${x}, ${y})`
   });
 }
-
+/*
 function highlightXY(x, y, frame) {
   const size = Math.round(5 + 50 * frame);
   return Targets.debugger.sendCommand('DOM.highlightRect', {
@@ -139,11 +139,12 @@ function highlightXY(x, y, frame) {
   });
 }
 
+
 function highlightClick(x, y) {
   const duration = 500;
   const interval = 40; // 25 frames per second
   const framesCount = Math.ceil(duration / interval);
-  const frames = []; res = Promise.resolve();
+  const frames = [];
   for (let i = 0; i <= framesCount; i++) {
     frames.push(i / framesCount);
   }
@@ -161,3 +162,4 @@ function getScrollXY() {
     expression: `window.scrollY`
   });
 }
+*/

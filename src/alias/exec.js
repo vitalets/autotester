@@ -1,7 +1,7 @@
 
-module.exports = function exec(command, opt_options = {}) {
-  const args = opt_options.args || [];
-  // console.info(`exec: ${command}`, args.join(' '));
+module.exports = function exec(/*command, opt_options = {}*/) {
+  // console.info(`exec ${command}`, opt_options.args);
+  // pass through all shell commands
   return new Command();
 };
 

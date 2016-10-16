@@ -3,7 +3,6 @@
  */
 
 const Channel = require('chnl');
-const logger = require('../utils/logger').create('Http');
 const httpBrowserify = require('http-browserify');
 const httpsBrowserify = require('https-browserify');
 const fakeHttp = require('../utils/fake-http');
@@ -28,7 +27,7 @@ exports.onResponse = new Channel();
 
 function intercept(http) {
   const origRequest = http.request;
-  http.request = function (options, callback) {
+  http.request = function (options) {
     const request = origRequest.apply(http, arguments);
     exports.onRequest.dispatchAsync({request, options});
     request.on('response', response => {

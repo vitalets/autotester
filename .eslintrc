@@ -1,5 +1,5 @@
 {
- // "extends": "eslint:recommended",
+  "extends": "eslint:recommended",
 
  // "parser": "babel-eslint",
 
@@ -10,11 +10,8 @@
 
   "env": {
     "es6": true,
+    "commonjs": true,
     "node": true
-  },
-
-  "globals": {
-    "buildInfo": false
   },
 
   "rules": {

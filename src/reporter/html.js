@@ -4,7 +4,6 @@
 
 var Base = require('./base');
 var utils = require('./utils');
-var evaluate = require('../utils/evaluate');
 var Progress = require('mocha/lib/browser/progress');
 var escapeRe = require('escape-string-regexp');
 var escape = utils.escape;

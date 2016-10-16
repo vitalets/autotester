@@ -17,9 +17,7 @@
 
 'use strict';
 
-var By = require('..').By,
-  until = require('..').until,
-  assert = require('../testing/assert'),
+var assert = require('../testing/assert'),
   test = require('../lib/test');
 
 test.suite(function(env) {

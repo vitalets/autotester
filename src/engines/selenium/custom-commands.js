@@ -3,7 +3,6 @@
  */
 
 const Executor = require('selenium-webdriver/lib/http').Executor;
-const command = require('selenium-webdriver/lib/command');
 
 // map of commands
 const commands = new Map();
