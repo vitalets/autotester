@@ -9,3 +9,11 @@ exports.getBranch = function () {
 exports.getChanges = function () {
   return exec('git status --porcelain', {silent: true}).stdout.trim();
 };
+
+exports.getCachedChanges = function () {
+  return exec('git diff --name-only --diff-filter=ACM --ignore-submodules --cached', {silent: true})
+    .stdout
+    .trim()
+    .split('\n')
+    .filter(Boolean);
+};
