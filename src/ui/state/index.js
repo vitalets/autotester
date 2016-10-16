@@ -4,4 +4,5 @@
 
 const State = require('./state');
 
-module.exports = new State();
+// for debug
+window.state = module.exports = new State();

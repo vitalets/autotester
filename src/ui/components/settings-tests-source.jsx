@@ -20,7 +20,7 @@ module.exports = class SettingsTestsSource extends React.Component {
     this.disposer = mobx.autorun(() => {
       this.setState({
         type: state.filesSourceType,
-        url: state.filesSourceUrl,
+        url: state.selectedProject.filesSource.url,
         urlError: this.getUrlError(),
       });
     });
@@ -29,6 +29,7 @@ module.exports = class SettingsTestsSource extends React.Component {
     this.disposer();
   }
   getUrlError() {
+    // todo: refactor
     if (state.filesSourceType === FILES_SOURCE_TYPE.URL && state.filesSourceUrl && !state.files.length) {
       return 'can not load tests from that url';
     } else {
@@ -73,7 +74,7 @@ module.exports = class SettingsTestsSource extends React.Component {
                     value={this.state.type}
                     childContainer="div"
                     onChange={e => this.handleTypeChange(e)}>
-          <Radio value={FILES_SOURCE_TYPE.INNER} ripple>In-browser snippets</Radio>
+          <Radio value={FILES_SOURCE_TYPE.INNER} ripple>In-browser</Radio>
           <Radio value={FILES_SOURCE_TYPE.URL} ripple className="tests-source-url-radio">
             <span style={{paddingTop: '25px', float: 'left'}}>Remote URL</span>
             <Textfield

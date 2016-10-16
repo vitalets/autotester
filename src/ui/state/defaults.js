@@ -13,7 +13,7 @@ exports.projectId = 'default';
 
 exports.filesSource = {
   // for dev builds make default tests source - built-in
-  type: buildInfo.isDev ? FILES_SOURCE_TYPE.BUILT_IN : FILES_SOURCE_TYPE.SNIPPETS,
+  type: buildInfo.isDev ? FILES_SOURCE_TYPE.BUILT_IN : FILES_SOURCE_TYPE.INNER,
   url: 'https://raw.githubusercontent.com/vitalets/autotester/master/examples/index.js',
   path: 'tests/index.js',
 };
