@@ -85,7 +85,7 @@
   "config": {
     "ghooks": {
       "pre-commit": "node tasks/code only-changed",
-      "pre-push": "npm test"
+      "pre-push": "npm run code && npm test"
     }
   },
   "keywords": [

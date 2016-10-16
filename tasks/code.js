@@ -11,10 +11,14 @@ exec('check-dependencies');
 
 if (onlyChanged) {
   const changedJsFiles = status.getCachedChanges().filter(filename => /\.jsx?$/.test(filename));
-  exec(`eslint ${changedJsFiles.join(' ')}`);
-  console.log(`eslint ${changedJsFiles.length} file(s) done.`);
+  if (changedJsFiles.length) {
+    exec(`eslint ${changedJsFiles.join(' ')}`);
+    console.log(`eslint: ${changedJsFiles.length} file(s) linted.`);
+  } else {
+    console.log(`eslint: nothing to lint.`);
+  }
 } else {
   const paths = ['src', 'test', 'tasks'];
   exec(`eslint ${paths.join(' ')}`);
-  console.log(`eslint ${paths.join(' ')} done.`);
+  console.log(`eslint: ${paths.length} path(s) linted.`);
 }
