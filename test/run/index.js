@@ -69,6 +69,7 @@ function runForCapabilities(caps) {
     driver.executeScript(function() {
       return navigator.userAgent + ' ' + navigator.language;
     }).then(res => console.log(`${signature}${res}`));
+    driver.wait(webdriver.until.titleContains('ready'));
     driver.findElement({id: 'run'}).click();
     let prevTitle = '';
     driver.wait(() => {
