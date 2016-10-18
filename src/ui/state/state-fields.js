@@ -5,16 +5,18 @@
 const defaults = require('./defaults');
 const {APP_STATE, FILES_SOURCE_TYPE, SETTINGS_MENU} = require('./constants');
 
-const defaultProject = {
-  id: defaults.projectId,
+/**
+ * Empty project is needed to be returned on start before default project is loaded
+ * It is more convenient than write `if (!this.selectedProject) {...}`
+ */
+const emptyProject = {
+  id: 'empty',
   filesSource: {
-    type: defaults.filesSource.type,
-    url: defaults.filesSource.url,
-    path: defaults.filesSource.path,
+    type: FILES_SOURCE_TYPE.INNER,
+    url: '',
+    path: '',
   },
-  innerFiles: [
-    {path: defaults.innerFile.path}
-  ],
+  innerFiles: [],
   selectedFile: {
     [FILES_SOURCE_TYPE.INNER]: '',
     [FILES_SOURCE_TYPE.URL]: '',
@@ -31,8 +33,8 @@ exports.runtime = {
 };
 
 exports.persistent = {
-  projects: [defaultProject],
-  selectedProjectId: defaultProject.id,
+  projects: [],
+  selectedProjectId: '',
   targets: defaults.targets,
   selectedTargetId: defaults.targets[0].id,
   hubs: defaults.hubs,
@@ -41,13 +43,13 @@ exports.persistent = {
 
 exports.computed = {
   get selectedProject() {
-    return this.projects.find(project => project.id === this.selectedProjectId);
+    return this.projects.find(project => project.id === this.selectedProjectId) || emptyProject;
   },
   get filesSourceType() {
     return this.selectedProject.filesSource.type;
   },
   set filesSourceType(value) {
-    return this.selectedProject.filesSource.type = value;
+    this.selectedProject.filesSource.type = value;
   },
   get isInnerFiles() {
     return this.filesSourceType === FILES_SOURCE_TYPE.INNER;

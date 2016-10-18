@@ -1,17 +1,16 @@
 const {RadioGroup, Radio, Textfield} = require('react-mdl');
 const debounce = require('lodash.debounce');
 const mobx = require('mobx');
-const {FILES_SOURCE_TYPE, APP_STATE} = require('../state/constants');
+const {FILES_SOURCE_TYPE} = require('../state/constants');
 const state = require('../state');
-const testsList = require('../controllers/tests-list');
 
-module.exports = class SettingsTestsSource extends React.Component {
+module.exports = class SettingsFilesSource extends React.Component {
   constructor() {
     super();
     this.state = {
       type: '',
       url: '',
-      urlError: '',
+      path: '',
     };
     this.saveType = debounce(mobx.action(this.saveType.bind(this)), 500);
     this.saveUrl = debounce(mobx.action(this.saveUrl.bind(this)), 1000);
@@ -21,51 +20,26 @@ module.exports = class SettingsTestsSource extends React.Component {
       this.setState({
         type: state.filesSourceType,
         url: state.selectedProject.filesSource.url,
-        urlError: this.getUrlError(),
+        path: state.selectedProject.filesSource.path,
       });
     });
   }
   componentWillUnmount() {
     this.disposer();
   }
-  getUrlError() {
-    // todo: refactor
-    if (state.filesSourceType === FILES_SOURCE_TYPE.URL && state.filesSourceUrl && !state.files.length) {
-      return 'can not load tests from that url';
-    } else {
-      return '';
-    }
-  }
   handleTypeChange(e) {
     this.setState({type: e.target.value});
     this.saveType();
   }
   handleUrlChange(e) {
-    this.setState({url: e.target.value, urlError: ''});
+    this.setState({url: e.target.value});
     this.saveUrl();
   }
   saveType() {
     state.filesSourceType = this.state.type;
-    if (state.filesSourceType !== FILES_SOURCE_TYPE.INNER) {
-      this.loadTests();
-    }
   }
   saveUrl() {
-    if (state.filesSourceUrl === this.state.url) {
-      return;
-    } else {
-      state.filesSourceUrl = this.state.url;
-    }
-    if (!state.filesSourceUrl) {
-      state.clearTests();
-    } else {
-      this.loadTests();
-    }
-  }
-  loadTests() {
-    state.appState = APP_STATE.LOADING;
-    testsList.load()
-      .then(() => state.appState = APP_STATE.READY);
+    state.selectedProject.filesSource.url = this.state.url;
   }
   render() {
     return (

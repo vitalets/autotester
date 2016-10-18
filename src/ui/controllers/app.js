@@ -18,12 +18,12 @@ const setup = require('./setup');
 exports.start = function() {
   htmlConsole.init();
   testsRun.init();
+  testsList.init();
   bgApi.init();
   windowApi.init();
   return Promise.resolve()
     .then(() => setup.applyOnFirstRun())
     .then(() => state.load())
-    .then(() => state.isInnerFiles ? null : testsList.load())
     .then(mobx.action(ready));
 };
 

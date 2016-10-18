@@ -41,11 +41,10 @@ module.exports = class State extends PersistentState {
   }
 
   /**
-   * Automatically reset selected file if it is not found in current files
-   * @private
+   * Verify that selected file is found in current files
    */
   _verifySelectedFile() {
-    if (this.selectedFile && !this.files.find(file => file.path === this.selectedFile)) {
+    if (this.selectedFile && this.files.length && !this.files.find(file => file.path === this.selectedFile)) {
       this.selectedFile = '';
     }
   }
