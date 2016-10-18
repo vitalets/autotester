@@ -22,7 +22,7 @@ module.exports = function SnippetIndex(props) {
   return (
     <div className="tests-index">
       {props.count ? has : no}
-      <Button raised style={{marginTop: '25px'}} onClick={() => state.addSnippet()}>
+      <Button raised style={{marginTop: '25px'}} onClick={() => state.addInnerFile()}>
         <Icon name="add"/>
         <span className="button-text">Create new test</span>
       </Button>

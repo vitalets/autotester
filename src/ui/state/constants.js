@@ -29,3 +29,5 @@ exports.SETTINGS_MENU = {
   TARGETS: 'TARGETS',
   HUBS: 'HUBS',
 };
+
+exports.PROJECTS_DIR = 'projects';

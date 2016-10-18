@@ -72,9 +72,7 @@ function getFiles() {
 }
 
 function getBaseUrl() {
-  return state.isInnerFiles
-    ? `projects/${state.selectedProject.id}`
-    : path.dirname(state.filesSourceUrl);
+  return state.isInnerFiles ? state.innerFilesPath : path.dirname(state.filesSourceUrl);
 }
 
 function getSnippets(basePath, paths) {

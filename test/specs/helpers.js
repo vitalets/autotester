@@ -28,10 +28,15 @@ runContext.textToLines = function (text) {
   return text ? text.split('\n').map(line => line.trim()) : [];
 };
 
+runContext.selectTab = function (index) {
+  const driver = runContext.driver;
+  driver.findElement({css: `.mdl-tabs__tab:nth-child(${index})`}).click();
+};
+
 runContext.enableTestsSource = function (type) {
   // enable tests source=built-in from settings
   const driver = runContext.driver;
-  driver.findElement({css: '.mdl-tabs__tab:nth-child(3)'}).click();
+  runContext.selectTab(3);
   driver.findElement({css: `.settings-tests-source input[value="${type}"]`}).click();
   driver.sleep(600);
 };

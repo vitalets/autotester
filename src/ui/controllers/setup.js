@@ -8,6 +8,7 @@ const mobx = require('mobx');
 const defaults = require('../state/defaults');
 const defaultsExtra = require('../state/defaults-extra');
 const localFs = require('../../utils/local-fs');
+const {PROJECTS_DIR} = require('../state/constants');
 const logger = require('../../utils/logger').create('Setup');
 
 exports.applyOnFirstRun = function() {
@@ -26,7 +27,7 @@ function isFirstRun() {
 function storeDefaults() {
   return Promise.all([
     storeToStorage(),
-    saveInnerFile(),
+    storeToFs(),
   ]);
 }
 
@@ -43,8 +44,8 @@ function storeToStorage() {
   return thenChrome.storage.local.set(data);
 }
 
-function saveInnerFile() {
-  const path = `projects/${defaults.project.id}/${defaults.innerFile.path}`;
+function storeToFs() {
+  const path = `${PROJECTS_DIR}/${defaults.project.id}/${defaults.innerFile.path}`;
   const content = defaults.innerFile.code;
   logger.log(`Storing default inner file: ${path}`);
   return localFs.save(path, content);

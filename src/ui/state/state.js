@@ -5,13 +5,14 @@
 const mobx = require('mobx');
 const PersistentState = require('../../utils/mobx/persistent-state');
 const fields = require('./state-fields');
-// const innerFileTpl = require('raw!./inner-file-tpl');
+const innerFileTpl = require('raw!./inner-file-tpl');
+const localFs = require('../../utils/local-fs');
 
 module.exports = class State extends PersistentState {
   constructor() {
     super(fields.all, fields.persistent);
-    this.deleteSnippet = mobx.action(this.deleteSnippet.bind(this));
-    this.addSnippet = mobx.action(this.addSnippet.bind(this));
+    this.deleteInnerFile = mobx.action(this.deleteInnerFile.bind(this));
+    this.addInnerFile = mobx.action(this.addInnerFile.bind(this));
     mobx.reaction(() => mobx.toJS(this.files), mobx.action(this._verifySelectedFile.bind(this)));
   }
 
@@ -19,7 +20,7 @@ module.exports = class State extends PersistentState {
   //   this.reset(['tests', 'testsSetup', 'selectedTest']);
   // }
 
-  deleteSnippet() {
+  deleteInnerFile() {
     if (this.isSnippets && this.selectedFile) {
       const index = this.snippets.findIndex(snippet => snippet.path === this.selectedFile);
       if (index >= 0) {
@@ -31,13 +32,14 @@ module.exports = class State extends PersistentState {
     }
   }
 
-  addSnippet() {
-    const path = findFreeName(this.snippets);
-    // todo: save code to fs
-    // const code = snippetTpl.replace('{name}', name);
-    const snippet = {path};
-    this.snippets.push(snippet);
-    this.selectedFile = snippet.path;
+  addInnerFile() {
+    const name = findFreeName(this.files);
+    const file = {path: name};
+    this.files.push(file);
+    this.selectedFile = name;
+    const fullPath = `${this.innerFilesPath}/${name}`;
+    const code = innerFileTpl.replace('{name}', name);
+    localFs.save(fullPath, code);
   }
 
   /**
@@ -51,10 +53,10 @@ module.exports = class State extends PersistentState {
 };
 
 // todo: move to utils
-function findFreeName(snippets) {
+function findFreeName(files) {
   for (let i = 1; i < 99; i++) {
     const name = `new_file_${i}`;
-    if (!snippets.some(snippet => snippet.path === name)) {
+    if (!files.some(file => file.path === name)) {
       return name;
     }
   }

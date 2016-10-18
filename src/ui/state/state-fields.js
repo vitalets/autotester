@@ -3,7 +3,12 @@
  */
 
 const defaults = require('./defaults');
-const {APP_STATE, FILES_SOURCE_TYPE, SETTINGS_MENU} = require('./constants');
+const {
+  APP_STATE,
+  FILES_SOURCE_TYPE,
+  SETTINGS_MENU,
+  PROJECTS_DIR,
+} = require('./constants');
 
 /**
  * Empty project is needed to be returned on start before default project is loaded
@@ -62,6 +67,9 @@ exports.computed = {
   },
   get innerFiles() {
     return this.selectedProject.innerFiles;
+  },
+  get innerFilesPath() {
+    return `${PROJECTS_DIR}/${this.selectedProject.id}`;
   },
   get selectedFile() {
     return this.selectedProject.selectedFile[this.filesSourceType] || '';
