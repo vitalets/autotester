@@ -2,6 +2,7 @@
  * List of fields describing ui state.
  */
 
+const path = require('path');
 const defaults = require('./defaults');
 const {
   APP_STATE,
@@ -35,6 +36,7 @@ exports.runtime = {
   outerFiles: [], // files that are loaded from URL or built-in
   selectedTab: -1,
   stopOnError: false,
+  selectedFileContent: '',
 };
 
 exports.persistent = {
@@ -89,6 +91,15 @@ exports.computed = {
       case FILES_SOURCE_TYPE.INNER:
       default:
         return '';
+    }
+  },
+  get selectedFileUrl() {
+    if (this.selectedFile) {
+      return this.isInnerFiles
+        ? `${this.innerFilesPath}/${this.selectedFile}`
+        : `${path.dirname(this.filesSourceUrl)}/${this.selectedFile}`;
+    } else {
+      return '';
     }
   }
 };

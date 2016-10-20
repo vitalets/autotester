@@ -11,6 +11,7 @@ const testsRun = require('./tests-run');
 const testsList = require('./tests-list');
 const htmlConsole = require('./html-console');
 const setup = require('./setup');
+const editor = require('./editor');
 
 /**
  * Start app
@@ -19,6 +20,7 @@ exports.start = function() {
   htmlConsole.init();
   testsRun.init();
   testsList.init();
+  editor.init();
   bgApi.init();
   windowApi.init();
   return Promise.resolve()
