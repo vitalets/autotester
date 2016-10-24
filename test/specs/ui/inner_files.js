@@ -13,7 +13,7 @@ test.describe('inner files', function () {
   });
 
   test.it('should have 1 default inner file', function () {
-    assert(driver.findElement({css: '#tests .dropdown__value'}).getText()).equalTo('All (1 file)');
+    assert(driver.findElement({css: '#tests ul li:nth-child(1)'}).getText()).equalTo('All (1 file)');
     assert(driver.findElement({css: '#tests ul li:nth-child(2)'}).getText()).equalTo('google_search');
   });
 
@@ -25,8 +25,12 @@ test.describe('inner files', function () {
     assert(driver.findElement({css: '#mocha-stats .passes em'}).getText()).equalTo('1');
   });
 
-  test.it('should add new inner file', function () {
+  // wait reset feature to be able to remove all created files
+  test.it.skip('should add new inner file from index button', function () {
     runContext.selectTab(1);
-    driver.findElement({css: '.tests-index button'}).click();
+    driver.findElement({css: '#tests'}).click();
+    driver.sleep(300);
+    driver.findElement({css: '#tests .mdl-menu__item:first-child'}).click();
+    driver.findElement({css: '.no-file-selected button'}).click();
   });
 });
