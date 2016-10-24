@@ -33,13 +33,13 @@
 
 const Channel = require('chnl');
 const promise = require('selenium-webdriver/lib/promise');
+const fs = require('bro-fs');
 const utils = require('../utils');
 const httpAlias = require('../alias/http');
 const MochaRunner = require('./mocha-runner');
 const FileRunner = require('./file-runner');
 const htmlReporter = require('../reporter/html');
 const globals = require('./globals');
-const localFs = require('../utils/local-fs');
 const engines = require('../engines');
 const logger = require('../utils/logger').create('Runner');
 
@@ -58,7 +58,6 @@ class Runner {
     this.onTestStarted = new Channel();
     // webdriver session started
     this.onSessionStarted = new Channel();
-
   }
 
   /**
@@ -99,10 +98,9 @@ class Runner {
     return this._params.tests.reduce((res, test) => {
       const content = wrapCode(test.code);
       const localPath = utils.join(this._params.localBaseDir, test.path);
-      return res.then(() => localFs
-        .save(localPath, content)
-        .then(localUrl => this._localUrls.push(localUrl))
-      )
+      return res
+        .then(() => fs.writeFile(localPath, content))
+        .then(entry => this._localUrls.push(entry.toURL()))
     }, Promise.resolve())
   }
 
@@ -132,7 +130,10 @@ class Runner {
 
   _listenHttp() {
     this._subscription = new Channel.Subscription([
-      {channel: httpAlias.onResponse, listener: this._onHttpResponse.bind(this)}
+      {
+        channel: httpAlias.onResponse,
+        listener: this._onHttpResponse.bind(this)
+      }
     ]).on();
   }
 
@@ -142,8 +143,11 @@ class Runner {
   }
 
   _fail(e) {
-    this._cleanAfter();
-    logger.log('Failed');
+    try {
+      this._cleanAfter();
+    } catch (err) {
+      logger.error('Nested error', err);
+    }
     throw e;
   }
 
@@ -151,13 +155,15 @@ class Runner {
     this._flow.reset();
     this._localUrls.length = 0;
     globals.clear(this._context);
-    // todo: maybe dont clean whole dir in future
-    return localFs.removeDir(this._params.localBaseDir);
+    // todo: dont clean whole dir in future, but currently keep it to test performance
+    return fs.rmdir(this._params.localBaseDir);
   }
 
   _cleanAfter() {
     this._cleanScriptTags();
-    this._subscription.off();
+    if (this._subscription) {
+      this._subscription.off();
+    }
     globals.clear(this._context);
   }
 

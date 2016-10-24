@@ -3,9 +3,9 @@
  */
 
 const mobx = require('mobx');
+const fs = require('bro-fs');
 const state = require('../state');
 const innerFileTpl = require('raw!./inner-file-tpl');
-const localFs = require('../../utils/local-fs');
 const utils = require('../../utils');
 
 exports.init = function () {
@@ -23,7 +23,7 @@ exports.saveName = mobx.action(function (newName) {
 
 exports.saveCode = mobx.action(function (newCode) {
   state.selectedFileContent = newCode;
-  localFs.save(state.selectedFileUrl, newCode);
+  fs.writeFile(state.selectedFileUrl, newCode);
 });
 
 exports.addFile = function () {
@@ -31,7 +31,7 @@ exports.addFile = function () {
   const file = {path: name};
   const fullPath = `${state.innerFilesPath}/${name}`;
   const code = innerFileTpl.replace('{name}', name);
-  localFs.save(fullPath, code)
+  fs.writeFile(fullPath, code)
     .then(mobx.action(() => {
       state.innerFiles.push(file);
       state.selectedFile = name;
@@ -41,10 +41,11 @@ exports.addFile = function () {
 exports.deleteFile = mobx.action(function () {
   if (state.isInnerFiles && state.selectedFile) {
     const index = getSelectedFileIndex();
+    const path = state.selectedFileUrl;
     if (index >= 0) {
       state.innerFiles.splice(index, 1);
       state.selectedFile = index > 0 ? state.innerFiles[index - 1].path : '';
-      // todo: remove from local-fs
+      fs.unlink(path);
     }
   }
 });
@@ -52,7 +53,7 @@ exports.deleteFile = mobx.action(function () {
 const setContent = mobx.action(content => state.selectedFileContent = content);
 
 function loadContent(url) {
-  const task = state.isInnerFiles ? localFs.readFile(url) : utils.fetchText(url);
+  const task = state.isInnerFiles ? fs.readFile(url) : utils.fetchText(url);
   task.then(setContent, () => setContent(''));
 }
 

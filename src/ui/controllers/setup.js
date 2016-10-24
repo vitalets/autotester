@@ -5,9 +5,9 @@
 
 const thenChrome = require('then-chrome');
 const mobx = require('mobx');
+const fs = require('bro-fs');
 const defaults = require('../state/defaults');
 const defaultsExtra = require('../state/defaults-extra');
-const localFs = require('../../utils/local-fs');
 const {PROJECTS_DIR} = require('../state/constants');
 const logger = require('../../utils/logger').create('Setup');
 
@@ -48,5 +48,5 @@ function storeToFs() {
   const path = `${PROJECTS_DIR}/${defaults.project.id}/${defaults.innerFile.path}`;
   const content = defaults.innerFile.code;
   logger.log(`Storing default inner file: ${path}`);
-  return localFs.save(path, content);
+  return fs.writeFile(path, content);
 }

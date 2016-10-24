@@ -5,7 +5,7 @@
 const thenChrome = require('then-chrome');
 const mobx = require('mobx');
 const path = require('path');
-const localFs = require('../../utils/local-fs');
+const fs = require('bro-fs');
 const state = require('../state');
 const {APP_STATE, TAB} = require('../state/constants');
 const bgApi = require('./bg-api');
@@ -78,7 +78,7 @@ function getBaseUrl() {
 function getSnippets(basePath, paths) {
   const tasks = paths.map(path => {
     const fullPath = basePath + '/' + path;
-    return localFs.readFile(fullPath)
+    return fs.readFile(fullPath)
       .then(code => {
         return {path, code};
       });

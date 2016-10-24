@@ -3,6 +3,7 @@
  */
 
 const mobx = require('mobx');
+const fs = require('bro-fs');
 const state = require('../state');
 const {APP_STATE, TAB} = require('../state/constants');
 const bgApi = require('./bg-api');
@@ -24,6 +25,7 @@ exports.start = function() {
   bgApi.init();
   windowApi.init();
   return Promise.resolve()
+    .then(() => fs.init({type: window.PERSISTENT, requestQuota: false}))
     .then(() => setup.applyOnFirstRun())
     .then(() => state.load())
     .then(mobx.action(ready));
