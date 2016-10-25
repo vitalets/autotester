@@ -35,6 +35,7 @@
     "babel-core": "^6.16.0",
     "babel-loader": "^6.2.5",
     "babel-preset-react": "^6.16.0",
+    "bro-fs": "^0.1.12",
     "check-dependencies": "^1.0.1",
     "chnl": "^0.2.5",
     "chromedriver": "^2.24.1",
