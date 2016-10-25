@@ -17,6 +17,17 @@ exports.applyOnFirstRun = function() {
 };
 
 /**
+ * Resets local storage, filesystem and reloads ui
+ */
+exports.reset = function() {
+  return Promise.all([
+    fs.clear(),
+    thenChrome.storage.local.clear(),
+  ])
+  .then(() => location.reload());
+};
+
+/**
  * Detects first run by checking `installDate` key in storage
  */
 function isFirstRun() {

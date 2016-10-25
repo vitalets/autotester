@@ -5,7 +5,14 @@ test.describe('inner files', function () {
     driver = runContext.driver = new Driver();
     driver.get(runContext.selftest.ui);
     driver.wait(until.titleContains('ready'));
-    runContext.enableTestsSource('INNER');
+  });
+
+  test.beforeEach(function () {
+    driver.executeScript(() => {
+      window.resetDefaults();
+    });
+    driver.sleep(200);
+    driver.wait(until.titleContains('ready'));
   });
 
   test.after(function () {
@@ -25,12 +32,39 @@ test.describe('inner files', function () {
     assert(driver.findElement({css: '#mocha-stats .passes em'}).getText()).equalTo('1');
   });
 
-  // wait reset feature to be able to remove all created files
-  test.it.skip('should add new inner file from index button', function () {
-    runContext.selectTab(1);
-    driver.findElement({css: '#tests'}).click();
-    driver.sleep(300);
-    driver.findElement({css: '#tests .mdl-menu__item:first-child'}).click();
+  test.it('should add new file from template', function () {
     driver.findElement({css: '.no-file-selected button'}).click();
+    const filename = driver.wait(until.elementLocated({css: '#textfield-Filename'}));
+    assert(filename.getAttribute('value')).equalTo('new_file_1');
+    const tpl = `
+test.describe('new_file_1', function () {
+  let driver;
+
+ test.before(function () {
+    driver = new Driver();
+  });
+
+  test.after(function () {
+    driver.quit();
+  });
+
+  test.it('should pass', function () {
+    driver.get('https://google.com');
+    driver.wait(until.titleContains('Google'), 2000);
+  });
+});`;
+    driver.findElement({css: '.ReactCodeMirror textarea'}).getText()
+      .then(text => {
+        assert(text.replace(/[\n\s]/g, '')).equalTo(tpl.replace(/[\n\s]/g, ''));
+      });
+  });
+
+  test.it('should successfully run newly created file', function () {
+    driver.findElement({css: '.no-file-selected button'}).click();
+    driver.findElement({id: 'run'}).click();
+    driver.wait(until.titleContains('done'));
+    driver.findElements({css: '.report-tab .console'}).then(elems => assert(elems.length).equalTo(0));
+    assert(driver.findElement({css: '#mocha-stats .failures em'}).getText()).equalTo('0');
+    assert(driver.findElement({css: '#mocha-stats .passes em'}).getText()).equalTo('1');
   });
 });

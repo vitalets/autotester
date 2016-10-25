@@ -4,6 +4,7 @@
 
 const testsRun = require('./tests-run');
 const htmlConsole = require('./html-console');
+const setup = require('./setup');
 
 /**
  * Exports API to window
@@ -20,6 +21,10 @@ exports.init = function () {
      * Console implementation to show test logs in report
      */
     htmlConsole: htmlConsole.getInstance(),
+
+    resetDefaults: function () {
+      return setup.reset();
+    },
 
     // for custom reporting
     // todo: export module, not dom element
