@@ -5,7 +5,9 @@ const Dropdown = require('../dropdown');
 
 module.exports = observer(class TestsDropdown extends React.Component {
   getItems() {
-    const items = state.files.map(file => {
+    const items = state.files
+      .filter(file => !file.isSetup)
+      .map(file => {
       return {
         value: file.path,
         text: file.path
