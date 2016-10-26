@@ -10,6 +10,7 @@ const Targets = require('../../targets');
  * Evaluate expression in current target
  *
  * @param {String} expression
+ * @param {Boolean} [isAsync=false]
  * @returns {Promise}
  */
 exports.evaluate = function (expression, isAsync = false) {
@@ -36,6 +37,7 @@ exports.evaluate = function (expression, isAsync = false) {
  *
  * @param {String} fnBody
  * @param {Array} args
+ * @param {Boolean} [isAsync=false]
  * @returns {*}
  */
 exports.callFunctionOn = function (fnBody, args, isAsync = false) {

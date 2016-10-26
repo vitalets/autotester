@@ -6,9 +6,10 @@ const thenChrome = require('then-chrome');
 const Channel = require('chnl');
 const logger = require('../../utils/logger').create('Debugger');
 
+// see: https://chromedevtools.github.io/debugger-protocol-viewer/1-2/
 const PROTOCOL_VERSION = '1.2';
 
-class Debugger {
+module.exports = class Debugger {
 
   constructor () {
     this._target = null;
@@ -20,7 +21,7 @@ class Debugger {
   attach(target) {
     return thenChrome.debugger.attach(target, PROTOCOL_VERSION)
       .then(() => this._afterAttach(target))
-      .catch(prettyError);
+      .catch(e => prettyError(e, 'attach'));
   }
 
   sendCommand(name, params = {}) {
@@ -30,7 +31,7 @@ class Debugger {
         logger.log(`Response to '${name}'`, res);
         return res;
       })
-      .catch(prettyError);
+      .catch(e => prettyError(e, name, params));
   }
 
   detach() {
@@ -39,7 +40,7 @@ class Debugger {
     if (this._target) {
       return thenChrome.debugger.detach(this._target)
         .then(() => this._afterDetach('self'))
-        .catch(prettyError);
+        .catch(e => prettyError(e, 'detach'));
     } else {
       return Promise.resolve();
     }
@@ -87,9 +88,9 @@ class Debugger {
       this.onEvent.dispatch(method, params);
     }
   }
-}
+};
 
-function prettyError(e) {
+function prettyError(e, command, params) {
   // convert debugger error into pretty one
   // debugger error is object with single key 'message'
   const isDebuggerError = typeof e === 'object' && Object.keys(e).length === 1 && e.message;
@@ -97,14 +98,23 @@ function prettyError(e) {
     let prettyMessage = e.message;
     try {
       const parsed = JSON.parse(e.message);
-      prettyMessage = `${parsed.message} ${parsed.data}`;
+      const data = parsed.data === undefined ? '' : ` ${parsed.data}`;
+      prettyMessage = `${parsed.message}${data}`;
     } catch (e) {
       // if can not parse, just return error message as is
     }
-    return Promise.reject(new Error(`Debugger error '${prettyMessage}'`));
+    const commandInfo = command ? ` Command: ${command} ${stringifyParams(params)}` : '';
+    const error = new Error(`Debugger error '${prettyMessage}'${commandInfo}`);
+    return Promise.reject(error);
   } else {
     return Promise.reject(e);
   }
 }
 
-module.exports = Debugger;
+function stringifyParams(params = []) {
+  try {
+    return JSON.stringify(params);
+  } catch (e) {
+    return `${params}`;
+  }
+}
