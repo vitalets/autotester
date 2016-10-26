@@ -15,9 +15,13 @@
 // specific language governing permissions and limitations
 // under the License.
 
+// todo: transfeer all tests from:
+// https://github.com/SeleniumHQ/selenium/blob/master/java/client/test/org/openqa/selenium/ExecutingAsyncJavascriptTest.java
+
 'use strict';
 
-var assert = require('../testing/assert'),
+var webdriver = require('..'),
+  assert = require('../testing/assert'),
   test = require('../lib/test');
 
 test.suite(function(env) {
@@ -45,6 +49,60 @@ test.suite(function(env) {
       driver.get(test.Pages.ajaxyPage);
       assert(driver.executeAsyncScript('arguments[arguments.length - 1](null);')).equalTo(null);
       assert(driver.executeAsyncScript('arguments[arguments.length - 1]();')).equalTo(null);
+    });
+
+    test.it('should return empty array', function () {
+      driver.get(test.Pages.ajaxyPage);
+      driver.executeAsyncScript('arguments[arguments.length - 1]([]);')
+      .then(res => {
+        assert(res).instanceOf(Array);
+        assert(res.length).equalTo(0);
+      });
+    });
+
+    test.it('should return array object', function () {
+      driver.get(test.Pages.ajaxyPage);
+      driver.executeAsyncScript('arguments[arguments.length - 1](new Array());')
+        .then(res => {
+          assert(res).instanceOf(Array);
+          assert(res.length).equalTo(0);
+        });
+    });
+
+    test.it('should return array of primitives', function () {
+      driver.get(test.Pages.ajaxyPage);
+      driver.executeAsyncScript('arguments[arguments.length - 1]([null, 123, "abc", true, false]);')
+        .then(res => {
+          assert(res).instanceOf(Array);
+          assert(res.length).equalTo(5);
+          assert(res[0]).equalTo(null);
+          assert(res[1]).equalTo(123);
+          assert(res[2]).equalTo('abc');
+          assert(res[3]).equalTo(true);
+          assert(res[4]).equalTo(false);
+        });
+    });
+
+    test.it('should return web element', function () {
+      driver.get(test.Pages.ajaxyPage);
+      driver.executeAsyncScript('arguments[arguments.length - 1](document.body);')
+        .then(res => {
+          assert(res).instanceOf(webdriver.WebElement);
+          assert(res.getTagName()).equalTo('body');
+        });
+    });
+
+    test.it('should return array of web elements', function () {
+      driver.get(test.Pages.ajaxyPage);
+      driver.executeAsyncScript('arguments[arguments.length - 1]([document.body, document.body]);')
+        .then(res => {
+          assert(res).instanceOf(Array);
+          assert(res.length).equalTo(2);
+          assert(res[0]).instanceOf(webdriver.WebElement);
+          assert(res[0].getTagName()).equalTo('body');
+          assert(res[1]).instanceOf(webdriver.WebElement);
+          assert(res[1].getTagName()).equalTo('body');
+        });
     });
 
   });

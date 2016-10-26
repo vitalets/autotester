@@ -12,13 +12,14 @@ const Targets = require('../../targets');
  * @param {String} expression
  * @returns {Promise}
  */
-exports.evaluate = function (expression) {
+exports.evaluate = function (expression, isAsync = false) {
   return Promise.resolve()
     .then(() => Targets.ensureComplete())
     .then(() => {
       return Targets.debugger.sendCommand('Runtime.evaluate', {
         expression: expression,
         returnByValue: false,
+        awaitPromise: isAsync,
       });
     })
     .then(res => {
@@ -37,7 +38,7 @@ exports.evaluate = function (expression) {
  * @param {Array} args
  * @returns {*}
  */
-exports.callFunctionOn = function (fnBody, args) {
+exports.callFunctionOn = function (fnBody, args, isAsync = false) {
   return Promise.resolve()
     .then(() => Targets.ensureComplete())
     .then(() => exports.evaluate('window'))
@@ -47,6 +48,7 @@ exports.callFunctionOn = function (fnBody, args) {
         functionDeclaration: fnBody,
         arguments: args,
         returnByValue: false,
+        awaitPromise: isAsync,
       })
     })
     .then(res => {

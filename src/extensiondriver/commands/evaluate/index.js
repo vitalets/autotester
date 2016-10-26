@@ -4,7 +4,6 @@
 
 const helper = require('./helper');
 const RemoteObject = require('./remote-object');
-const remotePromise = require('./remote-promise');
 const prepareArgs = require('./prepare-args');
 const prepareScript = require('./prepare-script');
 
@@ -32,13 +31,17 @@ exports.execute = function (params) {
  */
 exports.executeAsync = function (params) {
   return execute(params.script, params.args, true)
-    .then(result => {
-      return remotePromise.wait(result.objectId)
-        .then(
-          handleSuccess,
-          handleError
-        );
-    })
+    .then(
+      handleSuccess,
+      handleError
+    );
+    // .then(result => {
+    //   return remotePromise.wait(result.objectId)
+    //     .then(
+    //       handleSuccess,
+    //       handleError
+    //     );
+    // })
 };
 
 /**
@@ -62,10 +65,10 @@ function execute(script, args, isAsync) {
       let wrappedScript = isAsync ? prepareScript.asPromise(script) : script;
       if (args.length) {
         const fnBody = prepareScript.asFunction(wrappedScript);
-        return helper.callFunctionOn(fnBody, args)
+        return helper.callFunctionOn(fnBody, args, isAsync)
       } else {
         const expression = prepareScript.asSelfCallFunction(wrappedScript);
-        return helper.evaluate(expression);
+        return helper.evaluate(expression, isAsync);
       }
     })
 }
