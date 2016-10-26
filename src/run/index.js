@@ -86,9 +86,16 @@ module.exports = class Run {
     this._snippets.length = 0;
     const tasks = files.map(file => {
       const url = utils.join(baseUrl, file);
-      return utils.fetchText(url)
-        .then(text => this._snippets.push({path: file, code: text}));
+      return utils.fetchText(url);
     });
-    return Promise.all(tasks);
+    return Promise.all(tasks)
+      .then(texts => {
+        this._snippets = texts.map((text, index) => {
+          return {
+            path: files[index],
+            code: text,
+          };
+        });
+      });
   }
 };

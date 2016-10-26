@@ -22,9 +22,9 @@ function fakeRequire(moduleName) {
     return modules.get(moduleName);
   } else {
     throw new Error([`Unsupported module in fakeRequire: ${moduleName}`,
-      `[Registered modules]:`,
+      `[Registered modules (${modules.size})]:`,
       stringifyMapKeys(modules),
-      `[Aliases]:`,
+      `[Aliases (${aliases.size})]:`,
       stringifyMap(aliases),
     ].join('\n'));
   }

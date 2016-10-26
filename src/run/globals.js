@@ -4,6 +4,7 @@
  */
 
 const Channel = require('chnl');
+const fakeRequire = require('./fake-require');
 
 /**
  * Set globals to context
@@ -14,8 +15,8 @@ const Channel = require('chnl');
 exports.setGlobals = function (context, uiWindow) {
   Object.assign(context, {
     runContext: {},
-    // for running tests writen for node
-    require: require('./fake-require').getFn(),
+    // for running tests written for node
+    require: fakeRequire.getFn(),
     // for debug
     uiConsole: uiWindow.htmlConsole,
     // for custom reporting
