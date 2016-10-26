@@ -105,7 +105,7 @@ exports.createError = function (message) {
 };
 
 function checkThrownError(res) {
-  if (res && res.wasThrown) {
+  if (res && res.exceptionDetails) {
     throw exports.createError(res.result.description || res.exceptionDetails.text);
   }
 }
