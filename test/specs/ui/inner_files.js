@@ -8,9 +8,7 @@ test.describe('inner files', function () {
   });
 
   test.beforeEach(function () {
-    driver.executeScript(() => {
-      window.resetDefaults();
-    });
+    driver.executeScript(() => window.resetDefaults());
     driver.sleep(200);
     driver.wait(until.titleContains('ready'));
   });
