@@ -11,6 +11,7 @@ test.describe('inner files', function () {
     driver.executeScript(() => window.resetDefaults());
     driver.sleep(200);
     driver.wait(until.titleContains('ready'));
+    driver.wait(until.elementLocated({css: '.no-file-selected'}));
   });
 
   test.after(function () {
@@ -18,6 +19,7 @@ test.describe('inner files', function () {
   });
 
   test.it('should have one default file', function () {
+    assert(driver.findElement({css: '#tests .dropdown__value'}).getText()).equalTo('All (1 file)');
     assert(driver.findElement({css: '#tests ul li:nth-child(1)'}).getText()).equalTo('All (1 file)');
     assert(driver.findElement({css: '#tests ul li:nth-child(2)'}).getText()).equalTo('google_search');
   });
@@ -28,6 +30,11 @@ test.describe('inner files', function () {
       driver.findElement({css: '#tests'}).click();
       driver.sleep(200);
       driver.findElement({css: '#tests ul li:nth-child(2)'}).click();
+      driver.wait(until.elementLocated({css: '#textfield-Filename'}));
+    });
+
+    test.it('should show name in dropdown', function () {
+      assert(driver.findElement({css: '#tests .dropdown__value'}).getText()).equalTo('google_search');
     });
 
     test.it('should run without errors', function () {
@@ -39,15 +46,15 @@ test.describe('inner files', function () {
     });
 
     test.it('should be renamed', function () {
-      const filename = driver.wait(until.elementLocated({css: '#textfield-Filename'}));
-      filename.sendKeys('123');
+      driver.findElement({css: '#textfield-Filename'}).sendKeys('123');
       // there is debounce 500ms
       driver.sleep(600);
+      assert(driver.findElement({css: '#tests .dropdown__value'}).getText()).equalTo('google_search123');
       assert(driver.findElement({css: '#tests ul li:nth-child(2)'}).getText()).equalTo('google_search123');
     });
 
     test.it('should be deleted', function () {
-      driver.wait(until.elementLocated({css: '#editor [data-test-id="delete"]'}), 1000).click();
+      driver.findElement({css: '#editor [data-test-id="delete"]'}).click();
       // todo: use driver.wait(until.alertIsPresent)
       driver.sleep(200);
       driver.switchTo().alert().accept();
