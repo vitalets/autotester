@@ -60,11 +60,11 @@ test.describe('inner files', function () {
 
     test.beforeEach(function () {
       driver.findElement({css: '.no-file-selected button'}).click();
+      driver.wait(until.elementLocated({css: '#textfield-Filename'}));
     });
 
     test.it('should have correct name and template', function () {
-      const filename = driver.wait(until.elementLocated({css: '#textfield-Filename'}));
-      assert(filename.getAttribute('value')).equalTo('new_file_1');
+      assert(driver.findElement({css: '#textfield-Filename'}).getAttribute('value')).equalTo('new_file_1');
       assert(driver.findElement({css: '#tests ul li:nth-child(1)'}).getText()).equalTo('All (2 files)');
       assert(driver.findElement({css: '#tests ul li:nth-child(2)'}).getText()).equalTo('google_search');
       assert(driver.findElement({css: '#tests ul li:nth-child(3)'}).getText()).equalTo('new_file_1');
@@ -83,7 +83,7 @@ test.describe('inner files', function () {
     });
 
     test.it('should be deleted', function () {
-      driver.wait(until.elementLocated({css: '#editor [data-test-id="delete"]'}), 1000).click();
+      driver.findElement({css: '#editor [data-test-id="delete"]'}).click();
       // todo: use driver.wait(until.alertIsPresent)
       driver.sleep(200);
       driver.switchTo().alert().accept();
