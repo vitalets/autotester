@@ -102,6 +102,6 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md). Thanks for your support!
 * [Awesome Selenium](https://github.com/christian-bromann/awesome-selenium)
 
 ## License
-MIT
+MIT @ [Vitaliy Potapov](https://github.com/vitalets)
 
 [1]: https://github.com/vitalets/autotester/releases/download/v0.1.2/autotester.zip
