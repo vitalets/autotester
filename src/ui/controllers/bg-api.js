@@ -13,7 +13,6 @@ const {
 
 const {
   RELOAD,
-  TESTS_LIST_LOAD,
   TESTS_RUN,
   TESTS_DONE,
   SESSION_STARTED,
@@ -30,10 +29,6 @@ exports.init = function() {
   messaging.on(FILE_STARTED, data => onFileStarted.dispatch(data));
   messaging.on(TEST_STARTED, data => onTestStarted.dispatch(data));
   messaging.start();
-};
-
-exports.loadTestsList = function(url) {
-  return messaging.send(TESTS_LIST_LOAD, {url});
 };
 
 exports.runTests = function(data) {

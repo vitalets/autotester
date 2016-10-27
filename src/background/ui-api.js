@@ -4,7 +4,6 @@
 
 const messaging = require('../utils/messaging');
 const externalEvents = require('./external-events');
-const testsList = require('./tests-list');
 const testsRun = require('./tests-run');
 const {
   onTestsDone,
@@ -16,7 +15,6 @@ const {
 
 const {
   RELOAD,
-  TESTS_LIST_LOAD,
   TESTS_RUN,
   TESTS_DONE,
   SESSION_STARTED,
@@ -26,7 +24,6 @@ const {
 
 exports.init = function() {
   messaging.registerEvents(externalEvents);
-  messaging.on(TESTS_LIST_LOAD, loadTestsList);
   messaging.on(TESTS_RUN, runTests);
   onReady.addListener(() => messaging.send(RELOAD));
   onTestsDone.addListener(() => messaging.send(TESTS_DONE));
@@ -37,10 +34,6 @@ exports.init = function() {
   onTestStarted.addListener(data => messaging.send(TEST_STARTED, data));
   messaging.start();
 };
-
-function loadTestsList({url}) {
-  return testsList.load(url);
-}
 
 function runTests(data) {
   testsRun.run(data)

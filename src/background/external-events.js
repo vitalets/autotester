@@ -10,7 +10,6 @@ const keyMirror = require('keymirror');
  */
 module.exports = keyMirror({
   // from tab
-  TESTS_LIST_LOAD: null,
   TESTS_RUN: null,
   // from bg
   RELOAD: null,

@@ -9,7 +9,7 @@ const {APP_STATE, TAB} = require('../state/constants');
 const bgApi = require('./bg-api');
 const windowApi = require('./window-api');
 const testsRun = require('./tests-run');
-const testsList = require('./tests-list');
+const configLoader = require('./config-loader');
 const htmlConsole = require('./html-console');
 const setup = require('./setup');
 const editor = require('./editor');
@@ -20,7 +20,7 @@ const editor = require('./editor');
 exports.start = function() {
   htmlConsole.init();
   testsRun.init();
-  testsList.init();
+  configLoader.init();
   editor.init();
   bgApi.init();
   windowApi.init();
