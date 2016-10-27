@@ -40,6 +40,8 @@ test.describe('inner files', function () {
     test.it('should run without errors', function () {
       driver.findElement({id: 'run'}).click();
       driver.wait(until.titleContains('done'));
+      // need sleep as mocha report seems to get updated with little delay
+      driver.sleep(100);
       driver.findElements({css: '.report-tab .console'}).then(elems => assert(elems.length).equalTo(0));
       assert(driver.findElement({css: '#mocha-stats .failures em'}).getText()).equalTo('0');
       assert(driver.findElement({css: '#mocha-stats .passes em'}).getText()).equalTo('1');
@@ -84,6 +86,8 @@ test.describe('inner files', function () {
     test.it('should run without errors', function () {
       driver.findElement({id: 'run'}).click();
       driver.wait(until.titleContains('done'));
+      // need sleep as mocha report seems to get updated with little delay
+      driver.sleep(100);
       driver.findElements({css: '.report-tab .console'}).then(elems => assert(elems.length).equalTo(0));
       assert(driver.findElement({css: '#mocha-stats .failures em'}).getText()).equalTo('0');
       assert(driver.findElement({css: '#mocha-stats .passes em'}).getText()).equalTo('1');
