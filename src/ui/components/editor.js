@@ -86,7 +86,7 @@ module.exports = class Editor extends React.Component {
   }
   renderControls() {
     return (
-      <div style={{display: 'flex', alignItems: 'center'}}>
+      <div id="editor" style={{display: 'flex', alignItems: 'center'}}>
         <Textfield
           onChange={e => this.changeName(e)}
           value={this.state.name}
@@ -98,7 +98,7 @@ module.exports = class Editor extends React.Component {
           <Icon name="add"/>
           <span className="button-text">New file</span>
         </Button>
-        <Button raised onClick={() => this.deleteFile()}>
+        <Button raised data-test-id="delete" onClick={() => this.deleteFile()}>
           <Icon name="delete" disabled={!this.state.name}/>
           <span className="button-text">Delete</span>
         </Button>

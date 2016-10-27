@@ -15,6 +15,7 @@ const element = require('./commands/element');
 const evaluate = require('./commands/evaluate');
 const timeouts = require('./commands/timeouts');
 const requests = require('./commands/requests');
+const dialog = require('./commands/dialog');
 
 // lodash added for equal length to visually indent
 const GET_ = 'get';
@@ -48,6 +49,12 @@ module.exports = [
   [POST, '/session/:sessionId/window', switchTo.window],
   [GET_, '/session/:sessionId/window_handle', windowCommand.getCurrentWindowHandle],
   [GET_, '/session/:sessionId/window_handles', windowCommand.getAllWindowHandles],
+
+  // todo: this seems to be obsolete routes, current spec is /alert/*
+  [GET_, '/session/:sessionId/alert_text', dialog.getText],
+  // [POST, '/session/:sessionId/alert_text', dialog.setText],
+  [POST, '/session/:sessionId/accept_alert', dialog.accept],
+  [POST, '/session/:sessionId/dismiss_alert', dialog.dismiss],
 
   // extra autotester routes: live over `autotester` vendor prefix
   [POST, '/session/:sessionId/autotester/newtab', switchTo.newTab],

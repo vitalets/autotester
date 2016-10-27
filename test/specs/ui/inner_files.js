@@ -57,12 +57,21 @@ test.describe('new_file_1', function () {
       });
   });
 
-  test.it('should successfully run newly created file', function () {
+  test.it('should run newly created file without errors', function () {
     driver.findElement({css: '.no-file-selected button'}).click();
     driver.findElement({id: 'run'}).click();
     driver.wait(until.titleContains('done'));
     driver.findElements({css: '.report-tab .console'}).then(elems => assert(elems.length).equalTo(0));
     assert(driver.findElement({css: '#mocha-stats .failures em'}).getText()).equalTo('0');
     assert(driver.findElement({css: '#mocha-stats .passes em'}).getText()).equalTo('1');
+  });
+
+  test.it('should delete file', function () {
+    driver.findElement({css: '#tests'}).click();
+    driver.sleep(200);
+    driver.findElement({css: '#tests ul li:nth-child(2)'}).click();
+    driver.wait(until.elementLocated({css: '#editor [data-test-id="delete"]'}), 1000).click();
+    driver.switchTo().alert().accept();
+    driver.findElements({css: '#tests ul li'}).then(elems => assert(elems.length).equalTo(0));
   });
 });

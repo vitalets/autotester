@@ -24,7 +24,10 @@ exports.reset = function() {
     fs.clear(),
     thenChrome.storage.local.clear(),
   ])
-  .then(() => location.reload());
+  .then(() => {
+    // setTimeout is usefull here for test client to get response from evaluated script before page reload
+    setTimeout(() => location.reload(), 50);
+  });
 };
 
 /**

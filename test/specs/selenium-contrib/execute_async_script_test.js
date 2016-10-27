@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-// todo: transfeer all tests from:
+// todo: use all tests from:
 // https://github.com/SeleniumHQ/selenium/blob/master/java/client/test/org/openqa/selenium/ExecutingAsyncJavascriptTest.java
 
 'use strict';

@@ -21,6 +21,7 @@ module.exports = {
     'selenium-contrib/form_handling_test.js',
     'selenium-contrib/execute_async_script_test.js',
     'selenium-contrib/window_switching_test.js',
+    'selenium-contrib/alerts_test.js',
     // === specs copied from existing selenium tests in 'node_modules/selenium-webdriver/test'
     'selenium/tag_name_test.js',
     //'specs-selenium/actions_test.js',
