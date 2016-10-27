@@ -12,14 +12,22 @@ exports.init = function () {
   mobx.reaction(() => state.selectedFileUrl, url => url ? loadContent(url) : setContent(''));
 };
 
-exports.saveName = mobx.action(function (newName) {
+exports.saveName = function (newName) {
+  if (!newName) {
+    // todo: warning?
+    return;
+  }
   const index = getSelectedFileIndex();
   if (index >= 0) {
-    state.innerFiles[index].path = newName;
-    throw new Error('rename not supported');
-    // state.selectedFile = newName;
+    const oldPath = `${state.innerFilesPath}/${state.selectedFile}`;
+    const newPath = `${state.innerFilesPath}/${newName}`;
+    fs.rename(oldPath, newPath)
+      .then(mobx.action(() => {
+        state.innerFiles[index].path = newName;
+        state.selectedFile = newName;
+      }));
   }
-});
+};
 
 exports.saveCode = mobx.action(function (newCode) {
   state.selectedFileContent = newCode;

@@ -93,6 +93,7 @@ exports.computed = {
         return '';
     }
   },
+  // todo: maybe remove or rename, because for inner files it's not url it's path
   get selectedFileUrl() {
     if (this.selectedFile) {
       return this.isInnerFiles
