@@ -71,6 +71,8 @@ test.describe('new_file_1', function () {
     driver.sleep(200);
     driver.findElement({css: '#tests ul li:nth-child(2)'}).click();
     driver.wait(until.elementLocated({css: '#editor [data-test-id="delete"]'}), 1000).click();
+    // todo: use driver.wait(until.alertIsPresent)
+    driver.sleep(200);
     driver.switchTo().alert().accept();
     driver.findElements({css: '#tests ul li'}).then(elems => assert(elems.length).equalTo(0));
   });
