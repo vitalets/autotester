@@ -2,8 +2,8 @@ const {observer} = require('mobx-react');
 const {Layout, Content} = require('react-mdl');
 const Title = require('./title');
 const Top = require('./top');
-const TabBar = require('./tab-bar');
-const Center = require('./center');
+const TabBar = require('./tab-bar/tab-bar');
+const Tabs = require('./tabs');
 
 module.exports = observer(function App() {
   return (
@@ -12,7 +12,7 @@ module.exports = observer(function App() {
       <Top/>
       <TabBar/>
       <Content className="flex-container">
-        <Center/>
+        <Tabs/>
       </Content>
     </Layout>
   );

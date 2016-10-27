@@ -1,7 +1,7 @@
 
 const {observer} = require('mobx-react');
 const state = require('../../state');
-const Dropdown = require('../dropdown');
+const Dropdown = require('../utils/dropdown');
 
 module.exports = observer(class TestsDropdown extends React.Component {
   getItems() {

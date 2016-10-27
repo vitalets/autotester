@@ -1,5 +1,5 @@
 
-module.exports = class SettingsHubs extends React.Component {
+module.exports = class Hubs extends React.Component {
   render() {
     return (
       <div>

@@ -1,8 +1,8 @@
 
-const ReportStatus = require('./report-status');
-const HtmlConsole = require('./html-console');
+const ReportStatus = require('../report/status');
+const HtmlConsole = require('../html-console');
 
-module.exports = function ReportTab() {
+module.exports = function Report() {
   return (
     <div className="report-tab">
       <ReportStatus/>

@@ -1,6 +1,6 @@
 
 const {Button} = require('react-mdl');
-const {SETTINGS_MENU} = require('../state/constants');
+const {SETTINGS_MENU} = require('../../state/constants');
 
 const texts = {
   [SETTINGS_MENU.TESTS_SOURCE]: 'Tests source',
@@ -8,7 +8,7 @@ const texts = {
   [SETTINGS_MENU.TARGETS]     : 'Targets',
 };
 
-module.exports = function SettingsMenu(props) {
+module.exports = function Menu(props) {
   return (
     <div className="settings-menu">
       {Object.keys(SETTINGS_MENU).map(key => {

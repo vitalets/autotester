@@ -34,7 +34,6 @@ exports.runtime = {
   // todo: rename to appStatus
   appState: APP_STATE.LOADING,
   outerFiles: [], // files that are loaded from URL or built-in
-  selectedTab: -1,
   stopOnError: false,
   selectedFileContent: '',
 };
@@ -45,6 +44,7 @@ exports.persistent = {
   targets: defaults.targets,
   selectedTargetId: defaults.targets[0].id,
   hubs: defaults.hubs,
+  selectedTab: null,
   selectedSettingsMenuItem: SETTINGS_MENU.TESTS_SOURCE,
 };
 

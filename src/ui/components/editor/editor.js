@@ -4,9 +4,9 @@ const classNames = require('classnames');
 const CodeMirror = require('react-codemirror');
 require('codemirror/mode/javascript/javascript');
 const debounce = require('lodash.debounce');
-const state = require('../state');
-const {TAB} = require('../state/constants');
-const editor = require('../controllers/editor');
+const state = require('../../state');
+const {TAB} = require('../../state/constants');
+const editor = require('../../controllers/editor');
 
 
 const options = {

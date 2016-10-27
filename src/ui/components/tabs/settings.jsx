@@ -1,12 +1,12 @@
 const {observer} = require('mobx-react');
-const state = require('../state');
+const state = require('../../state');
 const mobx = require('mobx');
-const SettingsMenu = require('./settings-menu');
-const SettingsContent = require('./settings-content');
-const SettingsFilesSource = require('./settings-files-source');
-const SettingsHubs = require('./settings-hubs');
-const SettingsTargets = require('./settings-targets');
-const {SETTINGS_MENU} = require('../state/constants');
+const SettingsMenu = require('../settings/menu');
+const SettingsContent = require('../settings/content');
+const SettingsFilesSource = require('../settings/files-source');
+const SettingsHubs = require('../settings/hubs');
+const SettingsTargets = require('../settings/targets');
+const {SETTINGS_MENU} = require('../../state/constants');
 
 module.exports = observer(class SettingsTab extends React.Component {
   constructor() {

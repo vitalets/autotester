@@ -1,4 +1,4 @@
-module.exports = class SettingsTargets extends React.Component {
+module.exports = class Targets extends React.Component {
   render() {
     return (
       <div>

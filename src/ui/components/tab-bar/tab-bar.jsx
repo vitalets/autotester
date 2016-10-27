@@ -1,9 +1,9 @@
 const {observer} = require('mobx-react');
 const {Tabs, Tab, MDLComponent} = require('react-mdl');
 const mobx = require('mobx');
-const state = require('../state');
+const state = require('../../state');
+const {TAB} = require('../../state/constants');
 const TabBarItem = require('./tab-bar-item');
-const {TAB} = require('../state/constants');
 
 const tabList = [
   TAB.TESTS,

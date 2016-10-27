@@ -53,6 +53,7 @@ function storeToStorage() {
     targets: defaults.targets.concat(defaultsExtra.targets),
     selectedTargetId: defaults.targets[0].id,
     hubs: defaults.hubs.concat(defaultsExtra.hubs),
+    selectedTab: defaults.selectedTab,
   });
   logger.log(`Storing to storage`, data);
   return thenChrome.storage.local.set(data);

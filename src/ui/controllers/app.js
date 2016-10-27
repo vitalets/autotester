@@ -5,7 +5,7 @@
 const mobx = require('mobx');
 const fs = require('bro-fs');
 const state = require('../state');
-const {APP_STATE, TAB} = require('../state/constants');
+const {APP_STATE} = require('../state/constants');
 const bgApi = require('./bg-api');
 const windowApi = require('./window-api');
 const testsRun = require('./tests-run');
@@ -33,5 +33,4 @@ exports.start = function() {
 
 function ready() {
   state.appState = APP_STATE.READY;
-  state.selectedTab = TAB.TESTS;
 }

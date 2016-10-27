@@ -17,7 +17,7 @@ module.exports = class PersistentState extends State {
     const keys = Object.keys(this._persistentFields);
     return thenChrome.storage.local.get(keys)
       .then(mobx.action(data => {
-        // console.info('State: loaded', data);
+        // console.info('LOADED', data);
         Object.assign(this, data);
         this._loaded = true;
         this._observePersistent();
@@ -38,7 +38,7 @@ module.exports = class PersistentState extends State {
       // use here mobx.toJS as otherwise changes of deep objects/arrays are not tracked
       // see: https://jsfiddle.net/xd2zxu8u/5/
       mobx.reaction(() => mobx.toJS(this[fieldName]), newValue => {
-        // console.info('CHANGED', fieldName, newValue);
+        // console.info('SAVING', fieldName, newValue);
         const data = {
           [fieldName]: mobx.toJS(newValue)
         };

@@ -1,5 +1,5 @@
 
-module.exports = function SettingsContent(props) {
+module.exports = function Content(props) {
   return (
     <div className="settings-content">
       {props.children}

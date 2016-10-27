@@ -1,13 +1,13 @@
 
 const Channel = require('chnl');
-const state = require('../state');
+const state = require('../../state');
 const {
   onSessionStarted,
   onTestsRun,
   onTestsDone,
-} = require('../controllers/internal-channels');
+} = require('../../controllers/internal-channels');
 
-module.exports = class ReportStatus extends React.Component {
+module.exports = class Status extends React.Component {
   constructor() {
     super();
     this.state = {

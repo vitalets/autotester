@@ -2,7 +2,7 @@
  * Default values for state fields
  */
 
-const {FILES_SOURCE_TYPE} = require('./constants');
+const {FILES_SOURCE_TYPE, TAB} = require('./constants');
 
 exports.innerFile = {
   path: 'google_search',
@@ -45,3 +45,5 @@ exports.targets = [
     name: 'This chrome'
   },
 ];
+
+exports.selectedTab = TAB.TESTS;

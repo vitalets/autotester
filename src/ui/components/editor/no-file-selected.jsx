@@ -1,7 +1,7 @@
 const {observer} = require('mobx-react');
 const {Icon, Button} = require('react-mdl');
-const state = require('../state');
-const editor = require('../controllers/editor');
+const state = require('../../state');
+const editor = require('../../controllers/editor');
 
 module.exports = observer(class NoSelectedFile extends React.Component {
   render() {

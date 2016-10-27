@@ -1,10 +1,10 @@
 const {RadioGroup, Radio, Textfield} = require('react-mdl');
 const debounce = require('lodash.debounce');
 const mobx = require('mobx');
-const {FILES_SOURCE_TYPE} = require('../state/constants');
-const state = require('../state');
+const {FILES_SOURCE_TYPE} = require('../../state/constants');
+const state = require('../../state');
 
-module.exports = class SettingsFilesSource extends React.Component {
+module.exports = class FilesSource extends React.Component {
   constructor() {
     super();
     this.state = {
