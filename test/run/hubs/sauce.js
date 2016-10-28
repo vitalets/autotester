@@ -13,10 +13,10 @@ const targets = [
   {
     'platform': 'Windows 7',
   },
-  // {
-  //   'platform': 'Windows 7',
-  //   'version': 'beta',
-  // },
+  {
+    'platform': 'Windows 7',
+    'version': 'beta',
+  },
   // {
   //   'platform': 'Windows 10',
   // },
