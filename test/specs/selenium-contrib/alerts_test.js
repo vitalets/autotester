@@ -50,7 +50,7 @@ test.suite(function(env) {
     test.it('should accept alert', function () {
       driver.findElement(By.id('alert')).click();
       // todo: use driver.wait(until.alertIsPresent()); when it will be possible
-      driver.sleep(200);
+      driver.sleep(1000);
       driver.switchTo().alert().accept();
 
       // If we can perform any action, we're good to go
