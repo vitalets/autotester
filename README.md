@@ -59,7 +59,8 @@ Tested in:
   Please see [example](test/specs/extras/extension_switching_test.js).
 
 ## Project status
-Autotester is under **active development** now. Not all webdriver commands are supported. Yet. And there can be bugs.   
+Autotester is under **active development** now. Not all webdriver commands are supported. Yet.
+And there can be bugs.
 But feel free to try it and share your feedback or ideas in [issues](issues) - help us to make it better!
 
 ## Installation
