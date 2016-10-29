@@ -136,4 +136,4 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md). Thanks for your support!
 ## License
 MIT @ [Vitaliy Potapov](https://github.com/vitalets)
 
-[1]: https://github.com/vitalets/autotester/releases/download/v0.1.2/autotester.zip
+[1]: https://github.com/vitalets/autotester/releases/download/v0.1.3/autotester.zip
