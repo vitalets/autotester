@@ -21,6 +21,8 @@ const lastMoveTo = {
   y: 0,
 };
 
+const highlight = false;
+
 exports.clickElement = function (params) {
   return Promise.resolve()
      // .then(() => getScrollXY())
@@ -36,7 +38,7 @@ exports.clickElement = function (params) {
     .then(center => {
       return Promise.resolve()
         .then(() => moveAndClickXY(center.x, center.y))
-        // .then(() => highlightClick(center.x, center.y))
+        .then(() => highlight ? highlightClick(center.x, center.y) : null)
     });
 };
 
@@ -127,7 +129,7 @@ function scrollToXY(x, y) {
     expression: `window.scrollTo(${x}, ${y})`
   });
 }
-/*
+
 function highlightXY(x, y, frame) {
   const size = Math.round(5 + 50 * frame);
   return Targets.debugger.sendCommand('DOM.highlightRect', {
@@ -155,11 +157,11 @@ function highlightClick(x, y) {
   }, Promise.resolve());
 
 }
+//
+// function getScrollXY() {
+//   return Targets.debugger.sendCommand('Runtime.evaluate', {
+//     // expression: `(function() {return {y: window.scrollY}}())`
+//     expression: `window.scrollY`
+//   });
+// }
 
-function getScrollXY() {
-  return Targets.debugger.sendCommand('Runtime.evaluate', {
-    // expression: `(function() {return {y: window.scrollY}}())`
-    expression: `window.scrollY`
-  });
-}
-*/
