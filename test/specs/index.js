@@ -4,6 +4,7 @@
 
 module.exports = {
   setup: [
+    'page-object.js',
     'setup.js',
     'helpers.js',
   ],

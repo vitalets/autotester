@@ -1,7 +1,7 @@
 test.describe('show errors', function () {
   let driver;
 
-  const {runCode, getConsoleLines, textToLines} = runContext;
+  const {runCode, getConsoleLines, textToLines, page} = runContext;
 
   test.before(function () {
     driver = runContext.driver = new Driver();
@@ -21,7 +21,7 @@ test.describe('show errors', function () {
       `);
       getConsoleLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-        assert(lines[1]).equalTo('at runtime/test.js:2:9');
+        assert(lines[1]).equalTo('at runtime/undefined.js:2:9');
       })
     });
 
@@ -34,7 +34,7 @@ test.describe('show errors', function () {
       `);
       getConsoleLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-        assert(lines[1]).equalTo('at driver.call (runtime/test.js:4:11)');
+        assert(lines[1]).equalTo('at driver.call (runtime/undefined.js:4:11)');
       })
     });
 
@@ -60,7 +60,7 @@ test.describe('show errors', function () {
       `);
       getConsoleLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-        assert(lines[1]).equalTo('at Suite.<anonymous> (runtime/test.js:3:11)');
+        assert(lines[1]).equalTo('at Suite.<anonymous> (runtime/undefined.js:3:11)');
       });
     });
 
@@ -74,7 +74,7 @@ test.describe('show errors', function () {
       `);
       getMochaErrorLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-        assert(lines[1]).equalTo('at Context.<anonymous> (runtime/test.js:4:13)');
+        assert(lines[1]).equalTo('at Context.<anonymous> (runtime/undefined.js:4:13)');
       })
     });
 
@@ -95,7 +95,7 @@ test.describe('show errors', function () {
       `);
       getMochaErrorLines().then(lines => {
         assert(lines[0]).equalTo('ReferenceError: abc is not defined');
-        assert(lines[1]).equalTo('at driver.call (runtime/test.js:7:15)');
+        assert(lines[1]).equalTo('at driver.call (runtime/undefined.js:7:15)');
       })
     });
 
@@ -120,7 +120,7 @@ test.describe('show errors', function () {
   });
 
   function getMochaErrorLines() {
-    return driver.findElement({css: '#mocha-report .error'}).getText()
+    return driver.findElement(page.report.error).getText()
       .then(textToLines)
       .catch(() => [])
   }

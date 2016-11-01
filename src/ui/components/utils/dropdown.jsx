@@ -1,4 +1,6 @@
-
+/**
+ * Implementation of MDL dropdown
+ */
 const {Menu, MenuItem} = require('react-mdl');
 
 module.exports = class Dropdown extends React.Component {

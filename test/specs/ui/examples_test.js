@@ -1,13 +1,16 @@
 test.describe('examples', function () {
-  var driver;
+  let driver;
+
+  const page = runContext.page;
 
   test.before(function () {
     driver = runContext.driver = new Driver();
     driver.get(runContext.selftest.ui);
-    driver.wait(until.titleContains('ready'));
-    runContext.enableTestsSource('URL');
+    driver.wait(until.titleContains('ready'), 2000);
+    driver.findElement(page.tabHeaders.settings).click();
+    driver.findElement(page.settings.filesSource.url.label).click();
     // todo: wait title
-    driver.sleep(500);
+    driver.sleep(1000);
   });
 
   test.after(function () {
@@ -15,14 +18,12 @@ test.describe('examples', function () {
   });
 
   test.it('should run all without errors', function () {
-    driver.findElement({id: 'run'}).click();
+    driver.findElement(page.runButton).click();
     driver.wait(until.titleContains('done'));
-    // need sleep as mocha report seems to get updated with little delay
-    driver.sleep(100);
-    driver.findElements({css: '.report-tab .console'})
+    driver.findElements(page.report.console)
       .then(elems => assert(elems.length).equalTo(0));
-    assert(driver.findElement({css: '#mocha-stats .failures em'}).getText()).equalTo('0');
-    assert(driver.findElement({css: '#mocha-stats .passes em'}).getText()).equalTo('2');
+    assert(driver.findElement(page.report.mochaStats.failures).getText()).equalTo('0');
+    assert(driver.findElement(page.report.mochaStats.passes).getText()).equalTo('2');
   });
 
 });

@@ -72,7 +72,7 @@ module.exports = class Editor extends React.Component {
     options.readOnly = state.isInnerFiles ? false : 'nocursor';
     const className = classNames('flex-container', {'gray-bg': !state.isInnerFiles});
     return (
-      <div className="flex-container">
+      <div className="flex-container" id="editor">
         {state.isInnerFiles ? this.renderControls() : null}
         <CodeMirror
           className={className}
@@ -86,7 +86,7 @@ module.exports = class Editor extends React.Component {
   }
   renderControls() {
     return (
-      <div id="editor" style={{display: 'flex', alignItems: 'center'}}>
+      <div style={{display: 'flex', alignItems: 'center'}}>
         <Textfield
           onChange={e => this.changeName(e)}
           value={this.state.name}
@@ -94,11 +94,11 @@ module.exports = class Editor extends React.Component {
           floatingLabel
           style={{width: '300px', marginRight: 'auto'}}
         />
-        <Button raised style={{marginRight: '15px'}} onClick={() => this.addFile()}>
+        <Button raised style={{marginRight: '15px'}} onClick={() => this.addFile()} data-test-id="create">
           <Icon name="add"/>
           <span className="button-text">New file</span>
         </Button>
-        <Button raised data-test-id="delete" onClick={() => this.deleteFile()}>
+        <Button raised onClick={() => this.deleteFile()} data-test-id="delete">
           <Icon name="delete" disabled={!this.state.name}/>
           <span className="button-text">Delete</span>
         </Button>
