@@ -27,6 +27,7 @@ try {
 const hub = require('./hubs/' + process.argv[2]);
 
 const AUTOTESTER_UI_URL = 'chrome-extension://inilfehdbldcjcffbakeabignfomfbdh/core/ui/ui.html';
+const DEV_MODE = false;
 
 // run tests in all capabilities combination
 run();
@@ -53,45 +54,28 @@ function runForCapabilities(caps) {
   console.log(`${signature}running...`);
   let driver;
   return new Promise((resolve, reject) => {
-    const flow = new webdriver.promise.ControlFlow()
-      .on('uncaughtException', reject);
-
-    const builder = new webdriver.Builder();
-    if (hub.serverUrl) {
-      builder.usingServer(hub.serverUrl);
-    }
-    driver = builder
-      .withCapabilities(caps)
-      .setControlFlow(flow)
-      .build();
-
-    driver.get(AUTOTESTER_UI_URL);
-    driver.executeScript(function() {
-      return navigator.userAgent + ' ' + navigator.language;
-    }).then(res => console.log(`${signature}${res}`));
-    driver.wait(webdriver.until.titleContains('ready'));
-    driver.findElement({id: 'run'}).click();
-    let prevTitle = '';
-    driver.wait(() => {
-      return driver.getTitle().then(title =>{
-        if (title !== prevTitle) {
-          console.log(signature + title);
-          prevTitle = title;
-        }
-        return title.indexOf('done') >= 0;
-      })
-    });
-    // todo: read htmlConsole as there can be errors
-    const mochaReport = driver.findElement({id: 'mocha'}).getAttribute('innerHTML');
-    const consoleReport = driver.findElements({css: '.console'})
-        .then(elems => elems.length ? elems[0].getText() : '');
-    Promise.all([mochaReport, consoleReport]).then(([mochaReport, consoleReport]) => {
-      console.log(`${signature}console: ${consoleReport}`);
-      console.log(`${signature}mocha report: `);
-      const hasErrors = processReport(mochaReport, signature);
+    driver = buildDriver(caps, resolve, reject);
+    openUiAndRun(driver, signature);
+    waitForDone(driver, signature);
+    Promise.all([
+      getStats(driver),
+      getErrors(driver),
+      getConsole(driver),
+    ]).then(([
+      stats,
+      errorsReport,
+      consoleReport
+    ]) => {
+      const hasErrors = stats.failures !== '0';
+      console.log(`${signature}done: ${JSON.stringify(stats, false, 2)}`);
+      console.log(`${signature}console: ${consoleReport || 'empty'}`);
+      if (hasErrors) {
+        console.log(`${signature}errors:\n\n${errorsReport}\n\n`);
+      }
       trySendSessionStatus(driver, signature, hasErrors);
-      driver.quit()
-        .then(
+
+      const quit = DEV_MODE ? Promise.resolve() : driver.quit();
+      quit.then(
           () => !hasErrors ? resolve() : reject(new Error(`Tests failed`)),
           reject
         );
@@ -101,22 +85,91 @@ function runForCapabilities(caps) {
   .catch(e => fail(driver, signature, e));
 }
 
-function processReport(html) {
-  const text = htmlToText.fromString(html, {ignoreHref: true}).substr(1);
-  const matches = text.match(/\* duration:.+s/);
-  if (!matches) {
-    console.log('Empty report!');
-    return true;
+function buildDriver(caps, resolve, reject) {
+  const flow = new webdriver.promise.ControlFlow()
+    .on('uncaughtException', reject);
+
+  const builder = new webdriver.Builder();
+  if (hub.serverUrl) {
+    builder.usingServer(hub.serverUrl);
   }
-  const headerEnd = matches.index + matches[0].length + 1;
-  const header = text.substr(0, headerEnd);
-  const hasErrors = header.indexOf('failures: 0') === -1;
-  if (hasErrors) {
-    console.log(text);
-  }
-  console.log(header);
-  return hasErrors;
+
+  return builder
+    .withCapabilities(caps)
+    .setControlFlow(flow)
+    .build();
 }
+
+function openUiAndRun(driver, signature) {
+  driver.get(AUTOTESTER_UI_URL);
+  driver.executeScript(() => navigator.userAgent + ' ' + navigator.language)
+    .then(res => console.log(`${signature}${res}`));
+  driver.wait(webdriver.until.titleContains('ready'));
+  driver.findElement({id: 'run'}).click();
+}
+
+function waitForDone(driver, signature) {
+  let prevTitle = '';
+  driver.wait(() => {
+    return driver.getTitle().then(title =>{
+      if (title !== prevTitle) {
+        console.log(signature + title);
+        prevTitle = title;
+      }
+      return title.indexOf('done') >= 0;
+    })
+  });
+}
+
+function getStats(driver) {
+  const failures = driver.findElement({css: '#mocha-stats .failures em'}).getText();
+  const passes = driver.findElement({css: '#mocha-stats .passes em'}).getText();
+  const duration = driver.findElement({css: '#mocha-stats .duration em'}).getText();
+  return Promise.all([
+    failures,
+    passes,
+    duration
+  ]).then(res => {
+    return {
+      failures: res[0],
+      passes: res[1],
+      duration: res[2],
+    };
+  })
+}
+
+function getErrors(driver) {
+  return driver.findElements({css: '#mocha .test.fail'})
+    .then(elems => {
+      const tasks = elems.map(elem => elem.getAttribute('innerHTML'));
+      return Promise.all(tasks);
+    })
+    .then(htmls => {
+      return htmls.map(html => htmlToText.fromString(html, {ignoreHref: true})).join('\n\n')
+    })
+}
+
+function getConsole(driver) {
+  return driver.findElements({css: '.console'})
+    .then(elems => elems.length ? elems[0].getText() : '');
+}
+
+// function processReport(html) {
+//   const text = htmlToText.fromString(html, {ignoreHref: true}).substr(1);
+//   const matches = text.match(/\* duration:.+s/);
+//   if (!matches) {
+//     console.log('Empty report!');
+//     return true;
+//   }
+//   const headerEnd = matches.index + matches[0].length + 1;
+//   const header = text.substr(0, headerEnd);
+//   const hasErrors = header.indexOf('failures: 0') === -1;
+//   if (hasErrors) {
+//     console.log(text);
+//   }
+//   console.log(header);
+//   return hasErrors;
+// }
 
 function trySendSessionStatus(driver, signature, hasErrors) {
   if (hub.sendSessionStatus) {
@@ -130,13 +183,13 @@ function trySendSessionStatus(driver, signature, hasErrors) {
 }
 
 function fail(driver, signature, e) {
-  if (driver.getSession()) {
-    driver.quit();
-  }
   // todo: driver.quit().catch() ?
   // better to show message first as stack is too big
   console.log(`${signature}ERROR: ${e.message || e.stack}`);
-  return e;
+  return new Promise(resolve => {
+    const p = !DEV_MODE && driver.getSession() ? driver.quit() : Promise.resolve();
+    p.then(() => resolve(e), resolve);
+  })
 }
 
 function throwAsync(e) {
