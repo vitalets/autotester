@@ -4,8 +4,8 @@
 [![Sauce Test Status](https://saucelabs.com/buildstatus/vitalets1)](https://saucelabs.com/u/vitalets1)
 [![GitHub version](https://badge.fury.io/gh/vitalets%2Fautotester.svg)](https://github.com/vitalets/autotester/releases/latest)
 
-Autotester is chrome extension that allows to develop and run automation tests right in browser.  
-Tests are written in javascript and can be executed over another tab of the same chrome or any remote browser.
+Autotester is Chrome extension that allows to develop and run automation tests right in browser.  
+Tests are written in Javascript and can be executed over another tab of the same Chrome or any remote browser.
 
 Tested in:  
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/vitalets1.svg)](https://saucelabs.com/u/vitalets1)
@@ -52,7 +52,7 @@ Tested in:
 * **Run tests on remote servers**  
   Besides running tests in the same chrome instance it is possible to route commands to any selenium server.
   It can be [localhost](https://www.npmjs.com/package/selenium-standalone),
-  [saucelabs](https://saucelabs.com), [browserstack](https://www.browserstack.com), etc.
+  [Sauce Labs](https://saucelabs.com), [BrowserStack](https://www.browserstack.com), etc.
 
 * **Test other chrome extensions**  
   With Autotester it is possible to attach to other extensions background pages for testing.
@@ -113,6 +113,18 @@ If you have an idea how to fix bug or implement new feature - you are welcome to
 Please see [CONTRIBUTING.md](CONTRIBUTING.md). Thanks for your support!
 
 ## FAQ
+
+<details>
+  <summary>What if I get error "Unsupported route command"?</summary>
+     This error means that some Webdriver command is not implemented in Autotester yet.
+     The workaround sometimes can be using `driver.executeScript` to achive the goal directly.
+     For example, if `driver.getTitle()` is not implemented, you can retrieve title as:
+     
+     driver.executeScript(() => document.title);
+
+Also please search issues for the same unsupported route and vote or create new one
+ to let us know which commands you need most of all.  
+</details>
 
 <details>
   <summary>Where to store tests?</summary>
