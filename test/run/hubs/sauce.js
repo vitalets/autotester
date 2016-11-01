@@ -12,6 +12,7 @@ const capabilities = require('../capabilities');
 const targets = [
   {
     'platform': 'Windows 7',
+    'version': 'latest',
   },
   {
     'platform': 'Windows 7',
