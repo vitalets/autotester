@@ -38,6 +38,7 @@ module.exports = [
   [GET_, '/session/:sessionId/element/:id/attribute/:name', element.getAttribute],
   [POST, '/session/:sessionId/element/:id/click', mouse.clickElement],
   [POST, '/session/:sessionId/element/:id/submit', element.submit],
+  [GET_, '/session/:sessionId/element/:id/enabled', element.isEnabled],
   [POST, '/session/:sessionId/element/:id/element', elementSearch.findChildElement],
   [POST, '/session/:sessionId/element/:id/elements', elementSearch.findChildElements],
 

@@ -89,3 +89,18 @@ exports.getAttribute = function (params) {
   `;
   return evaluate.execute({script, args});
 };
+
+/**
+ * Is enabled
+ * @param {Object} params
+ * @param {String} params.id
+ * @returns {Promise}
+ */
+exports.isEnabled = function (params) {
+  const args = [WebElement.buildId(params.id)];
+  const script = `
+    const el = arguments[0];
+    return !el.disabled;
+  `;
+  return evaluate.execute({script, args});
+};
