@@ -36,12 +36,16 @@ const promise = require('selenium-webdriver/lib/promise');
 const fs = require('bro-fs');
 const utils = require('../utils');
 const httpAlias = require('../alias/http');
-const MochaRunner = require('./mocha-runner');
+const MochaRunner = require('./test-runners/mocha');
 const FileRunner = require('./file-runner');
-const htmlReporter = require('../reporter/html');
 const globals = require('./globals');
 const engines = require('../engines');
 const logger = require('../utils/logger').create('Runner');
+
+const DEFAULT_TEST_RUNNER_OPTIONS = {
+  timeout: 30 * 1000,
+  bail: false,
+};
 
 class Runner {
   /**
@@ -105,11 +109,11 @@ class Runner {
   }
 
   _setupTestRunner() {
-    const reporter = htmlReporter.getReporter(this._params.uiWindow);
-    this._testRunner = new MochaRunner({
-      reporter,
+    const options = Object.assign({}, DEFAULT_TEST_RUNNER_OPTIONS, {
+      uiWindow: this._params.uiWindow,
       bail: this._params.stopOnError,
     });
+    this._testRunner = new MochaRunner(options);
     this._testRunner.onTestStarted.addListener(data => this.onTestStarted.dispatch(data));
     return this._testRunner.loadTo(this._context);
   }

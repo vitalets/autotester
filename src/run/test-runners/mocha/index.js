@@ -3,8 +3,9 @@
  */
 
 const Channel = require('chnl');
-const utils = require('../utils');
-const logger = require('../utils/logger').create('Mocha-runner');
+const htmlReporter = require('./reporters/html');
+const utils = require('../../../utils');
+const logger = require('../../../utils/logger').create('Mocha-runner');
 
 const MOCHA_PATH = 'core/background/mocha.js';
 const DEFAULT_OPTIONS = {
@@ -19,10 +20,17 @@ class MochaRunner {
   /**
    * Constructor
    *
-   * @param {Object} options mocha options
+   * @param {Object} options
+   * @param {Boolean} options.bail
+   * @param {Number} options.timeout
+   * @param {Object} options.uiWindow
    */
   constructor(options) {
-    this._mochaOptions = Object.assign({}, DEFAULT_OPTIONS, options);
+    this._mochaOptions = Object.assign({}, DEFAULT_OPTIONS, {
+      timeout: options.timeout,
+      bail: options.bail,
+      reporter: htmlReporter.getReporter(options.uiWindow)
+    });
     this.onTestStarted = new Channel();
   }
 
