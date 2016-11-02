@@ -8,7 +8,7 @@ test.describe('examples', function () {
     driver.get(runContext.selftest.ui);
     driver.wait(until.titleContains('ready'), 2000);
     driver.findElement(page.tabHeaders.settings).click();
-    driver.findElement(page.settings.filesSource.url.label).click();
+    driver.wait(until.elementLocated(page.settings.filesSource.url.label), 2000).click();
     // todo: wait title
     driver.sleep(1000);
   });
