@@ -71,7 +71,7 @@ class Runner {
    * @param {Array<{path, code, isSetup}>} params.tests
    * @param {String} params.localBaseDir base directory to save test-files
    * @param {Object} params.uiWindow
-   * @param {Boolean} params.stopOnError
+   * @param {Boolean} params.devMode
    * @param {String} params.engine
    */
   run(params) {
@@ -81,7 +81,7 @@ class Runner {
 
     // todo: refactor - remove somewhere else
     const Targets = require('../extensiondriver/targets');
-    Targets.dontCloseTabs = params.stopOnError;
+    Targets.dontCloseTabs = params.devMode;
 
     return Promise.resolve()
       .then(() => this._cleanBefore())
@@ -111,7 +111,7 @@ class Runner {
   _setupTestRunner() {
     const options = Object.assign({}, DEFAULT_TEST_RUNNER_OPTIONS, {
       uiWindow: this._params.uiWindow,
-      bail: this._params.stopOnError,
+      bail: this._params.devMode,
     });
     this._testRunner = new MochaRunner(options);
     this._testRunner.onTestStarted.addListener(data => this.onTestStarted.dispatch(data));

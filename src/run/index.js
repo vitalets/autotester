@@ -18,7 +18,7 @@ module.exports = class Run {
    *
    * @param {Object} options
    * @param {Object} options.uiWindow
-   * @param {Boolean} options.stopOnError
+   * @param {Boolean} options.devMode
    * @param {String} options.engine
    * @param {Object} options.target {loopback, serverUrl, caps, name}
    */
@@ -64,7 +64,7 @@ module.exports = class Run {
       tests: this._snippets,
       localBaseDir: RUNTIME_DIR,
       uiWindow: this._options.uiWindow,
-      stopOnError: this._options.stopOnError,
+      devMode: this._options.devMode,
       engine: this._options.engine,
     });
   }

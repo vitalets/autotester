@@ -34,7 +34,7 @@ exports.runtime = {
   // todo: rename to appStatus
   appState: APP_STATE.LOADING,
   outerFiles: [], // files that are loaded from URL or built-in
-  stopOnError: false,
+  devMode: false,
   selectedFileContent: '',
 };
 

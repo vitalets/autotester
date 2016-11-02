@@ -25,7 +25,7 @@ exports.runCustomSnippets = function(snippets) {
   const data = {
     target: getSelectedTargetInfo(),
     snippets: snippets,
-    stopOnError: false,
+    devMode: false,
   };
   run(data);
 };
@@ -48,7 +48,7 @@ function runOnCurrentData() {
     target: getSelectedTargetInfo(),
     baseUrl: getBaseUrl(),
     files: getFiles(),
-    stopOnError: state.stopOnError,
+    devMode: state.devMode,
   };
   if (state.isInnerFiles) {
     getSnippets(data.baseUrl, data.files).then(snippets => {
