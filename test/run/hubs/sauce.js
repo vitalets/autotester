@@ -47,7 +47,7 @@ exports.sendSessionStatus = function (sessionId, hasErrors) {
     auth: `${process.env.SAUCE_USER}:${process.env.SAUCE_KEY}`,
     body: JSON.stringify({
       passed: !hasErrors,
-      build: 1,
+      build: process.env.TRAVIS_BUILD_NUMBER || 1,
     })
   };
   return got(url, params);

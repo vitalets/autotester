@@ -30,7 +30,7 @@ test.describe('inner files', function () {
 
     test.beforeEach(function () {
       driver.findElement(page.filesDropdown).click();
-      driver.sleep(200);
+      driver.sleep(400);
       driver.findElement(page.filesDropdown.item(2)).click();
       driver.wait(until.elementLocated(page.files.editor.filename));
     });
