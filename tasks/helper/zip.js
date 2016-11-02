@@ -11,6 +11,10 @@ const {pushd, exec, popd} = require('shelljs');
 
 exports.create = function ({dir, out}) {
   pushd(dir);
-  exec(`zip -rT ${out} .`);
+  if (process.env.APPVEYOR) {
+    exec(`7z a -r ${out} .`);
+  } else {
+    exec(`zip -rT ${out} .`);
+  }
   popd();
 };
