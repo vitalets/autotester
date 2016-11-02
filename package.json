@@ -81,6 +81,9 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.13.3"
   },
+  "optionalDependencies": {
+     "fsevents": "*"
+  },
   "config": {
     "ghooks": {
       "pre-commit": "node tasks/code only-changed",
