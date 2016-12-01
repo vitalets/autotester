@@ -35,7 +35,10 @@ module.exports = [
   [POST, '/session/:sessionId/element/:id/value', keyboard.sendKeysToElement],
   [GET_, '/session/:sessionId/element/:id/name', element.getElementTagName],
   [GET_, '/session/:sessionId/element/:id/text', element.getElementText],
-  [GET_, '/session/:sessionId/element/:id/attribute/:name', element.getAttribute],
+  // actually these commands are performed via execute atom script
+  // see: https://github.com/SeleniumHQ/selenium/blob/master/javascript/node/selenium-webdriver/lib/http.js#L39
+  //[GET_, '/session/:sessionId/element/:id/attribute/:name', element.getAttribute],
+  //[GET_, '/session/:sessionId/element/:id/displayed', element.isDisplayed],
   [POST, '/session/:sessionId/element/:id/click', mouse.clickElement],
   [POST, '/session/:sessionId/element/:id/submit', element.submit],
   [GET_, '/session/:sessionId/element/:id/enabled', element.isEnabled],

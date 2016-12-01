@@ -74,23 +74,6 @@ exports.submit = function (params) {
 };
 
 /**
- * Returns element text
- * @param {Object} params
- * @param {String} params.id
- * @param {String} params.name
- * @returns {Promise}
- */
-exports.getAttribute = function (params) {
-  const args = [WebElement.buildId(params.id), params.name];
-  const script = `
-    const el = arguments[0];
-    const name = arguments[1];
-    return el.getAttribute(name);
-  `;
-  return evaluate.execute({script, args});
-};
-
-/**
  * Is enabled
  * @param {Object} params
  * @param {String} params.id
