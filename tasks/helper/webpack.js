@@ -2,6 +2,7 @@
 const path = require('path');
 const fs = require('fs-extra');
 const webpack = require('webpack');
+// const CircularDependencyPlugin = require('circular-dependency-plugin');
 const webpackAlias = require('./webpack-alias');
 
 exports.run = function ({outDir, dev, watch}) {
@@ -64,6 +65,10 @@ function getConfig({outDir, dev}) {
           isDev: Boolean(dev),
         }
       }, getEnvData())),
+      // todo: found many circullar dependencies in node-modules
+      // new CircularDependencyPlugin({
+      //   failOnError: true
+      // }),
       // does not work yet because of ES6 (let)
       // new webpack.optimize.UglifyJsPlugin()
     ],

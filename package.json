@@ -39,6 +39,7 @@
     "check-dependencies": "^1.0.1",
     "chnl": "^0.2.5",
     "chromedriver": "^2.25.1",
+    "circular-dependency-plugin": "^2.0.0",
     "classnames": "^2.2.5",
     "codemirror": "^5.21.0",
     "cpx": "^1.5.0",
