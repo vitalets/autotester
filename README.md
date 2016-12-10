@@ -1,9 +1,10 @@
 # Autotester
 
+![Status](https://img.shields.io/badge/status-beta-yellow.svg)
+[![GitHub version](https://badge.fury.io/gh/vitalets%2Fautotester.svg)](https://github.com/vitalets/autotester/releases/latest)
 [![Build Status](https://travis-ci.org/vitalets/autotester.svg?branch=master)](https://travis-ci.org/vitalets/autotester)
 [![Build status](https://ci.appveyor.com/api/projects/status/156yjw6614quusln/branch/master?svg=true)](https://ci.appveyor.com/project/vitalets/autotester/branch/master)
 [![Sauce Test Status](https://saucelabs.com/buildstatus/vitalets1)](https://saucelabs.com/u/vitalets1)
-[![GitHub version](https://badge.fury.io/gh/vitalets%2Fautotester.svg)](https://github.com/vitalets/autotester/releases/latest)
 
 Autotester is Chrome extension that allows to develop and run automation tests right in browser.  
 Tests are written in Javascript and can be executed over another tab of the same Chrome or any remote browser.
