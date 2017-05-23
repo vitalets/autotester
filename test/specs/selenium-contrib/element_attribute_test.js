@@ -40,7 +40,7 @@ test.suite(function(env) {
     driver.quit();
   });
 
-  describe('element attribute', function () {
+  describe.skip('element attribute', function () {
 
     test.it('should return value of disabled attribute as null if not set', function () {
       var input = driver.findElement(By.css('input#working'));

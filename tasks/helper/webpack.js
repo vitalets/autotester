@@ -25,34 +25,52 @@ function getConfig({outDir, dev}) {
       'core/ui/boot': './src/ui/',
     },
     output: {
-      path: outDir,
+      path: path.resolve(outDir),
       filename: '[name].js',
       chunkFilename: '[name].js',
       sourceMapFilename: '[file].map',
     },
     resolve: {
-      extensions: ['', '.js', '.jsx']
+      extensions: ['.js', '.jsx']
     },
+    devtool: dev ? 'source-map' : false,
     module: {
-      loaders: [
+      rules: [
         {
           test: /.jsx?$/,
           loader: 'babel-loader',
           include: [
             path.resolve('./src/ui')
           ],
-          query: {
+          options: {
             presets: ['react']
           }
         },
-        { test: /\.css$/, loader: 'style-loader!css-loader' },
-        { test: /\.(jpg|png)$/, loader: 'url?limit=25000' },
-        { test: /\.woff$/, loader: 'url?mimetype=application/font-woff'}
+        {
+          test: /\.css$/,
+          use: [
+            'style-loader',
+            'css-loader',
+          ]
+        },
+        {
+          test: /\.(jpg|png)$/,
+          loader: 'url-loader',
+          options: {
+            limit: 25000
+          }
+        },
+        {
+          test: /\.woff$/,
+          loader: 'url-loader',
+          options: {
+            mimetype: 'application/font-woff'
+          }
+        }
       ]
     },
     plugins: [
       new webpack.NormalModuleReplacementPlugin(/./, webpackAlias.newResource),
-      // to not require('react') in every jsx file
       new webpack.ProvidePlugin({
         'React': 'react'
       }),
@@ -71,8 +89,7 @@ function getConfig({outDir, dev}) {
       // }),
       // does not work yet because of ES6 (let)
       // new webpack.optimize.UglifyJsPlugin()
-    ],
-    devtool: dev ? '#source-map' : null
+    ]
   }
 }
 

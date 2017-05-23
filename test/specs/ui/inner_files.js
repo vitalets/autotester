@@ -74,7 +74,7 @@ test.describe('inner files', function () {
       driver.wait(until.elementLocated(page.files.editor.filename));
     });
 
-    test.it('should have correct name and template', function () {
+    test.it.skip('should have correct name and template', function () {
       assert(driver.findElement(page.files.editor.filename).getAttribute('value')).equalTo('new_file_1');
       assert(driver.findElement(page.filesDropdown.item(1)).getText()).equalTo('All (2 files)');
       assert(driver.findElement(page.filesDropdown.item(2)).getText()).equalTo('google_search');

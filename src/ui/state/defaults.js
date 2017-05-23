@@ -6,7 +6,7 @@ const {FILES_SOURCE_TYPE, TAB} = require('./constants');
 
 exports.innerFile = {
   path: 'google_search',
-  code: require('raw!../../../examples/google_search'),
+  code: require('raw-loader!../../../examples/google_search'),
 };
 
 exports.project = {

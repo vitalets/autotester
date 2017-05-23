@@ -9,12 +9,12 @@ exports.existsSync = function (file) {
 
 exports.readFile = function (file, mode, callback) {
   if (file.startsWith('/atoms/getAttribute.js')) {
-    const content = require('raw!selenium-webdriver/lib/atoms/getAttribute.js');
+    const content = require('raw-loader!selenium-webdriver/lib/atoms/getAttribute.js');
     callback(null, content);
     return;
   }
-  if (file.startsWith('/atoms/isDisplayed.js')) {
-    const content = require('raw!selenium-webdriver/lib/atoms/isDisplayed.js');
+  if (file.startsWith('/atoms/is-displayed.js')) {
+    const content = require('raw-loader!selenium-webdriver/lib/atoms/is-displayed.js');
     callback(null, content);
     return;
   }

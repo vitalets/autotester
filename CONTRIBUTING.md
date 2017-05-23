@@ -4,11 +4,13 @@ Contribution is really appreciated.
 Please follow the instructions below.
 
 ## Self testing
-As Autotester is testing tool it can test itself.
-Exactly for that there should be two instances of Autotester loaded in browser during development.
-One is from `dist/unpacked-dev` - the DEV version built with selftests.
-And second from `dist/unpacked` - the PROD version to be tested.
-Mainly you work with DEV that runs tests over PROD and also easier to debug because of source maps.
+As Autotester is testing tool it can test itself.  
+Exactly for that there are two instances of Autotester loaded in browser during development:
+
+1. from `dist/unpacked-dev` - this is instance that runs tests
+2. from `dist/unpacked` - this is instance to be tested
+
+Both instances are updated simultaneously when code changes.
 
 ## Development setup
 

@@ -1,5 +1,5 @@
 /**
- * Extensions driver executes webdriver http commands using extension debugger API
+ * Extensions driver catches webdriver http commands and executes them via extension debugger API
  *
  * See: https://developer.chrome.com/extensions/debugger
  * See: https://chromedevtools.github.io/debugger-protocol-viewer/
@@ -54,21 +54,26 @@ function formatSuccess(result) {
 }
 
 function formatError(e) {
+  const errorObj = errors.encodeError(e);
   const data = {
-    stacktrace: e.stack,
     sessionId: Targets.SESSION_ID,
+    value: {
+      error: errorObj.error || e.name,
+      message: errorObj.message || String(e),
+      stackTrace: e.stack
+    },
   };
-  if (e instanceof errors.WebDriverError) {
-    const errorObj = errors.encodeError(e);
-    data.error = errorObj.error;
-    data.message = errorObj.message;
-  } else if (e instanceof Error) {
-    data.error = e.name;
-    data.message = e.message;
-  } else {
-    data.error = 'error';
-    data.message = String(e);
-  }
+  // if (e instanceof errors.WebDriverError) {
+  //   const errorObj = errors.encodeError(e);
+  //   data.status = errorObj.error;
+  //   data.state = errorObj.message;
+  // } else if (e instanceof Error) {
+  //   data.status = e.name;
+  //   data.state = e.message;
+  // } else {
+  //   data.status = 'error';
+  //   data.message = String(e);
+  // }
   return {
     statusCode: 500,
     data: JSON.stringify(data)

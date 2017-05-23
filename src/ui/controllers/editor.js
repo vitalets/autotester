@@ -5,7 +5,7 @@
 const mobx = require('mobx');
 const fs = require('bro-fs');
 const state = require('../state');
-const innerFileTpl = require('raw!./inner-file-tpl');
+const innerFileTpl = require('raw-loader!./inner-file-tpl');
 const utils = require('../../utils');
 
 exports.init = function () {
