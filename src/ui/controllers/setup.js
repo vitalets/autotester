@@ -60,8 +60,12 @@ function storeToStorage() {
 }
 
 function storeToFs() {
-  const path = `${PROJECTS_DIR}/${defaults.project.id}/${defaults.innerFile.path}`;
-  const content = defaults.innerFile.code;
-  logger.log(`Storing default inner file: ${path}`);
-  return fs.writeFile(path, content);
+  return defaults.innerFiles.reduce((res, innerFile) => {
+    return res.then(() => {
+      const path = `${PROJECTS_DIR}/${defaults.project.id}/${innerFile.path}`;
+      const content = innerFile.code;
+      logger.log(`Storing inner file to fs: ${path}`);
+      return fs.writeFile(path, content);
+    });
+  }, Promise.resolve());
 }

@@ -4,10 +4,12 @@
 
 const {FILES_SOURCE_TYPE, TAB} = require('./constants');
 
-exports.innerFile = {
-  path: 'google_search',
-  code: require('raw-loader!../../../examples/google_search'),
-};
+exports.innerFiles = [
+  {
+    path: 'google_search',
+    code: require('raw-loader!../../../examples/google_search'),
+  }
+];
 
 exports.project = {
   id: 'default',
@@ -17,9 +19,9 @@ exports.project = {
     url: 'https://raw.githubusercontent.com/vitalets/autotester/master/examples/index.js',
     path: 'tests/index.js',
   },
-  innerFiles: [
-    {path: exports.innerFile.path}
-  ],
+  innerFiles: exports.innerFiles.map(innerFile => {
+    return {path: innerFile.path};
+  }),
   selectedFile: {
     [FILES_SOURCE_TYPE.INNER]: '',
     [FILES_SOURCE_TYPE.URL]: '',
